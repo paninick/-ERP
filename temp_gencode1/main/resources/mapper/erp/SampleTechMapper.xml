@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.SampleTechMapper">
+
+    <resultMap type="SampleTech" id="SampleTechResult">
+        <result property="id"    column="id"    />
+        <result property="sampleType"    column="sample_type"    />
+        <result property="sampleId"    column="sample_id"    />
+        <result property="dueDate"    column="due_date"    />
+        <result property="stylePic"    column="style_pic"    />
+        <result property="tagPic"    column="tag_pic"    />
+        <result property="tagPicRemark"    column="tag_pic_remark"    />
+        <result property="pattenMarker"    column="patten_marker"    />
+        <result property="pattenChecker"    column="patten_checker"    />
+        <result property="cuttingTip"    column="cutting_tip"    />
+        <result property="liningTip"    column="lining_tip"    />
+        <result property="threadTip"    column="thread_tip"    />
+        <result property="needleTip"    column="needle_tip"    />
+        <result property="sewingTip"    column="sewing_tip"    />
+        <result property="backGarmentTip"    column="back_garment_tip"    />
+        <result property="tagHangingTip"    column="tag_hanging_tip"    />
+        <result property="ironingTip"    column="ironing_tip"    />
+        <result property="fabricTip"    column="fabric_tip"    />
+        <result property="seamSealingTip"    column="seam_sealing_tip"    />
+        <result property="handStitchingTip"    column="hand_stitching_tip"    />
+        <result property="handStitchingInspection"    column="hand_stitching_inspection"    />
+        <result property="washingTip"    column="washing_tip"    />
+        <result property="auditStatus"    column="audit_status"    />
+        <result property="auditBy"    column="audit_by"    />
+        <result property="auditTime"    column="audit_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectSampleTechVo">
+        select a.id, a.sample_type, a.sample_id, a.due_date, a.style_pic, a.tag_pic, a.tag_pic_remark, a.patten_marker, a.patten_checker, a.cutting_tip, a.lining_tip, a.thread_tip, a.needle_tip, a.sewing_tip, a.back_garment_tip, a.tag_hanging_tip, a.ironing_tip, a.fabric_tip, a.seam_sealing_tip, a.hand_stitching_tip, a.hand_stitching_inspection, a.washing_tip, a.audit_status, a.audit_by, a.audit_time, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
+        from t_erp_sample_tech a
+    </sql>
+
+    <select id="selectSampleTechList" parameterType="SampleTech" resultMap="SampleTechResult">
+        <include refid="selectSampleTechVo"/>
+        <where>
+            <if test="sampleType != null  and sampleType != ''"> and a.sample_type = #{sampleType}</if>
+            <if test="sampleId != null "> and a.sample_id = #{sampleId}</if>
+            <if test="dueDate != null "> and a.due_date = #{dueDate}</if>
+            <if test="stylePic != null  and stylePic != ''"> and a.style_pic = #{stylePic}</if>
+            <if test="tagPic != null  and tagPic != ''"> and a.tag_pic = #{tagPic}</if>
+            <if test="tagPicRemark != null  and tagPicRemark != ''"> and a.tag_pic_remark = #{tagPicRemark}</if>
+            <if test="pattenMarker != null "> and a.patten_marker = #{pattenMarker}</if>
+            <if test="pattenChecker != null "> and a.patten_checker = #{pattenChecker}</if>
+            <if test="cuttingTip != null  and cuttingTip != ''"> and a.cutting_tip = #{cuttingTip}</if>
+            <if test="liningTip != null  and liningTip != ''"> and a.lining_tip = #{liningTip}</if>
+            <if test="threadTip != null  and threadTip != ''"> and a.thread_tip = #{threadTip}</if>
+            <if test="needleTip != null  and needleTip != ''"> and a.needle_tip = #{needleTip}</if>
+            <if test="sewingTip != null  and sewingTip != ''"> and a.sewing_tip = #{sewingTip}</if>
+            <if test="backGarmentTip != null  and backGarmentTip != ''"> and a.back_garment_tip = #{backGarmentTip}</if>
+            <if test="tagHangingTip != null  and tagHangingTip != ''"> and a.tag_hanging_tip = #{tagHangingTip}</if>
+            <if test="ironingTip != null  and ironingTip != ''"> and a.ironing_tip = #{ironingTip}</if>
+            <if test="fabricTip != null  and fabricTip != ''"> and a.fabric_tip = #{fabricTip}</if>
+            <if test="seamSealingTip != null  and seamSealingTip != ''"> and a.seam_sealing_tip = #{seamSealingTip}</if>
+            <if test="handStitchingTip != null  and handStitchingTip != ''"> and a.hand_stitching_tip = #{handStitchingTip}</if>
+            <if test="handStitchingInspection != null  and handStitchingInspection != ''"> and a.hand_stitching_inspection = #{handStitchingInspection}</if>
+            <if test="washingTip != null  and washingTip != ''"> and a.washing_tip = #{washingTip}</if>
+            <if test="auditStatus != null  and auditStatus != ''"> and a.audit_status = #{auditStatus}</if>
+            <if test="auditBy != null  and auditBy != ''"> and a.audit_by = #{auditBy}</if>
+            <if test="auditTime != null "> and a.audit_time = #{auditTime}</if>
+        </where>
+    </select>
+
+    <select id="selectSampleTechById" parameterType="Long" resultMap="SampleTechResult">
+        <include refid="selectSampleTechVo"/>
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertSampleTech" parameterType="SampleTech" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_sample_tech
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sampleType != null">sample_type,</if>
+            <if test="sampleId != null">sample_id,</if>
+            <if test="dueDate != null">due_date,</if>
+            <if test="stylePic != null">style_pic,</if>
+            <if test="tagPic != null">tag_pic,</if>
+            <if test="tagPicRemark != null">tag_pic_remark,</if>
+            <if test="pattenMarker != null">patten_marker,</if>
+            <if test="pattenChecker != null">patten_checker,</if>
+            <if test="cuttingTip != null">cutting_tip,</if>
+            <if test="liningTip != null">lining_tip,</if>
+            <if test="threadTip != null">thread_tip,</if>
+            <if test="needleTip != null">needle_tip,</if>
+            <if test="sewingTip != null">sewing_tip,</if>
+            <if test="backGarmentTip != null">back_garment_tip,</if>
+            <if test="tagHangingTip != null">tag_hanging_tip,</if>
+            <if test="ironingTip != null">ironing_tip,</if>
+            <if test="fabricTip != null">fabric_tip,</if>
+            <if test="seamSealingTip != null">seam_sealing_tip,</if>
+            <if test="handStitchingTip != null">hand_stitching_tip,</if>
+            <if test="handStitchingInspection != null">hand_stitching_inspection,</if>
+            <if test="washingTip != null">washing_tip,</if>
+            <if test="auditStatus != null">audit_status,</if>
+            <if test="auditBy != null">audit_by,</if>
+            <if test="auditTime != null">audit_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sampleType != null">#{sampleType},</if>
+            <if test="sampleId != null">#{sampleId},</if>
+            <if test="dueDate != null">#{dueDate},</if>
+            <if test="stylePic != null">#{stylePic},</if>
+            <if test="tagPic != null">#{tagPic},</if>
+            <if test="tagPicRemark != null">#{tagPicRemark},</if>
+            <if test="pattenMarker != null">#{pattenMarker},</if>
+            <if test="pattenChecker != null">#{pattenChecker},</if>
+            <if test="cuttingTip != null">#{cuttingTip},</if>
+            <if test="liningTip != null">#{liningTip},</if>
+            <if test="threadTip != null">#{threadTip},</if>
+            <if test="needleTip != null">#{needleTip},</if>
+            <if test="sewingTip != null">#{sewingTip},</if>
+            <if test="backGarmentTip != null">#{backGarmentTip},</if>
+            <if test="tagHangingTip != null">#{tagHangingTip},</if>
+            <if test="ironingTip != null">#{ironingTip},</if>
+            <if test="fabricTip != null">#{fabricTip},</if>
+            <if test="seamSealingTip != null">#{seamSealingTip},</if>
+            <if test="handStitchingTip != null">#{handStitchingTip},</if>
+            <if test="handStitchingInspection != null">#{handStitchingInspection},</if>
+            <if test="washingTip != null">#{washingTip},</if>
+            <if test="auditStatus != null">#{auditStatus},</if>
+            <if test="auditBy != null">#{auditBy},</if>
+            <if test="auditTime != null">#{auditTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSampleTech" parameterType="SampleTech">
+        update t_erp_sample_tech
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sampleType != null">sample_type = #{sampleType},</if>
+            <if test="sampleId != null">sample_id = #{sampleId},</if>
+            <if test="dueDate != null">due_date = #{dueDate},</if>
+            <if test="stylePic != null">style_pic = #{stylePic},</if>
+            <if test="tagPic != null">tag_pic = #{tagPic},</if>
+            <if test="tagPicRemark != null">tag_pic_remark = #{tagPicRemark},</if>
+            <if test="pattenMarker != null">patten_marker = #{pattenMarker},</if>
+            <if test="pattenChecker != null">patten_checker = #{pattenChecker},</if>
+            <if test="cuttingTip != null">cutting_tip = #{cuttingTip},</if>
+            <if test="liningTip != null">lining_tip = #{liningTip},</if>
+            <if test="threadTip != null">thread_tip = #{threadTip},</if>
+            <if test="needleTip != null">needle_tip = #{needleTip},</if>
+            <if test="sewingTip != null">sewing_tip = #{sewingTip},</if>
+            <if test="backGarmentTip != null">back_garment_tip = #{backGarmentTip},</if>
+            <if test="tagHangingTip != null">tag_hanging_tip = #{tagHangingTip},</if>
+            <if test="ironingTip != null">ironing_tip = #{ironingTip},</if>
+            <if test="fabricTip != null">fabric_tip = #{fabricTip},</if>
+            <if test="seamSealingTip != null">seam_sealing_tip = #{seamSealingTip},</if>
+            <if test="handStitchingTip != null">hand_stitching_tip = #{handStitchingTip},</if>
+            <if test="handStitchingInspection != null">hand_stitching_inspection = #{handStitchingInspection},</if>
+            <if test="washingTip != null">washing_tip = #{washingTip},</if>
+            <if test="auditStatus != null">audit_status = #{auditStatus},</if>
+            <if test="auditBy != null">audit_by = #{auditBy},</if>
+            <if test="auditTime != null">audit_time = #{auditTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSampleTechById" parameterType="Long">
+        delete from t_erp_sample_tech where id = #{id}
+    </delete>
+
+    <delete id="deleteSampleTechByIds" parameterType="String">
+        delete from t_erp_sample_tech where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertSampleTechBatch" parameterType="java.util.List">
+
+        REPLACE INTO t_erp_sample_tech
+        (id,sample_type,sample_id,due_date,style_pic,tag_pic,tag_pic_remark,patten_marker,patten_checker,cutting_tip,lining_tip,thread_tip,needle_tip,sewing_tip,back_garment_tip,tag_hanging_tip,ironing_tip,fabric_tip,seam_sealing_tip,hand_stitching_tip,hand_stitching_inspection,washing_tip,audit_status,audit_by,audit_time,create_by,create_time,update_by,update_time,remark,)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+
+            (#{item.id},#{item.sampleType},#{item.sampleId},#{item.dueDate},#{item.stylePic},#{item.tagPic},#{item.tagPicRemark},#{item.pattenMarker},#{item.pattenChecker},#{item.cuttingTip},#{item.liningTip},#{item.threadTip},#{item.needleTip},#{item.sewingTip},#{item.backGarmentTip},#{item.tagHangingTip},#{item.ironingTip},#{item.fabricTip},#{item.seamSealingTip},#{item.handStitchingTip},#{item.handStitchingInspection},#{item.washingTip},#{item.auditStatus},#{item.auditBy},#{item.auditTime},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark},)
+
+        </foreach>
+    </insert>
+
+</mapper>

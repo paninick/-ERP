@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.SampleNoticeMapper">
+
+    <resultMap type="SampleNotice" id="SampleNoticeResult">
+        <result property="id"    column="id"    />
+        <result property="sampleType"    column="sample_type"    />
+        <result property="customerId"    column="customer_id"    />
+        <result property="styleType"    column="style_type"    />
+        <result property="sampleCategoryType"    column="sample_category_type"    />
+        <result property="styleCode"    column="style_code"    />
+        <result property="dueDate"    column="due_date"    />
+        <result property="emergencyType"    column="emergency_type"    />
+        <result property="pictureUrl"    column="picture_url"    />
+        <result property="auditStatus"    column="audit_status"    />
+        <result property="auditBy"    column="audit_by"    />
+        <result property="auditTime"    column="audit_time"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectSampleNoticeVo">
+        select a.id, a.sample_type, a.customer_id, a.style_type, a.sample_category_type, a.style_code, a.due_date, a.emergency_type, a.picture_url, a.audit_status, a.audit_by, a.audit_time, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
+        from t_erp_sample_notice a
+    </sql>
+
+    <select id="selectSampleNoticeList" parameterType="SampleNotice" resultMap="SampleNoticeResult">
+        <include refid="selectSampleNoticeVo"/>
+        <where>
+            <if test="sampleType != null  and sampleType != ''"> and a.sample_type = #{sampleType}</if>
+            <if test="customerId != null "> and a.customer_id = #{customerId}</if>
+            <if test="styleType != null  and styleType != ''"> and a.style_type = #{styleType}</if>
+            <if test="sampleCategoryType != null  and sampleCategoryType != ''"> and a.sample_category_type = #{sampleCategoryType}</if>
+            <if test="styleCode != null  and styleCode != ''"> and a.style_code = #{styleCode}</if>
+            <if test="emergencyType != null  and emergencyType != ''"> and a.emergency_type = #{emergencyType}</if>
+            <if test="auditStatus != null  and auditStatus != ''"> and a.audit_status = #{auditStatus}</if>
+        </where>
+    </select>
+
+    <select id="selectSampleNoticeById" parameterType="Long" resultMap="SampleNoticeResult">
+        <include refid="selectSampleNoticeVo"/>
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertSampleNotice" parameterType="SampleNotice" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_sample_notice
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sampleType != null">sample_type,</if>
+            <if test="customerId != null">customer_id,</if>
+            <if test="styleType != null">style_type,</if>
+            <if test="sampleCategoryType != null">sample_category_type,</if>
+            <if test="styleCode != null">style_code,</if>
+            <if test="dueDate != null">due_date,</if>
+            <if test="emergencyType != null">emergency_type,</if>
+            <if test="pictureUrl != null">picture_url,</if>
+            <if test="auditStatus != null">audit_status,</if>
+            <if test="auditBy != null">audit_by,</if>
+            <if test="auditTime != null">audit_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sampleType != null">#{sampleType},</if>
+            <if test="customerId != null">#{customerId},</if>
+            <if test="styleType != null">#{styleType},</if>
+            <if test="sampleCategoryType != null">#{sampleCategoryType},</if>
+            <if test="styleCode != null">#{styleCode},</if>
+            <if test="dueDate != null">#{dueDate},</if>
+            <if test="emergencyType != null">#{emergencyType},</if>
+            <if test="pictureUrl != null">#{pictureUrl},</if>
+            <if test="auditStatus != null">#{auditStatus},</if>
+            <if test="auditBy != null">#{auditBy},</if>
+            <if test="auditTime != null">#{auditTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSampleNotice" parameterType="SampleNotice">
+        update t_erp_sample_notice
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sampleType != null">sample_type = #{sampleType},</if>
+            <if test="customerId != null">customer_id = #{customerId},</if>
+            <if test="styleType != null">style_type = #{styleType},</if>
+            <if test="sampleCategoryType != null">sample_category_type = #{sampleCategoryType},</if>
+            <if test="styleCode != null">style_code = #{styleCode},</if>
+            <if test="dueDate != null">due_date = #{dueDate},</if>
+            <if test="emergencyType != null">emergency_type = #{emergencyType},</if>
+            <if test="pictureUrl != null">picture_url = #{pictureUrl},</if>
+            <if test="auditStatus != null">audit_status = #{auditStatus},</if>
+            <if test="auditBy != null">audit_by = #{auditBy},</if>
+            <if test="auditTime != null">audit_time = #{auditTime},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSampleNoticeById" parameterType="Long">
+        delete from t_erp_sample_notice where id = #{id}
+    </delete>
+
+    <delete id="deleteSampleNoticeByIds" parameterType="String">
+        delete from t_erp_sample_notice where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertSampleNoticeBatch" parameterType="java.util.List">
+
+        REPLACE INTO t_erp_sample_notice
+        (id,sample_type,customer_id,style_type,sample_category_type,style_code,due_date,emergency_type,picture_url,audit_status,audit_by,audit_time,create_by,create_time,update_by,update_time,remark,)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+
+            (#{item.id},#{item.sampleType},#{item.customerId},#{item.styleType},#{item.sampleCategoryType},#{item.styleCode},#{item.dueDate},#{item.emergencyType},#{item.pictureUrl},#{item.auditStatus},#{item.auditBy},#{item.auditTime},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark},)
+
+        </foreach>
+    </insert>
+
+</mapper>

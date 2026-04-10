@@ -1,0 +1,63 @@
+{
+  "id": "session_20260402_003229",
+  "created_at": "2026-04-02T00:32:29.943973",
+  "state": "active",
+  "context": {
+    "language": "Python",
+    "framework": "FastAPI",
+    "goal": "实现用户认证模块",
+    "project_name": "ERP 系统开发"
+  },
+  "messages": [
+    {
+      "role": "user",
+      "content": "请帮我实现 JWT 认证功能",
+      "timestamp": "2026-04-02T00:32:29.943973",
+      "metadata": {}
+    },
+    {
+      "role": "assistant",
+      "content": "好的，我来帮你实现 JWT 认证。首先让我创建任务列表...",
+      "timestamp": "2026-04-02T00:32:29.973564",
+      "metadata": {}
+    }
+  ],
+  "tasks": [
+    {
+      "id": "task_003229",
+      "description": "设计 JWT 认证中间件",
+      "status": "pending",
+      "priority": 1,
+      "assigned_to": null,
+      "dependencies": [],
+      "created_at": "2026-04-02T00:32:29.986170",
+      "completed_at": null,
+      "notes": ""
+    },
+    {
+      "id": "task_003230",
+      "description": "实现登录端点",
+      "status": "pending",
+      "priority": 1,
+      "assigned_to": null,
+      "dependencies": [],
+      "created_at": "2026-04-02T00:32:30.010287",
+      "completed_at": null,
+      "notes": ""
+    },
+    {
+      "id": "task_003230",
+      "description": "实现令牌刷新功能",
+      "status": "pending",
+      "priority": 2,
+      "assigned_to": null,
+      "dependencies": [],
+      "created_at": "2026-04-02T00:32:30.028179",
+      "completed_at": null,
+      "notes": ""
+    }
+  ],
+  "metadata": {
+    "project_name": "ERP 系统开发"
+  }
+}

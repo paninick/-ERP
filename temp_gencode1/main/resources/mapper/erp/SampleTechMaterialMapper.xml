@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.SampleTechMaterialMapper">
+
+    <resultMap type="SampleTechMaterial" id="SampleTechMaterialResult">
+        <result property="id"    column="id"    />
+        <result property="techId"    column="tech_id"    />
+        <result property="noticeId"    column="notice_id"    />
+        <result property="propertyOrder"    column="property_order"    />
+        <result property="propertyValue"    column="property_value"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectSampleTechMaterialVo">
+        select a.id, a.tech_id, a.notice_id, a.property_order, a.property_value, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
+        from t_erp_sample_tech_material a
+    </sql>
+
+    <select id="selectSampleTechMaterialList" parameterType="SampleTechMaterial" resultMap="SampleTechMaterialResult">
+        <include refid="selectSampleTechMaterialVo"/>
+        <where>
+            <if test="techId != null "> and a.tech_id = #{techId}</if>
+            <if test="noticeId != null "> and a.notice_id = #{noticeId}</if>
+            <if test="propertyOrder != null "> and a.property_order = #{propertyOrder}</if>
+            <if test="propertyValue != null  and propertyValue != ''"> and a.property_value = #{propertyValue}</if>
+        </where>
+    </select>
+
+    <select id="selectSampleTechMaterialById" parameterType="Long" resultMap="SampleTechMaterialResult">
+        <include refid="selectSampleTechMaterialVo"/>
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertSampleTechMaterial" parameterType="SampleTechMaterial" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_sample_tech_material
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="techId != null">tech_id,</if>
+            <if test="noticeId != null">notice_id,</if>
+            <if test="propertyOrder != null">property_order,</if>
+            <if test="propertyValue != null">property_value,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="techId != null">#{techId},</if>
+            <if test="noticeId != null">#{noticeId},</if>
+            <if test="propertyOrder != null">#{propertyOrder},</if>
+            <if test="propertyValue != null">#{propertyValue},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSampleTechMaterial" parameterType="SampleTechMaterial">
+        update t_erp_sample_tech_material
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="techId != null">tech_id = #{techId},</if>
+            <if test="noticeId != null">notice_id = #{noticeId},</if>
+            <if test="propertyOrder != null">property_order = #{propertyOrder},</if>
+            <if test="propertyValue != null">property_value = #{propertyValue},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSampleTechMaterialById" parameterType="Long">
+        delete from t_erp_sample_tech_material where id = #{id}
+    </delete>
+
+    <delete id="deleteSampleTechMaterialByIds" parameterType="String">
+        delete from t_erp_sample_tech_material where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertSampleTechMaterialBatch" parameterType="java.util.List">
+
+        REPLACE INTO t_erp_sample_tech_material
+        (id,tech_id,notice_id,property_order,property_value,create_by,create_time,update_by,update_time,remark,)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+
+            (#{item.id},#{item.techId},#{item.noticeId},#{item.propertyOrder},#{item.propertyValue},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark},)
+
+        </foreach>
+    </insert>
+
+</mapper>

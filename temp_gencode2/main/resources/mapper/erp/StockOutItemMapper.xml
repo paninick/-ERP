@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.StockOutItemMapper">
+
+    <resultMap type="StockOutItem" id="StockOutItemResult">
+        <result property="id"    column="id"    />
+        <result property="outId"    column="out_id"    />
+        <result property="sn"    column="sn"    />
+        <result property="materialId"    column="material_id"    />
+        <result property="materialType"    column="material_type"    />
+        <result property="materialNo"    column="material_no"    />
+        <result property="name"    column="name"    />
+        <result property="count"    column="count"    />
+        <result property="composition"    column="composition"    />
+        <result property="width"    column="width"    />
+        <result property="weight"    column="weight"    />
+        <result property="substance"    column="substance"    />
+        <result property="size"    column="size"    />
+        <result property="warehouseId"    column="warehouse_id"    />
+        <result property="warehouseAreaId"    column="warehouse_area_id"    />
+        <result property="warehouseLocationId"    column="warehouse_location_id"    />
+        <result property="saveLocation"    column="save_location"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectStockOutItemVo">
+        select a.id, a.out_id, a.sn, a.material_id, a.material_type, a.material_no, a.name, a.count, a.composition, a.width, a.weight, a.substance, a.size, a.warehouse_id, a.warehouse_area_id, a.warehouse_location_id, a.save_location, a.create_by, a.create_time, a.update_by, a.update_time
+        from t_erp_stock_out_item a
+    </sql>
+
+    <select id="selectStockOutItemList" parameterType="StockOutItem" resultMap="StockOutItemResult">
+        <include refid="selectStockOutItemVo"/>
+        <where>
+            <if test="sn != null  and sn != ''"> and a.sn = #{sn}</if>
+            <if test="materialType != null  and materialType != ''"> and a.material_type = #{materialType}</if>
+            <if test="materialNo != null  and materialNo != ''"> and a.material_no = #{materialNo}</if>
+            <if test="name != null  and name != ''"> and a.name like concat('%', #{name}, '%')</if>
+            <if test="warehouseId != null "> and a.warehouse_id = #{warehouseId}</if>
+            <if test="warehouseAreaId != null "> and a.warehouse_area_id = #{warehouseAreaId}</if>
+            <if test="warehouseLocationId != null "> and a.warehouse_location_id = #{warehouseLocationId}</if>
+        </where>
+    </select>
+
+    <select id="selectStockOutItemById" parameterType="Long" resultMap="StockOutItemResult">
+        <include refid="selectStockOutItemVo"/>
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertStockOutItem" parameterType="StockOutItem" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_stock_out_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="outId != null">out_id,</if>
+            <if test="sn != null">sn,</if>
+            <if test="materialId != null">material_id,</if>
+            <if test="materialType != null">material_type,</if>
+            <if test="materialNo != null and materialNo != ''">material_no,</if>
+            <if test="name != null">name,</if>
+            <if test="count != null">count,</if>
+            <if test="composition != null">composition,</if>
+            <if test="width != null">width,</if>
+            <if test="weight != null">weight,</if>
+            <if test="substance != null">substance,</if>
+            <if test="size != null">size,</if>
+            <if test="warehouseId != null">warehouse_id,</if>
+            <if test="warehouseAreaId != null">warehouse_area_id,</if>
+            <if test="warehouseLocationId != null">warehouse_location_id,</if>
+            <if test="saveLocation != null">save_location,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="outId != null">#{outId},</if>
+            <if test="sn != null">#{sn},</if>
+            <if test="materialId != null">#{materialId},</if>
+            <if test="materialType != null">#{materialType},</if>
+            <if test="materialNo != null and materialNo != ''">#{materialNo},</if>
+            <if test="name != null">#{name},</if>
+            <if test="count != null">#{count},</if>
+            <if test="composition != null">#{composition},</if>
+            <if test="width != null">#{width},</if>
+            <if test="weight != null">#{weight},</if>
+            <if test="substance != null">#{substance},</if>
+            <if test="size != null">#{size},</if>
+            <if test="warehouseId != null">#{warehouseId},</if>
+            <if test="warehouseAreaId != null">#{warehouseAreaId},</if>
+            <if test="warehouseLocationId != null">#{warehouseLocationId},</if>
+            <if test="saveLocation != null">#{saveLocation},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStockOutItem" parameterType="StockOutItem">
+        update t_erp_stock_out_item
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="outId != null">out_id = #{outId},</if>
+            <if test="sn != null">sn = #{sn},</if>
+            <if test="materialId != null">material_id = #{materialId},</if>
+            <if test="materialType != null">material_type = #{materialType},</if>
+            <if test="materialNo != null and materialNo != ''">material_no = #{materialNo},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="count != null">count = #{count},</if>
+            <if test="composition != null">composition = #{composition},</if>
+            <if test="width != null">width = #{width},</if>
+            <if test="weight != null">weight = #{weight},</if>
+            <if test="substance != null">substance = #{substance},</if>
+            <if test="size != null">size = #{size},</if>
+            <if test="warehouseId != null">warehouse_id = #{warehouseId},</if>
+            <if test="warehouseAreaId != null">warehouse_area_id = #{warehouseAreaId},</if>
+            <if test="warehouseLocationId != null">warehouse_location_id = #{warehouseLocationId},</if>
+            <if test="saveLocation != null">save_location = #{saveLocation},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStockOutItemById" parameterType="Long">
+        delete from t_erp_stock_out_item where id = #{id}
+    </delete>
+
+    <delete id="deleteStockOutItemByIds" parameterType="String">
+        delete from t_erp_stock_out_item where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertStockOutItemBatch" parameterType="java.util.List">
+
+        REPLACE INTO t_erp_stock_out_item
+        (id,out_id,sn,material_id,material_type,material_no,name,count,composition,width,weight,substance,size,warehouse_id,warehouse_area_id,warehouse_location_id,save_location,create_by,create_time,update_by,update_time,)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+
+            (#{item.id},#{item.outId},#{item.sn},#{item.materialId},#{item.materialType},#{item.materialNo},#{item.name},#{item.count},#{item.composition},#{item.width},#{item.weight},#{item.substance},#{item.size},#{item.warehouseId},#{item.warehouseAreaId},#{item.warehouseLocationId},#{item.saveLocation},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},)
+
+        </foreach>
+    </insert>
+
+</mapper>

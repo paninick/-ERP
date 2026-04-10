@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.WarehouseAreaMapper">
+
+    <resultMap type="WarehouseArea" id="WarehouseAreaResult">
+        <result property="id"    column="id"    />
+        <result property="code"    column="code"    />
+        <result property="name"    column="name"    />
+        <result property="address"    column="address"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectWarehouseAreaVo">
+        select a.id, a.code, a.name, a.address, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
+        from t_erp_warehouse_area a
+    </sql>
+
+    <select id="selectWarehouseAreaList" parameterType="WarehouseArea" resultMap="WarehouseAreaResult">
+        <include refid="selectWarehouseAreaVo"/>
+        <where>
+            <if test="name != null  and name != ''"> and a.name like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectWarehouseAreaById" parameterType="Long" resultMap="WarehouseAreaResult">
+        <include refid="selectWarehouseAreaVo"/>
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertWarehouseArea" parameterType="WarehouseArea" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_warehouse_area
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="code != null">code,</if>
+            <if test="name != null">name,</if>
+            <if test="address != null">address,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="code != null">#{code},</if>
+            <if test="name != null">#{name},</if>
+            <if test="address != null">#{address},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWarehouseArea" parameterType="WarehouseArea">
+        update t_erp_warehouse_area
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="code != null">code = #{code},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteWarehouseAreaById" parameterType="Long">
+        delete from t_erp_warehouse_area where id = #{id}
+    </delete>
+
+    <delete id="deleteWarehouseAreaByIds" parameterType="String">
+        delete from t_erp_warehouse_area where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertWarehouseAreaBatch" parameterType="java.util.List">
+
+        REPLACE INTO t_erp_warehouse_area
+        (id,code,name,address,create_by,create_time,update_by,update_time,remark,)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+
+            (#{item.id},#{item.code},#{item.name},#{item.address},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark},)
+
+        </foreach>
+    </insert>
+
+</mapper>

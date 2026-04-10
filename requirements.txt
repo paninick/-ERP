@@ -1,0 +1,30 @@
+# MCP System Integration - Requirements
+# Core dependencies
+pydantic>=2.0
+fastapi>=0.104.0
+uvicorn>=0.24.0
+python-multipart>=0.0.6
+
+# Data validation and serialization
+orjson>=3.9.0
+
+# Logging and monitoring
+structlog>=24.0.0
+
+# Testing
+pytest>=7.4.0
+pytest-asyncio>=0.21.0
+pytest-cov>=4.1.0
+coverage>=7.3.0
+
+# Async support
+anyio>=4.0.0
+
+# Type hints
+typing-extensions>=4.8.0
+
+# Development tools
+black>=23.0.0
+flake8>=6.0.0
+mypy>=1.6.0
+isort>=5.12.0

@@ -1,0 +1,3 @@
+@echo off
+"C:\Program Files\MySQL\MySQL Server 8.4\bin\mysql.exe" -u root -ppassword --default-character-set=utf8mb4 ry-vue < "d:\erp\RuoYi-Vue\sql\ry_20260321.sql"
+pause

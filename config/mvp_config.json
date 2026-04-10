@@ -1,0 +1,189 @@
+{
+  "name": "Coding Assistant (MVP)",
+  "version": "1.0.0",
+  "description": "最小可行产品配置",
+  "features": {
+    "s01_the_loop": true,
+    "s02_tool_dispatch": true,
+    "s03_planning": true,
+    "s04_sub_agents": false,
+    "s05_knowledge_on_demand": false,
+    "s06_context_compression": true,
+    "s07_persistent_tasks": true,
+    "s08_background_tasks": false,
+    "s09_agent_teams": false,
+    "s10_team_protocols": false,
+    "s11_autonomous_agents": false,
+    "s12_worktree_isolation": false,
+    "auto_compact": true,
+    "snip_compact": false,
+    "context_collapse": false,
+    "telemetry": false,
+    "undercover_mode": false
+  },
+  "persistence": {
+    "enabled": true,
+    "storage_dir": "./agent_sessions",
+    "jsonl_messages": true,
+    "json_metadata": true,
+    "fsync_user_messages": true,
+    "async_other_messages": true,
+    "auto_save_interval": 10
+  },
+  "compression": {
+    "enabled": true,
+    "token_threshold": 8000,
+    "max_messages": 50,
+    "keep_recent": 30,
+    "keep_oldest": 10,
+    "compact_boundary_marker": "[COMPACT_BOUNDARY]",
+    "use_llm_for_summary": true,
+    "summary_model": "gpt-3.5-turbo"
+  },
+  "permissions": {
+    "enabled": true,
+    "default_decision": "ask",
+    "auto_approve_read_only": true,
+    "always_ask_destructive": true,
+    "interactive_prompt": true,
+    "remember_always_allow": true,
+    "path_sandbox_enabled": true,
+    "allowed_paths": []
+  },
+  "system_prompt": {
+    "include_tools": true,
+    "include_permissions": true,
+    "include_project_context": true,
+    "include_claude_md": true,
+    "claude_md_filename": "CLAUDE.md",
+    "language": "zh-CN",
+    "tone": "helpful"
+  },
+  "tools": {
+    "file_read": {
+      "enabled": true,
+      "concurrency_safe": false,
+      "read_only": true,
+      "destructive": false,
+      "always_allow": true,
+      "always_deny": false,
+      "always_ask": true,
+      "priority": 0
+    },
+    "file_write": {
+      "enabled": true,
+      "concurrency_safe": false,
+      "read_only": false,
+      "destructive": true,
+      "always_allow": false,
+      "always_deny": false,
+      "always_ask": true,
+      "priority": 0
+    },
+    "file_edit": {
+      "enabled": true,
+      "concurrency_safe": false,
+      "read_only": false,
+      "destructive": true,
+      "always_allow": false,
+      "always_deny": false,
+      "always_ask": true,
+      "priority": 0
+    },
+    "glob": {
+      "enabled": true,
+      "concurrency_safe": false,
+      "read_only": true,
+      "destructive": false,
+      "always_allow": true,
+      "always_deny": false,
+      "always_ask": true,
+      "priority": 0
+    },
+    "grep": {
+      "enabled": true,
+      "concurrency_safe": false,
+      "read_only": true,
+      "destructive": false,
+      "always_allow": true,
+      "always_deny": false,
+      "always_ask": true,
+      "priority": 0
+    },
+    "bash": {
+      "enabled": true,
+      "concurrency_safe": false,
+      "read_only": false,
+      "destructive": false,
+      "always_allow": false,
+      "always_deny": false,
+      "always_ask": true,
+      "priority": 10
+    },
+    "powerShell": {
+      "enabled": true,
+      "concurrency_safe": false,
+      "read_only": false,
+      "destructive": false,
+      "always_allow": false,
+      "always_deny": false,
+      "always_ask": true,
+      "priority": 10
+    },
+    "ask_user": {
+      "enabled": true,
+      "concurrency_safe": false,
+      "read_only": true,
+      "destructive": false,
+      "always_allow": true,
+      "always_deny": false,
+      "always_ask": true,
+      "priority": 0
+    },
+    "web_fetch": {
+      "enabled": true,
+      "concurrency_safe": false,
+      "read_only": true,
+      "destructive": false,
+      "always_allow": false,
+      "always_deny": false,
+      "always_ask": true,
+      "priority": 0
+    },
+    "web_search": {
+      "enabled": true,
+      "concurrency_safe": false,
+      "read_only": true,
+      "destructive": false,
+      "always_allow": false,
+      "always_deny": false,
+      "always_ask": true,
+      "priority": 0
+    },
+    "todo_write": {
+      "enabled": true,
+      "concurrency_safe": false,
+      "read_only": false,
+      "destructive": false,
+      "always_allow": true,
+      "always_deny": false,
+      "always_ask": true,
+      "priority": 0
+    },
+    "mcp": {
+      "enabled": true,
+      "concurrency_safe": false,
+      "read_only": false,
+      "destructive": false,
+      "always_allow": false,
+      "always_deny": false,
+      "always_ask": true,
+      "priority": 0
+    }
+  },
+  "max_context_tokens": 128000,
+  "max_response_tokens": 4096,
+  "temperature": 0.7,
+  "primary_model": "gpt-4",
+  "fallback_model": "gpt-3.5-turbo"
+}
