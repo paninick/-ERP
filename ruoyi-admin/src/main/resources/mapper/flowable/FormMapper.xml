@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.flowable.mapper.FormMapper">
+    
+    <resultMap type="Form" id="FormResult">
+        <result property="id"    column="id"    />
+        <result property="formName"    column="form_name"    />
+        <result property="formKey"    column="form_key"    />
+        <result property="formType"    column="form_type"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectFormVo">
+        select id, form_name, form_key, form_type, status, remark, create_by, create_time, update_by, update_time from flowable_form
+    </sql>
+
+    <select id="selectFormList" parameterType="Form" resultMap="FormResult">
+        <include refid="selectFormVo"/>
+        <where>  
+            <if test="formName != null  and formName != ''"> and form_name like concat('%', #{formName}, '%')</if>
+            <if test="formType != null  and formType != ''"> and form_type = #{formType}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+        order by create_time desc
+    </select>
+    
+    <select id="selectFormById" parameterType="Long" resultMap="FormResult">
+        <include refid="selectFormVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertForm" parameterType="Form" useGeneratedKeys="true" keyProperty="id">
+        insert into flowable_form
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="formName != null and formName != ''">form_name,</if>
+            <if test="formKey != null and formKey != ''">form_key,</if>
+            <if test="formType != null and formType != ''">form_type,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            create_time
+         </trim>
+         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="formName != null and formName != ''">#{formName},</if>
+            <if test="formKey != null and formKey != ''">#{formKey},</if>
+            <if test="formType != null and formType != ''">#{formType},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            sysdate()
+         </trim>
+    </insert>
+
+    <update id="updateForm" parameterType="Form">
+        update flowable_form
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="formName != null and formName != ''">form_name = #{formName},</if>
+            <if test="formKey != null and formKey != ''">form_key = #{formKey},</if>
+            <if test="formType != null and formType != ''">form_type = #{formType},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFormById" parameterType="Long">
+        delete from flowable_form where id = #{id}
+    </delete>
+    
+    <delete id="deleteFormByIds" parameterType="String">
+        delete from flowable_form where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

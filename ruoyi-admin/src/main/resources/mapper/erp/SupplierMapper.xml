@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.SupplierMapper">
+
+    <resultMap type="Supplier" id="SupplierResult">
+        <result property="id"    column="id"    />
+        <result property="supplierType"    column="supplier_type"    />
+        <result property="supplierNo"    column="supplier_no"    />
+        <result property="supplierName"    column="supplier_name"    />
+        <result property="supplierBrief"    column="supplier_brief"    />
+        <result property="businessScope"    column="business_scope"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectSupplierVo">
+        select a.id, a.supplier_type, a.supplier_no, a.supplier_name, a.supplier_brief, a.business_scope, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
+        from t_erp_supplier a
+    </sql>
+
+    <select id="selectSupplierList" parameterType="Supplier" resultMap="SupplierResult">
+        <include refid="selectSupplierVo"/>
+        <where>
+            <if test="supplierType != null  and supplierType != ''"> and a.supplier_type = #{supplierType}</if>
+            <if test="supplierNo != null  and supplierNo != ''"> and a.supplier_no = #{supplierNo}</if>
+            <if test="supplierName != null  and supplierName != ''"> and a.supplier_name like concat('%', #{supplierName}, '%')</if>
+            <if test="supplierBrief != null  and supplierBrief != ''"> and a.supplier_brief = #{supplierBrief}</if>
+        </where>
+    </select>
+
+    <select id="selectSupplierById" parameterType="Long" resultMap="SupplierResult">
+        <include refid="selectSupplierVo"/>
+        where a.id = #{id}
+    </select>
+
+    <select id="selectSupplierByNo" parameterType="String" resultMap="SupplierResult">
+        <include refid="selectSupplierVo"/>
+        where a.supplier_no = #{supplierNo}
+    </select>
+
+    <insert id="insertSupplier" parameterType="Supplier" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_supplier
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="supplierType != null">supplier_type,</if>
+            <if test="supplierNo != null">supplier_no,</if>
+            <if test="supplierName != null">supplier_name,</if>
+            <if test="supplierBrief != null">supplier_brief,</if>
+            <if test="businessScope != null">business_scope,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="supplierType != null">#{supplierType},</if>
+            <if test="supplierNo != null">#{supplierNo},</if>
+            <if test="supplierName != null">#{supplierName},</if>
+            <if test="supplierBrief != null">#{supplierBrief},</if>
+            <if test="businessScope != null">#{businessScope},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSupplier" parameterType="Supplier">
+        update t_erp_supplier
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="supplierType != null">supplier_type = #{supplierType},</if>
+            <if test="supplierNo != null">supplier_no = #{supplierNo},</if>
+            <if test="supplierName != null">supplier_name = #{supplierName},</if>
+            <if test="supplierBrief != null">supplier_brief = #{supplierBrief},</if>
+            <if test="businessScope != null">business_scope = #{businessScope},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSupplierById" parameterType="Long">
+        delete from t_erp_supplier where id = #{id}
+    </delete>
+
+    <delete id="deleteSupplierByIds" parameterType="String">
+        delete from t_erp_supplier where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertSupplierBatch" parameterType="java.util.List">
+
+        REPLACE INTO t_erp_supplier
+        (id,supplier_type,supplier_no,supplier_name,supplier_brief,business_scope,create_by,create_time,update_by,update_time,remark,)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+
+            (#{item.id},#{item.supplierType},#{item.supplierNo},#{item.supplierName},#{item.supplierBrief},#{item.businessScope},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark},)
+
+        </foreach>
+    </insert>
+
+</mapper>

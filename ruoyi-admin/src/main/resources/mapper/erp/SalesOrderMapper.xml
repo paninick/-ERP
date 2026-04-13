@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.SalesOrderMapper">
+
+    <resultMap type="SalesOrder" id="SalesOrderResult">
+        <result property="id"    column="id"    />
+        <result property="salesType"    column="sales_type"    />
+        <result property="customerName"    column="customer_name"    />
+        <result property="bulkOrderNo"    column="bulk_order_no"    />
+        <result property="sampleStyleNo"    column="sample_style_no"    />
+        <result property="styleCategory"    column="style_category"    />
+        <result property="sampleNo"    column="sample_no"    />
+        <result property="salesName"    column="sales_name"    />
+        <result property="noticeId"    column="notice_id"    />
+        <result property="techId"    column="tech_id"    />
+        <result property="salesNo"    column="sales_no"    />
+        <result property="salesDate"    column="sales_date"    />
+        <result property="salesId"    column="sales_id"    />
+        <result property="customerId"    column="customer_id"    />
+        <result property="dueDate"    column="due_date"    />
+        <result property="quantity"    column="quantity"    />
+        <result property="amount"    column="amount"    />
+        <result property="payAmount"    column="pay_amount"    />
+        <result property="orderStatus"    column="order_status"    />
+        <result property="auditStatus"    column="audit_status"    />
+        <result property="auditBy"    column="audit_by"    />
+        <result property="auditTime"    column="audit_time"    />
+        <result property="bulkOpinion"    column="bulk_opinion"    />
+        <result property="productionExceed"    column="production_exceed"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectSalesOrderVo">
+        select a.id, a.sales_type, a.customer_name, a.bulk_order_no, a.sample_style_no, a.style_category, a.sample_no, a.sales_name, a.notice_id, a.tech_id, a.sales_no, a.sales_date, a.sales_id, a.customer_id, a.due_date, a.quantity, a.amount, a.pay_amount, a.order_status, a.audit_status, a.audit_by, a.audit_time, a.bulk_opinion, a.production_exceed, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
+        from t_erp_sales_order a
+    </sql>
+
+    <select id="selectSalesOrderList" parameterType="SalesOrder" resultMap="SalesOrderResult">
+        <include refid="selectSalesOrderVo"/>
+        <where>
+            <if test="salesType != null  and salesType != ''"> and a.sales_type = #{salesType}</if>
+            <if test="noticeId != null "> and a.notice_id = #{noticeId}</if>
+            <if test="techId != null "> and a.tech_id = #{techId}</if>
+            <if test="salesNo != null  and salesNo != ''"> and a.sales_no = #{salesNo}</if>
+        </where>
+    </select>
+
+    <select id="selectSalesOrderById" parameterType="Long" resultMap="SalesOrderResult">
+        <include refid="selectSalesOrderVo"/>
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertSalesOrder" parameterType="SalesOrder" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_sales_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="salesType != null">sales_type,</if>
+            <if test="customerName != null">customer_name,</if>
+            <if test="bulkOrderNo != null">bulk_order_no,</if>
+            <if test="sampleStyleNo != null">sample_style_no,</if>
+            <if test="styleCategory != null">style_category,</if>
+            <if test="sampleNo != null">sample_no,</if>
+            <if test="salesName != null">sales_name,</if>
+            <if test="noticeId != null ">notice_id,</if>
+            <if test="techId != null ">tech_id,</if>
+            <if test="salesNo != null ">sales_no,</if>
+            <if test="salesDate != null">sales_date,</if>
+            <if test="salesId != null">sales_id,</if>
+            <if test="customerId != null">customer_id,</if>
+            <if test="dueDate != null">due_date,</if>
+            <if test="quantity != null">quantity,</if>
+            <if test="amount != null">amount,</if>
+            <if test="payAmount != null">pay_amount,</if>
+            <if test="orderStatus != null">order_status,</if>
+            <if test="auditStatus != null">audit_status,</if>
+            <if test="auditBy != null">audit_by,</if>
+            <if test="auditTime != null">audit_time,</if>
+            <if test="bulkOpinion != null">bulk_opinion,</if>
+            <if test="productionExceed != null">production_exceed,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="salesType != null">#{salesType},</if>
+            <if test="customerName != null">#{customerName},</if>
+            <if test="bulkOrderNo != null">#{bulkOrderNo},</if>
+            <if test="sampleStyleNo != null">#{sampleStyleNo},</if>
+            <if test="styleCategory != null">#{styleCategory},</if>
+            <if test="sampleNo != null">#{sampleNo},</if>
+            <if test="salesName != null">#{salesName},</if>
+            <if test="noticeId != null">#{noticeId},</if>
+            <if test="techId != null">#{techId},</if>
+            <if test="salesNo != null">#{salesNo},</if>
+            <if test="salesDate != null">#{salesDate},</if>
+            <if test="salesId != null">#{salesId},</if>
+            <if test="customerId != null">#{customerId},</if>
+            <if test="dueDate != null">#{dueDate},</if>
+            <if test="quantity != null">#{quantity},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="payAmount != null">#{payAmount},</if>
+            <if test="orderStatus != null">#{orderStatus},</if>
+            <if test="auditStatus != null">#{auditStatus},</if>
+            <if test="auditBy != null">#{auditBy},</if>
+            <if test="auditTime != null">#{auditTime},</if>
+            <if test="bulkOpinion != null">#{bulkOpinion},</if>
+            <if test="productionExceed != null">#{productionExceed},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSalesOrder" parameterType="SalesOrder">
+        update t_erp_sales_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="salesType != null">sales_type = #{salesType},</if>
+            <if test="customerName != null">customer_name = #{customerName},</if>
+            <if test="bulkOrderNo != null">bulk_order_no = #{bulkOrderNo},</if>
+            <if test="sampleStyleNo != null">sample_style_no = #{sampleStyleNo},</if>
+            <if test="styleCategory != null">style_category = #{styleCategory},</if>
+            <if test="sampleNo != null">sample_no = #{sampleNo},</if>
+            <if test="salesName != null">sales_name = #{salesName},</if>
+            <if test="noticeId != null">notice_id = #{noticeId},</if>
+            <if test="techId != null">tech_id = #{techId},</if>
+            <if test="salesNo != null">sales_no = #{salesNo},</if>
+            <if test="salesDate != null">sales_date = #{salesDate},</if>
+            <if test="salesId != null">sales_id = #{salesId},</if>
+            <if test="customerId != null">customer_id = #{customerId},</if>
+            <if test="dueDate != null">due_date = #{dueDate},</if>
+            <if test="quantity != null">quantity = #{quantity},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="payAmount != null">pay_amount = #{payAmount},</if>
+            <if test="orderStatus != null">order_status = #{orderStatus},</if>
+            <if test="auditStatus != null">audit_status = #{auditStatus},</if>
+            <if test="auditBy != null">audit_by = #{auditBy},</if>
+            <if test="auditTime != null">audit_time = #{auditTime},</if>
+            <if test="bulkOpinion != null">bulk_opinion = #{bulkOpinion},</if>
+            <if test="productionExceed != null">production_exceed = #{productionExceed},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSalesOrderById" parameterType="Long">
+        delete from t_erp_sales_order where id = #{id}
+    </delete>
+
+    <delete id="deleteSalesOrderByIds" parameterType="String">
+        delete from t_erp_sales_order where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertSalesOrderBatch" parameterType="java.util.List">
+
+        REPLACE INTO t_erp_sales_order
+        (id,sales_type,customer_name,bulk_order_no,sample_style_no,style_category,sample_no,sales_name,notice_id,tech_id,sales_no,sales_date,sales_id,customer_id,due_date,quantity,amount,pay_amount,order_status,audit_status,audit_by,audit_time,bulk_opinion,production_exceed,create_by,create_time,update_by,update_time,remark)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+
+            (#{item.id},#{item.salesType},#{item.customerName},#{item.bulkOrderNo},#{item.sampleStyleNo},#{item.styleCategory},#{item.sampleNo},#{item.salesName},#{item.noticeId},#{item.techId},#{item.salesNo},#{item.salesDate},#{item.salesId},#{item.customerId},#{item.dueDate},#{item.quantity},#{item.amount},#{item.payAmount},#{item.orderStatus},#{item.auditStatus},#{item.auditBy},#{item.auditTime},#{item.bulkOpinion},#{item.productionExceed},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark})
+
+        </foreach>
+    </insert>
+
+</mapper>

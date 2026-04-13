@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.CheckMapper">
+    <resultMap type="Check" id="CheckResult">
+        <id property="checkId" column="check_id" />
+        <result property="checkNo" column="check_no" />
+        <result property="sampleNo" column="sample_no" />
+        <result property="techNo" column="tech_no" />
+        <result property="sampleType" column="sample_type" />
+        <result property="styleType" column="style_type" />
+        <result property="sampleCategoryType" column="sample_category_type" />
+        <result property="styleNo" column="style_no" />
+        <result property="bulkOrderNo" column="bulk_order_no" />
+        <result property="customerId" column="customer_id" />
+        <result property="customerName" column="customer_name" />
+        <result property="salesId" column="sales_id" />
+        <result property="salesName" column="sales_name" />
+        <result property="dueDate" column="due_date" />
+        <result property="progressStatus" column="progress_status" />
+        <result property="auditStatus" column="audit_status" />
+        <result property="auditBy" column="audit_by" />
+        <result property="auditByName" column="audit_by_name" />
+        <result property="auditTime" column="audit_time" />
+        <result property="quantity" column="quantity" />
+        <result property="checkDescription" column="check_description" />
+        <result property="checkResult" column="check_result" />
+        <result property="status" column="status" />
+        <result property="remark" column="remark" />
+        <result property="createBy" column="create_by" />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy" column="update_by" />
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="selectCheckVo">
+        select check_id, check_no, sample_no, tech_no, sample_type, style_type, sample_category_type, style_no, bulk_order_no, customer_id, customer_name, sales_id, sales_name, due_date, progress_status, audit_status, audit_by, audit_by_name, audit_time, quantity, check_description, check_result, status, remark, create_by, create_time, update_by, update_time from t_erp_check
+    </sql>
+
+    <select id="selectCheckByCheckId" parameterType="Long" resultMap="CheckResult">
+        <include refid="selectCheckVo" />
+        where check_id = #{checkId}
+    </select>
+
+    <select id="selectCheckByCheckNo" parameterType="String" resultMap="CheckResult">
+        <include refid="selectCheckVo" />
+        where check_no = #{checkNo}
+    </select>
+
+    <select id="selectCheckList" parameterType="Check" resultMap="CheckResult">
+        <include refid="selectCheckVo" />
+        <where>
+            <if test="checkNo != null and checkNo != ''">
+                AND check_no like concat('%', #{checkNo}, '%')
+            </if>
+            <if test="styleNo != null and styleNo != ''">
+                AND style_no like concat('%', #{styleNo}, '%')
+            </if>
+            <if test="customerName != null and customerName != ''">
+                AND customer_name like concat('%', #{customerName}, '%')
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+        </where>
+    </select>
+
+    <insert id="insertCheck" parameterType="Check" useGeneratedKeys="true" keyProperty="checkId">
+        insert into t_erp_check
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="checkNo != null and checkNo != ''">
+                check_no,
+            </if>
+            <if test="sampleNo != null and sampleNo != ''">
+                sample_no,
+            </if>
+            <if test="techNo != null and techNo != ''">
+                tech_no,
+            </if>
+            <if test="sampleType != null and sampleType != ''">
+                sample_type,
+            </if>
+            <if test="styleType != null and styleType != ''">
+                style_type,
+            </if>
+            <if test="sampleCategoryType != null and sampleCategoryType != ''">
+                sample_category_type,
+            </if>
+            <if test="styleNo != null and styleNo != ''">
+                style_no,
+            </if>
+            <if test="bulkOrderNo != null and bulkOrderNo != ''">
+                bulk_order_no,
+            </if>
+            <if test="customerId != null">
+                customer_id,
+            </if>
+            <if test="customerName != null and customerName != ''">
+                customer_name,
+            </if>
+            <if test="salesId != null">
+                sales_id,
+            </if>
+            <if test="salesName != null and salesName != ''">
+                sales_name,
+            </if>
+            <if test="dueDate != null">
+                due_date,
+            </if>
+            <if test="progressStatus != null and progressStatus != ''">
+                progress_status,
+            </if>
+            <if test="auditStatus != null and auditStatus != ''">
+                audit_status,
+            </if>
+            <if test="auditBy != null">
+                audit_by,
+            </if>
+            <if test="auditByName != null and auditByName != ''">
+                audit_by_name,
+            </if>
+            <if test="auditTime != null">
+                audit_time,
+            </if>
+            <if test="quantity != null">
+                quantity,
+            </if>
+            <if test="checkDescription != null and checkDescription != ''">
+                check_description,
+            </if>
+            <if test="checkResult != null and checkResult != ''">
+                check_result,
+            </if>
+            <if test="status != null and status != ''">
+                status,
+            </if>
+            <if test="remark != null and remark != ''">
+                remark,
+            </if>
+            <if test="createBy != null and createBy != ''">
+                create_by,
+            </if>
+            <if test="createTime != null">
+                create_time,
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                update_by,
+            </if>
+            <if test="updateTime != null">
+                update_time,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="checkNo != null and checkNo != ''">
+                #{checkNo},
+            </if>
+            <if test="sampleNo != null and sampleNo != ''">
+                #{sampleNo},
+            </if>
+            <if test="techNo != null and techNo != ''">
+                #{techNo},
+            </if>
+            <if test="sampleType != null and sampleType != ''">
+                #{sampleType},
+            </if>
+            <if test="styleType != null and styleType != ''">
+                #{styleType},
+            </if>
+            <if test="sampleCategoryType != null and sampleCategoryType != ''">
+                #{sampleCategoryType},
+            </if>
+            <if test="styleNo != null and styleNo != ''">
+                #{styleNo},
+            </if>
+            <if test="bulkOrderNo != null and bulkOrderNo != ''">
+                #{bulkOrderNo},
+            </if>
+            <if test="customerId != null">
+                #{customerId},
+            </if>
+            <if test="customerName != null and customerName != ''">
+                #{customerName},
+            </if>
+            <if test="salesId != null">
+                #{salesId},
+            </if>
+            <if test="salesName != null and salesName != ''">
+                #{salesName},
+            </if>
+            <if test="dueDate != null">
+                #{dueDate},
+            </if>
+            <if test="progressStatus != null and progressStatus != ''">
+                #{progressStatus},
+            </if>
+            <if test="auditStatus != null and auditStatus != ''">
+                #{auditStatus},
+            </if>
+            <if test="auditBy != null">
+                #{auditBy},
+            </if>
+            <if test="auditByName != null and auditByName != ''">
+                #{auditByName},
+            </if>
+            <if test="auditTime != null">
+                #{auditTime},
+            </if>
+            <if test="quantity != null">
+                #{quantity},
+            </if>
+            <if test="checkDescription != null and checkDescription != ''">
+                #{checkDescription},
+            </if>
+            <if test="checkResult != null and checkResult != ''">
+                #{checkResult},
+            </if>
+            <if test="status != null and status != ''">
+                #{status},
+            </if>
+            <if test="remark != null and remark != ''">
+                #{remark},
+            </if>
+            <if test="createBy != null and createBy != ''">
+                #{createBy},
+            </if>
+            <if test="createTime != null">
+                #{createTime},
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                #{updateBy},
+            </if>
+            <if test="updateTime != null">
+                #{updateTime},
+            </if>
+        </trim>
+    </insert>
+
+    <update id="updateCheck" parameterType="Check">
+        update t_erp_check
+        <set>
+            <if test="checkNo != null and checkNo != ''">
+                check_no = #{checkNo},
+            </if>
+            <if test="sampleNo != null and sampleNo != ''">
+                sample_no = #{sampleNo},
+            </if>
+            <if test="techNo != null and techNo != ''">
+                tech_no = #{techNo},
+            </if>
+            <if test="sampleType != null and sampleType != ''">
+                sample_type = #{sampleType},
+            </if>
+            <if test="styleType != null and styleType != ''">
+                style_type = #{styleType},
+            </if>
+            <if test="sampleCategoryType != null and sampleCategoryType != ''">
+                sample_category_type = #{sampleCategoryType},
+            </if>
+            <if test="styleNo != null and styleNo != ''">
+                style_no = #{styleNo},
+            </if>
+            <if test="bulkOrderNo != null and bulkOrderNo != ''">
+                bulk_order_no = #{bulkOrderNo},
+            </if>
+            <if test="customerId != null">
+                customer_id = #{customerId},
+            </if>
+            <if test="customerName != null and customerName != ''">
+                customer_name = #{customerName},
+            </if>
+            <if test="salesId != null">
+                sales_id = #{salesId},
+            </if>
+            <if test="salesName != null and salesName != ''">
+                sales_name = #{salesName},
+            </if>
+            <if test="dueDate != null">
+                due_date = #{dueDate},
+            </if>
+            <if test="progressStatus != null and progressStatus != ''">
+                progress_status = #{progressStatus},
+            </if>
+            <if test="auditStatus != null and auditStatus != ''">
+                audit_status = #{auditStatus},
+            </if>
+            <if test="auditBy != null">
+                audit_by = #{auditBy},
+            </if>
+            <if test="auditByName != null and auditByName != ''">
+                audit_by_name = #{auditByName},
+            </if>
+            <if test="auditTime != null">
+                audit_time = #{auditTime},
+            </if>
+            <if test="quantity != null">
+                quantity = #{quantity},
+            </if>
+            <if test="checkDescription != null and checkDescription != ''">
+                check_description = #{checkDescription},
+            </if>
+            <if test="checkResult != null and checkResult != ''">
+                check_result = #{checkResult},
+            </if>
+            <if test="status != null and status != ''">
+                status = #{status},
+            </if>
+            <if test="remark != null and remark != ''">
+                remark = #{remark},
+            </if>
+            <if test="createBy != null and createBy != ''">
+                create_by = #{createBy},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateBy != null and updateBy != ''">
+                update_by = #{updateBy},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+        </set>
+        where check_id = #{checkId}
+    </update>
+
+    <delete id="deleteCheckByCheckId" parameterType="Long">
+        delete from t_erp_check where check_id = #{checkId}
+    </delete>
+
+    <delete id="deleteCheckByCheckIds" parameterType="Long[]">
+        delete from t_erp_check where check_id in
+        <foreach item="checkId" collection="array" open="(" separator="," close=")">
+            #{checkId}
+        </foreach>
+    </delete>
+</mapper>

@@ -62,8 +62,9 @@
           plain
           icon="el-icon-upload"
           size="mini"
+          :disabled="false"
           @click="openImportTable"
-          v-hasPermi="['tool:gen:import']"
+          style="opacity: 1 !important; pointer-events: auto !important;"
         >导入</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -164,7 +165,7 @@
         </el-tab-pane>
       </el-tabs>
     </el-dialog>
-    <import-table ref="import" @ok="handleQuery" />
+    <import-table ref="importTable" @ok="handleQuery" />
     <create-table ref="create" @ok="handleQuery" />
   </div>
 </template>
@@ -282,7 +283,7 @@ export default {
     },
     /** 打开导入表弹窗 */
     openImportTable() {
-      this.$refs.import.show()
+      this.$refs.importTable.show()
     },
     /** 打开创建表弹窗 */
     openCreateTable() {

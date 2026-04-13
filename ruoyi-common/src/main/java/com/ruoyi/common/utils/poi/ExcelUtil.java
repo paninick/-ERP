@@ -1901,9 +1901,31 @@ public class ExcelUtil<T>
         for (int i = row.getFirstCellNum(); i < row.getLastCellNum(); i++)
         {
             Cell cell = row.getCell(i);
-            if (cell != null && cell.getCellType() != CellType.BLANK)
+            if (cell != null)
             {
-                return false;
+                // 检查单元格是否真的为空（包括空字符串）
+                boolean isCellEmpty = true;
+                CellType cellType = cell.getCellType();
+                
+                if (cellType == CellType.BLANK)
+                {
+                    isCellEmpty = true;
+                }
+                else if (cellType == CellType.STRING)
+                {
+                    String cellValue = cell.getStringCellValue();
+                    isCellEmpty = cellValue == null || cellValue.trim().isEmpty();
+                }
+                else if (cellType == CellType.NUMERIC || cellType == CellType.BOOLEAN || 
+                         cellType == CellType.FORMULA || cellType == CellType.ERROR)
+                {
+                    isCellEmpty = false;
+                }
+                
+                if (!isCellEmpty)
+                {
+                    return false;
+                }
             }
         }
         return true;

@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.StockInMapper">
+
+    <resultMap type="StockIn" id="StockInResult">
+        <result property="id"    column="id"    />
+        <result property="sn"    column="sn"    />
+        <result property="inDate"    column="in_date"    />
+        <result property="inType"    column="in_type"    />
+        <result property="chargeUserId"    column="charge_user_id"    />
+        <result property="totalPrice"    column="total_price"    />
+        <result property="confirmStatus"    column="confirm_status"    />
+        <result property="confirmBy"    column="confirm_by"    />
+        <result property="confirmTime"    column="confirm_time"    />
+        <result property="purchaseId"    column="purchase_id"    />
+        <result property="purchaseSn"    column="purchase_sn"    />
+        <result property="bulkOrderNo"    column="bulk_order_no"    />
+        <result property="inDescription"    column="in_description"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectStockInVo">
+        select a.id, a.sn, a.in_date, a.in_type, a.charge_user_id, a.total_price, a.confirm_status, a.confirm_by, a.confirm_time, a.purchase_id, a.purchase_sn, a.bulk_order_no, a.in_description, a.remark, a.create_by, a.create_time, a.update_by, a.update_time
+        from t_erp_stock_in a
+    </sql>
+
+    <select id="selectStockInList" parameterType="StockIn" resultMap="StockInResult">
+        <include refid="selectStockInVo"/>
+        <where>
+            <if test="sn != null  and sn != ''"> and a.sn = #{sn}</if>
+            <if test="inDate != null "> and a.in_date = #{inDate}</if>
+            <if test="inType != null "> and a.in_type = #{inType}</if>
+            <if test="chargeUserId != null "> and a.charge_user_id = #{chargeUserId}</if>
+            <if test="confirmStatus != null  and confirmStatus != ''"> and a.confirm_status = #{confirmStatus}</if>
+            <if test="purchaseSn != null  and purchaseSn != ''"> and a.purchase_sn = #{purchaseSn}</if>
+        </where>
+    </select>
+
+    <select id="selectStockInById" parameterType="Long" resultMap="StockInResult">
+        <include refid="selectStockInVo"/>
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertStockIn" parameterType="StockIn" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_stock_in
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sn != null">sn,</if>
+            <if test="inDate != null">in_date,</if>
+            <if test="inType != null">in_type,</if>
+            <if test="chargeUserId != null">charge_user_id,</if>
+            <if test="totalPrice != null">total_price,</if>
+            <if test="confirmStatus != null">confirm_status,</if>
+            <if test="confirmBy != null">confirm_by,</if>
+            <if test="confirmTime != null">confirm_time,</if>
+            <if test="purchaseId != null">purchase_id,</if>
+            <if test="purchaseSn != null">purchase_sn,</if>
+            <if test="bulkOrderNo != null">bulk_order_no,</if>
+            <if test="inDescription != null">in_description,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sn != null">#{sn},</if>
+            <if test="inDate != null">#{inDate},</if>
+            <if test="inType != null">#{inType},</if>
+            <if test="chargeUserId != null">#{chargeUserId},</if>
+            <if test="totalPrice != null">#{totalPrice},</if>
+            <if test="confirmStatus != null">#{confirmStatus},</if>
+            <if test="confirmBy != null">#{confirmBy},</if>
+            <if test="confirmTime != null">#{confirmTime},</if>
+            <if test="purchaseId != null">#{purchaseId},</if>
+            <if test="purchaseSn != null">#{purchaseSn},</if>
+            <if test="bulkOrderNo != null">#{bulkOrderNo},</if>
+            <if test="inDescription != null">#{inDescription},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStockIn" parameterType="StockIn">
+        update t_erp_stock_in
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sn != null">sn = #{sn},</if>
+            <if test="inDate != null">in_date = #{inDate},</if>
+            <if test="inType != null">in_type = #{inType},</if>
+            <if test="chargeUserId != null">charge_user_id = #{chargeUserId},</if>
+            <if test="totalPrice != null">total_price = #{totalPrice},</if>
+            <if test="confirmStatus != null">confirm_status = #{confirmStatus},</if>
+            <if test="confirmBy != null">confirm_by = #{confirmBy},</if>
+            <if test="confirmTime != null">confirm_time = #{confirmTime},</if>
+            <if test="purchaseId != null">purchase_id = #{purchaseId},</if>
+            <if test="purchaseSn != null">purchase_sn = #{purchaseSn},</if>
+            <if test="bulkOrderNo != null">bulk_order_no = #{bulkOrderNo},</if>
+            <if test="inDescription != null">in_description = #{inDescription},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStockInById" parameterType="Long">
+        delete from t_erp_stock_in where id = #{id}
+    </delete>
+
+    <delete id="deleteStockInByIds" parameterType="String">
+        delete from t_erp_stock_in where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertStockInBatch" parameterType="java.util.List">
+
+        REPLACE INTO t_erp_stock_in
+        (id,sn,in_date,in_type,charge_user_id,total_price,confirm_status,confirm_by,confirm_time,purchase_id,purchase_sn,bulk_order_no,in_description,remark,create_by,create_time,update_by,update_time)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+
+            (#{item.id},#{item.sn},#{item.inDate},#{item.inType},#{item.chargeUserId},#{item.totalPrice},#{item.confirmStatus},#{item.confirmBy},#{item.confirmTime},#{item.purchaseId},#{item.purchaseSn},#{item.bulkOrderNo},#{item.inDescription},#{item.remark},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime})
+
+        </foreach>
+    </insert>
+
+</mapper>

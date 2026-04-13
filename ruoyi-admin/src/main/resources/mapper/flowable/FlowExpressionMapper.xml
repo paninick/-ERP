@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.flowable.mapper.FlowExpressionMapper">
+    
+    <resultMap type="FlowExpression" id="FlowExpressionResult">
+        <result property="id"    column="id"    />
+        <result property="expressionName"    column="expression_name"    />
+        <result property="expressionKey"    column="expression_key"    />
+        <result property="expressionType"    column="expression_type"    />
+        <result property="expressionContent"    column="expression_text"    />
+        <result property="processDefId"    column="process_def_id"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectFlowExpressionVo">
+        select id, expression_name, expression_key, expression_type, expression_text, process_def_id, status, remark, create_by, create_time, update_by, update_time from flowable_expression
+    </sql>
+
+    <select id="selectFlowExpressionList" parameterType="FlowExpression" resultMap="FlowExpressionResult">
+        <include refid="selectFlowExpressionVo"/>
+        <where>  
+            <if test="expressionName != null  and expressionName != ''"> and expression_name like concat('%', #{expressionName}, '%')</if>
+            <if test="expressionType != null  and expressionType != ''"> and expression_type = #{expressionType}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+        order by create_time desc
+    </select>
+    
+    <select id="selectFlowExpressionById" parameterType="Long" resultMap="FlowExpressionResult">
+        <include refid="selectFlowExpressionVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFlowExpression" parameterType="FlowExpression" useGeneratedKeys="true" keyProperty="id">
+        insert into flowable_expression
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="expressionName != null and expressionName != ''">expression_name,</if>
+            <if test="expressionKey != null and expressionKey != ''">expression_key,</if>
+            <if test="expressionType != null and expressionType != ''">expression_type,</if>
+            <if test="expressionContent != null and expressionContent != ''">expression_text,</if>
+            <if test="processDefId != null and processDefId != ''">process_def_id,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            create_time
+         </trim>
+         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="expressionName != null and expressionName != ''">#{expressionName},</if>
+            <if test="expressionKey != null and expressionKey != ''">#{expressionKey},</if>
+            <if test="expressionType != null and expressionType != ''">#{expressionType},</if>
+            <if test="expressionContent != null and expressionContent != ''">#{expressionContent},</if>
+            <if test="processDefId != null and processDefId != ''">#{processDefId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            sysdate()
+         </trim>
+    </insert>
+
+    <update id="updateFlowExpression" parameterType="FlowExpression">
+        update flowable_expression
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="expressionName != null and expressionName != ''">expression_name = #{expressionName},</if>
+            <if test="expressionKey != null and expressionKey != ''">expression_key = #{expressionKey},</if>
+            <if test="expressionType != null and expressionType != ''">expression_type = #{expressionType},</if>
+            <if test="expressionContent != null and expressionContent != ''">expression_text = #{expressionContent},</if>
+            <if test="processDefId != null and processDefId != ''">process_def_id = #{processDefId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFlowExpressionById" parameterType="Long">
+        delete from flowable_expression where id = #{id}
+    </delete>
+    
+    <delete id="deleteFlowExpressionByIds" parameterType="String">
+        delete from flowable_expression where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

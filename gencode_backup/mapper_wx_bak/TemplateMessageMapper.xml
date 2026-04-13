@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.wx.mapper.TemplateMessageMapper">
+
+    <resultMap type="TemplateMessage" id="TemplateMessageResult">
+        <result property="id"    column="id"    />
+        <result property="wxUserId"    column="wx_user_id"    />
+        <result property="openId"    column="open_id"    />
+        <result property="templateId"    column="template_id"    />
+        <result property="url"    column="url"    />
+        <result property="minaAppid"    column="mina_appid"    />
+        <result property="pagePath"    column="page_path"    />
+        <result property="params"    column="params"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectTemplateMessageVo">
+        select a.id, a.wx_user_id, a.open_id, a.template_id, a.url, a.mina_appid, a.page_path, a.params, a.status, a.remark, a.create_by, a.create_time, a.update_by, a.update_time
+        from t_wx_template_message a
+    </sql>
+
+    <select id="selectTemplateMessageList" parameterType="TemplateMessage" resultMap="TemplateMessageResult">
+        <include refid="selectTemplateMessageVo"/>
+        <where>
+            <if test="wxUserId != null "> and a.wx_user_id = #{wxUserId}</if>
+            <if test="openId != null  and openId != ''"> and a.open_id = #{openId}</if>
+            <if test="templateId != null  and templateId != ''"> and a.template_id = #{templateId}</if>
+            <if test="url != null  and url != ''"> and a.url = #{url}</if>
+            <if test="minaAppid != null  and minaAppid != ''"> and a.mina_appid = #{minaAppid}</if>
+            <if test="pagePath != null  and pagePath != ''"> and a.page_path = #{pagePath}</if>
+            <if test="params != null  and params != ''"> and a.params = #{params}</if>
+            <if test="status != null  and status != ''"> and a.status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectTemplateMessageById" parameterType="Long" resultMap="TemplateMessageResult">
+        <include refid="selectTemplateMessageVo"/>
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertTemplateMessage" parameterType="TemplateMessage" useGeneratedKeys="true" keyProperty="id">
+        insert into t_wx_template_message
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="wxUserId != null">wx_user_id,</if>
+            <if test="openId != null">open_id,</if>
+            <if test="templateId != null">template_id,</if>
+            <if test="url != null">url,</if>
+            <if test="minaAppid != null">mina_appid,</if>
+            <if test="pagePath != null">page_path,</if>
+            <if test="params != null">params,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="wxUserId != null">#{wxUserId},</if>
+            <if test="openId != null">#{openId},</if>
+            <if test="templateId != null">#{templateId},</if>
+            <if test="url != null">#{url},</if>
+            <if test="minaAppid != null">#{minaAppid},</if>
+            <if test="pagePath != null">#{pagePath},</if>
+            <if test="params != null">#{params},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateTemplateMessage" parameterType="TemplateMessage">
+        update t_wx_template_message
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="wxUserId != null">wx_user_id = #{wxUserId},</if>
+            <if test="openId != null">open_id = #{openId},</if>
+            <if test="templateId != null">template_id = #{templateId},</if>
+            <if test="url != null">url = #{url},</if>
+            <if test="minaAppid != null">mina_appid = #{minaAppid},</if>
+            <if test="pagePath != null">page_path = #{pagePath},</if>
+            <if test="params != null">params = #{params},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteTemplateMessageById" parameterType="Long">
+        delete from t_wx_template_message where id = #{id}
+    </delete>
+
+    <delete id="deleteTemplateMessageByIds" parameterType="String">
+        delete from t_wx_template_message where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertTemplateMessageBatch" parameterType="java.util.List">
+
+        REPLACE INTO t_wx_template_message
+        (id,wx_user_id,open_id,template_id,url,mina_appid,page_path,params,status,remark,create_by,create_time,update_by,update_time,)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+
+            (#{item.id},#{item.wxUserId},#{item.openId},#{item.templateId},#{item.url},#{item.minaAppid},#{item.pagePath},#{item.params},#{item.status},#{item.remark},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},)
+
+        </foreach>
+    </insert>
+
+</mapper>

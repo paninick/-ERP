@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.CorpContactsMapper">
+
+    <resultMap type="CorpContacts" id="CorpContactsResult">
+        <result property="id"    column="id"    />
+        <result property="corpType"    column="corp_type"    />
+        <result property="corpId"    column="corp_id"    />
+        <result property="name"    column="name"    />
+        <result property="department"    column="department"    />
+        <result property="sex"    column="sex"    />
+        <result property="phone"    column="phone"    />
+        <result property="mail"    column="mail"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectCorpContactsVo">
+        select a.id, a.corp_type, a.corp_id, a.name, a.department, a.sex, a.phone, a.mail, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
+        from t_erp_corp_contacts a
+    </sql>
+
+    <select id="selectCorpContactsList" parameterType="CorpContacts" resultMap="CorpContactsResult">
+        <include refid="selectCorpContactsVo"/>
+        <where>
+            <if test="corpType != null  and corpType != ''"> and a.corp_type = #{corpType}</if>
+            <if test="corpId != null "> and a.corp_id = #{corpId}</if>
+            <if test="name != null  and name != ''"> and a.name like concat('%', #{name}, '%')</if>
+            <if test="department != null  and department != ''"> and a.department like concat('%', #{department}, '%')</if>
+            <if test="sex != null  and sex != ''"> and a.sex = #{sex}</if>
+            <if test="phone != null  and phone != ''"> and a.phone = #{phone}</if>
+            <if test="mail != null  and mail != ''"> and a.mail = #{mail}</if>
+        </where>
+    </select>
+
+    <select id="selectCorpContactsById" parameterType="Long" resultMap="CorpContactsResult">
+        <include refid="selectCorpContactsVo"/>
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertCorpContacts" parameterType="CorpContacts" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_corp_contacts
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="corpType != null">corp_type,</if>
+            <if test="corpId != null">corp_id,</if>
+            <if test="name != null">name,</if>
+            <if test="department != null">department,</if>
+            <if test="sex != null">sex,</if>
+            <if test="phone != null">phone,</if>
+            <if test="mail != null">mail,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="corpType != null">#{corpType},</if>
+            <if test="corpId != null">#{corpId},</if>
+            <if test="name != null">#{name},</if>
+            <if test="department != null">#{department},</if>
+            <if test="sex != null">#{sex},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="mail != null">#{mail},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCorpContacts" parameterType="CorpContacts">
+        update t_erp_corp_contacts
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="corpType != null">corp_type = #{corpType},</if>
+            <if test="corpId != null">corp_id = #{corpId},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="department != null">department = #{department},</if>
+            <if test="sex != null">sex = #{sex},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="mail != null">mail = #{mail},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCorpContactsById" parameterType="Long">
+        delete from t_erp_corp_contacts where id = #{id}
+    </delete>
+
+    <delete id="deleteCorpContactsByIds" parameterType="String">
+        delete from t_erp_corp_contacts where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertCorpContactsBatch" parameterType="java.util.List">
+
+        REPLACE INTO t_erp_corp_contacts
+        (id,corp_type,corp_id,name,department,sex,phone,mail,create_by,create_time,update_by,update_time,remark,)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+
+            (#{item.id},#{item.corpType},#{item.corpId},#{item.name},#{item.department},#{item.sex},#{item.phone},#{item.mail},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark},)
+
+        </foreach>
+    </insert>
+
+</mapper>

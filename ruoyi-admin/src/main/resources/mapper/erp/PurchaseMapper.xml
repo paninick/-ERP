@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.PurchaseMapper">
+
+    <resultMap type="Purchase" id="PurchaseResult">
+        <result property="id"    column="id"    />
+        <result property="sn"    column="sn"    />
+        <result property="type"    column="type"    />
+        <result property="bulkOrderNo"    column="bulk_order_no"    />
+        <result property="description"    column="description"    />
+        <result property="purchaseDate"    column="purchase_date"    />
+        <result property="expectedDeliveryDate"    column="expected_delivery_date"    />
+        <result property="purchaseName"    column="purchase_name"    />
+        <result property="purchaseUserId"    column="purchase_user_id"    />
+        <result property="confirmTime"    column="confirm_time"    />
+        <result property="status"    column="status"    />
+        <result property="supplierId"    column="supplier_id"    />
+        <result property="amount"    column="amount"    />
+        <result property="deliveryType"    column="delivery_type"    />
+        <result property="confirmStatus"    column="confirm_status"    />
+        <result property="isPay"    column="is_pay"    />
+        <result property="payDate"    column="pay_date"    />
+        <result property="payAmount"    column="pay_amount"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectPurchaseVo">
+        select a.id, a.sn, a.type, a.bulk_order_no, a.description, a.purchase_date, a.expected_delivery_date, a.purchase_name, a.purchase_user_id, a.confirm_time, a.status, a.supplier_id, a.amount, a.delivery_type, a.confirm_status, a.is_pay, a.pay_date, a.pay_amount, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
+        from t_erp_purchase a
+    </sql>
+
+    <select id="selectPurchaseList" parameterType="Purchase" resultMap="PurchaseResult">
+        <include refid="selectPurchaseVo"/>
+        <where>
+            <if test="sn != null  and sn != ''"> and a.sn = #{sn}</if>
+            <if test="purchaseDate != null "> and a.purchase_date = #{purchaseDate}</if>
+            <if test="supplierId != null "> and a.supplier_id = #{supplierId}</if>
+            <if test="confirmStatus != null  and confirmStatus != ''"> and a.confirm_status = #{confirmStatus}</if>
+        </where>
+    </select>
+
+    <select id="selectPurchaseById" parameterType="Long" resultMap="PurchaseResult">
+        <include refid="selectPurchaseVo"/>
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertPurchase" parameterType="Purchase" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_purchase
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="sn != null">sn,</if>
+            <if test="type != null">type,</if>
+            <if test="bulkOrderNo != null">bulk_order_no,</if>
+            <if test="description != null">description,</if>
+            <if test="purchaseDate != null">purchase_date,</if>
+            <if test="expectedDeliveryDate != null">expected_delivery_date,</if>
+            <if test="purchaseName != null">purchase_name,</if>
+            <if test="purchaseUserId != null">purchase_user_id,</if>
+            <if test="confirmTime != null">confirm_time,</if>
+            <if test="status != null">status,</if>
+            <if test="supplierId != null">supplier_id,</if>
+            <if test="amount != null">amount,</if>
+            <if test="deliveryType != null">delivery_type,</if>
+            <if test="confirmStatus != null">confirm_status,</if>
+            <if test="isPay != null">is_pay,</if>
+            <if test="payDate != null">pay_date,</if>
+            <if test="payAmount != null">pay_amount,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="sn != null">#{sn},</if>
+            <if test="type != null">#{type},</if>
+            <if test="bulkOrderNo != null">#{bulkOrderNo},</if>
+            <if test="description != null">#{description},</if>
+            <if test="purchaseDate != null">#{purchaseDate},</if>
+            <if test="expectedDeliveryDate != null">#{expectedDeliveryDate},</if>
+            <if test="purchaseName != null">#{purchaseName},</if>
+            <if test="purchaseUserId != null">#{purchaseUserId},</if>
+            <if test="confirmTime != null">#{confirmTime},</if>
+            <if test="status != null">#{status},</if>
+            <if test="supplierId != null">#{supplierId},</if>
+            <if test="amount != null">#{amount},</if>
+            <if test="deliveryType != null">#{deliveryType},</if>
+            <if test="confirmStatus != null">#{confirmStatus},</if>
+            <if test="isPay != null">#{isPay},</if>
+            <if test="payDate != null">#{payDate},</if>
+            <if test="payAmount != null">#{payAmount},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updatePurchase" parameterType="Purchase">
+        update t_erp_purchase
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="sn != null">sn = #{sn},</if>
+            <if test="type != null">type = #{type},</if>
+            <if test="bulkOrderNo != null">bulk_order_no = #{bulkOrderNo},</if>
+            <if test="description != null">description = #{description},</if>
+            <if test="purchaseDate != null">purchase_date = #{purchaseDate},</if>
+            <if test="expectedDeliveryDate != null">expected_delivery_date = #{expectedDeliveryDate},</if>
+            <if test="purchaseName != null">purchase_name = #{purchaseName},</if>
+            <if test="purchaseUserId != null">purchase_user_id = #{purchaseUserId},</if>
+            <if test="confirmTime != null">confirm_time = #{confirmTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="supplierId != null">supplier_id = #{supplierId},</if>
+            <if test="amount != null">amount = #{amount},</if>
+            <if test="deliveryType != null">delivery_type = #{deliveryType},</if>
+            <if test="confirmStatus != null">confirm_status = #{confirmStatus},</if>
+            <if test="isPay != null">is_pay = #{isPay},</if>
+            <if test="payDate != null">pay_date = #{payDate},</if>
+            <if test="payAmount != null">pay_amount = #{payAmount},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePurchaseById" parameterType="Long">
+        delete from t_erp_purchase where id = #{id}
+    </delete>
+
+    <delete id="deletePurchaseByIds" parameterType="String">
+        delete from t_erp_purchase where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertPurchaseBatch" parameterType="java.util.List">
+
+        REPLACE INTO t_erp_purchase
+        (id,sn,type,bulk_order_no,description,purchase_date,expected_delivery_date,purchase_name,purchase_user_id,confirm_time,status,supplier_id,amount,delivery_type,confirm_status,is_pay,pay_date,pay_amount,create_by,create_time,update_by,update_time,remark)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+
+            (#{item.id},#{item.sn},#{item.type},#{item.bulkOrderNo},#{item.description},#{item.purchaseDate},#{item.expectedDeliveryDate},#{item.purchaseName},#{item.purchaseUserId},#{item.confirmTime},#{item.status},#{item.supplierId},#{item.amount},#{item.deliveryType},#{item.confirmStatus},#{item.isPay},#{item.payDate},#{item.payAmount},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark})
+
+        </foreach>
+    </insert>
+
+</mapper>

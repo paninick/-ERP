@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.CustomerTemplateSizeMapper">
+
+    <resultMap type="CustomerTemplateSize" id="CustomerTemplateSizeResult">
+        <result property="id"    column="id"    />
+        <result property="customerId"    column="customer_id"    />
+        <result property="templateId"    column="template_id"    />
+        <result property="propertyName"    column="property_name"    />
+        <result property="propertyValueA"    column="property_value_a"    />
+        <result property="propertyValueB"    column="property_value_b"    />
+        <result property="propertyValueC"    column="property_value_c"    />
+        <result property="propertyValueD"    column="property_value_d"    />
+        <result property="propertyValueE"    column="property_value_e"    />
+        <result property="propertyValueF"    column="property_value_f"    />
+        <result property="propertyValueG"    column="property_value_g"    />
+        <result property="propertyValueH"    column="property_value_h"    />
+        <result property="propertyValueI"    column="property_value_i"    />
+        <result property="propertyValueJ"    column="property_value_j"    />
+        <result property="propertyValueK"    column="property_value_k"    />
+        <result property="propertyOrder"    column="property_order"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectCustomerTemplateSizeVo">
+        select a.id, a.customer_id, a.template_id, a.property_name, a.property_value_a, a.property_value_b, a.property_value_c, a.property_value_d, a.property_value_e, a.property_value_f, a.property_value_g, a.property_value_h, a.property_value_i, a.property_value_j, a.property_value_k, a.property_order, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
+        from t_erp_customer_template_size a
+    </sql>
+
+    <select id="selectCustomerTemplateSizeList" parameterType="CustomerTemplateSize" resultMap="CustomerTemplateSizeResult">
+        <include refid="selectCustomerTemplateSizeVo"/>
+        <where>
+            <if test="customerId != null "> and a.customer_id = #{customerId}</if>
+            <if test="templateId != null "> and a.template_id = #{templateId}</if>
+            <if test="propertyName != null  and propertyName != ''"> and a.property_name like concat('%', #{propertyName}, '%')</if>
+            <if test="propertyValueA != null  and propertyValueA != ''"> and a.property_value_a = #{propertyValueA}</if>
+            <if test="propertyValueB != null  and propertyValueB != ''"> and a.property_value_b = #{propertyValueB}</if>
+            <if test="propertyValueC != null  and propertyValueC != ''"> and a.property_value_c = #{propertyValueC}</if>
+            <if test="propertyValueD != null  and propertyValueD != ''"> and a.property_value_d = #{propertyValueD}</if>
+            <if test="propertyValueE != null  and propertyValueE != ''"> and a.property_value_e = #{propertyValueE}</if>
+            <if test="propertyValueF != null  and propertyValueF != ''"> and a.property_value_f = #{propertyValueF}</if>
+            <if test="propertyValueG != null  and propertyValueG != ''"> and a.property_value_g = #{propertyValueG}</if>
+            <if test="propertyValueH != null  and propertyValueH != ''"> and a.property_value_h = #{propertyValueH}</if>
+            <if test="propertyValueI != null  and propertyValueI != ''"> and a.property_value_i = #{propertyValueI}</if>
+            <if test="propertyValueJ != null  and propertyValueJ != ''"> and a.property_value_j = #{propertyValueJ}</if>
+            <if test="propertyValueK != null  and propertyValueK != ''"> and a.property_value_k = #{propertyValueK}</if>
+            <if test="propertyOrder != null "> and a.property_order = #{propertyOrder}</if>
+        </where>
+    </select>
+
+    <select id="selectCustomerTemplateSizeById" parameterType="Long" resultMap="CustomerTemplateSizeResult">
+        <include refid="selectCustomerTemplateSizeVo"/>
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertCustomerTemplateSize" parameterType="CustomerTemplateSize" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_customer_template_size
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">customer_id,</if>
+            <if test="templateId != null">template_id,</if>
+            <if test="propertyName != null">property_name,</if>
+            <if test="propertyValueA != null">property_value_a,</if>
+            <if test="propertyValueB != null">property_value_b,</if>
+            <if test="propertyValueC != null">property_value_c,</if>
+            <if test="propertyValueD != null">property_value_d,</if>
+            <if test="propertyValueE != null">property_value_e,</if>
+            <if test="propertyValueF != null">property_value_f,</if>
+            <if test="propertyValueG != null">property_value_g,</if>
+            <if test="propertyValueH != null">property_value_h,</if>
+            <if test="propertyValueI != null">property_value_i,</if>
+            <if test="propertyValueJ != null">property_value_j,</if>
+            <if test="propertyValueK != null">property_value_k,</if>
+            <if test="propertyOrder != null">property_order,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">#{customerId},</if>
+            <if test="templateId != null">#{templateId},</if>
+            <if test="propertyName != null">#{propertyName},</if>
+            <if test="propertyValueA != null">#{propertyValueA},</if>
+            <if test="propertyValueB != null">#{propertyValueB},</if>
+            <if test="propertyValueC != null">#{propertyValueC},</if>
+            <if test="propertyValueD != null">#{propertyValueD},</if>
+            <if test="propertyValueE != null">#{propertyValueE},</if>
+            <if test="propertyValueF != null">#{propertyValueF},</if>
+            <if test="propertyValueG != null">#{propertyValueG},</if>
+            <if test="propertyValueH != null">#{propertyValueH},</if>
+            <if test="propertyValueI != null">#{propertyValueI},</if>
+            <if test="propertyValueJ != null">#{propertyValueJ},</if>
+            <if test="propertyValueK != null">#{propertyValueK},</if>
+            <if test="propertyOrder != null">#{propertyOrder},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateCustomerTemplateSize" parameterType="CustomerTemplateSize">
+        update t_erp_customer_template_size
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="customerId != null">customer_id = #{customerId},</if>
+            <if test="templateId != null">template_id = #{templateId},</if>
+            <if test="propertyName != null">property_name = #{propertyName},</if>
+            <if test="propertyValueA != null">property_value_a = #{propertyValueA},</if>
+            <if test="propertyValueB != null">property_value_b = #{propertyValueB},</if>
+            <if test="propertyValueC != null">property_value_c = #{propertyValueC},</if>
+            <if test="propertyValueD != null">property_value_d = #{propertyValueD},</if>
+            <if test="propertyValueE != null">property_value_e = #{propertyValueE},</if>
+            <if test="propertyValueF != null">property_value_f = #{propertyValueF},</if>
+            <if test="propertyValueG != null">property_value_g = #{propertyValueG},</if>
+            <if test="propertyValueH != null">property_value_h = #{propertyValueH},</if>
+            <if test="propertyValueI != null">property_value_i = #{propertyValueI},</if>
+            <if test="propertyValueJ != null">property_value_j = #{propertyValueJ},</if>
+            <if test="propertyValueK != null">property_value_k = #{propertyValueK},</if>
+            <if test="propertyOrder != null">property_order = #{propertyOrder},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCustomerTemplateSizeById" parameterType="Long">
+        delete from t_erp_customer_template_size where id = #{id}
+    </delete>
+
+    <delete id="deleteCustomerTemplateSizeByIds" parameterType="String">
+        delete from t_erp_customer_template_size where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertCustomerTemplateSizeBatch" parameterType="java.util.List">
+
+        REPLACE INTO t_erp_customer_template_size
+        (id,customer_id,template_id,property_name,property_value_a,property_value_b,property_value_c,property_value_d,property_value_e,property_value_f,property_value_g,property_value_h,property_value_i,property_value_j,property_value_k,property_order,create_by,create_time,update_by,update_time,remark,)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+
+            (#{item.id},#{item.customerId},#{item.templateId},#{item.propertyName},#{item.propertyValueA},#{item.propertyValueB},#{item.propertyValueC},#{item.propertyValueD},#{item.propertyValueE},#{item.propertyValueF},#{item.propertyValueG},#{item.propertyValueH},#{item.propertyValueI},#{item.propertyValueJ},#{item.propertyValueK},#{item.propertyOrder},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark},)
+
+        </foreach>
+    </insert>
+
+</mapper>

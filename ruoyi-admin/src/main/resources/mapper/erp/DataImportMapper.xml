@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.DataImportMapper">
+
+	<resultMap type="DataImport" id="DataImportResult">
+		<id     property="importId"       column="import_id"        />
+		<result property="importName"     column="import_name"      />
+		<result property="tableName"      column="table_name"       />
+		<result property="fileName"       column="file_name"        />
+		<result property="filePath"       column="file_path"        />
+		<result property="totalCount"     column="total_count"       />
+		<result property="successCount"   column="success_count"    />
+		<result property="failCount"      column="fail_count"       />
+		<result property="status"         column="status"           />
+		<result property="remark"         column="remark"           />
+		<result property="createBy"       column="create_by"        />
+		<result property="createTime"     column="create_time"      />
+		<result property="updateBy"       column="update_by"        />
+		<result property="updateTime"     column="update_time"      />
+		<result property="remark"         column="remark"           />
+	</resultMap>
+
+	<select id="selectDataImportList" parameterType="DataImport" resultMap="DataImportResult">
+		SELECT 
+		    import_id, import_name, table_name, file_name, file_path, total_count, success_count, fail_count, status, remark
+		FROM data_import
+		<where>
+			<if test="importName != null and importName != ''">
+				AND import_name LIKE CONCAT('%', #{importName}, '%')
+			</if>
+			<if test="tableName != null and tableName != ''">
+				AND table_name LIKE CONCAT('%', #{tableName}, '%')
+			</if>
+			<if test="status != null and status != ''">
+				AND status = #{status}
+			</if>
+		</where>
+		ORDER BY create_time DESC
+	</select>
+
+	<select id="selectDataImportByImportId" parameterType="Long" resultMap="DataImportResult">
+		SELECT 
+		    import_id, import_name, table_name, file_name, file_path, total_count, success_count, fail_count, status, remark
+		FROM data_import
+		WHERE import_id = #{importId}
+	</select>
+
+	<insert id="insertDataImport" parameterType="DataImport" useGeneratedKeys="true" keyProperty="importId">
+		INSERT INTO data_import
+		(import_name, table_name, file_name, file_path, total_count, success_count, fail_count, status, remark, create_by, create_time)
+		VALUES
+		(#{importName}, #{tableName}, #{fileName}, #{filePath}, #{totalCount}, #{successCount}, #{failCount}, #{status}, #{remark}, #{createBy}, #{createTime})
+	</insert>
+
+	<update id="updateDataImport" parameterType="DataImport">
+		UPDATE data_import
+		SET
+			<if test="importName != null">import_name = #{importName},</if>
+			<if test="tableName != null">table_name = #{tableName},</if>
+			<if test="fileName != null">file_name = #{fileName},</if>
+			<if test="filePath != null">file_path = #{filePath},</if>
+			<if test="totalCount != null">total_count = #{totalCount},</if>
+			<if test="successCount != null">success_count = #{successCount},</if>
+			<if test="failCount != null">fail_count = #{failCount},</if>
+			<if test="status != null">status = #{status},</if>
+			<if test="remark != null">remark = #{remark},</if>
+			update_by = #{updateBy}, update_time = #{updateTime}
+		WHERE import_id = #{importId}
+	</update>
+
+	<delete id="deleteDataImportByImportId" parameterType="Long">
+		DELETE FROM data_import WHERE import_id = #{importId}
+	</delete>
+
+	<delete id="deleteDataImportByImportIds" parameterType="Long[]">
+		DELETE FROM data_import WHERE import_id IN
+		<foreach item="importId" collection="array" open="(" separator="," close=")">
+			#{importId}
+		</foreach>
+	</delete>
+</mapper>

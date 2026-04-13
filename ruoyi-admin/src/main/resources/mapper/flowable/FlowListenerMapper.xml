@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.flowable.mapper.FlowListenerMapper">
+    
+    <resultMap type="FlowListener" id="FlowListenerResult">
+        <result property="id"    column="id"    />
+        <result property="listenerName"    column="listener_name"    />
+        <result property="listenerType"    column="listener_type"    />
+        <result property="listenerValue"    column="listener_value"    />
+        <result property="valueType"    column="value_type"    />
+        <result property="implementation"    column="implementation"    />
+        <result property="eventType"    column="event_type"    />
+        <result property="processDefId"    column="process_def_id"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectFlowListenerVo">
+        select id, listener_name, listener_type, listener_value, value_type, implementation, event_type, process_def_id, status, remark, create_by, create_time, update_by, update_time from flowable_listener
+    </sql>
+
+    <select id="selectFlowListenerList" parameterType="FlowListener" resultMap="FlowListenerResult">
+        <include refid="selectFlowListenerVo"/>
+        <where>  
+            <if test="listenerName != null  and listenerName != ''"> and listener_name like concat('%', #{listenerName}, '%')</if>
+            <if test="listenerType != null  and listenerType != ''"> and listener_type = #{listenerType}</if>
+            <if test="eventType != null  and eventType != ''"> and event_type = #{eventType}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+        order by create_time desc
+    </select>
+    
+    <select id="selectFlowListenerById" parameterType="Long" resultMap="FlowListenerResult">
+        <include refid="selectFlowListenerVo"/>
+        where id = #{id}
+    </select>
+        
+    <insert id="insertFlowListener" parameterType="FlowListener" useGeneratedKeys="true" keyProperty="id">
+        insert into flowable_listener
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="listenerName != null and listenerName != ''">listener_name,</if>
+            <if test="listenerType != null and listenerType != ''">listener_type,</if>
+            <if test="listenerValue != null and listenerValue != ''">listener_value,</if>
+            <if test="valueType != null and valueType != ''">value_type,</if>
+            <if test="implementation != null and implementation != ''">implementation,</if>
+            <if test="eventType != null and eventType != ''">event_type,</if>
+            <if test="processDefId != null and processDefId != ''">process_def_id,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            create_time
+         </trim>
+         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="listenerName != null and listenerName != ''">#{listenerName},</if>
+            <if test="listenerType != null and listenerType != ''">#{listenerType},</if>
+            <if test="listenerValue != null and listenerValue != ''">#{listenerValue},</if>
+            <if test="valueType != null and valueType != ''">#{valueType},</if>
+            <if test="implementation != null and implementation != ''">#{implementation},</if>
+            <if test="eventType != null and eventType != ''">#{eventType},</if>
+            <if test="processDefId != null and processDefId != ''">#{processDefId},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            sysdate()
+         </trim>
+    </insert>
+
+    <update id="updateFlowListener" parameterType="FlowListener">
+        update flowable_listener
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="listenerName != null and listenerName != ''">listener_name = #{listenerName},</if>
+            <if test="listenerType != null and listenerType != ''">listener_type = #{listenerType},</if>
+            <if test="listenerValue != null and listenerValue != ''">listener_value = #{listenerValue},</if>
+            <if test="valueType != null and valueType != ''">value_type = #{valueType},</if>
+            <if test="implementation != null and implementation != ''">implementation = #{implementation},</if>
+            <if test="eventType != null and eventType != ''">event_type = #{eventType},</if>
+            <if test="processDefId != null and processDefId != ''">process_def_id = #{processDefId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            update_time = sysdate()
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteFlowListenerById" parameterType="Long">
+        delete from flowable_listener where id = #{id}
+    </delete>
+    
+    <delete id="deleteFlowListenerByIds" parameterType="String">
+        delete from flowable_listener where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

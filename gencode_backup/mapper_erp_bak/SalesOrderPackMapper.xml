@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.SalesOrderPackMapper">
+
+    <resultMap type="SalesOrderPack" id="SalesOrderPackResult">
+        <result property="id"    column="id"    />
+        <result property="salesOrderId"    column="sales_order_id"    />
+        <result property="packDate"    column="pack_date"    />
+        <result property="clotheNo"    column="clothe_no"    />
+        <result property="tapeType"    column="tape_type"    />
+        <result property="tapeSize"    column="tape_size"    />
+        <result property="tapeNum"    column="tape_num"    />
+        <result property="cartonMark"    column="carton_mark"    />
+        <result property="contractNo"    column="contract_no"    />
+        <result property="cartonSize"    column="carton_size"    />
+        <result property="cartonNum"    column="carton_num"    />
+        <result property="perNum"    column="per_num"    />
+        <result property="singleWeight"    column="single_weight"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectSalesOrderPackVo">
+        select a.id, a.sales_order_id, a.pack_date, a.clothe_no, a.tape_type, a.tape_size, a.tape_num, a.carton_mark, a.contract_no, a.carton_size, a.carton_num, a.per_num, a.single_weight, a.remark, a.create_by, a.create_time, a.update_by, a.update_time
+        from t_erp_sales_order_pack a
+    </sql>
+
+    <select id="selectSalesOrderPackList" parameterType="SalesOrderPack" resultMap="SalesOrderPackResult">
+        <include refid="selectSalesOrderPackVo"/>
+        <where>
+            <if test="salesOrderId != null "> and a.sales_order_id = #{salesOrderId}</if>
+            <if test="packDate != null "> and a.pack_date = #{packDate}</if>
+            <if test="clotheNo != null  and clotheNo != ''"> and a.clothe_no = #{clotheNo}</if>
+            <if test="tapeType != null  and tapeType != ''"> and a.tape_type = #{tapeType}</if>
+        </where>
+    </select>
+
+    <select id="selectSalesOrderPackById" parameterType="Long" resultMap="SalesOrderPackResult">
+        <include refid="selectSalesOrderPackVo"/>
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertSalesOrderPack" parameterType="SalesOrderPack" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_sales_order_pack
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="salesOrderId != null">sales_order_id,</if>
+            <if test="packDate != null">pack_date,</if>
+            <if test="clotheNo != null">clothe_no,</if>
+            <if test="tapeType != null">tape_type,</if>
+            <if test="tapeSize != null">tape_size,</if>
+            <if test="tapeNum != null">tape_num,</if>
+            <if test="cartonMark != null">carton_mark,</if>
+            <if test="contractNo != null">contract_no,</if>
+            <if test="cartonSize != null">carton_size,</if>
+            <if test="cartonNum != null">carton_num,</if>
+            <if test="perNum != null">per_num,</if>
+            <if test="singleWeight != null">single_weight,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="salesOrderId != null">#{salesOrderId},</if>
+            <if test="packDate != null">#{packDate},</if>
+            <if test="clotheNo != null">#{clotheNo},</if>
+            <if test="tapeType != null">#{tapeType},</if>
+            <if test="tapeSize != null">#{tapeSize},</if>
+            <if test="tapeNum != null">#{tapeNum},</if>
+            <if test="cartonMark != null">#{cartonMark},</if>
+            <if test="contractNo != null">#{contractNo},</if>
+            <if test="cartonSize != null">#{cartonSize},</if>
+            <if test="cartonNum != null">#{cartonNum},</if>
+            <if test="perNum != null">#{perNum},</if>
+            <if test="singleWeight != null">#{singleWeight},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSalesOrderPack" parameterType="SalesOrderPack">
+        update t_erp_sales_order_pack
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="salesOrderId != null">sales_order_id = #{salesOrderId},</if>
+            <if test="packDate != null">pack_date = #{packDate},</if>
+            <if test="clotheNo != null">clothe_no = #{clotheNo},</if>
+            <if test="tapeType != null">tape_type = #{tapeType},</if>
+            <if test="tapeSize != null">tape_size = #{tapeSize},</if>
+            <if test="tapeNum != null">tape_num = #{tapeNum},</if>
+            <if test="cartonMark != null">carton_mark = #{cartonMark},</if>
+            <if test="contractNo != null">contract_no = #{contractNo},</if>
+            <if test="cartonSize != null">carton_size = #{cartonSize},</if>
+            <if test="cartonNum != null">carton_num = #{cartonNum},</if>
+            <if test="perNum != null">per_num = #{perNum},</if>
+            <if test="singleWeight != null">single_weight = #{singleWeight},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSalesOrderPackById" parameterType="Long">
+        delete from t_erp_sales_order_pack where id = #{id}
+    </delete>
+
+    <delete id="deleteSalesOrderPackByIds" parameterType="String">
+        delete from t_erp_sales_order_pack where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertSalesOrderPackBatch" parameterType="java.util.List">
+
+        REPLACE INTO t_erp_sales_order_pack
+        (id,sales_order_id,pack_date,clothe_no,tape_type,tape_size,tape_num,carton_mark,contract_no,carton_size,carton_num,per_num,single_weight,remark,create_by,create_time,update_by,update_time,)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+
+            (#{item.id},#{item.salesOrderId},#{item.packDate},#{item.clotheNo},#{item.tapeType},#{item.tapeSize},#{item.tapeNum},#{item.cartonMark},#{item.contractNo},#{item.cartonSize},#{item.cartonNum},#{item.perNum},#{item.singleWeight},#{item.remark},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},)
+
+        </foreach>
+    </insert>
+
+</mapper>

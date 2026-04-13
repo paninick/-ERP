@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.SampleNoticeDetailMapper">
+
+    <resultMap type="SampleNoticeDetail" id="SampleNoticeDetailResult">
+        <result property="id"    column="id"    />
+        <result property="noticeId"    column="notice_id"    />
+        <result property="sampleColor"    column="sample_color"    />
+        <result property="sampleSize"    column="sample_size"    />
+        <result property="sampleCount"    column="sample_count"    />
+        <result property="dueDate"    column="due_date"    />
+        <result property="customerComment"    column="customer_comment"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectSampleNoticeDetailVo">
+        select a.id, a.notice_id, a.sample_color, a.sample_size, a.sample_count, a.due_date, a.customer_comment, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
+        from t_erp_sample_notice_detail a
+    </sql>
+
+    <select id="selectSampleNoticeDetailList" parameterType="SampleNoticeDetail" resultMap="SampleNoticeDetailResult">
+        <include refid="selectSampleNoticeDetailVo"/>
+        <where>
+            <if test="noticeId != null "> and a.notice_id = #{noticeId}</if>
+            <if test="sampleColor != null  and sampleColor != ''"> and a.sample_color = #{sampleColor}</if>
+            <if test="sampleSize != null  and sampleSize != ''"> and a.sample_size = #{sampleSize}</if>
+            <if test="sampleCount != null "> and a.sample_count = #{sampleCount}</if>
+            <if test="dueDate != null "> and a.due_date = #{dueDate}</if>
+            <if test="customerComment != null  and customerComment != ''"> and a.customer_comment = #{customerComment}</if>
+        </where>
+    </select>
+
+    <select id="selectSampleNoticeDetailById" parameterType="Long" resultMap="SampleNoticeDetailResult">
+        <include refid="selectSampleNoticeDetailVo"/>
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertSampleNoticeDetail" parameterType="SampleNoticeDetail" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_sample_notice_detail
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="noticeId != null">notice_id,</if>
+            <if test="sampleColor != null">sample_color,</if>
+            <if test="sampleSize != null">sample_size,</if>
+            <if test="sampleCount != null">sample_count,</if>
+            <if test="dueDate != null">due_date,</if>
+            <if test="customerComment != null">customer_comment,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="noticeId != null">#{noticeId},</if>
+            <if test="sampleColor != null">#{sampleColor},</if>
+            <if test="sampleSize != null">#{sampleSize},</if>
+            <if test="sampleCount != null">#{sampleCount},</if>
+            <if test="dueDate != null">#{dueDate},</if>
+            <if test="customerComment != null">#{customerComment},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateSampleNoticeDetail" parameterType="SampleNoticeDetail">
+        update t_erp_sample_notice_detail
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="noticeId != null">notice_id = #{noticeId},</if>
+            <if test="sampleColor != null">sample_color = #{sampleColor},</if>
+            <if test="sampleSize != null">sample_size = #{sampleSize},</if>
+            <if test="sampleCount != null">sample_count = #{sampleCount},</if>
+            <if test="dueDate != null">due_date = #{dueDate},</if>
+            <if test="customerComment != null">customer_comment = #{customerComment},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteSampleNoticeDetailById" parameterType="Long">
+        delete from t_erp_sample_notice_detail where id = #{id}
+    </delete>
+
+    <delete id="deleteSampleNoticeDetailByIds" parameterType="String">
+        delete from t_erp_sample_notice_detail where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertSampleNoticeDetailBatch" parameterType="java.util.List">
+
+        REPLACE INTO t_erp_sample_notice_detail
+        (id,notice_id,sample_color,sample_size,sample_count,due_date,customer_comment,create_by,create_time,update_by,update_time,remark,)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+
+            (#{item.id},#{item.noticeId},#{item.sampleColor},#{item.sampleSize},#{item.sampleCount},#{item.dueDate},#{item.customerComment},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark},)
+
+        </foreach>
+    </insert>
+
+</mapper>

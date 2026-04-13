@@ -1,0 +1,54 @@
+import request from '@/utils/request'
+
+// 查询流程表达式列表
+export function listExpression(query) {
+  return request({
+    url: '/flowable/expression/list',
+    method: 'get',
+    params: query
+  })
+}
+
+// 查询流程表达式详细
+export function getExpression(id) {
+  return request({
+    url: '/flowable/expression/' + id,
+    method: 'get'
+  })
+}
+
+// 新增流程表达式
+export function addExpression(data) {
+  return request({
+    url: '/flowable/expression',
+    method: 'post',
+    data: data
+  })
+}
+
+// 修改流程表达式
+export function updateExpression(data) {
+  return request({
+    url: '/flowable/expression',
+    method: 'put',
+    data: data
+  })
+}
+
+// 删除流程表达式
+export function delExpression(id) {
+  return request({
+    url: '/flowable/expression/' + id,
+    method: 'delete'
+  })
+}
+
+// 导出流程表达式
+export function exportExpression(query) {
+  return request({
+    url: '/flowable/expression/export',
+    method: 'get',
+    params: query,
+    responseType: 'blob'
+  })
+}

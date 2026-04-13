@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.MainMaterialMapper">
+
+    <resultMap type="MainMaterial" id="MainMaterialResult">
+        <result property="id"    column="id"    />
+        <result property="mainMaterialType"    column="main_material_type"    />
+        <result property="mainMaterialNo"    column="main_material_no"    />
+        <result property="supplyMethod"    column="supply_method"    />
+        <result property="factoryNo"    column="factory_no"    />
+        <result property="supplierId"    column="supplier_id"    />
+        <result property="name"    column="name"    />
+        <result property="composition"    column="composition"    />
+        <result property="width"    column="width"    />
+        <result property="weight"    column="weight"    />
+        <result property="yarnCount"    column="yarn_count"    />
+        <result property="unit"    column="unit"    />
+        <result property="pictrueUrl"    column="pictrue_url"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectMainMaterialVo">
+        select a.id, a.main_material_type, a.main_material_no, a.supply_method, a.factory_no, a.supplier_id, a.name, a.composition, a.width, a.weight, a.yarn_count, a.unit, a.pictrue_url, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
+        from t_erp_main_material a
+    </sql>
+
+    <select id="selectMainMaterialList" parameterType="MainMaterial" resultMap="MainMaterialResult">
+        <include refid="selectMainMaterialVo"/>
+        <where>
+            <if test="mainMaterialType != null  and mainMaterialType != ''"> and a.main_material_type = #{mainMaterialType}</if>
+            <if test="mainMaterialNo != null  and mainMaterialNo != ''"> and a.main_material_no = #{mainMaterialNo}</if>
+            <if test="supplyMethod != null  and supplyMethod != ''"> and a.supply_method = #{supplyMethod}</if>
+            <if test="supplierId != null "> and a.supplier_id = #{supplierId}</if>
+            <if test="name != null  and name != ''"> and a.name like concat('%', #{name}, '%')</if>
+        </where>
+    </select>
+
+    <select id="selectMainMaterialById" parameterType="Long" resultMap="MainMaterialResult">
+        <include refid="selectMainMaterialVo"/>
+        where a.id = #{id}
+    </select>
+
+    <select id="selectMainMaterialByNo" parameterType="String" resultMap="MainMaterialResult">
+        <include refid="selectMainMaterialVo"/>
+        where a.main_material_no = #{mainMaterialNo}
+    </select>
+
+    <insert id="insertMainMaterial" parameterType="MainMaterial" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_main_material
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mainMaterialType != null">main_material_type,</if>
+            <if test="mainMaterialNo != null">main_material_no,</if>
+            <if test="supplyMethod != null">supply_method,</if>
+            <if test="factoryNo != null">factory_no,</if>
+            <if test="supplierId != null">supplier_id,</if>
+            <if test="name != null">name,</if>
+            <if test="composition != null">composition,</if>
+            <if test="width != null">width,</if>
+            <if test="weight != null">weight,</if>
+            <if test="yarnCount != null">yarn_count,</if>
+            <if test="unit != null">unit,</if>
+            <if test="pictrueUrl != null">pictrue_url,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="mainMaterialType != null">#{mainMaterialType},</if>
+            <if test="mainMaterialNo != null">#{mainMaterialNo},</if>
+            <if test="supplyMethod != null">#{supplyMethod},</if>
+            <if test="factoryNo != null">#{factoryNo},</if>
+            <if test="supplierId != null">#{supplierId},</if>
+            <if test="name != null">#{name},</if>
+            <if test="composition != null">#{composition},</if>
+            <if test="width != null">#{width},</if>
+            <if test="weight != null">#{weight},</if>
+            <if test="yarnCount != null">#{yarnCount},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="pictrueUrl != null">#{pictrueUrl},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateMainMaterial" parameterType="MainMaterial">
+        update t_erp_main_material
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="mainMaterialType != null">main_material_type = #{mainMaterialType},</if>
+            <if test="mainMaterialNo != null">main_material_no = #{mainMaterialNo},</if>
+            <if test="supplyMethod != null">supply_method = #{supplyMethod},</if>
+            <if test="factoryNo != null">factory_no = #{factoryNo},</if>
+            <if test="supplierId != null">supplier_id = #{supplierId},</if>
+            <if test="name != null">name = #{name},</if>
+            <if test="composition != null">composition = #{composition},</if>
+            <if test="width != null">width = #{width},</if>
+            <if test="weight != null">weight = #{weight},</if>
+            <if test="yarnCount != null">yarn_count = #{yarnCount},</if>
+            <if test="unit != null">unit = #{unit},</if>
+            <if test="pictrueUrl != null">pictrue_url = #{pictrueUrl},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteMainMaterialById" parameterType="Long">
+        delete from t_erp_main_material where id = #{id}
+    </delete>
+
+    <delete id="deleteMainMaterialByIds" parameterType="String">
+        delete from t_erp_main_material where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <insert id="insertMainMaterialBatch" parameterType="java.util.List">
+        REPLACE INTO t_erp_main_material
+        (id,main_material_type,main_material_no,supply_method,factory_no,supplier_id,name,composition,width,weight,yarn_count,unit,pictrue_url,create_by,create_time,update_by,update_time,remark,price)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.id},#{item.mainMaterialType},#{item.mainMaterialNo},#{item.supplyMethod},#{item.factoryNo},#{item.supplierId},#{item.name},#{item.composition},#{item.width},#{item.weight},#{item.yarnCount},#{item.unit},#{item.pictrueUrl},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark},#{item.price})
+        </foreach>
+    </insert>
+
+    <insert id="insertMainMaterialSafe" parameterType="MainMaterial" useGeneratedKeys="true" keyProperty="id">
+        INSERT IGNORE INTO t_erp_main_material
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="mainMaterialType != null">main_material_type,</if>
+            <if test="mainMaterialNo != null">main_material_no,</if>
+            <if test="supplyMethod != null">supply_method,</if>
+            <if test="factoryNo != null">factory_no,</if>
+            <if test="supplierId != null">supplier_id,</if>
+            <if test="name != null">name,</if>
+            <if test="composition != null">composition,</if>
+            <if test="width != null">width,</if>
+            <if test="weight != null">weight,</if>
+            <if test="yarnCount != null">yarn_count,</if>
+            <if test="unit != null">unit,</if>
+            <if test="pictrueUrl != null">pictrue_url,</if>
+            <if test="price != null">price,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="mainMaterialType != null">#{mainMaterialType},</if>
+            <if test="mainMaterialNo != null">#{mainMaterialNo},</if>
+            <if test="supplyMethod != null">#{supplyMethod},</if>
+            <if test="factoryNo != null">#{factoryNo},</if>
+            <if test="supplierId != null">#{supplierId},</if>
+            <if test="name != null">#{name},</if>
+            <if test="composition != null">#{composition},</if>
+            <if test="width != null">#{width},</if>
+            <if test="weight != null">#{weight},</if>
+            <if test="yarnCount != null">#{yarnCount},</if>
+            <if test="unit != null">#{unit},</if>
+            <if test="pictrueUrl != null">#{pictrueUrl},</if>
+            <if test="price != null">#{price},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <insert id="insertMainMaterialBatchSafe" parameterType="java.util.List">
+        INSERT IGNORE INTO t_erp_main_material
+        (main_material_type,main_material_no,supply_method,factory_no,supplier_id,name,composition,width,weight,yarn_count,unit,pictrue_url,create_by,create_time,update_by,update_time,remark,price)
+        VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.mainMaterialType},#{item.mainMaterialNo},#{item.supplyMethod},#{item.factoryNo},#{item.supplierId},#{item.name},#{item.composition},#{item.width},#{item.weight},#{item.yarnCount},#{item.unit},#{item.pictrueUrl},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark},#{item.price})
+        </foreach>
+    </insert>
+
+</mapper>
