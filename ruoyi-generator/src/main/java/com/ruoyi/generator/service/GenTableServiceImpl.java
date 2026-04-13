@@ -294,7 +294,13 @@ public class GenTableServiceImpl implements IGenTableService
     @Transactional
     public void synchDb(String tableName)
     {
-        GenTable table = genTableMapper.selectGenTableByName(tableName);
+        // 查询表信息，如果有重复记录取第一条，避免selectOne报错
+        List<GenTable> tables = genTableMapper.selectGenTableListByName(tableName);
+        if (tables.isEmpty())
+        {
+            throw new ServiceException("同步数据失败，原表结构不存在");
+        }
+        GenTable table = tables.get(0);
         List<GenTableColumn> tableColumns = table.getColumns();
         Map<String, GenTableColumn> tableColumnMap = tableColumns.stream().collect(Collectors.toMap(GenTableColumn::getColumnName, Function.identity()));
 
@@ -369,8 +375,13 @@ public class GenTableServiceImpl implements IGenTableService
      */
     private void generatorCode(String tableName, ZipOutputStream zip, Map<String, StringBuffer> typeFiles)
     {
-        // 查询表信息
-        GenTable table = genTableMapper.selectGenTableByName(tableName);
+        // 查询表信息，如果有重复记录取第一条，避免selectOne报错
+        List<GenTable> tables = genTableMapper.selectGenTableListByName(tableName);
+        if (tables.isEmpty())
+        {
+            return;
+        }
+        GenTable table = tables.get(0);
         // 设置主子表信息
         setSubTable(table);
         // 设置主键列信息
@@ -515,7 +526,12 @@ public class GenTableServiceImpl implements IGenTableService
         String subTableName = table.getSubTableName();
         if (StringUtils.isNotEmpty(subTableName))
         {
-            table.setSubTable(genTableMapper.selectGenTableByName(subTableName));
+            // 查询子表信息，如果有重复记录取第一条，避免selectOne报错
+            List<GenTable> subTables = genTableMapper.selectGenTableListByName(subTableName);
+            if (!subTables.isEmpty())
+            {
+                table.setSubTable(subTables.get(0));
+            }
         }
     }
 

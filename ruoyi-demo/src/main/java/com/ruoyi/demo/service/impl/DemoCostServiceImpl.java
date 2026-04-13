@@ -28,11 +28,12 @@ public class DemoCostServiceImpl implements IDemoCostService {
 
     @Override
     public BigDecimal calculateFobPrice(String styleNo, Integer quantity, BigDecimal profitRate) {
-        // 查询款式信息
-        DemoStyle style = demoStyleMapper.selectOne(wrapper -> wrapper.eq("style_no", styleNo));
-        if (style == null) {
+        // 查询款式信息 - 使用list获取第一条，避免selectOne在多条时报错
+        List<DemoStyle> styles = demoStyleMapper.selectList(wrapper -> wrapper.eq("style_no", styleNo));
+        if (styles.isEmpty()) {
             return BigDecimal.ZERO;
         }
+        DemoStyle style = styles.get(0);
 
         BigDecimal costPrice = calculateStyleCost(style);
         BigDecimal totalCost = costPrice.multiply(BigDecimal.valueOf(quantity));

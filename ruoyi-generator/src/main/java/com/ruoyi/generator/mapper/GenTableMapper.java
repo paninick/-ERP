@@ -58,6 +58,14 @@ public interface GenTableMapper
     public GenTable selectGenTableByName(String tableName);
 
     /**
+     * 查询表名称业务信息（返回列表，允许重复）
+     * 
+     * @param tableName 表名称
+     * @return 业务信息列表
+     */
+    public List<GenTable> selectGenTableListByName(String tableName);
+
+    /**
      * 新增业务
      * 
      * @param genTable 业务信息
