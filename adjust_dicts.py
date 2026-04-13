@@ -1,14 +1,21 @@
 
+import os
 import pymysql
+from dotenv import load_dotenv
 
-config = {
-    'host': 'localhost',
-    'port': 3306,
-    'user': 'root',
-    'password': '',
-    'database': 'ry_vue',
-    'charset': 'utf8mb4'
-}
+load_dotenv()
+
+def get_db_config():
+    return {
+        'host': os.environ.get('DB_HOST', 'localhost'),
+        'port': int(os.environ.get('DB_PORT', '3306')),
+        'user': os.environ.get('DB_USER', 'root'),
+        'password': os.environ.get('DB_PASSWORD', ''),
+        'database': os.environ.get('DB_NAME', 'ry_vue'),
+        'charset': os.environ.get('DB_CHARSET', 'utf8mb4')
+    }
+
+config = get_db_config()
 
 def adjust_dicts():
     """调整字典"""

@@ -1,0 +1,38 @@
+
+import pandas as pd
+import os
+
+excel_path = r'C:\Users\91306\Downloads\入库单_全量导出_2026-04-12.xlsx'
+
+if os.path.exists(excel_path):
+    print('File exists:', excel_path)
+    print()
+    
+    df = pd.read_excel(excel_path)
+    print('='*80)
+    print('Stock In Headers:')
+    print('='*80)
+    print(list(df.columns))
+    print()
+    
+    print('='*80)
+    print(f'Total Records: {len(df)}')
+    print('='*80)
+    print()
+    
+    print('='*80)
+    print('First 10 records:')
+    print('='*80)
+    print(df.head(10))
+    print()
+    
+    print('='*80)
+    print('Data Types:')
+    print('='*80)
+    print(df.dtypes)
+    print()
+    
+    print('Read completed!')
+else:
+    print('File not found:', excel_path)
+

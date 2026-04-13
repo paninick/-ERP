@@ -1,3 +1,11 @@
+# Environment variables file
+.env
+.env.local
+.env.*
+
+# Database configuration
+lightweight-mysql-config.ini
+
 # Python
 __pycache__/
 *.py[cod]
@@ -10,26 +18,20 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
-parts/
-sdist/
-var/
-wheels/
+installer/lib/python
+lib/python3.12/site-packages
 *.egg-info/
 .installed.cfg
 *.egg
-.pytest_cache/
-.coverage
-htmlcov/
-.tox/
-.nox/
+*.log
+*.err
+*.tmp
 
 # Virtual environment
 venv/
 env/
+ENV/
 .venv
-.env
 
 # IDE
 .vscode/
@@ -37,22 +39,29 @@ env/
 *.swp
 *.swo
 *~
-.DS_Store
-
-# Project
-logs/
-*.log
-temp/
-tmp/
+*.code-workspace
 
 # OS
+.DS_Store
 Thumbs.db
 Desktop.ini
 
-# Jupyter
-.ipynb_checkpoints/
+# Excel and data files
+*.xlsx
+*.xls
+*.csv
+*.sql
+*.sqlite
+*.sqlite3
 
-# Environment variables
-.env
-.env.local
-.env.*
+# Backup files
+*.bak
+*.backup
+*.old
+*.orig
+
+# Temp files
+*.temp
+*.tmp
+refactor_db_config.ps1
+hs_err_pid*.log
