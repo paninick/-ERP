@@ -199,57 +199,101 @@
     />
 
     <!-- 添加或修改大货订单物料明细对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="60%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
+    <el-dialog :title="title" :visible.sync="open" width="700px" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="销售订单id" prop="salesOrderId">
-          <el-input v-model="form.salesOrderId" placeholder="请输入销售订单id" />
-        </el-form-item>
-        <el-form-item label="材料类型" prop="materialType">
-          <el-select v-model="form.materialType" placeholder="请选择材料类型">
+        <el-form-item label="销售订单" prop="salesOrderId" required>
+          <el-select v-model="form.salesOrderId" placeholder="请选择销售订单" clearable
+            filterable clearable remote :remote-method="filterSalesOrder" loading="salesOrderLoading">
             <el-option
-              v-for="dict in dict.type.erp_material_type"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            ></el-option>
+              v-for="item in salesOrderOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
           </el-select>
         </el-form-item>
-        <el-form-item label="主料id" prop="materialId">
-          <el-input v-model="form.materialId" placeholder="请输入主料id" />
-        </el-form-item>
-        <el-form-item label="颜色" prop="color">
-          <el-input v-model="form.color" placeholder="请输入颜色" />
-        </el-form-item>
-        <el-form-item label="单耗" prop="unitConsumption">
-          <el-input v-model="form.unitConsumption" placeholder="请输入单耗" />
-        </el-form-item>
-        <el-form-item label="损耗方式" prop="lossType">
-          <el-select v-model="form.lossType" placeholder="请选择损耗方式">
-            <el-option
-              v-for="dict in dict.type.erp_loss_type"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="损耗" prop="wastage">
-          <el-input v-model="form.wastage" placeholder="请输入损耗" />
-        </el-form-item>
-        <el-form-item label="排产数量" prop="planQuantity">
-          <el-input v-model="form.planQuantity" placeholder="请输入排产数量" />
-        </el-form-item>
-        <el-form-item label="需求总量" prop="totalQuantity">
-          <el-input v-model="form.totalQuantity" placeholder="请输入需求总量" />
-        </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="材料类型" prop="materialType" required>
+              <el-select v-model="form.materialType" placeholder="请选择材料类型">
+                <el-option
+                  v-for="dict in dict.type.erp_material_type"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="主料" prop="materialId" required>
+              <el-select v-model="form.materialId" placeholder="请选择主料" clearable
+                filterable clearable remote :remote-method="filterMaterial" loading="materialLoading">
+                <el-option
+                  v-for="item in materialOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="颜色" prop="color" required>
+              <el-input v-model="form.color" placeholder="请输入颜色" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="单耗" prop="unitConsumption" required>
+              <el-input-number v-model="form.unitConsumption" :precision="4" :min="0" placeholder="请输入单耗" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="损耗方式" prop="lossType" required>
+              <el-select v-model="form.lossType" placeholder="请选择损耗方式">
+                <el-option
+                  v-for="dict in dict.type.erp_loss_type"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="损耗" prop="wastage">
+              <el-input-number v-model="form.wastage" :precision="4" :min="0" placeholder="请输入损耗" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="排产数量" prop="planQuantity" required>
+              <el-input-number v-model="form.planQuantity" :precision="2" :min="0" placeholder="请输入排产数量" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="需求总量" prop="totalQuantity">
+              <el-input-number v-model="form.totalQuantity" :precision="2" :min="0" placeholder="请输入需求总量" />
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label="计算公式" prop="totalDesc">
           <el-input v-model="form.totalDesc" placeholder="请输入计算公式" />
         </el-form-item>
-        <el-form-item label="入库数量" prop="inboundQuantity">
-          <el-input v-model="form.inboundQuantity" placeholder="请输入入库数量" />
-        </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="入库数量" prop="inboundQuantity">
+              <el-input-number v-model="form.inboundQuantity" :precision="2" :min="0" placeholder="请输入入库数量" />
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+          <el-input v-model="form.remark" type="textarea" placeholder="请输入备注" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -262,6 +306,8 @@
 
 <script>
 import { listSalesmaterial, getSalesmaterial, delSalesmaterial, addSalesmaterial, updateSalesmaterial } from "@/api/erp/salesmaterial"
+import { listSales } from "@/api/erp/sales"
+import { listMainMaterial } from "@/api/erp/mainMaterial"
 
 export default {
   name: "Salesmaterial",
@@ -304,10 +350,34 @@ export default {
         materialStatus: null,
         inventoryStatus: null,
       },
+      // 销售订单选项
+      salesOrderOptions: [],
+      salesOrderLoading: false,
+      // 主料选项
+      materialOptions: [],
+      materialLoading: false,
       // 表单参数
       form: {},
       // 表单校验
       rules: {
+        salesOrderId: [
+          { required: true, message: "销售订单不能为空", trigger: "change" }
+        ],
+        materialType: [
+          { required: true, message: "材料类型不能为空", trigger: "change" }
+        ],
+        materialId: [
+          { required: true, message: "主料不能为空", trigger: "change" }
+        ],
+        unitConsumption: [
+          { required: true, message: "单耗不能为空", trigger: "blur" }
+        ],
+        lossType: [
+          { required: true, message: "损耗方式不能为空", trigger: "change" }
+        ],
+        planQuantity: [
+          { required: true, message: "排产数量不能为空", trigger: "blur" }
+        ]
       }
     }
   },
@@ -315,6 +385,40 @@ export default {
     this.getList()
   },
   methods: {
+    /** 过滤销售订单 */
+    filterSalesOrder(query) {
+      if (!query) {
+        this.salesOrderOptions = []
+        return
+      }
+      this.salesOrderLoading = true
+      listSales({ pageNum: 1, pageSize: 20, salesNo: query }).then(response => {
+        this.salesOrderOptions = response.rows.map(r => ({
+          value: r.id,
+          label: r.salesNo
+        }))
+        this.salesOrderLoading = false
+      }).catch(() => {
+        this.salesOrderLoading = false
+      })
+    },
+    /** 过滤主料 */
+    filterMaterial(query) {
+      if (!query) {
+        this.materialOptions = []
+        return
+      }
+      this.materialLoading = true
+      listMainMaterial({ pageNum: 1, pageSize: 20, materialName: query }).then(response => {
+        this.materialOptions = response.rows.map(r => ({
+          value: r.id,
+          label: r.materialName
+        }))
+        this.materialLoading = false
+      }).catch(() => {
+        this.materialLoading = false
+      })
+    },
     /** 查询大货订单物料明细列表 */
     getList() {
       this.loading = true

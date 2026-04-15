@@ -1,6 +1,17 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
+      <el-form-item label="采购单" prop="purchaseId">
+        <el-select v-model="queryParams.purchaseId" placeholder="请选择采购单" clearable
+          filterable clearable remote :remote-method="filterPurchase" loading="purchaseLoading">
+          <el-option
+            v-for="item in purchaseOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item label="类型" prop="inType">
         <el-select v-model="queryParams.inType" placeholder="请选择类型" clearable>
           <el-option label="面料" :value="1" />
@@ -25,14 +36,6 @@
             :value="dict.value"
           />
         </el-select>
-      </el-form-item>
-      <el-form-item label="关联采购单号" prop="purchaseSn">
-        <el-input
-          v-model="queryParams.purchaseSn"
-          placeholder="请输入关联采购单号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -140,54 +143,79 @@
     <!-- 添加或修改入库单对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="700px" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="入库单号" prop="sn" required>
-          <el-input v-model="form.sn" placeholder="请输入入库单号" />
-        </el-form-item>
-        <el-form-item label="入库日期" prop="inDate" required>
-          <el-date-picker clearable
-            v-model="form.inDate"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择入库日期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="类型" prop="inType" required>
-          <el-select v-model="form.inType" placeholder="请选择类型">
-            <el-option label="面料" :value="1" />
-            <el-option label="纱线" :value="2" />
-            <el-option label="辅料" :value="3" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="大货款号" prop="bulkOrderNo">
-          <el-input v-model="form.bulkOrderNo" placeholder="请输入大货款号" />
-        </el-form-item>
-        <el-form-item label="入库简介" prop="inDescription">
-          <el-input v-model="form.inDescription" type="textarea" placeholder="请输入入库简介" />
-        </el-form-item>
-        <el-form-item label="确认人" prop="confirmBy">
-          <el-input v-model="form.confirmBy" placeholder="请输入确认人" />
-        </el-form-item>
-        <el-form-item label="确认时间" prop="confirmTime">
-          <el-date-picker clearable
-            v-model="form.confirmTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择确认时间">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="确认状态" prop="confirmStatus">
-          <el-select v-model="form.confirmStatus" placeholder="请选择确认状态">
-            <el-option
-              v-for="dict in dict.type.erp_confirm_status"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="关联采购单号" prop="purchaseSn">
-          <el-input v-model="form.purchaseSn" placeholder="请输入关联采购单号" />
-        </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="关联采购单" prop="purchaseId">
+              <el-select v-model="form.purchaseId" placeholder="请选择采购单" clearable
+                filterable clearable remote :remote-method="filterPurchase" loading="purchaseLoading">
+                <el-option
+                  v-for="item in purchaseOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="入库单号" prop="sn" required>
+              <el-input v-model="form.sn" placeholder="请输入入库单号" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="入库日期" prop="inDate" required>
+              <el-date-picker clearable
+                v-model="form.inDate"
+                type="date"
+                value-format="yyyy-MM-dd"
+                placeholder="请选择入库日期">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="类型" prop="inType" required>
+              <el-select v-model="form.inType" placeholder="请选择类型">
+                <el-option label="面料" :value="1" />
+                <el-option label="纱线" :value="2" />
+                <el-option label="辅料" :value="3" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="负责人" prop="chargeUserId">
+              <el-select v-model="form.chargeUserId" placeholder="请选择入库负责人" clearable
+                filterable clearable remote :remote-method="filterUser" loading="userLoading">
+                <el-option
+                  v-for="item in userOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="总金额" prop="totalPrice">
+              <el-input-number v-model="form.totalPrice" :precision="2" :min="0" placeholder="总金额" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="大货款号" prop="bulkOrderNo">
+              <el-input v-model="form.bulkOrderNo" placeholder="请输入大货款号" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="入库简介" prop="inDescription">
+              <el-input v-model="form.inDescription" type="textarea" placeholder="请输入入库简介" />
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入备注" />
         </el-form-item>
@@ -202,6 +230,7 @@
 
 <script>
 import { listStockin, getStockin, delStockin, addStockin, updateStockin } from "@/api/erp/stockin"
+import { listPurchase } from "@/api/erp/purchase"
 
 export default {
   name: "StockIn",
@@ -222,9 +251,13 @@ export default {
         { value: '2', label: '纱线' },
         { value: '3', label: '辅料' }
       ],
+      // 采购单选项
+      purchaseOptions: [],
+      purchaseLoading: false,
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        purchaseId: null,
         sn: null,
         bulkOrderNo: null,
         inDate: null,
@@ -250,6 +283,37 @@ export default {
     this.getList()
   },
   methods: {
+    /** 过滤采购单 */
+    filterPurchase(query) {
+      if (!query) {
+        this.purchaseOptions = []
+        return
+      }
+      this.purchaseLoading = true
+      listPurchase({ pageNum: 1, pageSize: 20, sn: query }).then(response => {
+        this.purchaseOptions = response.rows.map(r => ({
+          value: r.id,
+          label: r.sn
+        }))
+        this.purchaseLoading = false
+      }).catch(() => {
+        this.purchaseLoading = false
+      })
+    },
+    /** 过滤用户 */
+    filterUser(query) {
+      if (!query) {
+        this.userOptions = []
+        return
+      }
+      this.userLoading = true
+      const users = this.$store.getters.userList.filter(u => u.nickName.includes(query) || u.userName.includes(query))
+      this.userOptions = users.map(u => ({
+        value: u.userId,
+        label: u.nickName + '(' + u.userName + ')'
+      }))
+      this.userLoading = false
+    },
     getInTypeLabel(value) {
       const typeMap = {'1': '面料', '2': '纱线', '3': '辅料'}
       return typeMap[value] || value

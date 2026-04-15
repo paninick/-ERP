@@ -1,6 +1,28 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
+      <el-form-item label="客户" prop="customerId">
+        <el-select v-model="queryParams.customerId" placeholder="请选择客户" clearable
+          filterable clearable remote :remote-method="filterCustomer" loading="customerLoading">
+          <el-option
+            v-for="item in customerOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="销售订单" prop="salesOrderId">
+        <el-select v-model="queryParams.salesOrderId" placeholder="请选择销售订单" clearable
+          filterable clearable remote :remote-method="filterSalesOrder" loading="salesOrderLoading">
+          <el-option
+            v-for="item in salesOrderOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item label="审批状态" prop="auditStatus">
         <el-select v-model="queryParams.auditStatus" placeholder="请选择审批状态" clearable>
           <el-option
@@ -20,14 +42,6 @@
             :value="dict.value"
           />
         </el-select>
-      </el-form-item>
-      <el-form-item label="业务员" prop="salesName">
-        <el-input
-          v-model="queryParams.salesName"
-          placeholder="请输入业务员"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -144,58 +158,118 @@
     />
 
     <!-- 添加或修改样衣BOM对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="60%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
+    <el-dialog :title="title" :visible.sync="open" width="700px" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="打样类型" prop="sampleType">
-          <el-select v-model="form.sampleType" placeholder="请选择打样类型">
-            <el-option
-              v-for="dict in dict.type.erp_sample_type"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="客户名称" prop="customerName">
-          <el-input v-model="form.customerName" placeholder="请输入客户名称" />
-        </el-form-item>
-        <el-form-item label="样品款式" prop="styleType">
-          <el-select v-model="form.styleType" placeholder="请选择样品款式">
-            <el-option
-              v-for="dict in dict.type.erp_sample_style"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="样品类型" prop="sampleCategoryType">
-          <el-select v-model="form.sampleCategoryType" placeholder="请选择样品类型">
-            <el-option
-              v-for="dict in dict.type.erp_sample_category"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="打样编号" prop="sampleNo">
-          <el-input v-model="form.sampleNo" placeholder="请输入打样编号" />
-        </el-form-item>
-        <el-form-item label="大货款号" prop="bulkOrderNo">
-          <el-input v-model="form.bulkOrderNo" placeholder="请输入大货款号" />
-        </el-form-item>
-        <el-form-item label="要求交期" prop="dueDate">
-          <el-date-picker clearable
-            v-model="form.dueDate"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择要求交期">
-          </el-date-picker>
-        </el-form-item>
-        <el-form-item label="业务员" prop="salesName">
-          <el-input v-model="form.salesName" placeholder="请输入业务员" />
-        </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="客户" prop="customerId">
+              <el-select v-model="form.customerId" placeholder="请选择客户" clearable
+                filterable clearable remote :remote-method="filterCustomer" loading="customerLoading">
+                <el-option
+                  v-for="item in customerOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="销售订单" prop="salesOrderId">
+              <el-select v-model="form.salesOrderId" placeholder="请选择销售订单" clearable
+                filterable clearable remote :remote-method="filterSalesOrder" loading="salesOrderLoading">
+                <el-option
+                  v-for="item in salesOrderOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="打样类型" prop="sampleType" required>
+              <el-select v-model="form.sampleType" placeholder="请选择打样类型">
+                <el-option
+                  v-for="dict in dict.type.erp_sample_type"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="样品款式" prop="styleType" required>
+              <el-select v-model="form.styleType" placeholder="请选择样品款式">
+                <el-option
+                  v-for="dict in dict.type.erp_sample_style"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="样品类型" prop="sampleCategoryType" required>
+              <el-select v-model="form.sampleCategoryType" placeholder="请选择样品类型">
+                <el-option
+                  v-for="dict in dict.type.erp_sample_category"
+                  :key="dict.value"
+                  :label="dict.label"
+                  :value="dict.value"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="要求交期" prop="dueDate" required>
+              <el-date-picker clearable
+                v-model="form.dueDate"
+                type="date"
+                value-format="yyyy-MM-dd"
+                placeholder="请选择要求交期">
+              </el-date-picker>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="客户名称" prop="customerName">
+              <el-input v-model="form.customerName" placeholder="请输入客户名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="打样编号" prop="sampleNo">
+              <el-input v-model="form.sampleNo" placeholder="请输入打样编号" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="大货款号" prop="bulkOrderNo">
+              <el-input v-model="form.bulkOrderNo" placeholder="请输入大货款号" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="业务员" prop="salesId">
+              <el-select v-model="form.salesId" placeholder="请选择业务员" clearable
+                filterable clearable remote :remote-method="filterUser" loading="userLoading">
+                <el-option
+                  v-for="item in userOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label="审批状态" prop="auditStatus">
           <el-select v-model="form.auditStatus" placeholder="请选择审批状态">
             <el-option
@@ -216,20 +290,6 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="工艺书编号" prop="techNo">
-          <el-input v-model="form.techNo" placeholder="请输入工艺书编号" />
-        </el-form-item>
-        <el-form-item label="审批人" prop="auditByNickName">
-          <el-input v-model="form.auditByNickName" placeholder="请输入审批人" />
-        </el-form-item>
-        <el-form-item label="审批时间" prop="auditTime">
-          <el-date-picker clearable
-            v-model="form.auditTime"
-            type="date"
-            value-format="yyyy-MM-dd"
-            placeholder="请选择审批时间">
-          </el-date-picker>
-        </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
@@ -244,6 +304,8 @@
 
 <script>
 import { listBom, getBom, delBom, addBom, updateBom } from "@/api/erp/bom"
+import { listCustomer } from "@/api/erp/customer"
+import { listSales } from "@/api/erp/sales"
 
 export default {
   name: "Bom",
@@ -268,10 +330,18 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 客户选项
+      customerOptions: [],
+      customerLoading: false,
+      // 销售订单选项
+      salesOrderOptions: [],
+      salesOrderLoading: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        customerId: null,
+        salesOrderId: null,
         auditStatus: null,
         progressStatus: null,
         salesName: null,
@@ -280,6 +350,21 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        sampleType: [
+          { required: true, message: "打样类型不能为空", trigger: "change" }
+        ],
+        customerName: [
+          { required: true, message: "客户名称不能为空", trigger: "blur" }
+        ],
+        styleType: [
+          { required: true, message: "样品款式不能为空", trigger: "change" }
+        ],
+        sampleCategoryType: [
+          { required: true, message: "样品类型不能为空", trigger: "change" }
+        ],
+        dueDate: [
+          { required: true, message: "要求交期不能为空", trigger: "change" }
+        ]
       }
     }
   },
@@ -287,6 +372,54 @@ export default {
     this.getList()
   },
   methods: {
+    /** 过滤客户 */
+    filterCustomer(query) {
+      if (!query) {
+        this.customerOptions = []
+        return
+      }
+      this.customerLoading = true
+      listCustomer({ pageNum: 1, pageSize: 20, customerName: query }).then(response => {
+        this.customerOptions = response.rows.map(r => ({
+          value: r.id,
+          label: r.customerName
+        }))
+        this.customerLoading = false
+      }).catch(() => {
+        this.customerLoading = false
+      })
+    },
+    /** 过滤销售订单 */
+    filterSalesOrder(query) {
+      if (!query) {
+        this.salesOrderOptions = []
+        return
+      }
+      this.salesOrderLoading = true
+      listSales({ pageNum: 1, pageSize: 20, salesNo: query }).then(response => {
+        this.salesOrderOptions = response.rows.map(r => ({
+          value: r.id,
+          label: r.salesNo
+        }))
+        this.salesOrderLoading = false
+      }).catch(() => {
+        this.salesOrderLoading = false
+      })
+    },
+    /** 过滤用户 */
+    filterUser(query) {
+      if (!query) {
+        this.userOptions = []
+        return
+      }
+      this.userLoading = true
+      const users = this.$store.getters.userList.filter(u => u.nickName.includes(query) || u.userName.includes(query))
+      this.userOptions = users.map(u => ({
+        value: u.userId,
+        label: u.nickName + '(' + u.userName + ')'
+      }))
+      this.userLoading = false
+    },
     /** 查询样衣BOM列表 */
     getList() {
       this.loading = true

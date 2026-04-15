@@ -1,6 +1,33 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
+      <el-form-item label="销售订单ID" prop="salesOrderId">
+        <el-select v-model="queryParams.salesOrderId" placeholder="请选择销售订单" clearable
+          filterable clearable remote :remote-method="filterSalesOrder" loading="salesOrderLoading">
+          <el-option
+            v-for="item in salesOrderOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="颜色" prop="color">
+        <el-input
+          v-model="queryParams.color"
+          placeholder="请输入颜色"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item label="尺码" prop="size">
+        <el-input
+          v-model="queryParams.size"
+          placeholder="请输入尺码"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
@@ -55,15 +82,13 @@
 
     <el-table v-loading="loading" :data="salesitemList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" />
-      <el-table-column label="销售订单id" align="center" prop="salesOrderId" />
-      <el-table-column label="打样通知id" align="center" prop="noticeId" />
-      <el-table-column label="工艺书id" align="center" prop="techId" />
-      <el-table-column label="颜色" align="center" prop="color" />
-      <el-table-column label="尺码" align="center" prop="size" />
-      <el-table-column label="订单数量" align="center" prop="orderQuantity" />
-      <el-table-column label="排产数量" align="center" prop="planQuantity" />
-      <el-table-column label="入库数量" align="center" prop="inboundAmount" />
+      <el-table-column label="序号" align="center" prop="id" width="60" />
+      <el-table-column label="销售订单" align="center" prop="salesOrderNo" />
+      <el-table-column label="颜色" align="center" prop="color" width="100" />
+      <el-table-column label="尺码" align="center" prop="size" width="80" />
+      <el-table-column label="订单数量" align="center" prop="orderQuantity" width="100" />
+      <el-table-column label="排产数量" align="center" prop="planQuantity" width="100" />
+      <el-table-column label="入库数量" align="center" prop="inboundAmount" width="100" />
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -93,34 +118,48 @@
     />
 
     <!-- 添加或修改销售订单明细对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="60%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
+    <el-dialog :title="title" :visible.sync="open" width="600px" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="销售订单id" prop="salesOrderId">
-          <el-input v-model="form.salesOrderId" placeholder="请输入销售订单id" />
+        <el-form-item label="销售订单" prop="salesOrderId" required>
+          <el-select v-model="form.salesOrderId" placeholder="请选择销售订单" clearable
+            filterable clearable remote :remote-method="filterSalesOrder" loading="salesOrderLoading">
+            <el-option
+              v-for="item in salesOrderOptions"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value"
+            />
+          </el-select>
         </el-form-item>
-        <el-form-item label="打样通知id" prop="noticeId">
-          <el-input v-model="form.noticeId" placeholder="请输入打样通知id" />
-        </el-form-item>
-        <el-form-item label="工艺书id" prop="techId">
-          <el-input v-model="form.techId" placeholder="请输入工艺书id" />
-        </el-form-item>
-        <el-form-item label="颜色" prop="color">
-          <el-input v-model="form.color" placeholder="请输入颜色" />
-        </el-form-item>
-        <el-form-item label="尺码" prop="size">
-          <el-input v-model="form.size" placeholder="请输入尺码" />
-        </el-form-item>
-        <el-form-item label="订单数量" prop="orderQuantity">
-          <el-input v-model="form.orderQuantity" placeholder="请输入订单数量" />
-        </el-form-item>
-        <el-form-item label="排产数量" prop="planQuantity">
-          <el-input v-model="form.planQuantity" placeholder="请输入排产数量" />
-        </el-form-item>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="颜色" prop="color" required>
+              <el-input v-model="form.color" placeholder="请输入颜色" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="尺码" prop="size" required>
+              <el-input v-model="form.size" placeholder="请输入尺码" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="订单数量" prop="orderQuantity" required>
+              <el-input-number v-model="form.orderQuantity" :precision="2" :min="0" placeholder="请输入订单数量" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="排产数量" prop="planQuantity">
+              <el-input-number v-model="form.planQuantity" :precision="2" :min="0" placeholder="请输入排产数量" />
+            </el-form-item>
+          </el-col>
+        </el-row>
         <el-form-item label="入库数量" prop="inboundAmount">
-          <el-input v-model="form.inboundAmount" placeholder="请输入入库数量" />
+          <el-input-number v-model="form.inboundAmount" :precision="2" :min="0" placeholder="请输入入库数量" />
         </el-form-item>
         <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+          <el-input v-model="form.remark" type="textarea" placeholder="请输入备注" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -133,6 +172,7 @@
 
 <script>
 import { listSalesitem, getSalesitem, delSalesitem, addSalesitem, updateSalesitem } from "@/api/erp/salesitem"
+import { listSales } from "@/api/erp/sales"
 
 export default {
   name: "Salesitem",
@@ -156,15 +196,33 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      // 销售订单选项
+      salesOrderOptions: [],
+      salesOrderLoading: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        salesOrderId: null,
+        color: null,
+        size: null
       },
       // 表单参数
       form: {},
       // 表单校验
       rules: {
+        salesOrderId: [
+          { required: true, message: "销售订单不能为空", trigger: "change" }
+        ],
+        color: [
+          { required: true, message: "颜色不能为空", trigger: "blur" }
+        ],
+        size: [
+          { required: true, message: "尺码不能为空", trigger: "blur" }
+        ],
+        orderQuantity: [
+          { required: true, message: "订单数量不能为空", trigger: "blur" }
+        ]
       }
     }
   },
@@ -172,6 +230,23 @@ export default {
     this.getList()
   },
   methods: {
+    /** 过滤销售订单 */
+    filterSalesOrder(query) {
+      if (!query) {
+        this.salesOrderOptions = []
+        return
+      }
+      this.salesOrderLoading = true
+      listSales({ pageNum: 1, pageSize: 20, salesNo: query }).then(response => {
+        this.salesOrderOptions = response.rows.map(r => ({
+          value: r.id,
+          label: r.salesNo
+        }))
+        this.salesOrderLoading = false
+      }).catch(() => {
+        this.salesOrderLoading = false
+      })
+    },
     /** 查询销售订单明细列表 */
     getList() {
       this.loading = true
@@ -198,10 +273,6 @@ export default {
         orderQuantity: null,
         planQuantity: null,
         inboundAmount: null,
-        createBy: null,
-        createTime: null,
-        updateBy: null,
-        updateTime: null,
         remark: null
       }
       this.resetForm("form")
@@ -219,7 +290,7 @@ export default {
     // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
-      this.single = selection.length!==1
+      this.single = selection.length !== 1
       this.multiple = !selection.length
     },
     /** 新增按钮操作 */

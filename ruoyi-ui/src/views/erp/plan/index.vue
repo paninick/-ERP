@@ -1,6 +1,28 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="80px">
+      <el-form-item label="销售订单" prop="salesOrderId">
+        <el-select v-model="queryParams.salesOrderId" placeholder="请选择销售订单" clearable
+          filterable clearable remote :remote-method="filterSalesOrder" loading="salesOrderLoading">
+          <el-option
+            v-for="item in salesOrderOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="客户" prop="customerId">
+        <el-select v-model="queryParams.customerId" placeholder="请选择客户" clearable
+          filterable clearable remote :remote-method="filterCustomer" loading="customerLoading">
+          <el-option
+            v-for="item in customerOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
       <el-form-item label="大货款号" prop="bulkOrderNo">
         <el-input
           v-model="queryParams.bulkOrderNo"
@@ -17,14 +39,6 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="客户" prop="customerName">
-        <el-input
-          v-model="queryParams.customerName"
-          placeholder="请输入客户名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="生产状态" prop="produceStatus">
         <el-input
           v-model="queryParams.produceStatus"
@@ -32,16 +46,6 @@
           clearable
           @keyup.enter.native="handleQuery"
         />
-      </el-form-item>
-      <el-form-item label="业务员" prop="salesName">
-        <el-select v-model="queryParams.salesName" placeholder="请选择业务员" clearable>
-          <el-option
-            v-for="dict in dict.type.erp_sales_name"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
@@ -179,28 +183,44 @@
     />
 
     <!-- 添加或修改生产计划对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="800px" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
+    <el-dialog :title="title" :visible.sync="open" width="900px" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="生产状态" prop="produceStatus">
-              <el-input v-model="form.produceStatus" placeholder="请输入生产状态" />
+            <el-form-item label="销售订单" prop="salesOrderId">
+              <el-select v-model="form.salesOrderId" placeholder="请选择销售订单" clearable
+                filterable clearable remote :remote-method="filterSalesOrder" loading="salesOrderLoading">
+                <el-option
+                  v-for="item in salesOrderOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="类型" prop="type">
-              <el-input v-model="form.type" placeholder="请输入类型" />
+            <el-form-item label="客户" prop="customerId">
+              <el-select v-model="form.customerId" placeholder="请选择客户" clearable
+                filterable clearable remote :remote-method="filterCustomer" loading="customerLoading">
+                <el-option
+                  v-for="item in customerOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="生产计划编号" prop="planNo">
+            <el-form-item label="生产计划编号" prop="planNo" required>
               <el-input v-model="form.planNo" placeholder="请输入生产计划编号" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="大货款号" prop="bulkOrderNo">
+            <el-form-item label="大货款号" prop="bulkOrderNo" required>
               <el-input v-model="form.bulkOrderNo" placeholder="请输入大货款号" />
             </el-form-item>
           </el-col>
@@ -224,8 +244,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="业务员" prop="salesName">
-              <el-input v-model="form.salesName" placeholder="请输入业务员" />
+            <el-form-item label="生产状态" prop="produceStatus">
+              <el-input v-model="form.produceStatus" placeholder="请输入生产状态" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -326,9 +346,11 @@
 
 <script>
 import { listPlan, getPlan, delPlan, addPlan, updatePlan } from "@/api/erp/plan"
+import { listSales } from "@/api/erp/sales"
+import { listCustomer } from "@/api/erp/customer"
 
 export default {
-  name: "Plan",
+  name: "ProducePlan",
   dicts: [],
   data() {
     return {
@@ -341,9 +363,18 @@ export default {
       planList: [],
       title: "",
       open: false,
+      // 销售订单选项
+      salesOrderOptions: [],
+      salesOrderLoading: false,
+      // 客户选项
+      customerOptions: [],
+      customerLoading: false,
+      // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
+        salesOrderId: null,
+        customerId: null,
         bulkOrderNo: null,
         sampleStyleNo: null,
         customerName: null,
@@ -351,7 +382,20 @@ export default {
         salesName: null
       },
       form: {},
+      // 表单校验
       rules: {
+        planNo: [
+          { required: true, message: "生产计划编号不能为空", trigger: "blur" }
+        ],
+        bulkOrderNo: [
+          { required: true, message: "大货款号不能为空", trigger: "blur" }
+        ],
+        customerName: [
+          { required: true, message: "客户名称不能为空", trigger: "blur" }
+        ],
+        dueDate: [
+          { required: true, message: "交期不能为空", trigger: "change" }
+        ]
       }
     }
   },
@@ -359,6 +403,40 @@ export default {
     this.getList()
   },
   methods: {
+    /** 过滤销售订单 */
+    filterSalesOrder(query) {
+      if (!query) {
+        this.salesOrderOptions = []
+        return
+      }
+      this.salesOrderLoading = true
+      listSales({ pageNum: 1, pageSize: 20, salesNo: query }).then(response => {
+        this.salesOrderOptions = response.rows.map(r => ({
+          value: r.id,
+          label: r.salesNo
+        }))
+        this.salesOrderLoading = false
+      }).catch(() => {
+        this.salesOrderLoading = false
+      })
+    },
+    /** 过滤客户 */
+    filterCustomer(query) {
+      if (!query) {
+        this.customerOptions = []
+        return
+      }
+      this.customerLoading = true
+      listCustomer({ pageNum: 1, pageSize: 20, customerName: query }).then(response => {
+        this.customerOptions = response.rows.map(r => ({
+          value: r.id,
+          label: r.customerName
+        }))
+        this.customerLoading = false
+      }).catch(() => {
+        this.customerLoading = false
+      })
+    },
     getList() {
       this.loading = true
       listPlan(this.queryParams).then(response => {

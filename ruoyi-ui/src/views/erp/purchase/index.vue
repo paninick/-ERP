@@ -1,6 +1,25 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
+      <el-form-item label="供应商" prop="supplierId">
+        <el-select v-model="queryParams.supplierId" placeholder="请选择供应商" clearable
+          filterable clearable remote :remote-method="filterSupplier" loading="supplierLoading">
+          <el-option
+            v-for="item in supplierOptions"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="采购单号" prop="sn">
+        <el-input
+          v-model="queryParams.sn"
+          placeholder="请输入采购单号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="类型" prop="type">
         <el-input
           v-model="queryParams.type"
@@ -9,34 +28,10 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="大货款号" prop="bulkOrderNo">
-        <el-input
-          v-model="queryParams.bulkOrderNo"
-          placeholder="请输入大货款号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="采购员" prop="purchaseName">
-        <el-input
-          v-model="queryParams.purchaseName"
-          placeholder="请输入采购员"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
       <el-form-item label="状态" prop="status">
         <el-input
           v-model="queryParams.status"
           placeholder="请输入状态"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
-      </el-form-item>
-      <el-form-item label="采购单号" prop="sn">
-        <el-input
-          v-model="queryParams.sn"
-          placeholder="请输入采购单号"
           clearable
           @keyup.enter.native="handleQuery"
         />
@@ -144,7 +139,27 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="类型" prop="type">
+            <el-form-item label="供应商" prop="supplierId" required>
+              <el-select v-model="form.supplierId" placeholder="请选择供应商" clearable
+                filterable clearable remote :remote-method="filterSupplier" loading="supplierLoading">
+                <el-option
+                  v-for="item in supplierOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="采购单号" prop="sn" required>
+              <el-input v-model="form.sn" placeholder="请输入采购单号" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item label="类型" prop="type" required>
               <el-input v-model="form.type" placeholder="请输入类型" />
             </el-form-item>
           </el-col>
@@ -159,7 +174,7 @@
         </el-form-item>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="预计到货日期" prop="expectedDeliveryDate">
+            <el-form-item label="预计到货日期" prop="expectedDeliveryDate" required>
               <el-date-picker clearable
                 v-model="form.expectedDeliveryDate"
                 type="date"
@@ -169,8 +184,16 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="采购员" prop="purchaseName">
-              <el-input v-model="form.purchaseName" placeholder="请输入采购员" />
+            <el-form-item label="采购员" prop="purchaseUserId">
+              <el-select v-model="form.purchaseUserId" placeholder="请选择采购员" clearable
+                filterable clearable remote :remote-method="filterUser" loading="userLoading">
+                <el-option
+                  v-for="item in userOptions"
+                  :key="item.value"
+                  :label="item.label"
+                  :value="item.value"
+                />
+              </el-select>
             </el-form-item>
           </el-col>
         </el-row>
@@ -191,11 +214,11 @@
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="采购单号" prop="sn">
-          <el-input v-model="form.sn" placeholder="请输入采购单号" />
+        <el-form-item label="订单金额" prop="amount">
+          <el-input-number v-model="form.amount" :precision="2" :min="0" placeholder="请输入订单金额" />
         </el-form-item>
         <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+          <el-input v-model="form.remark" type="textarea" placeholder="请输入备注" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -208,6 +231,7 @@
 
 <script>
 import { listPurchase, getPurchase, delPurchase, addPurchase, updatePurchase } from "@/api/erp/purchase"
+import { listSupplier } from "@/api/erp/supplier"
 
 export default {
   name: "Purchase",
@@ -223,6 +247,10 @@ export default {
       purchaseList: [],
       title: "",
       open: false,
+      // 供应商选项
+      supplierOptions: [],
+      supplierLoading: false,
+      // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -230,10 +258,24 @@ export default {
         bulkOrderNo: null,
         purchaseName: null,
         status: null,
-        sn: null
+        sn: null,
+        supplierId: null
       },
       form: {},
+      // 表单校验
       rules: {
+        sn: [
+          { required: true, message: "采购单号不能为空", trigger: "blur" }
+        ],
+        type: [
+          { required: true, message: "类型不能为空", trigger: "blur" }
+        ],
+        supplierId: [
+          { required: true, message: "供应商不能为空", trigger: "change" }
+        ],
+        expectedDeliveryDate: [
+          { required: true, message: "预计到货日期不能为空", trigger: "change" }
+        ]
       }
     }
   },
@@ -241,6 +283,37 @@ export default {
     this.getList()
   },
   methods: {
+    /** 过滤供应商 */
+    filterSupplier(query) {
+      if (!query) {
+        this.supplierOptions = []
+        return
+      }
+      this.supplierLoading = true
+      listSupplier({ pageNum: 1, pageSize: 20, supplierName: query }).then(response => {
+        this.supplierOptions = response.rows.map(r => ({
+          value: r.id,
+          label: r.supplierName
+        }))
+        this.supplierLoading = false
+      }).catch(() => {
+        this.supplierLoading = false
+      })
+    },
+    /** 过滤用户 */
+    filterUser(query) {
+      if (!query) {
+        this.userOptions = []
+        return
+      }
+      this.userLoading = true
+      const users = this.$store.getters.userList.filter(u => u.nickName.includes(query) || u.userName.includes(query))
+      this.userOptions = users.map(u => ({
+        value: u.userId,
+        label: u.nickName + '(' + u.userName + ')'
+      }))
+      this.userLoading = false
+    },
     getList() {
       this.loading = true
       listPurchase(this.queryParams).then(response => {
