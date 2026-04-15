@@ -1,4 +1,0 @@
-
-pytest&gt;=7.4.0
-httpx&gt;=0.25.0
-
