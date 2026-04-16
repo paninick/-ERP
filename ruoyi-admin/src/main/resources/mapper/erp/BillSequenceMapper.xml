@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.BillSequenceMapper">
+
+    <select id="selectCurrentVal" resultType="java.lang.Long">
+        SELECT current_val FROM t_erp_bill_sequence
+        WHERE seq_date = #{seqDate} AND bill_type = #{billType}
+    </select>
+
+    <insert id="insertSequence">
+        INSERT INTO t_erp_bill_sequence (seq_date, bill_type, current_val)
+        VALUES (#{seqDate}, #{billType}, #{currentVal})
+    </insert>
+
+    <update id="incrementSequence">
+        UPDATE t_erp_bill_sequence SET current_val = current_val + 1
+        WHERE seq_date = #{seqDate} AND bill_type = #{billType}
+    </update>
+
+    <update id="upsertSequence">
+        UPDATE t_erp_bill_sequence SET current_val = #{currentVal}
+        WHERE seq_date = #{seqDate} AND bill_type = #{billType}
+    </update>
+
+</mapper>

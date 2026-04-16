@@ -63,6 +63,8 @@ spring:
   jackson:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
+    deserialization:
+      use-bigdecimal-for-floats: true
   # 服务模块
   devtools:
     restart:
