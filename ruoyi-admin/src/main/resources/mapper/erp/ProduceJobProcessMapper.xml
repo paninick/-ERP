@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.ProduceJobProcessMapper">
+
+    <resultMap id="BaseResultMap" type="com.ruoyi.erp.domain.ProduceJobProcess">
+        <id property="id" column="id"/>
+        <result property="jobId" column="job_id"/>
+        <result property="processId" column="process_id"/>
+        <result property="processSeq" column="process_seq"/>
+        <result property="employeeId" column="employee_id"/>
+        <result property="employeeName" column="employee_name"/>
+        <result property="inQty" column="in_qty"/>
+        <result property="outQty" column="out_qty"/>
+        <result property="defectQty" column="defect_qty"/>
+        <result property="startTime" column="start_time"/>
+        <result property="finishTime" column="finish_time"/>
+        <result property="isOutsource" column="is_outsource"/>
+        <result property="outsourceId" column="outsource_id"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, job_id, process_id, process_seq, employee_id, employee_name, in_qty, out_qty, defect_qty,
+        start_time, finish_time, is_outsource, outsource_id, create_by, create_time, remark
+    </sql>
+
+    <select id="selectProduceJobProcessById" parameterType="Long" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM t_erp_produce_job_process WHERE id = #{id}
+    </select>
+
+    <select id="selectProduceJobProcessList" parameterType="ProduceJobProcess" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM t_erp_produce_job_process
+        <where>
+            <if test="jobId != null">
+                AND job_id = #{jobId}
+            </if>
+            <if test="processId != null">
+                AND process_id = #{processId}
+            </if>
+            <if test="employeeId != null">
+                AND employee_id = #{employeeId}
+            </if>
+            <if test="isOutsource != null and isOutsource != ''">
+                AND is_outsource = #{isOutsource}
+            </if>
+            <if test="outsourceId != null">
+                AND outsource_id = #{outsourceId}
+            </if>
+        </where>
+        ORDER BY process_seq ASC
+    </select>
+
+    <insert id="insertProduceJobProcess" parameterType="ProduceJobProcess" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_erp_produce_job_process (
+            job_id, process_id, process_seq, employee_id, employee_name, in_qty, out_qty, defect_qty,
+            start_time, finish_time, is_outsource, outsource_id, create_by, create_time, remark
+        ) VALUES (
+            #{jobId}, #{processId}, #{processSeq}, #{employeeId}, #{employeeName}, #{inQty}, #{outQty}, #{defectQty},
+            #{startTime}, #{finishTime}, #{isOutsource}, #{outsourceId}, #{createBy}, #{createTime}, #{remark}
+        )
+    </insert>
+
+    <update id="updateProduceJobProcess" parameterType="ProduceJobProcess">
+        UPDATE t_erp_produce_job_process SET
+            <if test="jobId != null">job_id = #{jobId},</if>
+            <if test="processId != null">process_id = #{processId},</if>
+            <if test="processSeq != null">process_seq = #{processSeq},</if>
+            <if test="employeeId != null">employee_id = #{employeeId},</if>
+            <if test="employeeName != null">employee_name = #{employeeName},</if>
+            <if test="inQty != null">in_qty = #{inQty},</if>
+            <if test="outQty != null">out_qty = #{outQty},</if>
+            <if test="defectQty != null">defect_qty = #{defectQty},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="finishTime != null">finish_time = #{finishTime},</if>
+            <if test="isOutsource != null">is_outsource = #{isOutsource},</if>
+            <if test="outsourceId != null">outsource_id = #{outsourceId},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            id = id
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteProduceJobProcessById" parameterType="Long">
+        DELETE FROM t_erp_produce_job_process WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteProduceJobProcessByIds">
+        DELETE FROM t_erp_produce_job_process WHERE id IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectProduceJobProcessByJobId" parameterType="Long" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM t_erp_produce_job_process WHERE job_id = #{jobId}
+        ORDER BY process_seq ASC
+    </select>
+
+    <select id="selectCurrentProcessByJobId" parameterType="Long" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM t_erp_produce_job_process WHERE job_id = #{jobId}
+        AND finish_time IS NULL ORDER BY process_seq ASC LIMIT 1
+    </select>
+</mapper>

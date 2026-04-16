@@ -65,4 +65,21 @@ public interface IProducePlanService {
      * @return 结果
      */
     int insertProducePlanBatch(List<ProducePlan> list);
+
+    /**
+     * 查询甘特图任务列表
+     *
+     * @return 甘特图任务列表
+     */
+    List<com.ruoyi.erp.domain.vo.GanttTaskVO> selectGanttTasks();
+
+    /**
+     * 更新计划日期
+     *
+     * @param id 计划ID
+     * @param startDate 开始日期
+     * @param dueDate 截止日期
+     * @return 结果
+     */
+    int updatePlanDates(Long id, java.util.Date startDate, java.util.Date dueDate);
 }

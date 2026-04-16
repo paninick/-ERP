@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.ProductSerialMapper">
+
+    <resultMap id="BaseResultMap" type="com.ruoyi.erp.domain.ProductSerial">
+        <id property="id" column="id"/>
+        <result property="serialNo" column="serial_no"/>
+        <result property="orderId" column="order_id"/>
+        <result property="jobId" column="job_id"/>
+        <result property="producePlanId" column="produce_plan_id"/>
+        <result property="colorCode" column="color_code"/>
+        <result property="sizeCode" column="size_code"/>
+        <result property="currentProcessId" column="current_process_id"/>
+        <result property="currentProcessName" column="current_process_name"/>
+        <result property="status" column="status"/>
+        <result property="createTime" column="create_time"/>
+        <result property="finishTime" column="finish_time"/>
+        <result property="warehouseTime" column="warehouse_time"/>
+        <result property="shipTime" column="ship_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, serial_no, order_id, job_id, produce_plan_id, color_code, size_code, current_process_id,
+        current_process_name, status, create_time, finish_time, warehouse_time, ship_time, remark
+    </sql>
+
+    <select id="selectProductSerialById" parameterType="Long" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM t_erp_product_serial WHERE id = #{id}
+    </select>
+
+    <select id="selectProductSerialList" parameterType="ProductSerial" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM t_erp_product_serial
+        <where>
+            <if test="serialNo != null and serialNo != ''">
+                AND serial_no like concat('%', #{serialNo}, '%')
+            </if>
+            <if test="orderId != null">
+                AND order_id = #{orderId}
+            </if>
+            <if test="jobId != null">
+                AND job_id = #{jobId}
+            </if>
+            <if test="producePlanId != null">
+                AND produce_plan_id = #{producePlanId}
+            </if>
+            <if test="colorCode != null and colorCode != ''">
+                AND color_code like concat('%', #{colorCode}, '%')
+            </if>
+            <if test="sizeCode != null and sizeCode != ''">
+                AND size_code like concat('%', #{sizeCode}, '%')
+            </if>
+            <if test="currentProcessId != null">
+                AND current_process_id = #{currentProcessId}
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <insert id="insertProductSerial" parameterType="ProductSerial" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_erp_product_serial (
+            serial_no, order_id, job_id, produce_plan_id, color_code, size_code, current_process_id,
+            current_process_name, status, create_time, finish_time, warehouse_time, ship_time, remark
+        ) VALUES (
+            #{serialNo}, #{orderId}, #{jobId}, #{producePlanId}, #{colorCode}, #{sizeCode}, #{currentProcessId},
+            #{currentProcessName}, #{status}, #{createTime}, #{finishTime}, #{warehouseTime}, #{shipTime}, #{remark}
+        )
+    </insert>
+
+    <insert id="batchInsertProductSerial" parameterType="java.util.List">
+        INSERT INTO t_erp_product_serial (
+            serial_no, order_id, job_id, produce_plan_id, color_code, size_code, current_process_id,
+            current_process_name, status, create_time, finish_time, warehouse_time, ship_time, remark
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+                #{item.serialNo}, #{item.orderId}, #{item.jobId}, #{item.producePlanId}, #{item.colorCode},
+                #{item.sizeCode}, #{item.currentProcessId}, #{item.currentProcessName}, #{item.status},
+                #{item.createTime}, #{item.finishTime}, #{item.warehouseTime}, #{item.shipTime}, #{item.remark}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateProductSerial" parameterType="ProductSerial">
+        UPDATE t_erp_product_serial SET
+            <if test="serialNo != null">serial_no = #{serialNo},</if>
+            <if test="orderId != null">order_id = #{orderId},</if>
+            <if test="jobId != null">job_id = #{jobId},</if>
+            <if test="producePlanId != null">produce_plan_id = #{producePlanId},</if>
+            <if test="colorCode != null">color_code = #{colorCode},</if>
+            <if test="sizeCode != null">size_code = #{sizeCode},</if>
+            <if test="currentProcessId != null">current_process_id = #{currentProcessId},</if>
+            <if test="currentProcessName != null">current_process_name = #{currentProcessName},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="finishTime != null">finish_time = #{finishTime},</if>
+            <if test="warehouseTime != null">warehouse_time = #{warehouseTime},</if>
+            <if test="shipTime != null">ship_time = #{shipTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            id = id
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteProductSerialById" parameterType="Long">
+        DELETE FROM t_erp_product_serial WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteProductSerialByIds">
+        DELETE FROM t_erp_product_serial WHERE id IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectProductSerialByJobId" parameterType="Long" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM t_erp_product_serial WHERE job_id = #{jobId}
+        ORDER BY serial_no
+    </select>
+
+    <select id="selectProductSerialBySerialNo" parameterType="String" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM t_erp_product_serial WHERE serial_no = #{serialNo}
+    </select>
+
+    <select id="countProductSerialByJobId" parameterType="Long" resultType="int">
+        SELECT COUNT(*) FROM t_erp_product_serial WHERE job_id = #{jobId}
+    </select>
+</mapper>

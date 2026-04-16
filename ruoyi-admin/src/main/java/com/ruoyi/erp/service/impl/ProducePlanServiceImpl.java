@@ -99,4 +99,14 @@ public class ProducePlanServiceImpl implements IProducePlanService {
     public int insertProducePlanBatch(List<ProducePlan> list) {
         return producePlanMapper.insertProducePlanBatch(list);
     }
+
+    @Override
+    public List<com.ruoyi.erp.domain.vo.GanttTaskVO> selectGanttTasks() {
+        return producePlanMapper.selectGanttTasks();
+    }
+
+    @Override
+    public int updatePlanDates(Long id, java.util.Date startDate, java.util.Date dueDate) {
+        return producePlanMapper.updatePlanDates(id, startDate, dueDate);
+    }
 }

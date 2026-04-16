@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.ProduceJobMapper">
+
+    <resultMap id="BaseResultMap" type="com.ruoyi.erp.domain.ProduceJob">
+        <id property="id" column="id"/>
+        <result property="jobNo" column="job_no"/>
+        <result property="producePlanId" column="produce_plan_id"/>
+        <result property="orderId" column="order_id"/>
+        <result property="colorCode" column="color_code"/>
+        <result property="sizeCode" column="size_code"/>
+        <result property="planQty" column="plan_qty"/>
+        <result property="actualQty" column="actual_qty"/>
+        <result property="defectQty" column="defect_qty"/>
+        <result property="currentProcessId" column="current_process_id"/>
+        <result property="currentProcessStatus" column="current_process_status"/>
+        <result property="startTime" column="start_time"/>
+        <result property="finishTime" column="finish_time"/>
+        <result property="outsourceBatchBarcode" column="outsource_batch_barcode"/>
+        <result property="outboundTime" column="outbound_time"/>
+        <result property="receiveTime" column="receive_time"/>
+        <result property="confirmQty" column="confirm_qty"/>
+        <result property="outsourceId" column="outsource_id"/>
+        <result property="status" column="status"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, job_no, produce_plan_id, order_id, color_code, size_code, plan_qty, actual_qty, defect_qty,
+        current_process_id, current_process_status, start_time, finish_time, outsource_batch_barcode,
+        outbound_time, receive_time, confirm_qty, outsource_id, status, create_by, create_time,
+        update_by, update_time, remark
+    </sql>
+
+    <select id="selectProduceJobById" parameterType="Long" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM t_erp_produce_job WHERE id = #{id}
+    </select>
+
+    <select id="selectProduceJobList" parameterType="ProduceJob" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM t_erp_produce_job
+        <where>
+            <if test="jobNo != null and jobNo != ''">
+                AND job_no like concat('%', #{jobNo}, '%')
+            </if>
+            <if test="producePlanId != null">
+                AND produce_plan_id = #{producePlanId}
+            </if>
+            <if test="orderId != null">
+                AND order_id = #{orderId}
+            </if>
+            <if test="colorCode != null and colorCode != ''">
+                AND color_code like concat('%', #{colorCode}, '%')
+            </if>
+            <if test="sizeCode != null and sizeCode != ''">
+                AND size_code like concat('%', #{sizeCode}, '%')
+            </if>
+            <if test="currentProcessId != null">
+                AND current_process_id = #{currentProcessId}
+            </if>
+            <if test="currentProcessStatus != null and currentProcessStatus != ''">
+                AND current_process_status = #{currentProcessStatus}
+            </if>
+            <if test="outsourceId != null">
+                AND outsource_id = #{outsourceId}
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <insert id="insertProduceJob" parameterType="ProduceJob" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_erp_produce_job (
+            job_no, produce_plan_id, order_id, color_code, size_code, plan_qty, actual_qty, defect_qty,
+            current_process_id, current_process_status, start_time, finish_time, outsource_batch_barcode,
+            outbound_time, receive_time, confirm_qty, outsource_id, status, create_by, create_time,
+            update_by, update_time, remark
+        ) VALUES (
+            #{jobNo}, #{producePlanId}, #{orderId}, #{colorCode}, #{sizeCode}, #{planQty}, #{actualQty}, #{defectQty},
+            #{currentProcessId}, #{currentProcessStatus}, #{startTime}, #{finishTime}, #{outsourceBatchBarcode},
+            #{outboundTime}, #{receiveTime}, #{confirmQty}, #{outsourceId}, #{status}, #{createBy}, #{createTime},
+            #{updateBy}, #{updateTime}, #{remark}
+        )
+    </insert>
+
+    <insert id="batchInsertProduceJob" parameterType="java.util.List">
+        INSERT INTO t_erp_produce_job (
+            job_no, produce_plan_id, order_id, color_code, size_code, plan_qty, actual_qty, defect_qty,
+            current_process_id, current_process_status, start_time, finish_time, outsource_batch_barcode,
+            outbound_time, receive_time, confirm_qty, outsource_id, status, create_by, create_time,
+            update_by, update_time, remark
+        ) VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+                #{item.jobNo}, #{item.producePlanId}, #{item.orderId}, #{item.colorCode}, #{item.sizeCode},
+                #{item.planQty}, #{item.actualQty}, #{item.defectQty}, #{item.currentProcessId},
+                #{item.currentProcessStatus}, #{item.startTime}, #{item.finishTime}, #{item.outsourceBatchBarcode},
+                #{item.outboundTime}, #{item.receiveTime}, #{item.confirmQty}, #{item.outsourceId}, #{item.status},
+                #{item.createBy}, #{item.createTime}, #{item.updateBy}, #{item.updateTime}, #{item.remark}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updateProduceJob" parameterType="ProduceJob">
+        UPDATE t_erp_produce_job SET
+            <if test="jobNo != null">job_no = #{jobNo},</if>
+            <if test="producePlanId != null">produce_plan_id = #{producePlanId},</if>
+            <if test="orderId != null">order_id = #{orderId},</if>
+            <if test="colorCode != null">color_code = #{colorCode},</if>
+            <if test="sizeCode != null">size_code = #{sizeCode},</if>
+            <if test="planQty != null">plan_qty = #{planQty},</if>
+            <if test="actualQty != null">actual_qty = #{actualQty},</if>
+            <if test="defectQty != null">defect_qty = #{defectQty},</if>
+            <if test="currentProcessId != null">current_process_id = #{currentProcessId},</if>
+            <if test="currentProcessStatus != null">current_process_status = #{currentProcessStatus},</if>
+            <if test="startTime != null">start_time = #{startTime},</if>
+            <if test="finishTime != null">finish_time = #{finishTime},</if>
+            <if test="outsourceBatchBarcode != null">outsource_batch_barcode = #{outsourceBatchBarcode},</if>
+            <if test="outboundTime != null">outbound_time = #{outboundTime},</if>
+            <if test="receiveTime != null">receive_time = #{receiveTime},</if>
+            <if test="confirmQty != null">confirm_qty = #{confirmQty},</if>
+            <if test="outsourceId != null">outsource_id = #{outsourceId},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            id = id
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteProduceJobById" parameterType="Long">
+        DELETE FROM t_erp_produce_job WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteProduceJobByIds">
+        DELETE FROM t_erp_produce_job WHERE id IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="selectProduceJobByProducePlanId" parameterType="Long" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM t_erp_produce_job WHERE produce_plan_id = #{producePlanId}
+        ORDER BY color_code, size_code
+    </select>
+
+    <select id="sumPlanQtyByProducePlanId" parameterType="Long" resultType="java.lang.Integer">
+        SELECT COALESCE(SUM(plan_qty), 0) FROM t_erp_produce_job WHERE produce_plan_id = #{producePlanId}
+    </select>
+
+    <select id="sumActualQtyByProducePlanId" parameterType="Long" resultType="java.lang.Integer">
+        SELECT COALESCE(SUM(actual_qty), 0) FROM t_erp_produce_job WHERE produce_plan_id = #{producePlanId}
+    </select>
+
+    <!-- 按状态统计工票数 -->
+    <select id="countByStatus" resultType="int" parameterType="string">
+        SELECT COUNT(*) FROM t_erp_produce_job WHERE status = #{status}
+    </select>
+
+    <!-- 统计今日新增 -->
+    <select id="countCreatedToday" resultType="int" parameterType="date">
+        SELECT COUNT(*) FROM t_erp_produce_job
+        WHERE create_time &gt;= #{today} AND create_time &lt; DATE_ADD(#{today}, INTERVAL 1 DAY)
+    </select>
+
+    <!-- 按工序统计WIP数量 -->
+    <select id="countWipByProcess" resultType="int" parameterType="Long">
+        SELECT COUNT(*) FROM t_erp_produce_job
+        WHERE current_process_id = #{processId} AND status = '1' AND current_process_status != '2'
+    </select>
+
+    <!-- 按工序统计WIP总件数 -->
+    <select id="sumWipQtyByProcess" resultType="int" parameterType="Long">
+        SELECT COALESCE(SUM(plan_qty), 0) FROM t_erp_produce_job
+        WHERE current_process_id = #{processId} AND status = '1' AND current_process_status != '2'
+    </select>
+
+    <!-- 查询工序日均产量 -->
+    <select id="selectDailyAvgByProcess" resultType="java.lang.Integer">
+        SELECT CEILING(COALESCE(SUM(actual_qty), 0) / DATEDIFF(#{end}, #{start}))
+        FROM t_erp_produce_job
+        WHERE current_process_id = #{processId} AND status = '2'
+        AND finish_time &gt;= #{start} AND finish_time &lt;= #{end}
+    </select>
+
+    <!-- 查询员工月度产量排名 -->
+    <select id="selectEmployeeMonthlyRank" resultType="com.ruoyi.erp.domain.vo.EmployeeRankVO">
+        SELECT
+            p.employee_id as employeeId,
+            e.employee_name as employeeName,
+            SUM(p.actual_qty) as monthlyQuantity,
+            SUM(p.actual_qty * p.process_price) as monthlyWage,
+            CEILING(SUM(p.actual_qty) / DATEDIFF(#{end}, #{start})) as dailyAverage
+        FROM t_erp_produce_job_process p
+        LEFT JOIN t_erp_erp_employee e ON p.employee_id = e.id
+        WHERE p.finish_time &gt;= #{start} AND p.finish_time &lt;= #{end}
+        GROUP BY p.employee_id, e.employee_name
+        ORDER BY monthlyQuantity DESC
+    </select>
+</mapper>

@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.ErpEmployeeMapper">
+
+    <resultMap type="ErpEmployee" id="ErpEmployeeResult">
+        <result property="id"    column="id"    />
+        <result property="employeeCode"    column="employee_code"    />
+        <result property="employeeName"    column="employee_name"    />
+        <result property="phone"    column="phone"    />
+        <result property="idCard"    column="id_card"    />
+        <result property="department"    column="department"    />
+        <result property="station"    column="station"    />
+        <result property="entryDate"    column="entry_date"    />
+        <result property="leaveDate"    column="leave_date"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectErpEmployeeVo">
+        select a.id, a.employee_code, a.employee_name, a.phone, a.id_card, a.department, a.station, a.entry_date, a.leave_date, a.status, a.remark, a.create_by, a.create_time, a.update_by, a.update_time
+        from t_erp_employee a
+    </sql>
+
+    <select id="selectErpEmployeeList" parameterType="ErpEmployee" resultMap="ErpEmployeeResult">
+        <include refid="selectErpEmployeeVo"/>
+        <where>
+            <if test="employeeCode != null  and employeeCode != ''"> and a.employee_code = #{employeeCode}</if>
+            <if test="employeeName != null  and employeeName != ''"> and a.employee_name like concat('%', #{employeeName}, '%')</if>
+            <if test="department != null  and department != ''"> and a.department = #{department}</if>
+            <if test="station != null  and station != ''"> and a.station = #{station}</if>
+            <if test="status != null  and status != ''"> and a.status = #{status}</if>
+        </where>
+        order by a.id desc
+    </select>
+
+    <select id="selectErpEmployeeById" parameterType="Long" resultMap="ErpEmployeeResult">
+        <include refid="selectErpEmployeeVo"/>
+        where a.id = #{id}
+    </select>
+
+    <select id="selectErpEmployeeByCode" parameterType="String" resultMap="ErpEmployeeResult">
+        <include refid="selectErpEmployeeVo"/>
+        where a.employee_code = #{employeeCode}
+    </select>
+
+    <insert id="insertErpEmployee" parameterType="ErpEmployee" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_employee
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="employeeCode != null">employee_code,</if>
+            <if test="employeeName != null">employee_name,</if>
+            <if test="phone != null">phone,</if>
+            <if test="idCard != null">id_card,</if>
+            <if test="department != null">department,</if>
+            <if test="station != null">station,</if>
+            <if test="entryDate != null">entry_date,</if>
+            <if test="leaveDate != null">leave_date,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="employeeCode != null">#{employeeCode},</if>
+            <if test="employeeName != null">#{employeeName},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="idCard != null">#{idCard},</if>
+            <if test="department != null">#{department},</if>
+            <if test="station != null">#{station},</if>
+            <if test="entryDate != null">#{entryDate},</if>
+            <if test="leaveDate != null">#{leaveDate},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateErpEmployee" parameterType="ErpEmployee">
+        update t_erp_employee
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="employeeCode != null">employee_code = #{employeeCode},</if>
+            <if test="employeeName != null">employee_name = #{employeeName},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="idCard != null">id_card = #{idCard},</if>
+            <if test="department != null">department = #{department},</if>
+            <if test="station != null">station = #{station},</if>
+            <if test="entryDate != null">entry_date = #{entryDate},</if>
+            <if test="leaveDate != null">leave_date = #{leaveDate},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteErpEmployeeById" parameterType="Long">
+        delete from t_erp_employee where id = #{id}
+    </delete>
+
+    <delete id="deleteErpEmployeeByIds" parameterType="Long">
+        delete from t_erp_employee where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

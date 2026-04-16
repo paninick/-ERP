@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.ProcessRouteItemMapper">
+
+    <resultMap type="ProcessRouteItem" id="ProcessRouteItemResult">
+        <result property="id"    column="id"    />
+        <result property="routeId"    column="route_id"    />
+        <result property="processId"    column="process_id"    />
+        <result property="sortOrder"    column="sort_order"    />
+        <result property="isControlPoint"    column="is_control_point"    />
+        <result property="requireCompleteRatio"    column="require_complete_ratio"    />
+        <result property="allowForceStart"    column="allow_force_start"    />
+        <result property="isOutsource"    column="is_outsource"    />
+        <result property="standardCycleHours"    column="standard_cycle_hours"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectProcessRouteItemVo">
+        select a.id, a.route_id, a.process_id, a.sort_order, a.is_control_point, a.require_complete_ratio, a.allow_force_start, a.is_outsource, a.standard_cycle_hours, a.remark
+        from t_erp_process_route_item a
+    </sql>
+
+    <select id="selectProcessRouteItemList" parameterType="ProcessRouteItem" resultMap="ProcessRouteItemResult">
+        <include refid="selectProcessRouteItemVo"/>
+        <where>
+            <if test="routeId != null"> and a.route_id = #{routeId}</if>
+            <if test="processId != null"> and a.process_id = #{processId}</if>
+            <if test="isControlPoint != null"> and a.is_control_point = #{isControlPoint}</if>
+            <if test="isOutsource != null"> and a.is_outsource = #{isOutsource}</if>
+        </where>
+        order by a.sort_order asc
+    </select>
+
+    <select id="selectProcessRouteItemById" parameterType="Long" resultMap="ProcessRouteItemResult">
+        <include refid="selectProcessRouteItemVo"/>
+        where a.id = #{id}
+    </select>
+
+    <select id="selectProcessRouteItemByRouteId" parameterType="Long" resultMap="ProcessRouteItemResult">
+        <include refid="selectProcessRouteItemVo"/>
+        where a.route_id = #{routeId}
+        order by a.sort_order asc
+    </select>
+
+    <insert id="insertProcessRouteItem" parameterType="ProcessRouteItem" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_process_route_item
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="routeId != null">route_id,</if>
+            <if test="processId != null">process_id,</if>
+            <if test="sortOrder != null">sort_order,</if>
+            <if test="isControlPoint != null">is_control_point,</if>
+            <if test="requireCompleteRatio != null">require_complete_ratio,</if>
+            <if test="allowForceStart != null">allow_force_start,</if>
+            <if test="isOutsource != null">is_outsource,</if>
+            <if test="standardCycleHours != null">standard_cycle_hours,</if>
+            <if test="remark != null">remark,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="routeId != null">#{routeId},</if>
+            <if test="processId != null">#{processId},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+            <if test="isControlPoint != null">#{isControlPoint},</if>
+            <if test="requireCompleteRatio != null">#{requireCompleteRatio},</if>
+            <if test="allowForceStart != null">#{allowForceStart},</if>
+            <if test="isOutsource != null">#{isOutsource},</if>
+            <if test="standardCycleHours != null">#{standardCycleHours},</if>
+            <if test="remark != null">#{remark},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProcessRouteItem" parameterType="ProcessRouteItem">
+        update t_erp_process_route_item
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="routeId != null">route_id = #{routeId},</if>
+            <if test="processId != null">process_id = #{processId},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="isControlPoint != null">is_control_point = #{isControlPoint},</if>
+            <if test="requireCompleteRatio != null">require_complete_ratio = #{requireCompleteRatio},</if>
+            <if test="allowForceStart != null">allow_force_start = #{allowForceStart},</if>
+            <if test="isOutsource != null">is_outsource = #{isOutsource},</if>
+            <if test="standardCycleHours != null">standard_cycle_hours = #{standardCycleHours},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteProcessRouteItemById" parameterType="Long">
+        delete from t_erp_process_route_item where id = #{id}
+    </delete>
+
+    <delete id="deleteProcessRouteItemByIds" parameterType="Long">
+        delete from t_erp_process_route_item where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteProcessRouteItemByRouteId" parameterType="Long">
+        delete from t_erp_process_route_item where route_id = #{routeId}
+    </delete>
+
+</mapper>

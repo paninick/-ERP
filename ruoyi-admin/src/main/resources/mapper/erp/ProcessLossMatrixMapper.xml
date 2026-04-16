@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.ProcessLossMatrixMapper">
+
+    <resultMap type="ProcessLossMatrix" id="ProcessLossMatrixResult">
+        <result property="id"    column="id"    />
+        <result property="materialAType"    column="material_a_type"    />
+        <result property="materialBType"    column="material_b_type"    />
+        <result property="processCode"    column="process_code"    />
+        <result property="standardLossRate"    column="standard_loss_rate"    />
+        <result property="actualAvgLoss"    column="actual_avg_loss"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectProcessLossMatrixVo">
+        select a.id, a.material_a_type, a.material_b_type, a.process_code, a.standard_loss_rate, a.actual_avg_loss, a.remark, a.create_by, a.create_time, a.update_by, a.update_time
+        from t_erp_process_loss_matrix a
+    </sql>
+
+    <select id="selectProcessLossMatrixList" parameterType="ProcessLossMatrix" resultMap="ProcessLossMatrixResult">
+        <include refid="selectProcessLossMatrixVo"/>
+        <where>
+            <if test="materialAType != null  and materialAType != ''"> and a.material_a_type = #{materialAType}</if>
+            <if test="materialBType != null  and materialBType != ''"> and a.material_b_type = #{materialBType}</if>
+            <if test="processCode != null  and processCode != ''"> and a.process_code = #{processCode}</if>
+        </where>
+        order by a.id desc
+    </select>
+
+    <select id="selectProcessLossMatrixById" parameterType="Long" resultMap="ProcessLossMatrixResult">
+        <include refid="selectProcessLossMatrixVo"/>
+        where a.id = #{id}
+    </select>
+
+    <select id="selectByCombination" resultMap="ProcessLossMatrixResult">
+        <include refid="selectProcessLossMatrixVo"/>
+        where a.material_a_type = #{materialAType}
+        <choose>
+            <when test="materialBType != null and materialBType != ''">
+                and a.material_b_type = #{materialBType}
+            </when>
+            <otherwise>
+                and (a.material_b_type is null or a.material_b_type = '')
+            </otherwise>
+        </choose>
+        and a.process_code = #{processCode}
+    </select>
+
+    <insert id="insertProcessLossMatrix" parameterType="ProcessLossMatrix" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_process_loss_matrix
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="materialAType != null">material_a_type,</if>
+            <if test="materialBType != null">material_b_type,</if>
+            <if test="processCode != null">process_code,</if>
+            <if test="standardLossRate != null">standard_loss_rate,</if>
+            <if test="actualAvgLoss != null">actual_avg_loss,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="materialAType != null">#{materialAType},</if>
+            <if test="materialBType != null">#{materialBType},</if>
+            <if test="processCode != null">#{processCode},</if>
+            <if test="standardLossRate != null">#{standardLossRate},</if>
+            <if test="actualAvgLoss != null">#{actualAvgLoss},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProcessLossMatrix" parameterType="ProcessLossMatrix">
+        update t_erp_process_loss_matrix
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="materialAType != null">material_a_type = #{materialAType},</if>
+            <if test="materialBType != null">material_b_type = #{materialBType},</if>
+            <if test="processCode != null">process_code = #{processCode},</if>
+            <if test="standardLossRate != null">standard_loss_rate = #{standardLossRate},</if>
+            <if test="actualAvgLoss != null">actual_avg_loss = #{actualAvgLoss},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <update id="updateActualAvgLoss">
+        update t_erp_process_loss_matrix set actual_avg_loss = #{actualAvgLoss}, update_time = now() where id = #{id}
+    </update>
+
+    <delete id="deleteProcessLossMatrixById" parameterType="Long">
+        delete from t_erp_process_loss_matrix where id = #{id}
+    </delete>
+
+    <delete id="deleteProcessLossMatrixByIds" parameterType="Long">
+        delete from t_erp_process_loss_matrix where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

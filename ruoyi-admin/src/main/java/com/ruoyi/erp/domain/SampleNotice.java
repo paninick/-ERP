@@ -99,6 +99,29 @@ public class SampleNotice extends BaseEntity {
     @Excel(name = "业务员")
     private String salesName;
 
+    /** 颜色确认状态 01待提交 02客户签样 03车间比对 04允许生产 */
+    @Excel(name = "颜色确认状态")
+    private String colorConfirmStatus;
+
+    /** 确认人ID */
+    private Long confirmById;
+
+    /** 确认时间 */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private Date confirmTime;
+
+    /** 颜色对比照片（多个逗号分隔） */
+    private String colorConfirmImages;
+
+    /** 确认人数字签名图片 */
+    private String digitalSignature;
+
+    /** 客户允差ΔE */
+    private java.math.BigDecimal customerAcceptDeltaE;
+
+    /** 拍摄光源类型 */
+    private String lightSourceType;
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -256,6 +279,62 @@ public class SampleNotice extends BaseEntity {
         this.salesName = salesName;
     }
 
+    public String getColorConfirmStatus() {
+        return colorConfirmStatus;
+    }
+
+    public void setColorConfirmStatus(String colorConfirmStatus) {
+        this.colorConfirmStatus = colorConfirmStatus;
+    }
+
+    public Long getConfirmById() {
+        return confirmById;
+    }
+
+    public void setConfirmById(Long confirmById) {
+        this.confirmById = confirmById;
+    }
+
+    public Date getConfirmTime() {
+        return confirmTime;
+    }
+
+    public void setConfirmTime(Date confirmTime) {
+        this.confirmTime = confirmTime;
+    }
+
+    public String getColorConfirmImages() {
+        return colorConfirmImages;
+    }
+
+    public void setColorConfirmImages(String colorConfirmImages) {
+        this.colorConfirmImages = colorConfirmImages;
+    }
+
+    public String getDigitalSignature() {
+        return digitalSignature;
+    }
+
+    public void setDigitalSignature(String digitalSignature) {
+        this.digitalSignature = digitalSignature;
+    }
+
+    public java.math.BigDecimal getCustomerAcceptDeltaE() {
+        return customerAcceptDeltaE;
+    }
+
+    public void setCustomerAcceptDeltaE(java.math.BigDecimal customerAcceptDeltaE) {
+        this.customerAcceptDeltaE = customerAcceptDeltaE;
+    }
+
+    public String getLightSourceType() {
+        return lightSourceType;
+    }
+
+    public void setLightSourceType(String lightSourceType) {
+        this.lightSourceType = lightSourceType;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -278,6 +357,15 @@ public class SampleNotice extends BaseEntity {
             .append("auditTime", getAuditTime())
             .append("processInstanceId", getProcessInstanceId())
             .append("bulkOrderNo", getBulkOrderNo())
+            .append("salesId", getSalesId())
+            .append("salesName", getSalesName())
+            .append("colorConfirmStatus", getColorConfirmStatus())
+            .append("confirmById", getConfirmById())
+            .append("confirmTime", getConfirmTime())
+            .append("colorConfirmImages", getColorConfirmImages())
+            .append("digitalSignature", getDigitalSignature())
+            .append("customerAcceptDeltaE", getCustomerAcceptDeltaE())
+            .append("lightSourceType", getLightSourceType())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())

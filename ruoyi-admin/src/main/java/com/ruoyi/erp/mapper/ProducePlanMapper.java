@@ -65,4 +65,77 @@ public interface ProducePlanMapper {
      * @return 结果
      */
     int insertProducePlanBatch(List<ProducePlan> list);
+
+    /**
+     * 统计总数
+     *
+     * @return 总数
+     */
+    int countAll();
+
+    /**
+     * 按状态统计
+     *
+     * @param status 状态
+     * @return 数量
+     */
+    int countByStatus(String status);
+
+    /**
+     * 按状态列表统计
+     *
+     * @param statusList 状态列表
+     * @return 数量
+     */
+    int countByStatusIn(List<String> statusList);
+
+    /**
+     * 统计指定日期完成的数量
+     *
+     * @param date 日期
+     * @return 数量
+     */
+    int countCompletedByDate(java.util.Date date);
+
+    /**
+     * 统计时间段内完成的数量
+     *
+     * @param start 开始日期
+     * @param end 结束日期
+     * @return 数量
+     */
+    int countCompletedBetween(java.util.Date start, java.util.Date end);
+
+    /**
+     * 统计时间段内完成总数
+     *
+     * @param start 开始日期
+     * @param end 结束日期
+     * @return 数量
+     */
+    int countCompletedInPeriod(java.util.Date start, java.util.Date end);
+
+    /**
+     * 统计准时完成数量
+     *
+     * @return 数量
+     */
+    int countOnTimeCompleted();
+
+    /**
+     * 查询甘特图任务列表
+     *
+     * @return 甘特图任务列表
+     */
+    java.util.List<com.ruoyi.erp.domain.vo.GanttTaskVO> selectGanttTasks();
+
+    /**
+     * 更新计划开始和结束日期
+     *
+     * @param id 计划ID
+     * @param startDate 开始日期
+     * @param dueDate 截止日期
+     * @return 结果
+     */
+    int updatePlanDates(Long id, java.util.Date startDate, java.util.Date dueDate);
 }

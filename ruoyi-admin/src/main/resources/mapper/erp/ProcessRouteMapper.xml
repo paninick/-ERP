@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.ProcessRouteMapper">
+
+    <resultMap type="ProcessRoute" id="ProcessRouteResult">
+        <result property="id"    column="id"    />
+        <result property="routeName"    column="route_name"    />
+        <result property="productType"    column="product_type"    />
+        <result property="productCode"    column="product_code"    />
+        <result property="isDefault"    column="is_default"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectProcessRouteVo">
+        select a.id, a.route_name, a.product_type, a.product_code, a.is_default, a.status, a.remark, a.create_by, a.create_time, a.update_by, a.update_time
+        from t_erp_process_route a
+    </sql>
+
+    <select id="selectProcessRouteList" parameterType="ProcessRoute" resultMap="ProcessRouteResult">
+        <include refid="selectProcessRouteVo"/>
+        <where>
+            <if test="routeName != null  and routeName != ''"> and a.route_name like concat('%', #{routeName}, '%')</if>
+            <if test="productType != null  and productType != ''"> and a.product_type = #{productType}</if>
+            <if test="productCode != null  and productCode != ''"> and a.product_code = #{productCode}</if>
+            <if test="isDefault != null"> and a.is_default = #{isDefault}</if>
+            <if test="status != null  and status != ''"> and a.status = #{status}</if>
+        </where>
+        order by a.id desc
+    </select>
+
+    <select id="selectProcessRouteById" parameterType="Long" resultMap="ProcessRouteResult">
+        <include refid="selectProcessRouteVo"/>
+        where a.id = #{id}
+    </select>
+
+    <select id="selectDefaultRouteByProductType" parameterType="String" resultMap="ProcessRouteResult">
+        <include refid="selectProcessRouteVo"/>
+        where a.product_type = #{productType} and a.is_default = 1 and a.status = '0'
+        limit 1
+    </select>
+
+    <insert id="insertProcessRoute" parameterType="ProcessRoute" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_process_route
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="routeName != null">route_name,</if>
+            <if test="productType != null">product_type,</if>
+            <if test="productCode != null">product_code,</if>
+            <if test="isDefault != null">is_default,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="routeName != null">#{routeName},</if>
+            <if test="productType != null">#{productType},</if>
+            <if test="productCode != null">#{productCode},</if>
+            <if test="isDefault != null">#{isDefault},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProcessRoute" parameterType="ProcessRoute">
+        update t_erp_process_route
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="routeName != null">route_name = #{routeName},</if>
+            <if test="productType != null">product_type = #{productType},</if>
+            <if test="productCode != null">product_code = #{productCode},</if>
+            <if test="isDefault != null">is_default = #{isDefault},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteProcessRouteById" parameterType="Long">
+        delete from t_erp_process_route where id = #{id}
+    </delete>
+
+    <delete id="deleteProcessRouteByIds" parameterType="Long">
+        delete from t_erp_process_route where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

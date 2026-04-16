@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.ProcessDefMapper">
+
+    <resultMap type="ProcessDef" id="ProcessDefResult">
+        <result property="id"    column="id"    />
+        <result property="processCode"    column="process_code"    />
+        <result property="processName"    column="process_name"    />
+        <result property="processType"    column="process_type"    />
+        <result property="department"    column="department"    />
+        <result property="defaultPrice"    column="default_price"    />
+        <result property="enableOutsource"    column="enable_outsource"    />
+        <result property="needQualityCheck"    column="need_quality_check"    />
+        <result property="sortOrder"    column="sort_order"    />
+        <result property="status"    column="status"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectProcessDefVo">
+        select a.id, a.process_code, a.process_name, a.process_type, a.department, a.default_price, a.enable_outsource, a.need_quality_check, a.sort_order, a.status, a.remark, a.create_by, a.create_time, a.update_by, a.update_time
+        from t_erp_process_def a
+    </sql>
+
+    <select id="selectProcessDefList" parameterType="ProcessDef" resultMap="ProcessDefResult">
+        <include refid="selectProcessDefVo"/>
+        <where>
+            <if test="processCode != null  and processCode != ''"> and a.process_code = #{processCode}</if>
+            <if test="processName != null  and processName != ''"> and a.process_name like concat('%', #{processName}, '%')</if>
+            <if test="processType != null  and processType != ''"> and a.process_type = #{processType}</if>
+            <if test="department != null  and department != ''"> and a.department = #{department}</if>
+            <if test="status != null  and status != ''"> and a.status = #{status}</if>
+        </where>
+        order by a.sort_order asc
+    </select>
+
+    <select id="selectProcessDefById" parameterType="Long" resultMap="ProcessDefResult">
+        <include refid="selectProcessDefVo"/>
+        where a.id = #{id}
+    </select>
+
+    <select id="selectProcessDefByCode" parameterType="String" resultMap="ProcessDefResult">
+        <include refid="selectProcessDefVo"/>
+        where a.process_code = #{processCode}
+    </select>
+
+    <insert id="insertProcessDef" parameterType="ProcessDef" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_process_def
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="processCode != null">process_code,</if>
+            <if test="processName != null">process_name,</if>
+            <if test="processType != null">process_type,</if>
+            <if test="department != null">department,</if>
+            <if test="defaultPrice != null">default_price,</if>
+            <if test="enableOutsource != null">enable_outsource,</if>
+            <if test="needQualityCheck != null">need_quality_check,</if>
+            <if test="sortOrder != null">sort_order,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="processCode != null">#{processCode},</if>
+            <if test="processName != null">#{processName},</if>
+            <if test="processType != null">#{processType},</if>
+            <if test="department != null">#{department},</if>
+            <if test="defaultPrice != null">#{defaultPrice},</if>
+            <if test="enableOutsource != null">#{enableOutsource},</if>
+            <if test="needQualityCheck != null">#{needQualityCheck},</if>
+            <if test="sortOrder != null">#{sortOrder},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProcessDef" parameterType="ProcessDef">
+        update t_erp_process_def
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="processCode != null">process_code = #{processCode},</if>
+            <if test="processName != null">process_name = #{processName},</if>
+            <if test="processType != null">process_type = #{processType},</if>
+            <if test="department != null">department = #{department},</if>
+            <if test="defaultPrice != null">default_price = #{defaultPrice},</if>
+            <if test="enableOutsource != null">enable_outsource = #{enableOutsource},</if>
+            <if test="needQualityCheck != null">need_quality_check = #{needQualityCheck},</if>
+            <if test="sortOrder != null">sort_order = #{sortOrder},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteProcessDefById" parameterType="Long">
+        delete from t_erp_process_def where id = #{id}
+    </delete>
+
+    <delete id="deleteProcessDefByIds" parameterType="Long">
+        delete from t_erp_process_def where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

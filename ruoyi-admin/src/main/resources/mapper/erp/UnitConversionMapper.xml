@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.UnitConversionMapper">
+
+    <resultMap type="UnitConversion" id="UnitConversionResult">
+        <result property="id"    column="id"    />
+        <result property="materialId"    column="material_id"    />
+        <result property="purchaseUnit"    column="purchase_unit"    />
+        <result property="stockUnit"    column="stock_unit"    />
+        <result property="produceUnit"    column="produce_unit"    />
+        <result property="purchaseToStock"    column="purchase_to_stock"    />
+        <result property="stockToProduce"    column="stock_to_produce"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectUnitConversionVo">
+        select a.id, a.material_id, a.purchase_unit, a.stock_unit, a.produce_unit, a.purchase_to_stock, a.stock_to_produce, a.remark, a.create_by, a.create_time, a.update_by, a.update_time
+        from t_erp_unit_conversion a
+    </sql>
+
+    <select id="selectUnitConversionList" parameterType="UnitConversion" resultMap="UnitConversionResult">
+        <include refid="selectUnitConversionVo"/>
+        <where>
+            <if test="materialId != null"> and a.material_id = #{materialId}</if>
+            <if test="purchaseUnit != null  and purchaseUnit != ''"> and a.purchase_unit = #{purchaseUnit}</if>
+            <if test="stockUnit != null  and stockUnit != ''"> and a.stock_unit = #{stockUnit}</if>
+            <if test="produceUnit != null  and produceUnit != ''"> and a.produce_unit = #{produceUnit}</if>
+        </where>
+        order by a.id desc
+    </select>
+
+    <select id="selectUnitConversionById" parameterType="Long" resultMap="UnitConversionResult">
+        <include refid="selectUnitConversionVo"/>
+        where a.id = #{id}
+    </select>
+
+    <select id="selectUnitConversionByMaterialId" parameterType="Long" resultMap="UnitConversionResult">
+        <include refid="selectUnitConversionVo"/>
+        where a.material_id = #{materialId}
+    </select>
+
+    <insert id="insertUnitConversion" parameterType="UnitConversion" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_unit_conversion
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="materialId != null">material_id,</if>
+            <if test="purchaseUnit != null">purchase_unit,</if>
+            <if test="stockUnit != null">stock_unit,</if>
+            <if test="produceUnit != null">produce_unit,</if>
+            <if test="purchaseToStock != null">purchase_to_stock,</if>
+            <if test="stockToProduce != null">stock_to_produce,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="materialId != null">#{materialId},</if>
+            <if test="purchaseUnit != null">#{purchaseUnit},</if>
+            <if test="stockUnit != null">#{stockUnit},</if>
+            <if test="produceUnit != null">#{produceUnit},</if>
+            <if test="purchaseToStock != null">#{purchaseToStock},</if>
+            <if test="stockToProduce != null">#{stockToProduce},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateUnitConversion" parameterType="UnitConversion">
+        update t_erp_unit_conversion
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="materialId != null">material_id = #{materialId},</if>
+            <if test="purchaseUnit != null">purchase_unit = #{purchaseUnit},</if>
+            <if test="stockUnit != null">stock_unit = #{stockUnit},</if>
+            <if test="produceUnit != null">produce_unit = #{produceUnit},</if>
+            <if test="purchaseToStock != null">purchase_to_stock = #{purchaseToStock},</if>
+            <if test="stockToProduce != null">stock_to_produce = #{stockToProduce},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteUnitConversionById" parameterType="Long">
+        delete from t_erp_unit_conversion where id = #{id}
+    </delete>
+
+    <delete id="deleteUnitConversionByIds" parameterType="Long">
+        delete from t_erp_unit_conversion where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

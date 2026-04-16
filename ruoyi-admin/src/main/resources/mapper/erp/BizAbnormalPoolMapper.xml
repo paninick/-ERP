@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.BizAbnormalPoolMapper">
+
+    <resultMap id="BaseResultMap" type="com.ruoyi.erp.domain.BizAbnormalPool">
+        <id column="id" property="id"/>
+        <result column="biz_type" property="bizType"/>
+        <result column="biz_id" property="bizId"/>
+        <result column="abnormal_code" property="abnormalCode"/>
+        <result column="abnormal_title" property="abnormalTitle"/>
+        <result column="abnormal_desc" property="abnormalDesc"/>
+        <result column="abnormal_level" property="abnormalLevel"/>
+        <result column="status" property="status"/>
+        <result column="handle_by_id" property="handleById"/>
+        <result column="handle_by_name" property="handleByName"/>
+        <result column="handle_time" property="handleTime"/>
+        <result column="handle_result" property="handleResult"/>
+        <result column="lock_biz" property="lockBiz"/>
+        <result column="create_by" property="createBy"/>
+        <result column="create_time" property="createTime"/>
+        <result column="update_by" property="updateBy"/>
+        <result column="update_time" property="updateTime"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, biz_type, biz_id, abnormal_code, abnormal_title, abnormal_desc, abnormal_level, status,
+        handle_by_id, handle_by_name, handle_time, handle_result, lock_biz, create_by, create_time,
+        update_by, update_time, remark
+    </sql>
+
+    <select id="selectBizAbnormalPoolById" parameterType="Long" resultMap="BaseResultMap">
+        SELECT
+        <include preffix="overlap" refid="Base_Column_List"/>
+        FROM t_erp_biz_abnormal_pool
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectBizAbnormalPoolList" parameterType="com.ruoyi.erp.domain.BizAbnormalPool" resultMap="BaseResultMap">
+        SELECT
+        <include preffix="overlap" refid="Base_Column_List"/>
+        FROM t_erp_biz_abnormal_pool
+        <where>
+            <if test="bizType != null and bizType != ''">
+                AND biz_type = #{bizType}
+            </if>
+            <if test="bizId != null">
+                AND biz_id = #{bizId}
+            </if>
+            <if test="abnormalCode != null and abnormalCode != ''">
+                AND abnormal_code like concat('%', #{abnormalCode}, '%')
+            </if>
+            <if test="abnormalTitle != null and abnormalTitle != ''">
+                AND abnormal_title like concat('%', #{abnormalTitle}, '%')
+            </if>
+            <if test="abnormalLevel != null">
+                AND abnormal_level = #{abnormalLevel}
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+            <if test="lockBiz != null and lockBiz != ''">
+                AND lock_biz = #{lockBiz}
+            </if>
+        </where>
+        ORDER BY abnormal_level DESC, create_time ASC
+    </select>
+
+    <insert id="insertBizAbnormalPool" parameterType="com.ruoyi.erp.domain.BizAbnormalPool" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_erp_biz_abnormal_pool (
+            biz_type, biz_id, abnormal_code, abnormal_title, abnormal_desc, abnormal_level,
+            status, handle_by_id, handle_by_name, handle_time, handle_result, lock_biz,
+            create_by, create_time, update_by, update_time, remark
+        ) VALUES (
+            #{bizType}, #{bizId}, #{abnormalCode}, #{abnormalTitle}, #{abnormalDesc}, #{abnormalLevel},
+            #{status}, #{handleById}, #{handleByName}, #{handleTime}, #{handleResult}, #{lockBiz},
+            #{createBy}, #{createTime}, #{updateBy}, #{updateTime}, #{remark}
+        )
+    </insert>
+
+    <update id="updateBizAbnormalPool" parameterType="com.ruoyi.erp.domain.BizAbnormalPool">
+        UPDATE t_erp_biz_abnormal_pool
+        <set>
+            <if test="bizType != null">biz_type = #{bizType},</if>
+            <if test="bizId != null">biz_id = #{bizId},</if>
+            <if test="abnormalCode != null">abnormal_code = #{abnormalCode},</if>
+            <if test="abnormalTitle != null">abnormal_title = #{abnormalTitle},</if>
+            <if test="abnormalDesc != null">abnormal_desc = #{abnormalDesc},</if>
+            <if test="abnormalLevel != null">abnormal_level = #{abnormalLevel},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="handleById != null">handle_by_id = #{handleById},</if>
+            <if test="handleByName != null">handle_by_name = #{handleByName},</if>
+            <if test="handleTime != null">handle_time = #{handleTime},</if>
+            <if test="handleResult != null">handle_result = #{handleResult},</if>
+            <if test="lockBiz != null">lock_biz = #{lockBiz},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteBizAbnormalPoolById" parameterType="Long">
+        DELETE FROM t_erp_biz_abnormal_pool WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteBizAbnormalPoolByIds">
+        DELETE FROM t_erp_biz_abnormal_pool WHERE id IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="countUnhandledByBiz" resultType="int">
+        SELECT COUNT(*) FROM t_erp_biz_abnormal_pool
+        WHERE biz_type = #{bizType} AND biz_id = #{bizId} AND status IN ('0', '1')
+    </select>
+
+    <!-- 统计所有未处理异常 -->
+    <select id="countUnhandled" resultType="int">
+        SELECT COUNT(*) FROM t_erp_biz_abnormal_pool WHERE status IN ('0', '1')
+    </select>
+</mapper>

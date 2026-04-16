@@ -308,4 +308,84 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </insert>
 
+    <!-- 统计总数 -->
+    <select id="countAll" resultType="int">
+        SELECT COUNT(*) FROM t_erp_produce_plan
+    </select>
+
+    <!-- 按状态统计 -->
+    <select id="countByStatus" resultType="int" parameterType="string">
+        SELECT COUNT(*) FROM t_erp_produce_plan WHERE plan_status = #{status}
+    </select>
+
+    <!-- 按状态列表统计 -->
+    <select id="countByStatusIn" resultType="int">
+        SELECT COUNT(*) FROM t_erp_produce_plan WHERE plan_status IN
+        <foreach item="status" collection="list" open="(" separator="," close=")">
+            #{status}
+        </foreach>
+    </select>
+
+    <!-- 统计指定日期完成 -->
+    <select id="countCompletedByDate" resultType="int" parameterType="date">
+        SELECT COUNT(*) FROM t_erp_produce_plan
+        WHERE complete_date &gt;= #{date} AND complete_date &lt; DATE_ADD(#{date}, INTERVAL 1 DAY)
+        AND plan_status IN ('5','6','7','9')
+    </select>
+
+    <!-- 统计时间段完成 -->
+    <select id="countCompletedBetween" resultType="int">
+        SELECT COUNT(*) FROM t_erp_produce_plan
+        WHERE complete_date &gt;= #{start} AND complete_date &lt;= #{end}
+        AND plan_status IN ('5','6','7','9')
+    </select>
+
+    <!-- 统计时间段内完成总数 -->
+    <select id="countCompletedInPeriod" resultType="int">
+        SELECT COUNT(*) FROM t_erp_produce_plan
+        <where>
+            <if test="start != null">AND complete_date &gt;= #{start}</if>
+            <if test="end != null">AND complete_date &lt;= #{end}</if>
+        </where>
+        AND plan_status IN ('5','6','7','9')
+    </select>
+
+    <!-- 统计准时完成 -->
+    <select id="countOnTimeCompleted" resultType="int">
+        SELECT COUNT(*) FROM t_erp_produce_plan
+        WHERE complete_date &lt;= due_date AND plan_status IN ('5','6','7','9')
+    </select>
+
+    <!-- 查询甘特图任务列表 -->
+    <select id="selectGanttTasks" resultType="com.ruoyi.erp.domain.vo.GanttTaskVO">
+        SELECT
+            id as id,
+            plan_no as name,
+            start_date as start,
+            due_date as end,
+            CASE
+                WHEN plan_status = '1' THEN 0
+                WHEN plan_status = '2' THEN 10
+                WHEN plan_status = '3' THEN 30
+                WHEN plan_status = '4' THEN 60
+                WHEN plan_status = '5' THEN 80
+                WHEN plan_status = '9' THEN 100
+                ELSE 0
+            END as progress,
+            sales_name as owner,
+            plan_status as status,
+            customer_name as customerName,
+            style_category as styleCategory
+        FROM t_erp_produce_plan
+        WHERE plan_status NOT IN ('10')
+        ORDER BY start_date ASC
+    </select>
+
+    <!-- 更新计划日期 -->
+    <update id="updatePlanDates">
+        UPDATE t_erp_produce_plan
+        SET start_date = #{startDate}, due_date = #{dueDate}
+        WHERE id = #{id}
+    </update>
+
 </mapper>

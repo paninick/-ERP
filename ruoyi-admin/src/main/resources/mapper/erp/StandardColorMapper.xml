@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.StandardColorMapper">
+
+    <resultMap type="StandardColor" id="StandardColorResult">
+        <result property="id"    column="id"    />
+        <result property="colorCode"    column="color_code"    />
+        <result property="colorName"    column="color_name"    />
+        <result property="colorLab"    column="color_lab"    />
+        <result property="defaultDeltaE"    column="default_delta_e"    />
+        <result property="colorImage"    column="color_image"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectStandardColorVo">
+        select a.id, a.color_code, a.color_name, a.color_lab, a.default_delta_e, a.color_image, a.remark, a.create_by, a.create_time, a.update_by, a.update_time
+        from t_erp_standard_color a
+    </sql>
+
+    <select id="selectStandardColorList" parameterType="StandardColor" resultMap="StandardColorResult">
+        <include refid="selectStandardColorVo"/>
+        <where>
+            <if test="colorCode != null  and colorCode != ''"> and a.color_code = #{colorCode}</if>
+            <if test="colorName != null  and colorName != ''"> and a.color_name like concat('%', #{colorName}, '%')</if>
+        </where>
+        order by a.id desc
+    </select>
+
+    <select id="selectStandardColorById" parameterType="Long" resultMap="StandardColorResult">
+        <include refid="selectStandardColorVo"/>
+        where a.id = #{id}
+    </select>
+
+    <select id="selectStandardColorByCode" parameterType="String" resultMap="StandardColorResult">
+        <include refid="selectStandardColorVo"/>
+        where a.color_code = #{colorCode}
+    </select>
+
+    <insert id="insertStandardColor" parameterType="StandardColor" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_standard_color
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="colorCode != null">color_code,</if>
+            <if test="colorName != null">color_name,</if>
+            <if test="colorLab != null">color_lab,</if>
+            <if test="defaultDeltaE != null">default_delta_e,</if>
+            <if test="colorImage != null">color_image,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="colorCode != null">#{colorCode},</if>
+            <if test="colorName != null">#{colorName},</if>
+            <if test="colorLab != null">#{colorLab},</if>
+            <if test="defaultDeltaE != null">#{defaultDeltaE},</if>
+            <if test="colorImage != null">#{colorImage},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateStandardColor" parameterType="StandardColor">
+        update t_erp_standard_color
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="colorCode != null">color_code = #{colorCode},</if>
+            <if test="colorName != null">color_name = #{colorName},</if>
+            <if test="colorLab != null">color_lab = #{colorLab},</if>
+            <if test="defaultDeltaE != null">default_delta_e = #{defaultDeltaE},</if>
+            <if test="colorImage != null">color_image = #{colorImage},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteStandardColorById" parameterType="Long">
+        delete from t_erp_standard_color where id = #{id}
+    </delete>
+
+    <delete id="deleteStandardColorByIds" parameterType="Long">
+        delete from t_erp_standard_color where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
