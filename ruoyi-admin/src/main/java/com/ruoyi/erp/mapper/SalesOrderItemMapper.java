@@ -65,4 +65,12 @@ public interface SalesOrderItemMapper {
      * @return 结果
      */
     int insertSalesOrderItemBatch(List<SalesOrderItem> list);
+
+    /**
+     * 根据销售订单ID查询销售明细列表
+     *
+     * @param salesOrderId 销售订单ID
+     * @return 销售明细集合
+     */
+    List<SalesOrderItem> selectSalesOrderItemBySalesOrderId(Long salesOrderId);
 }

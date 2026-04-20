@@ -6,6 +6,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="SalesOrder" id="SalesOrderResult">
         <result property="id"    column="id"    />
+        <result property="srcBillType"    column="src_bill_type"    />
+        <result property="srcBillId"    column="src_bill_id"    />
+        <result property="srcBillNo"    column="src_bill_no"    />
         <result property="salesType"    column="sales_type"    />
         <result property="customerName"    column="customer_name"    />
         <result property="bulkOrderNo"    column="bulk_order_no"    />
@@ -37,7 +40,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectSalesOrderVo">
-        select a.id, a.sales_type, a.customer_name, a.bulk_order_no, a.sample_style_no, a.style_category, a.sample_no, a.sales_name, a.notice_id, a.tech_id, a.sales_no, a.sales_date, a.sales_id, a.customer_id, a.due_date, a.quantity, a.amount, a.pay_amount, a.order_status, a.audit_status, a.audit_by, a.audit_time, a.bulk_opinion, a.production_exceed, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
+        select a.id, a.src_bill_type, a.src_bill_id, a.src_bill_no, a.sales_type, a.customer_name, a.bulk_order_no, a.sample_style_no, a.style_category, a.sample_no, a.sales_name, a.notice_id, a.tech_id, a.sales_no, a.sales_date, a.sales_id, a.customer_id, a.due_date, a.quantity, a.amount, a.pay_amount, a.order_status, a.audit_status, a.audit_by, a.audit_time, a.bulk_opinion, a.production_exceed, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
         from t_erp_sales_order a
     </sql>
 
@@ -59,6 +62,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertSalesOrder" parameterType="SalesOrder" useGeneratedKeys="true" keyProperty="id">
         insert into t_erp_sales_order
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="srcBillType != null">src_bill_type,</if>
+            <if test="srcBillId != null">src_bill_id,</if>
+            <if test="srcBillNo != null">src_bill_no,</if>
             <if test="salesType != null">sales_type,</if>
             <if test="customerName != null">customer_name,</if>
             <if test="bulkOrderNo != null">bulk_order_no,</if>
@@ -89,6 +95,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="remark != null">remark,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="srcBillType != null">#{srcBillType},</if>
+            <if test="srcBillId != null">#{srcBillId},</if>
+            <if test="srcBillNo != null">#{srcBillNo},</if>
             <if test="salesType != null">#{salesType},</if>
             <if test="customerName != null">#{customerName},</if>
             <if test="bulkOrderNo != null">#{bulkOrderNo},</if>
@@ -123,6 +132,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateSalesOrder" parameterType="SalesOrder">
         update t_erp_sales_order
         <trim prefix="SET" suffixOverrides=",">
+            <if test="srcBillType != null">src_bill_type = #{srcBillType},</if>
+            <if test="srcBillId != null">src_bill_id = #{srcBillId},</if>
+            <if test="srcBillNo != null">src_bill_no = #{srcBillNo},</if>
             <if test="salesType != null">sales_type = #{salesType},</if>
             <if test="customerName != null">customer_name = #{customerName},</if>
             <if test="bulkOrderNo != null">bulk_order_no = #{bulkOrderNo},</if>
@@ -169,11 +181,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertSalesOrderBatch" parameterType="java.util.List">
 
         REPLACE INTO t_erp_sales_order
-        (id,sales_type,customer_name,bulk_order_no,sample_style_no,style_category,sample_no,sales_name,notice_id,tech_id,sales_no,sales_date,sales_id,customer_id,due_date,quantity,amount,pay_amount,order_status,audit_status,audit_by,audit_time,bulk_opinion,production_exceed,create_by,create_time,update_by,update_time,remark)
+        (id,src_bill_type,src_bill_id,src_bill_no,sales_type,customer_name,bulk_order_no,sample_style_no,style_category,sample_no,sales_name,notice_id,tech_id,sales_no,sales_date,sales_id,customer_id,due_date,quantity,amount,pay_amount,order_status,audit_status,audit_by,audit_time,bulk_opinion,production_exceed,create_by,create_time,update_by,update_time,remark)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
 
-            (#{item.id},#{item.salesType},#{item.customerName},#{item.bulkOrderNo},#{item.sampleStyleNo},#{item.styleCategory},#{item.sampleNo},#{item.salesName},#{item.noticeId},#{item.techId},#{item.salesNo},#{item.salesDate},#{item.salesId},#{item.customerId},#{item.dueDate},#{item.quantity},#{item.amount},#{item.payAmount},#{item.orderStatus},#{item.auditStatus},#{item.auditBy},#{item.auditTime},#{item.bulkOpinion},#{item.productionExceed},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark})
+            (#{item.id},#{item.srcBillType},#{item.srcBillId},#{item.srcBillNo},#{item.salesType},#{item.customerName},#{item.bulkOrderNo},#{item.sampleStyleNo},#{item.styleCategory},#{item.sampleNo},#{item.salesName},#{item.noticeId},#{item.techId},#{item.salesNo},#{item.salesDate},#{item.salesId},#{item.customerId},#{item.dueDate},#{item.quantity},#{item.amount},#{item.payAmount},#{item.orderStatus},#{item.auditStatus},#{item.auditBy},#{item.auditTime},#{item.bulkOpinion},#{item.productionExceed},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark})
 
         </foreach>
     </insert>

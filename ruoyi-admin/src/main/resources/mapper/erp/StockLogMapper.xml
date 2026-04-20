@@ -8,6 +8,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="id"    column="id"    />
         <result property="sn"    column="sn"    />
         <result property="relationId"    column="relation_id"    />
+        <result property="srcBillType"    column="src_bill_type"    />
+        <result property="srcBillId"    column="src_bill_id"    />
+        <result property="srcBillNo"    column="src_bill_no"    />
+        <result property="skuId"    column="sku_id"    />
+        <result property="materialId"    column="material_id"    />
         <result property="materialId"    column="material_id"    />
         <result property="materialType"    column="material_type"    />
         <result property="materialNo"    column="material_no"    />
@@ -25,7 +30,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectStockLogVo">
-        select a.id, a.sn, a.relation_id, a.material_id, a.material_type, a.material_no, a.name, a.in_out, a.count, a.warehouse_id, a.warehouse_area_id, a.warehouse_location_id, a.save_location, a.create_by, a.create_time, a.update_by, a.update_time
+        select a.id, a.sn, a.relation_id, a.src_bill_type, a.src_bill_id, a.src_bill_no, a.sku_id, a.material_id, a.material_type, a.material_no, a.name, a.in_out, a.count, a.warehouse_id, a.warehouse_area_id, a.warehouse_location_id, a.save_location, a.create_by, a.create_time, a.update_by, a.update_time
         from t_erp_stock_log a
     </sql>
 
@@ -52,6 +57,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="id != null">id,</if>
             <if test="sn != null">sn,</if>
             <if test="relationId != null">relation_id,</if>
+            <if test="srcBillType != null">src_bill_type,</if>
+            <if test="srcBillId != null">src_bill_id,</if>
+            <if test="srcBillNo != null">src_bill_no,</if>
+            <if test="skuId != null">sku_id,</if>
             <if test="materialId != null">material_id,</if>
             <if test="materialType != null">material_type,</if>
             <if test="materialNo != null and materialNo != ''">material_no,</if>
@@ -71,6 +80,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="id != null">#{id},</if>
             <if test="sn != null">#{sn},</if>
             <if test="relationId != null">#{relationId},</if>
+            <if test="srcBillType != null">#{srcBillType},</if>
+            <if test="srcBillId != null">#{srcBillId},</if>
+            <if test="srcBillNo != null">#{srcBillNo},</if>
+            <if test="skuId != null">#{skuId},</if>
             <if test="materialId != null">#{materialId},</if>
             <if test="materialType != null">#{materialType},</if>
             <if test="materialNo != null and materialNo != ''">#{materialNo},</if>
@@ -93,6 +106,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <trim prefix="SET" suffixOverrides=",">
             <if test="sn != null">sn = #{sn},</if>
             <if test="relationId != null">relation_id = #{relationId},</if>
+            <if test="srcBillType != null">src_bill_type = #{srcBillType},</if>
+            <if test="srcBillId != null">src_bill_id = #{srcBillId},</if>
+            <if test="srcBillNo != null">src_bill_no = #{srcBillNo},</if>
+            <if test="skuId != null">sku_id = #{skuId},</if>
             <if test="materialId != null">material_id = #{materialId},</if>
             <if test="materialType != null">material_type = #{materialType},</if>
             <if test="materialNo != null and materialNo != ''">material_no = #{materialNo},</if>
@@ -125,11 +142,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertStockLogBatch" parameterType="java.util.List">
 
         REPLACE INTO t_erp_stock_log
-        (id,sn,relation_id,material_id,material_type,material_no,name,in_out,count,warehouse_id,warehouse_area_id,warehouse_location_id,save_location,create_by,create_time,update_by,update_time,)
+        (id,sn,relation_id,src_bill_type,src_bill_id,src_bill_no,sku_id,material_id,material_type,material_no,name,in_out,count,warehouse_id,warehouse_area_id,warehouse_location_id,save_location,create_by,create_time,update_by,update_time)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
 
-            (#{item.id},#{item.sn},#{item.relationId},#{item.materialId},#{item.materialType},#{item.materialNo},#{item.name},#{item.inOut},#{item.count},#{item.warehouseId},#{item.warehouseAreaId},#{item.warehouseLocationId},#{item.saveLocation},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},)
+            (#{item.id},#{item.sn},#{item.relationId},#{item.srcBillType},#{item.srcBillId},#{item.srcBillNo},#{item.skuId},#{item.materialId},#{item.materialType},#{item.materialNo},#{item.name},#{item.inOut},#{item.count},#{item.warehouseId},#{item.warehouseAreaId},#{item.warehouseLocationId},#{item.saveLocation},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime})
 
         </foreach>
     </insert>

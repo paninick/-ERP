@@ -6,6 +6,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="Purchase" id="PurchaseResult">
         <result property="id"    column="id"    />
+        <result property="srcBillType"    column="src_bill_type"    />
+        <result property="srcBillId"    column="src_bill_id"    />
+        <result property="srcBillNo"    column="src_bill_no"    />
         <result property="sn"    column="sn"    />
         <result property="type"    column="type"    />
         <result property="bulkOrderNo"    column="bulk_order_no"    />
@@ -31,7 +34,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectPurchaseVo">
-        select a.id, a.sn, a.type, a.bulk_order_no, a.description, a.purchase_date, a.expected_delivery_date, a.purchase_name, a.purchase_user_id, a.confirm_time, a.status, a.supplier_id, a.amount, a.delivery_type, a.confirm_status, a.is_pay, a.pay_date, a.pay_amount, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
+        select a.id, a.src_bill_type, a.src_bill_id, a.src_bill_no, a.sn, a.type, a.bulk_order_no, a.description, a.purchase_date, a.expected_delivery_date, a.purchase_name, a.purchase_user_id, a.confirm_time, a.status, a.supplier_id, a.amount, a.delivery_type, a.confirm_status, a.is_pay, a.pay_date, a.pay_amount, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
         from t_erp_purchase a
     </sql>
 
@@ -53,6 +56,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertPurchase" parameterType="Purchase" useGeneratedKeys="true" keyProperty="id">
         insert into t_erp_purchase
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="srcBillType != null">src_bill_type,</if>
+            <if test="srcBillId != null">src_bill_id,</if>
+            <if test="srcBillNo != null">src_bill_no,</if>
             <if test="sn != null">sn,</if>
             <if test="type != null">type,</if>
             <if test="bulkOrderNo != null">bulk_order_no,</if>
@@ -77,6 +83,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="remark != null">remark,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="srcBillType != null">#{srcBillType},</if>
+            <if test="srcBillId != null">#{srcBillId},</if>
+            <if test="srcBillNo != null">#{srcBillNo},</if>
             <if test="sn != null">#{sn},</if>
             <if test="type != null">#{type},</if>
             <if test="bulkOrderNo != null">#{bulkOrderNo},</if>
@@ -105,6 +114,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updatePurchase" parameterType="Purchase">
         update t_erp_purchase
         <trim prefix="SET" suffixOverrides=",">
+            <if test="srcBillType != null">src_bill_type = #{srcBillType},</if>
+            <if test="srcBillId != null">src_bill_id = #{srcBillId},</if>
+            <if test="srcBillNo != null">src_bill_no = #{srcBillNo},</if>
             <if test="sn != null">sn = #{sn},</if>
             <if test="type != null">type = #{type},</if>
             <if test="bulkOrderNo != null">bulk_order_no = #{bulkOrderNo},</if>
@@ -145,11 +157,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertPurchaseBatch" parameterType="java.util.List">
 
         REPLACE INTO t_erp_purchase
-        (id,sn,type,bulk_order_no,description,purchase_date,expected_delivery_date,purchase_name,purchase_user_id,confirm_time,status,supplier_id,amount,delivery_type,confirm_status,is_pay,pay_date,pay_amount,create_by,create_time,update_by,update_time,remark)
+        (id,src_bill_type,src_bill_id,src_bill_no,sn,type,bulk_order_no,description,purchase_date,expected_delivery_date,purchase_name,purchase_user_id,confirm_time,status,supplier_id,amount,delivery_type,confirm_status,is_pay,pay_date,pay_amount,create_by,create_time,update_by,update_time,remark)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
 
-            (#{item.id},#{item.sn},#{item.type},#{item.bulkOrderNo},#{item.description},#{item.purchaseDate},#{item.expectedDeliveryDate},#{item.purchaseName},#{item.purchaseUserId},#{item.confirmTime},#{item.status},#{item.supplierId},#{item.amount},#{item.deliveryType},#{item.confirmStatus},#{item.isPay},#{item.payDate},#{item.payAmount},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark})
+            (#{item.id},#{item.srcBillType},#{item.srcBillId},#{item.srcBillNo},#{item.sn},#{item.type},#{item.bulkOrderNo},#{item.description},#{item.purchaseDate},#{item.expectedDeliveryDate},#{item.purchaseName},#{item.purchaseUserId},#{item.confirmTime},#{item.status},#{item.supplierId},#{item.amount},#{item.deliveryType},#{item.confirmStatus},#{item.isPay},#{item.payDate},#{item.payAmount},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark})
 
         </foreach>
     </insert>

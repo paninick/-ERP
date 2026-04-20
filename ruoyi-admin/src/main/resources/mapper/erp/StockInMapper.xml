@@ -6,6 +6,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="StockIn" id="StockInResult">
         <result property="id"    column="id"    />
+        <result property="srcBillType"    column="src_bill_type"    />
+        <result property="srcBillId"    column="src_bill_id"    />
+        <result property="srcBillNo"    column="src_bill_no"    />
         <result property="sn"    column="sn"    />
         <result property="inDate"    column="in_date"    />
         <result property="inType"    column="in_type"    />
@@ -26,7 +29,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectStockInVo">
-        select a.id, a.sn, a.in_date, a.in_type, a.charge_user_id, a.total_price, a.confirm_status, a.confirm_by, a.confirm_time, a.purchase_id, a.purchase_sn, a.bulk_order_no, a.in_description, a.remark, a.create_by, a.create_time, a.update_by, a.update_time
+        select a.id, a.src_bill_type, a.src_bill_id, a.src_bill_no, a.sn, a.in_date, a.in_type, a.charge_user_id, a.total_price, a.confirm_status, a.confirm_by, a.confirm_time, a.purchase_id, a.purchase_sn, a.bulk_order_no, a.in_description, a.remark, a.create_by, a.create_time, a.update_by, a.update_time
         from t_erp_stock_in a
     </sql>
 
@@ -50,6 +53,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertStockIn" parameterType="StockIn" useGeneratedKeys="true" keyProperty="id">
         insert into t_erp_stock_in
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="srcBillType != null">src_bill_type,</if>
+            <if test="srcBillId != null">src_bill_id,</if>
+            <if test="srcBillNo != null">src_bill_no,</if>
             <if test="sn != null">sn,</if>
             <if test="inDate != null">in_date,</if>
             <if test="inType != null">in_type,</if>
@@ -69,6 +75,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="srcBillType != null">#{srcBillType},</if>
+            <if test="srcBillId != null">#{srcBillId},</if>
+            <if test="srcBillNo != null">#{srcBillNo},</if>
             <if test="sn != null">#{sn},</if>
             <if test="inDate != null">#{inDate},</if>
             <if test="inType != null">#{inType},</if>
@@ -92,6 +101,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateStockIn" parameterType="StockIn">
         update t_erp_stock_in
         <trim prefix="SET" suffixOverrides=",">
+            <if test="srcBillType != null">src_bill_type = #{srcBillType},</if>
+            <if test="srcBillId != null">src_bill_id = #{srcBillId},</if>
+            <if test="srcBillNo != null">src_bill_no = #{srcBillNo},</if>
             <if test="sn != null">sn = #{sn},</if>
             <if test="inDate != null">in_date = #{inDate},</if>
             <if test="inType != null">in_type = #{inType},</if>
@@ -127,11 +139,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertStockInBatch" parameterType="java.util.List">
 
         REPLACE INTO t_erp_stock_in
-        (id,sn,in_date,in_type,charge_user_id,total_price,confirm_status,confirm_by,confirm_time,purchase_id,purchase_sn,bulk_order_no,in_description,remark,create_by,create_time,update_by,update_time)
+        (id,src_bill_type,src_bill_id,src_bill_no,sn,in_date,in_type,charge_user_id,total_price,confirm_status,confirm_by,confirm_time,purchase_id,purchase_sn,bulk_order_no,in_description,remark,create_by,create_time,update_by,update_time)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
 
-            (#{item.id},#{item.sn},#{item.inDate},#{item.inType},#{item.chargeUserId},#{item.totalPrice},#{item.confirmStatus},#{item.confirmBy},#{item.confirmTime},#{item.purchaseId},#{item.purchaseSn},#{item.bulkOrderNo},#{item.inDescription},#{item.remark},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime})
+            (#{item.id},#{item.srcBillType},#{item.srcBillId},#{item.srcBillNo},#{item.sn},#{item.inDate},#{item.inType},#{item.chargeUserId},#{item.totalPrice},#{item.confirmStatus},#{item.confirmBy},#{item.confirmTime},#{item.purchaseId},#{item.purchaseSn},#{item.bulkOrderNo},#{item.inDescription},#{item.remark},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime})
 
         </foreach>
     </insert>

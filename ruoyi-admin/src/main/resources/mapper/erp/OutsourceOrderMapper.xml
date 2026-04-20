@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.OutsourceOrderMapper">
+
+    <resultMap type="OutsourceOrder" id="OutsourceOrderResult">
+        <result property="id"    column="id"    />
+        <result property="srcBillType"    column="src_bill_type"    />
+        <result property="srcBillId"    column="src_bill_id"    />
+        <result property="srcBillNo"    column="src_bill_no"    />
+        <result property="outsourceNo"    column="outsource_no"    />
+        <result property="processId"    column="process_id"    />
+        <result property="processName"    column="process_name"    />
+        <result property="supplierId"    column="supplier_id"    />
+        <result property="supplierName"    column="supplier_name"    />
+        <result property="isTransfer"    column="is_transfer"    />
+        <result property="transferFrom"    column="transfer_from"    />
+        <result property="transferTo"    column="transfer_to"    />
+        <result property="jobIds"    column="job_ids"    />
+        <result property="totalQty"    column="total_qty"    />
+        <result property="theoryWeight"    column="theory_weight"    />
+        <result property="actualWeight"    column="actual_weight"    />
+        <result property="confirmQty"    column="confirm_qty"    />
+        <result property="defectQty"    column="defect_qty"    />
+        <result property="status"    column="status"    />
+        <result property="outboundTime"    column="outbound_time"    />
+        <result property="receiveTime"    column="receive_time"    />
+        <result property="unitPrice"    column="unit_price"    />
+        <result property="totalPrice"    column="total_price"    />
+        <result property="freight"    column="freight"    />
+        <result property="remark"    column="remark"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+    </resultMap>
+
+    <sql id="selectOutsourceOrderVo">
+        select a.id, a.src_bill_type, a.src_bill_id, a.src_bill_no, a.outsource_no, a.process_id, a.process_name, a.supplier_id, a.supplier_name, a.is_transfer, a.transfer_from, a.transfer_to, a.job_ids, a.total_qty, a.theory_weight, a.actual_weight, a.confirm_qty, a.defect_qty, a.status, a.outbound_time, a.receive_time, a.unit_price, a.total_price, a.freight, a.remark, a.create_by, a.create_time, a.update_by, a.update_time
+        from t_erp_outsource_order a
+    </sql>
+
+    <select id="selectOutsourceOrderList" parameterType="OutsourceOrder" resultMap="OutsourceOrderResult">
+        <include refid="selectOutsourceOrderVo"/>
+        <where>
+            <if test="outsourceNo != null  and outsourceNo != ''"> and a.outsource_no = #{outsourceNo}</if>
+            <if test="processId != null "> and a.process_id = #{processId}</if>
+            <if test="supplierId != null "> and a.supplier_id = #{supplierId}</if>
+            <if test="status != null  and status != ''"> and a.status = #{status}</if>
+        </where>
+    </select>
+
+    <select id="selectOutsourceOrderById" parameterType="Long" resultMap="OutsourceOrderResult">
+        <include refid="selectOutsourceOrderVo"/>
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertOutsourceOrder" parameterType="OutsourceOrder" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_outsource_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="srcBillType != null">src_bill_type,</if>
+            <if test="srcBillId != null">src_bill_id,</if>
+            <if test="srcBillNo != null">src_bill_no,</if>
+            <if test="outsourceNo != null">outsource_no,</if>
+            <if test="processId != null">process_id,</if>
+            <if test="processName != null">process_name,</if>
+            <if test="supplierId != null">supplier_id,</if>
+            <if test="supplierName != null">supplier_name,</if>
+            <if test="isTransfer != null">is_transfer,</if>
+            <if test="transferFrom != null">transfer_from,</if>
+            <if test="transferTo != null">transfer_to,</if>
+            <if test="jobIds != null">job_ids,</if>
+            <if test="totalQty != null">total_qty,</if>
+            <if test="theoryWeight != null">theory_weight,</if>
+            <if test="actualWeight != null">actual_weight,</if>
+            <if test="confirmQty != null">confirm_qty,</if>
+            <if test="defectQty != null">defect_qty,</if>
+            <if test="status != null">status,</if>
+            <if test="outboundTime != null">outbound_time,</if>
+            <if test="receiveTime != null">receive_time,</if>
+            <if test="unitPrice != null">unit_price,</if>
+            <if test="totalPrice != null">total_price,</if>
+            <if test="freight != null">freight,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="srcBillType != null">#{srcBillType},</if>
+            <if test="srcBillId != null">#{srcBillId},</if>
+            <if test="srcBillNo != null">#{srcBillNo},</if>
+            <if test="outsourceNo != null">#{outsourceNo},</if>
+            <if test="processId != null">#{processId},</if>
+            <if test="processName != null">#{processName},</if>
+            <if test="supplierId != null">#{supplierId},</if>
+            <if test="supplierName != null">#{supplierName},</if>
+            <if test="isTransfer != null">#{isTransfer},</if>
+            <if test="transferFrom != null">#{transferFrom},</if>
+            <if test="transferTo != null">#{transferTo},</if>
+            <if test="jobIds != null">#{jobIds},</if>
+            <if test="totalQty != null">#{totalQty},</if>
+            <if test="theoryWeight != null">#{theoryWeight},</if>
+            <if test="actualWeight != null">#{actualWeight},</if>
+            <if test="confirmQty != null">#{confirmQty},</if>
+            <if test="defectQty != null">#{defectQty},</if>
+            <if test="status != null">#{status},</if>
+            <if test="outboundTime != null">#{outboundTime},</if>
+            <if test="receiveTime != null">#{receiveTime},</if>
+            <if test="unitPrice != null">#{unitPrice},</if>
+            <if test="totalPrice != null">#{totalPrice},</if>
+            <if test="freight != null">#{freight},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateOutsourceOrder" parameterType="OutsourceOrder">
+        update t_erp_outsource_order
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="srcBillType != null">src_bill_type = #{srcBillType},</if>
+            <if test="srcBillId != null">src_bill_id = #{srcBillId},</if>
+            <if test="srcBillNo != null">src_bill_no = #{srcBillNo},</if>
+            <if test="outsourceNo != null">outsource_no = #{outsourceNo},</if>
+            <if test="processId != null">process_id = #{processId},</if>
+            <if test="processName != null">process_name = #{processName},</if>
+            <if test="supplierId != null">supplier_id = #{supplierId},</if>
+            <if test="supplierName != null">supplier_name = #{supplierName},</if>
+            <if test="isTransfer != null">is_transfer = #{isTransfer},</if>
+            <if test="transferFrom != null">transfer_from = #{transferFrom},</if>
+            <if test="transferTo != null">transfer_to = #{transferTo},</if>
+            <if test="jobIds != null">job_ids = #{jobIds},</if>
+            <if test="totalQty != null">total_qty = #{totalQty},</if>
+            <if test="theoryWeight != null">theory_weight = #{theoryWeight},</if>
+            <if test="actualWeight != null">actual_weight = #{actualWeight},</if>
+            <if test="confirmQty != null">confirm_qty = #{confirmQty},</if>
+            <if test="defectQty != null">defect_qty = #{defectQty},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="outboundTime != null">outbound_time = #{outboundTime},</if>
+            <if test="receiveTime != null">receive_time = #{receiveTime},</if>
+            <if test="unitPrice != null">unit_price = #{unitPrice},</if>
+            <if test="totalPrice != null">total_price = #{totalPrice},</if>
+            <if test="freight != null">freight = #{freight},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="createBy != null">create_by = #{createBy},</if>
+            <if test="createTime != null">create_time = #{createTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteOutsourceOrderById" parameterType="Long">
+        delete from t_erp_outsource_order where id = #{id}
+    </delete>
+
+    <delete id="deleteOutsourceOrderByIds">
+        delete from t_erp_outsource_order where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

@@ -6,6 +6,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="SampleNotice" id="SampleNoticeResult">
         <result property="id"    column="id"    />
+        <result property="srcBillType"    column="src_bill_type"    />
+        <result property="srcBillId"    column="src_bill_id"    />
+        <result property="srcBillNo"    column="src_bill_no"    />
         <result property="sampleNo"    column="sample_no"    />
         <result property="sampleType"    column="sample_type"    />
         <result property="customerId"    column="customer_id"    />
@@ -34,9 +37,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectSampleNoticeVo">
-        select a.id, a.sample_no, a.sample_type, a.customer_id, a.customer_name, a.style_category, a.style_sub_category,
-               a.style_type, a.sample_category_type, a.style_code, a.due_date, a.emergency_type, 
-               a.picture_url, a.audit_status, a.audit_by, a.audit_by_nick_name, a.audit_time, a.process_instance_id, 
+        select a.id, a.src_bill_type, a.src_bill_id, a.src_bill_no, a.sample_no, a.sample_type, a.customer_id, a.customer_name, a.style_category, a.style_sub_category,
+               a.style_type, a.sample_category_type, a.style_code, a.due_date, a.emergency_type,
+               a.picture_url, a.audit_status, a.audit_by, a.audit_by_nick_name, a.audit_time, a.process_instance_id,
                a.bulk_order_no, a.sales_id, a.sales_name, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
         from t_erp_sample_notice a
     </sql>
@@ -62,6 +65,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertSampleNotice" parameterType="SampleNotice" useGeneratedKeys="true" keyProperty="id">
         insert into t_erp_sample_notice
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="srcBillType != null">src_bill_type,</if>
+            <if test="srcBillId != null">src_bill_id,</if>
+            <if test="srcBillNo != null">src_bill_no,</if>
             <if test="sampleType != null">sample_type,</if>
             <if test="customerId != null">customer_id,</if>
             <if test="styleType != null">style_type,</if>
@@ -80,6 +86,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="remark != null">remark,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="srcBillType != null">#{srcBillType},</if>
+            <if test="srcBillId != null">#{srcBillId},</if>
+            <if test="srcBillNo != null">#{srcBillNo},</if>
             <if test="sampleType != null">#{sampleType},</if>
             <if test="customerId != null">#{customerId},</if>
             <if test="styleType != null">#{styleType},</if>
@@ -102,6 +111,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateSampleNotice" parameterType="SampleNotice">
         update t_erp_sample_notice
         <trim prefix="SET" suffixOverrides=",">
+            <if test="srcBillType != null">src_bill_type = #{srcBillType},</if>
+            <if test="srcBillId != null">src_bill_id = #{srcBillId},</if>
+            <if test="srcBillNo != null">src_bill_no = #{srcBillNo},</if>
             <if test="sampleType != null">sample_type = #{sampleType},</if>
             <if test="customerId != null">customer_id = #{customerId},</if>
             <if test="styleType != null">style_type = #{styleType},</if>
@@ -136,11 +148,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertSampleNoticeBatch" parameterType="java.util.List">
 
         REPLACE INTO t_erp_sample_notice
-        (id,sample_type,customer_id,style_type,sample_category_type,style_code,due_date,emergency_type,picture_url,audit_status,audit_by,audit_time,create_by,create_time,update_by,update_time,remark)
+        (id,src_bill_type,src_bill_id,src_bill_no,sample_type,customer_id,style_type,sample_category_type,style_code,due_date,emergency_type,picture_url,audit_status,audit_by,audit_time,create_by,create_time,update_by,update_time,remark)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
 
-            (#{item.id},#{item.sampleType},#{item.customerId},#{item.styleType},#{item.sampleCategoryType},#{item.styleCode},#{item.dueDate},#{item.emergencyType},#{item.pictureUrl},#{item.auditStatus},#{item.auditBy},#{item.auditTime},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark})
+            (#{item.id},#{item.srcBillType},#{item.srcBillId},#{item.srcBillNo},#{item.sampleType},#{item.customerId},#{item.styleType},#{item.sampleCategoryType},#{item.styleCode},#{item.dueDate},#{item.emergencyType},#{item.pictureUrl},#{item.auditStatus},#{item.auditBy},#{item.auditTime},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark})
 
         </foreach>
     </insert>

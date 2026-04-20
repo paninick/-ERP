@@ -13,6 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="purchaseCount"    column="purchase_count"    />
         <result property="purchasePrice"    column="purchase_price"    />
         <result property="status"    column="status"    />
+        <result property="executeQty"    column="execute_qty"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
@@ -21,7 +22,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectPurchaseItemVo">
-        select a.id, a.purchase_id, a.sn, a.material_id, a.material_type, a.purchase_count, a.purchase_price, a.status, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
+        select a.id, a.purchase_id, a.sn, a.material_id, a.material_type, a.purchase_count, a.execute_qty, a.purchase_price, a.status, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
         from t_erp_purchase_item a
     </sql>
 
@@ -113,5 +114,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
         </foreach>
     </insert>
+
+    <select id="selectPurchaseItemByPurchaseId" parameterType="Long" resultMap="PurchaseItemResult">
+        <include refid="selectPurchaseItemVo"/>
+        where a.purchase_id = #{purchaseId}
+    </select>
 
 </mapper>

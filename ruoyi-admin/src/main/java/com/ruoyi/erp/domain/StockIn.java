@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
-import com.ruoyi.common.core.domain.BaseEntity;
+import com.ruoyi.erp.domain.base.ErpBaseBillEntity;
 
 /**
  * 入库单对象 t_erp_stock_in
@@ -14,8 +14,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
  * @author zhangmingjian
  * @date 2026-04-07
  */
-public class StockIn extends BaseEntity {
-    private static final long serialVersionUID = 1L;
+public class StockIn extends ErpBaseBillEntity {
 
     /** 主键 */
     private Long id;

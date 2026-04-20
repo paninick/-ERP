@@ -1,7 +1,7 @@
 package com.ruoyi.erp.domain;
 
 import com.ruoyi.common.annotation.Excel;
-import com.ruoyi.common.core.domain.BaseEntity;
+import com.ruoyi.erp.domain.base.ErpBaseBillEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
@@ -14,8 +14,7 @@ import java.util.Date;
  * @author zhangmingjian
  * @date 2026-04-15
  */
-public class OutsourceOrder extends BaseEntity {
-    private static final long serialVersionUID = 1L;
+public class OutsourceOrder extends ErpBaseBillEntity {
 
     /** 外协订单ID */
     private Long id;

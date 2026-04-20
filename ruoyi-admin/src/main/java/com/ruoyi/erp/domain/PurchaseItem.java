@@ -42,6 +42,9 @@ public class PurchaseItem extends BaseEntity {
     @Excel(name = "采购单价")
     private BigDecimal purchasePrice;
 
+    /** 已执行数量（已入库） */
+    private BigDecimal executeQty;
+
     /** 入库状态（0待入库） */
     private String status;
 
@@ -94,6 +97,15 @@ public class PurchaseItem extends BaseEntity {
     public BigDecimal getPurchasePrice() {
         return purchasePrice;
     }
+
+    public BigDecimal getExecuteQty() {
+        return executeQty;
+    }
+
+    public void setExecuteQty(BigDecimal executeQty) {
+        this.executeQty = executeQty;
+    }
+
     public void setStatus(String status) {
         this.status = status;
     }
@@ -112,6 +124,7 @@ public class PurchaseItem extends BaseEntity {
             .append("materialType", getMaterialType())
             .append("purchaseCount", getPurchaseCount())
             .append("purchasePrice", getPurchasePrice())
+            .append("executeQty", getExecuteQty())
             .append("status", getStatus())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())

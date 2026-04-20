@@ -65,4 +65,20 @@ public interface IStockOutService {
      * @return 结果
      */
     int insertStockOutBatch(List<StockOut> list);
+
+    /**
+     * 确认出库单
+     *
+     * @param stockOut 出库单
+     * @return 是否成功
+     */
+    boolean confirm(StockOut stockOut);
+
+    /**
+     * 取消确认出库单
+     *
+     * @param stockOut 出库单
+     * @return 是否成功
+     */
+    boolean cancelConfirm(StockOut stockOut);
 }

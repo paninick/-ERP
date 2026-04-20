@@ -50,6 +50,9 @@ public class SalesOrderItem extends BaseEntity {
     @Excel(name = "入库数量")
     private BigDecimal inboundAmount;
 
+    /** 已执行数量（已出库） */
+    private BigDecimal executeQty;
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -114,6 +117,14 @@ public class SalesOrderItem extends BaseEntity {
         return inboundAmount;
     }
 
+    public BigDecimal getExecuteQty() {
+        return executeQty;
+    }
+
+    public void setExecuteQty(BigDecimal executeQty) {
+        this.executeQty = executeQty;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -126,6 +137,7 @@ public class SalesOrderItem extends BaseEntity {
             .append("orderQuantity", getOrderQuantity())
             .append("planQuantity", getPlanQuantity())
             .append("inboundAmount", getInboundAmount())
+            .append("executeQty", getExecuteQty())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())

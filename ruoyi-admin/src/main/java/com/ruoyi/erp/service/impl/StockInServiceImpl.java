@@ -5,9 +5,12 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.erp.mapper.StockInMapper;
 import com.ruoyi.erp.domain.StockIn;
 import com.ruoyi.erp.service.IStockInService;
+import com.ruoyi.erp.service.IErpPushDownService;
+import com.ruoyi.erp.service.IErpInventoryService;
 
 /**
  * 入库单Service业务层处理
@@ -19,6 +22,12 @@ import com.ruoyi.erp.service.IStockInService;
 public class StockInServiceImpl implements IStockInService {
     @Autowired
     private StockInMapper stockInMapper;
+
+    @Autowired
+    private IErpPushDownService erpPushDownService;
+
+    @Autowired
+    private IErpInventoryService erpInventoryService;
 
     /**
      * 查询入库单
@@ -98,5 +107,71 @@ public class StockInServiceImpl implements IStockInService {
     @Override
     public int insertStockInBatch(List<StockIn> list) {
         return stockInMapper.insertStockInBatch(list);
+    }
+
+    /**
+     * 确认入库单
+     *
+     * @param stockIn 入库单
+     * @return 是否成功
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean confirm(StockIn stockIn) {
+        // 1. 更新确认状态
+        stockIn.setConfirmStatus("1");
+        stockIn.setConfirmBy(SecurityUtils.getUsername());
+        stockIn.setConfirmTime(DateUtils.getNowDate());
+        int result = stockInMapper.updateStockIn(stockIn);
+        if (result <= 0) {
+            return false;
+        }
+
+        // 2. 如果来源上游单据，更新上游已执行数量
+        boolean pushDownResult = erpPushDownService.updatePurchaseExecuteQty(stockIn);
+        if (!pushDownResult) {
+            throw new RuntimeException("更新采购订单已执行数量失败");
+        }
+
+        // 3. 增加库存
+        boolean inventoryResult = erpInventoryService.increaseStockByStockIn(stockIn);
+        if (!inventoryResult) {
+            throw new RuntimeException("增加库存失败");
+        }
+
+        return true;
+    }
+
+    /**
+     * 取消确认入库单
+     *
+     * @param stockIn 入库单
+     * @return 是否成功
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean cancelConfirm(StockIn stockIn) {
+        // 1. 更新确认状态
+        stockIn.setConfirmStatus("0");
+        stockIn.setConfirmBy(null);
+        stockIn.setConfirmTime(null);
+        int result = stockInMapper.updateStockIn(stockIn);
+        if (result <= 0) {
+            return false;
+        }
+
+        // 2. 如果来源上游单据，回滚上游已执行数量
+        boolean rollbackResult = erpPushDownService.rollbackPurchaseExecuteQty(stockIn);
+        if (!rollbackResult) {
+            throw new RuntimeException("回滚采购订单已执行数量失败");
+        }
+
+        // 3. 回滚库存
+        boolean inventoryResult = erpInventoryService.rollbackIncreaseStockByStockIn(stockIn);
+        if (!inventoryResult) {
+            throw new RuntimeException("回滚库存失败");
+        }
+
+        return true;
     }
 }

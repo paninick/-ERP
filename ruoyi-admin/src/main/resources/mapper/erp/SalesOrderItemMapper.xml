@@ -13,6 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="size"    column="size"    />
         <result property="orderQuantity"    column="order_quantity"    />
         <result property="planQuantity"    column="plan_quantity"    />
+        <result property="executeQty"    column="execute_qty"    />
         <result property="inboundAmount"    column="inbound_amount"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
@@ -22,7 +23,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectSalesOrderItemVo">
-        select a.id, a.sales_order_id, a.notice_id, a.tech_id, a.color, a.size, a.order_quantity, a.plan_quantity, a.inbound_amount, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
+        select a.id, a.sales_order_id, a.notice_id, a.tech_id, a.color, a.size, a.order_quantity, a.plan_quantity, a.execute_qty, a.inbound_amount, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
         from t_erp_sales_order_item a
     </sql>
 
@@ -113,5 +114,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
         </foreach>
     </insert>
+
+    <select id="selectSalesOrderItemBySalesOrderId" parameterType="Long" resultMap="SalesOrderItemResult">
+        <include refid="selectSalesOrderItemVo"/>
+        where a.sales_order_id = #{salesOrderId}
+    </select>
 
 </mapper>

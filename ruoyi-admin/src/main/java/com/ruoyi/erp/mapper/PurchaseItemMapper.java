@@ -65,4 +65,12 @@ public interface PurchaseItemMapper {
      * @return 结果
      */
     int insertPurchaseItemBatch(List<PurchaseItem> list);
+
+    /**
+     * 根据采购订单ID查询采购明细列表
+     *
+     * @param purchaseId 采购订单ID
+     * @return 采购明细集合
+     */
+    List<PurchaseItem> selectPurchaseItemByPurchaseId(Long purchaseId);
 }

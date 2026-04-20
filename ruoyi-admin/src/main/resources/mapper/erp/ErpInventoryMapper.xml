@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.ErpInventoryMapper">
+
+    <resultMap type="ErpInventory" id="ErpInventoryResult">
+        <result property="id"    column="id"    />
+        <result property="warehouseId"    column="warehouse_id"    />
+        <result property="skuId"    column="sku_id"    />
+        <result property="materialId"    column="material_id"    />
+        <result property="invQty"    column="inv_qty"    />
+        <result property="lockQty"    column="lock_qty"    />
+        <result property="version"    column="version"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remark"    column="remark"    />
+    </resultMap>
+
+    <sql id="selectErpInventoryVo">
+        select id, warehouse_id, sku_id, material_id, inv_qty, lock_qty, version,
+               create_by, create_time, update_by, update_time, remark
+        from t_erp_inv_stock
+    </sql>
+
+    <select id="selectErpInventoryById" parameterType="Long" resultMap="ErpInventoryResult">
+        <include refid="selectErpInventoryVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectByWarehouseIdAndSkuId" resultMap="ErpInventoryResult">
+        <include refid="selectErpInventoryVo"/>
+        where warehouse_id = #{warehouseId} and sku_id = #{skuId}
+    </select>
+
+    <select id="selectErpInventoryList" parameterType="ErpInventory" resultMap="ErpInventoryResult">
+        <include refid="selectErpInventoryVo"/>
+        <where>
+            <if test="warehouseId != null"> and warehouse_id = #{warehouseId}</if>
+            <if test="skuId != null"> and sku_id = #{skuId}</if>
+            <if test="materialId != null"> and material_id = #{materialId}</if>
+        </where>
+        order by id desc
+    </select>
+
+    <insert id="insertErpInventory" parameterType="ErpInventory" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_inv_stock (
+            warehouse_id, sku_id, material_id, inv_qty, lock_qty, version,
+            create_by, create_time, update_by, update_time, remark
+        ) values (
+            #{warehouseId}, #{skuId}, #{materialId}, #{invQty}, #{lockQty}, #{version},
+            #{createBy}, #{createTime}, #{updateBy}, #{updateTime}, #{remark}
+        )
+    </insert>
+
+    <update id="updateErpInventory" parameterType="ErpInventory">
+        update t_erp_inv_stock
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="warehouseId != null">warehouse_id = #{warehouseId},</if>
+            <if test="skuId != null">sku_id = #{skuId},</if>
+            <if test="materialId != null">material_id = #{materialId},</if>
+            <if test="invQty != null">inv_qty = #{invQty},</if>
+            <if test="lockQty != null">lock_qty = #{lockQty},</if>
+            <if test="version != null">version = #{version},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        where id = #{id} and version = #{version}
+    </update>
+
+    <update id="increaseStock">
+        update t_erp_inv_stock
+        set inv_qty = inv_qty + #{qty},
+            version = version + 1,
+            update_time = NOW()
+        where id = #{id}
+          and version = #{oldVersion}
+    </update>
+
+    <update id="decreaseStock">
+        update t_erp_inv_stock
+        set inv_qty = inv_qty - #{qty},
+            version = version + 1,
+            update_time = NOW()
+        where id = #{id}
+          and version = #{oldVersion}
+          and inv_qty - lock_qty >= #{qty}
+    </update>
+
+    <delete id="deleteErpInventoryById" parameterType="Long">
+        delete from t_erp_inv_stock where id = #{id}
+    </delete>
+
+    <delete id="deleteErpInventoryByIds">
+        delete from t_erp_inv_stock where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

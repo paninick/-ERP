@@ -1,8 +1,10 @@
 package com.ruoyi.erp.service.impl;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.ruoyi.common.utils.DateUtils;
@@ -11,7 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.erp.mapper.MainMaterialMapper;
+import com.ruoyi.erp.mapper.MaterialSkuMapper;
+import com.ruoyi.erp.mapper.AuxPropertyValueMapper;
 import com.ruoyi.erp.domain.MainMaterial;
+import com.ruoyi.erp.domain.MaterialSku;
+import com.ruoyi.erp.domain.AuxPropertyValue;
+import com.ruoyi.erp.domain.vo.AuxPropertySelection;
 import com.ruoyi.erp.service.IMainMaterialService;
 
 /**
@@ -25,6 +32,9 @@ public class MainMaterialServiceImpl implements IMainMaterialService {
     private static final Logger log = LoggerFactory.getLogger(MainMaterialServiceImpl.class);
     @Autowired
     private MainMaterialMapper mainMaterialMapper;
+
+    @Autowired
+    private AuxPropertyValueMapper auxPropertyValueMapper;
 
     /**
      * 查询主料
@@ -316,5 +326,108 @@ public class MainMaterialServiceImpl implements IMainMaterialService {
     @Override
     public int insertMainMaterialBatchSafe(List<MainMaterial> list) {
         return mainMaterialMapper.insertMainMaterialBatchSafe(list);
+    }
+
+    @Override
+    public List<MaterialSku> generateSkuMatrix(Long materialId, List<AuxPropertySelection> auxProperties) {
+        log.info("========== 开始生成SKU笛卡尔积 ==========");
+        log.info("物料ID: {}, 辅助属性数量: {}", materialId, auxProperties.size());
+
+        // 1. 查询所有选中的辅助属性值详情
+        List<List<AuxPropertyValue>> allOptions = new ArrayList<>();
+        for (AuxPropertySelection selection : auxProperties) {
+            List<Long> valueIds = selection.getSelectedValueIds();
+            if (valueIds == null || valueIds.isEmpty()) {
+                continue;
+            }
+            List<AuxPropertyValue> values = auxPropertyValueMapper.selectAuxPropertyValueByIds(valueIds);
+            if (!values.isEmpty()) {
+                allOptions.add(values);
+            }
+        }
+
+        log.info("筛选后有效属性维度: {}", allOptions.size());
+        for (int i = 0; i < allOptions.size(); i++) {
+            log.info("维度 {} - 选项数量: {}", i + 1, allOptions.get(i).size());
+        }
+
+        // 2. 生成笛卡尔积
+        List<List<AuxPropertyValue>> cartesianProduct = generateCartesianProduct(allOptions);
+        log.info("笛卡尔积生成完成，共 {} 个SKU组合", cartesianProduct.size());
+
+        // 3. 查询主料信息获取主料名称
+        MainMaterial mainMaterial = selectMainMaterialById(materialId);
+        String materialName = mainMaterial != null ? mainMaterial.getName() : "";
+
+        // 4. 构建SKU列表
+        List<MaterialSku> skuList = new ArrayList<>();
+        int index = 0;
+        for (List<AuxPropertyValue> combination : cartesianProduct) {
+            MaterialSku sku = new MaterialSku();
+            sku.setMaterialId(materialId);
+            sku.setStatus("0");
+            sku.setIsDeleted(0L);
+
+            // 按固定顺序分配辅助属性：1->auxId1, 2->auxId2, 3->auxId3
+            StringBuilder skuNameBuilder = new StringBuilder(materialName);
+            for (AuxPropertyValue value : combination) {
+                Integer auxType = value.getAuxType();
+                if (auxType == 1) {
+                    sku.setAuxId1(value.getId());
+                } else if (auxType == 2) {
+                    sku.setAuxId2(value.getId());
+                } else if (auxType == 3) {
+                    sku.setAuxId3(value.getId());
+                }
+                skuNameBuilder.append(" ").append(value.getValueName());
+            }
+
+            String skuName = skuNameBuilder.toString().trim();
+            sku.setSkuName(skuName);
+
+            // 生成SKU编码：物料ID + 序号保证唯一性
+            String skuCode = materialId + "-" + String.format("%06d", ++index);
+            sku.setSkuCode(skuCode);
+
+            skuList.add(sku);
+            log.info("生成SKU: {}", skuName);
+        }
+
+        log.info("========== SKU笛卡尔积生成完成，共 {} 个SKU ==========", skuList.size());
+        return skuList;
+    }
+
+    /**
+     * 生成多个列表的笛卡尔积
+     * @param lists 输入的多个列表，每个列表代表一个维度的选项
+     * @return 笛卡尔积结果，每个元素是一个组合列表
+     */
+    private List<List<AuxPropertyValue>> generateCartesianProduct(List<List<AuxPropertyValue>> lists) {
+        List<List<AuxPropertyValue>> result = new ArrayList<>();
+        if (lists == null || lists.isEmpty()) {
+            return result;
+        }
+        // 初始化为第一个列表
+        for (AuxPropertyValue value : lists.get(0)) {
+            List<AuxPropertyValue> initial = new ArrayList<>();
+            initial.add(value);
+            result.add(initial);
+        }
+
+        // 依次和后续列表做笛卡尔积
+        for (int i = 1; i < lists.size(); i++) {
+            List<AuxPropertyValue> currentList = lists.get(i);
+            List<List<AuxPropertyValue>> newResult = new ArrayList<>();
+            for (List<AuxPropertyValue> existing : result) {
+                for (AuxPropertyValue newValue : currentList) {
+                    List<AuxPropertyValue> combination = new ArrayList<>(existing);
+                    combination.add(newValue);
+                    newResult.add(combination);
+                }
+            }
+            result = newResult;
+        }
+
+        return result;
     }
 }

@@ -20,6 +20,8 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.erp.domain.MainMaterial;
+import com.ruoyi.erp.domain.MaterialSku;
+import com.ruoyi.erp.domain.vo.AuxPropertySelection;
 import com.ruoyi.erp.service.IMainMaterialService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
@@ -166,5 +168,15 @@ public class MainMaterialController extends BaseController {
             log.error("快速导入主料数据异常", e);
             throw e;
         }
+    }
+
+    /**
+     * 根据选中的辅助属性生成SKU笛卡尔积矩阵
+     */
+    @PreAuthorize("@ss.hasPermi('erp:material:generateSku')")
+    @PostMapping("/generate-sku/{materialId}")
+    public AjaxResult generateSkuMatrix(@PathVariable Long materialId, @RequestBody List<AuxPropertySelection> auxProperties) {
+        List<MaterialSku> skuList = mainMaterialService.generateSkuMatrix(materialId, auxProperties);
+        return success(skuList);
     }
 }

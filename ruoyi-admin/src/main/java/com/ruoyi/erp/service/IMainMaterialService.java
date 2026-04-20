@@ -2,6 +2,8 @@ package com.ruoyi.erp.service;
 
 import java.util.List;
 import com.ruoyi.erp.domain.MainMaterial;
+import com.ruoyi.erp.domain.MaterialSku;
+import com.ruoyi.erp.domain.vo.AuxPropertySelection;
 
 /**
  * 主料Service接口
@@ -98,4 +100,14 @@ public interface IMainMaterialService {
      * @return 结果
      */
     int insertMainMaterialBatchSafe(List<MainMaterial> list);
+
+    /**
+     * 根据选中的辅助属性（颜色×尺码）生成SKU笛卡尔积
+     *
+     * @param materialId 物料ID
+     * @param auxProperties 辅助属性选项列表，每个属性包含类型和选中值
+     * @return 生成的SKU列表
+     */
+    List<com.ruoyi.erp.domain.MaterialSku> generateSkuMatrix(Long materialId,
+        java.util.List<com.ruoyi.erp.domain.vo.AuxPropertySelection> auxProperties);
 }

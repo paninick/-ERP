@@ -6,6 +6,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="StockOut" id="StockOutResult">
         <result property="id"    column="id"    />
+        <result property="srcBillType"    column="src_bill_type"    />
+        <result property="srcBillId"    column="src_bill_id"    />
+        <result property="srcBillNo"    column="src_bill_no"    />
         <result property="sn"    column="sn"    />
         <result property="outDate"    column="out_date"    />
         <result property="outType"    column="out_type"    />
@@ -28,7 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectStockOutVo">
-        select a.id, a.sn, a.out_date, a.out_type, a.charge_user_id, a.confirm_status, a.applicant, a.apply_date, a.confirm_by, a.confirm_time, a.purchase_id, a.purchase_sn, a.plan_id, a.bulk_order_no, a.out_description, a.remark, a.create_by, a.create_time, a.update_by, a.update_time
+        select a.id, a.src_bill_type, a.src_bill_id, a.src_bill_no, a.sn, a.out_date, a.out_type, a.charge_user_id, a.confirm_status, a.applicant, a.apply_date, a.confirm_by, a.confirm_time, a.purchase_id, a.purchase_sn, a.plan_id, a.bulk_order_no, a.out_description, a.remark, a.create_by, a.create_time, a.update_by, a.update_time
         from t_erp_stock_out a
     </sql>
 
@@ -54,6 +57,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertStockOut" parameterType="StockOut" useGeneratedKeys="true" keyProperty="id">
         insert into t_erp_stock_out
         <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="srcBillType != null">src_bill_type,</if>
+            <if test="srcBillId != null">src_bill_id,</if>
+            <if test="srcBillNo != null">src_bill_no,</if>
             <if test="sn != null">sn,</if>
             <if test="outDate != null">out_date,</if>
             <if test="outType != null">out_type,</if>
@@ -75,6 +81,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateTime != null">update_time,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="srcBillType != null">#{srcBillType},</if>
+            <if test="srcBillId != null">#{srcBillId},</if>
+            <if test="srcBillNo != null">#{srcBillNo},</if>
             <if test="sn != null">#{sn},</if>
             <if test="outDate != null">#{outDate},</if>
             <if test="outType != null">#{outType},</if>
@@ -100,6 +109,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateStockOut" parameterType="StockOut">
         update t_erp_stock_out
         <trim prefix="SET" suffixOverrides=",">
+            <if test="srcBillType != null">src_bill_type = #{srcBillType},</if>
+            <if test="srcBillId != null">src_bill_id = #{srcBillId},</if>
+            <if test="srcBillNo != null">src_bill_no = #{srcBillNo},</if>
             <if test="sn != null">sn = #{sn},</if>
             <if test="outDate != null">out_date = #{outDate},</if>
             <if test="outType != null">out_type = #{outType},</if>
@@ -137,11 +149,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertStockOutBatch" parameterType="java.util.List">
 
         REPLACE INTO t_erp_stock_out
-        (id,sn,out_date,out_type,charge_user_id,confirm_status,applicant,apply_date,confirm_by,confirm_time,purchase_id,purchase_sn,plan_id,bulk_order_no,out_description,remark,create_by,create_time,update_by,update_time)
+        (id,src_bill_type,src_bill_id,src_bill_no,sn,out_date,out_type,charge_user_id,confirm_status,applicant,apply_date,confirm_by,confirm_time,purchase_id,purchase_sn,plan_id,bulk_order_no,out_description,remark,create_by,create_time,update_by,update_time)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
 
-            (#{item.id},#{item.sn},#{item.outDate},#{item.outType},#{item.chargeUserId},#{item.confirmStatus},#{item.applicant},#{item.applyDate},#{item.confirmBy},#{item.confirmTime},#{item.purchaseId},#{item.purchaseSn},#{item.planId},#{item.bulkOrderNo},#{item.outDescription},#{item.remark},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime})
+            (#{item.id},#{item.srcBillType},#{item.srcBillId},#{item.srcBillNo},#{item.sn},#{item.outDate},#{item.outType},#{item.chargeUserId},#{item.confirmStatus},#{item.applicant},#{item.applyDate},#{item.confirmBy},#{item.confirmTime},#{item.purchaseId},#{item.purchaseSn},#{item.planId},#{item.bulkOrderNo},#{item.outDescription},#{item.remark},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime})
 
         </foreach>
     </insert>

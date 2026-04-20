@@ -26,6 +26,18 @@ public class StockLog extends BaseEntity {
     @Excel(name = "关联id")
     private Long relationId;
 
+    /** 来源单据类型 */
+    private String srcBillType;
+
+    /** 来源单据ID */
+    private Long srcBillId;
+
+    /** 来源单据号 */
+    private String srcBillNo;
+
+    /** SKU ID */
+    private Long skuId;
+
     /** 材料id */
     @Excel(name = "材料id")
     private Long materialId;
@@ -154,12 +166,48 @@ public class StockLog extends BaseEntity {
         return saveLocation;
     }
 
+    public String getSrcBillType() {
+        return srcBillType;
+    }
+
+    public void setSrcBillType(String srcBillType) {
+        this.srcBillType = srcBillType;
+    }
+
+    public Long getSrcBillId() {
+        return srcBillId;
+    }
+
+    public void setSrcBillId(Long srcBillId) {
+        this.srcBillId = srcBillId;
+    }
+
+    public String getSrcBillNo() {
+        return srcBillNo;
+    }
+
+    public void setSrcBillNo(String srcBillNo) {
+        this.srcBillNo = srcBillNo;
+    }
+
+    public Long getSkuId() {
+        return skuId;
+    }
+
+    public void setSkuId(Long skuId) {
+        this.skuId = skuId;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
             .append("sn", getSn())
             .append("relationId", getRelationId())
+            .append("srcBillType", getSrcBillType())
+            .append("srcBillId", getSrcBillId())
+            .append("srcBillNo", getSrcBillNo())
+            .append("skuId", getSkuId())
             .append("materialId", getMaterialId())
             .append("materialType", getMaterialType())
             .append("materialNo", getMaterialNo())

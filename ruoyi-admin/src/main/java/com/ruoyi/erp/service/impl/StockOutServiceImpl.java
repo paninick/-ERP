@@ -5,9 +5,12 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import com.ruoyi.erp.mapper.StockOutMapper;
 import com.ruoyi.erp.domain.StockOut;
 import com.ruoyi.erp.service.IStockOutService;
+import com.ruoyi.erp.service.IErpPushDownService;
+import com.ruoyi.erp.service.IErpInventoryService;
 
 /**
  * 出库单Service业务层处理
@@ -19,6 +22,12 @@ import com.ruoyi.erp.service.IStockOutService;
 public class StockOutServiceImpl implements IStockOutService {
     @Autowired
     private StockOutMapper stockOutMapper;
+
+    @Autowired
+    private IErpPushDownService erpPushDownService;
+
+    @Autowired
+    private IErpInventoryService erpInventoryService;
 
     /**
      * 查询出库单
@@ -98,5 +107,71 @@ public class StockOutServiceImpl implements IStockOutService {
     @Override
     public int insertStockOutBatch(List<StockOut> list) {
         return stockOutMapper.insertStockOutBatch(list);
+    }
+
+    /**
+     * 确认出库单
+     *
+     * @param stockOut 出库单
+     * @return 是否成功
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean confirm(StockOut stockOut) {
+        // 1. 更新确认状态
+        stockOut.setConfirmStatus("1");
+        stockOut.setConfirmBy(SecurityUtils.getUsername());
+        stockOut.setConfirmTime(DateUtils.getNowDate());
+        int result = stockOutMapper.updateStockOut(stockOut);
+        if (result <= 0) {
+            return false;
+        }
+
+        // 2. 如果来源上游单据，更新上游已执行数量
+        boolean pushDownResult = erpPushDownService.updateSalesOrderExecuteQty(stockOut);
+        if (!pushDownResult) {
+            throw new RuntimeException("更新销售订单已执行数量失败");
+        }
+
+        // 3. 扣减库存
+        boolean inventoryResult = erpInventoryService.decreaseStockByStockOut(stockOut);
+        if (!inventoryResult) {
+            throw new RuntimeException("扣减库存失败");
+        }
+
+        return true;
+    }
+
+    /**
+     * 取消确认出库单
+     *
+     * @param stockOut 出库单
+     * @return 是否成功
+     */
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public boolean cancelConfirm(StockOut stockOut) {
+        // 1. 更新确认状态
+        stockOut.setConfirmStatus("0");
+        stockOut.setConfirmBy(null);
+        stockOut.setConfirmTime(null);
+        int result = stockOutMapper.updateStockOut(stockOut);
+        if (result <= 0) {
+            return false;
+        }
+
+        // 2. 如果来源上游单据，回滚上游已执行数量
+        boolean rollbackResult = erpPushDownService.rollbackSalesOrderExecuteQty(stockOut);
+        if (!rollbackResult) {
+            throw new RuntimeException("回滚销售订单已执行数量失败");
+        }
+
+        // 3. 回滚库存
+        boolean inventoryResult = erpInventoryService.rollbackDecreaseStockByStockOut(stockOut);
+        if (!inventoryResult) {
+            throw new RuntimeException("回滚库存失败");
+        }
+
+        return true;
     }
 }
