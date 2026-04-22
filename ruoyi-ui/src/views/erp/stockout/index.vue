@@ -85,7 +85,7 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="100px" class="biz-form">
         <el-row :gutter="24">
           <el-col :span="12">
-            <el-form-item label="出库单号" prop="sn" required>
+            <el-form-item label="出库单号" prop="sn">
               <el-input v-model="form.sn" placeholder="保存时自动生成（SOUT-yyyyMMdd-序号）" disabled />
             </el-form-item>
           </el-col>
@@ -175,7 +175,6 @@ export default {
       },
       form: {},
       rules: {
-        sn: [{ required: true, message: "不能为空", trigger: "blur" }],
         outType: [{ required: true, message: "不能为空", trigger: "change" }],
         applyDate: [{ required: true, message: "不能为空", trigger: "change" }]
       }

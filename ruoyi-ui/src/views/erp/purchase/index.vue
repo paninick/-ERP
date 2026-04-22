@@ -152,7 +152,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="采购单号" prop="sn" required>
+            <el-form-item label="采购单号" prop="sn">
               <el-input v-model="form.sn" placeholder="保存时自动生成（PO-yyyyMMdd-序号）" disabled />
             </el-form-item>
           </el-col>

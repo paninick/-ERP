@@ -105,7 +105,7 @@
         </el-row>
         <el-row :gutter="24">
           <el-col :span="12">
-            <el-form-item label="销售单号" prop="salesNo" required>
+            <el-form-item label="销售单号" prop="salesNo">
               <el-input v-model="form.salesNo" placeholder="保存时自动生成（SO-yyyyMMdd-序号）" disabled />
             </el-form-item>
           </el-col>
@@ -163,7 +163,6 @@ export default {
       rules: {
         salesType: [{ required: true, message: "不能为空", trigger: "change" }],
         customerId: [{ required: true, message: "不能为空", trigger: "change" }],
-        salesNo: [{ required: true, message: "不能为空", trigger: "blur" }],
         salesDate: [{ required: true, message: "不能为空", trigger: "change" }]
       }
     }

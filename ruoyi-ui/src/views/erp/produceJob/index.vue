@@ -199,7 +199,6 @@ export default {
       },
       form: {},
       rules: {
-        jobNo: [{ required: true, message: "不能为空", trigger: "blur" }],
         producePlanId: [{ required: true, message: "不能为空", trigger: "blur" }],
         orderId: [{ required: true, message: "不能为空", trigger: "blur" }],
         planQty: [{ required: true, message: "不能为空", trigger: "blur" }]
