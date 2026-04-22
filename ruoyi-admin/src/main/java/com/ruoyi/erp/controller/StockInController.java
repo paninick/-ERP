@@ -20,6 +20,7 @@ import com.ruoyi.erp.domain.StockIn;
 import com.ruoyi.erp.service.IStockInService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 入库单Controller
@@ -93,5 +94,30 @@ public class StockInController extends BaseController {
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {
         return toAjax(stockInService.deleteStockInByIds(ids));
+    }
+
+    /**
+     * 导入入库单 Excel
+     */
+    @PreAuthorize("@ss.hasPermi('erp:stock:import')")
+    @Log(title = "入库单导入", businessType = BusinessType.IMPORT)
+    @PostMapping("/importData")
+    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
+        if (file == null || file.isEmpty()) {
+            return error("上传文件不能为空");
+        }
+        ExcelUtil<StockIn> util = new ExcelUtil<>(StockIn.class);
+        List<StockIn> list = util.importExcel(file.getInputStream());
+        String message = stockInService.importStockIn(list, updateSupport);
+        return success(message);
+    }
+
+    /**
+     * 下载入库单导入模板
+     */
+    @PostMapping("/importTemplate")
+    public void importTemplate(HttpServletResponse response) {
+        ExcelUtil<StockIn> util = new ExcelUtil<>(StockIn.class);
+        util.importTemplateExcel(response, "入库单数据");
     }
 }

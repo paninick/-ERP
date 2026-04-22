@@ -11,4 +11,9 @@ public interface IBomService {
     int deleteBomByIds(Long[] ids);
     int deleteBomById(Long id);
     int insertBomBatch(List<Bom> list);
+
+    /**
+     * 导入样衣 BOM 主表 Excel（明细表不在此方法范围）
+     */
+    String importBom(List<Bom> list, boolean updateSupport);
 }

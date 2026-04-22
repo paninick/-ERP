@@ -20,6 +20,7 @@ import com.ruoyi.erp.domain.SampleNotice;
 import com.ruoyi.erp.service.ISampleNoticeService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 打样通知Controller
@@ -93,5 +94,30 @@ public class SampleNoticeController extends BaseController {
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {
         return toAjax(sampleNoticeService.deleteSampleNoticeByIds(ids));
+    }
+
+    /**
+     * 导入打样通知 Excel
+     */
+    @PreAuthorize("@ss.hasPermi('erp:notice:import')")
+    @Log(title = "打样通知导入", businessType = BusinessType.IMPORT)
+    @PostMapping("/importData")
+    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
+        if (file == null || file.isEmpty()) {
+            return error("上传文件不能为空");
+        }
+        ExcelUtil<SampleNotice> util = new ExcelUtil<>(SampleNotice.class);
+        List<SampleNotice> list = util.importExcel(file.getInputStream());
+        String message = sampleNoticeService.importSampleNotice(list, updateSupport);
+        return success(message);
+    }
+
+    /**
+     * 下载打样通知导入模板
+     */
+    @PostMapping("/importTemplate")
+    public void importTemplate(HttpServletResponse response) {
+        ExcelUtil<SampleNotice> util = new ExcelUtil<>(SampleNotice.class);
+        util.importTemplateExcel(response, "打样通知数据");
     }
 }

@@ -81,4 +81,13 @@ public interface IStockInService {
      * @return 是否成功
      */
     boolean cancelConfirm(StockIn stockIn);
+
+    /**
+     * 导入入库单 Excel
+     *
+     * @param list          Excel 解析后的入库单列表
+     * @param updateSupport 是否允许更新已存在的单据（按 sn 匹配）
+     * @return 导入结果消息
+     */
+    String importStockIn(List<StockIn> list, boolean updateSupport);
 }

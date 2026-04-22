@@ -65,4 +65,13 @@ public interface ISampleNoticeService {
      * @return 结果
      */
     int insertSampleNoticeBatch(List<SampleNotice> list);
+
+    /**
+     * 导入打样通知 Excel
+     *
+     * @param list          Excel 解析后的打样通知列表
+     * @param updateSupport 是否允许更新已存在的打样通知
+     * @return 导入结果消息
+     */
+    String importSampleNotice(List<SampleNotice> list, boolean updateSupport);
 }

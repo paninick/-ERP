@@ -51,4 +51,33 @@ public class BomServiceImpl implements IBomService {
     public int insertBomBatch(List<Bom> list) {
         return bomMapper.insertBomBatch(list);
     }
+
+    @Override
+    public String importBom(List<Bom> list, boolean updateSupport) {
+        if (list == null || list.isEmpty()) {
+            throw new RuntimeException("导入 BOM 数据不能为空");
+        }
+        int successNum = 0;
+        int failureNum = 0;
+        StringBuilder successMsg = new StringBuilder();
+        StringBuilder failureMsg = new StringBuilder();
+        for (Bom bom : list) {
+            try {
+                insertBom(bom);
+                successNum++;
+                successMsg.append("\n").append(successNum).append("、BOM 大货款号 ")
+                        .append(bom.getBulkOrderNo()).append(" 导入成功");
+            } catch (Exception e) {
+                failureNum++;
+                failureMsg.append("\n").append(failureNum).append("、BOM 导入失败：")
+                        .append(e.getMessage());
+            }
+        }
+        if (failureNum > 0) {
+            failureMsg.insert(0, "导入失败！共 " + failureNum + " 条数据格式不正确，错误如下：");
+            throw new RuntimeException(failureMsg.toString());
+        }
+        successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条（明细请在 UI 中继续维护）。");
+        return successMsg.toString();
+    }
 }

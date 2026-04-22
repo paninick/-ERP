@@ -20,6 +20,7 @@ import com.ruoyi.erp.domain.Bom;
 import com.ruoyi.erp.service.IBomService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/erp/bom")
@@ -69,5 +70,30 @@ public class BomController extends BaseController {
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {
         return toAjax(bomService.deleteBomByIds(ids));
+    }
+
+    /**
+     * 导入样衣 BOM 主表 Excel（明细表请在 UI 中维护）
+     */
+    @PreAuthorize("@ss.hasPermi('erp:bom:import')")
+    @Log(title = "样衣BOM导入", businessType = BusinessType.IMPORT)
+    @PostMapping("/importData")
+    public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
+        if (file == null || file.isEmpty()) {
+            return error("上传文件不能为空");
+        }
+        ExcelUtil<Bom> util = new ExcelUtil<>(Bom.class);
+        List<Bom> list = util.importExcel(file.getInputStream());
+        String message = bomService.importBom(list, updateSupport);
+        return success(message);
+    }
+
+    /**
+     * 下载样衣 BOM 导入模板
+     */
+    @PostMapping("/importTemplate")
+    public void importTemplate(HttpServletResponse response) {
+        ExcelUtil<Bom> util = new ExcelUtil<>(Bom.class);
+        util.importTemplateExcel(response, "样衣BOM数据");
     }
 }

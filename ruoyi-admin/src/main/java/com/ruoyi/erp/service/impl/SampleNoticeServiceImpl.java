@@ -106,4 +106,33 @@ public class SampleNoticeServiceImpl implements ISampleNoticeService {
     public int insertSampleNoticeBatch(List<SampleNotice> list) {
         return sampleNoticeMapper.insertSampleNoticeBatch(list);
     }
+
+    @Override
+    public String importSampleNotice(List<SampleNotice> list, boolean updateSupport) {
+        if (list == null || list.isEmpty()) {
+            throw new RuntimeException("导入打样通知数据不能为空");
+        }
+        int successNum = 0;
+        int failureNum = 0;
+        StringBuilder successMsg = new StringBuilder();
+        StringBuilder failureMsg = new StringBuilder();
+        for (SampleNotice sampleNotice : list) {
+            try {
+                insertSampleNotice(sampleNotice);
+                successNum++;
+                successMsg.append("\n").append(successNum).append("、打样通知 ")
+                        .append(sampleNotice.getSampleNo()).append(" 导入成功");
+            } catch (Exception e) {
+                failureNum++;
+                failureMsg.append("\n").append(failureNum).append("、打样通知导入失败：")
+                        .append(e.getMessage());
+            }
+        }
+        if (failureNum > 0) {
+            failureMsg.insert(0, "导入失败！共 " + failureNum + " 条数据格式不正确，错误如下：");
+            throw new RuntimeException(failureMsg.toString());
+        }
+        successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条。");
+        return successMsg.toString();
+    }
 }

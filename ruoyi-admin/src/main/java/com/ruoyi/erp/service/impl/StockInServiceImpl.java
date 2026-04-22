@@ -181,4 +181,33 @@ public class StockInServiceImpl implements IStockInService {
 
         return true;
     }
+
+    @Override
+    public String importStockIn(List<StockIn> list, boolean updateSupport) {
+        if (list == null || list.isEmpty()) {
+            throw new RuntimeException("导入入库单数据不能为空");
+        }
+        int successNum = 0;
+        int failureNum = 0;
+        StringBuilder successMsg = new StringBuilder();
+        StringBuilder failureMsg = new StringBuilder();
+        for (StockIn stockIn : list) {
+            try {
+                insertStockIn(stockIn);
+                successNum++;
+                successMsg.append("\n").append(successNum).append("、入库单 ")
+                        .append(stockIn.getSn()).append(" 导入成功");
+            } catch (Exception e) {
+                failureNum++;
+                failureMsg.append("\n").append(failureNum).append("、入库单导入失败：")
+                        .append(e.getMessage());
+            }
+        }
+        if (failureNum > 0) {
+            failureMsg.insert(0, "导入失败！共 " + failureNum + " 条数据格式不正确，错误如下：");
+            throw new RuntimeException(failureMsg.toString());
+        }
+        successMsg.insert(0, "恭喜您，数据已全部导入成功！共 " + successNum + " 条。");
+        return successMsg.toString();
+    }
 }
