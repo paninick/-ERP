@@ -307,7 +307,7 @@
 <script>
 import { listSalesmaterial, getSalesmaterial, delSalesmaterial, addSalesmaterial, updateSalesmaterial } from "@/api/erp/salesmaterial"
 import { listSales } from "@/api/erp/sales"
-import { listMainMaterial } from "@/api/erp/mainMaterial"
+import { listMaterial as listMainMaterial } from "@/api/erp/material"
 
 export default {
   name: "Salesmaterial",

@@ -7,6 +7,7 @@ const storageSetting = JSON.parse(localStorage.getItem('layout-setting')) || ''
 const state = {
   title: '',
   theme: storageSetting.theme || '#409EFF',
+  themeStyle: storageSetting.themeStyle || 'default', // 'default', 'muji', 'apple'
   sideTheme: storageSetting.sideTheme || sideTheme,
   showSettings: showSettings,
   navType: storageSetting.navType === undefined ? navType : storageSetting.navType,
@@ -23,6 +24,14 @@ const mutations = {
   CHANGE_SETTING: (state, { key, value }) => {
     if (state.hasOwnProperty(key)) {
       state[key] = value
+      // Theme switching logic
+      if (key === 'themeStyle') {
+        document.body.className = value === 'default' ? '' : `theme-${value}`;
+        // Persist setting
+        const settings = JSON.parse(localStorage.getItem('layout-setting')) || {};
+        settings.themeStyle = value;
+        localStorage.setItem('layout-setting', JSON.stringify(settings));
+      }
     }
   },
   SET_TITLE: (state, title) => {

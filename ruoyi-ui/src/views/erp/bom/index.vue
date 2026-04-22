@@ -1,301 +1,178 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
-      <el-form-item label="客户" prop="customerId">
-        <el-select v-model="queryParams.customerId" placeholder="请选择客户" clearable
-          filterable clearable remote :remote-method="filterCustomer" loading="customerLoading">
-          <el-option
-            v-for="item in customerOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="销售订单" prop="salesOrderId">
-        <el-select v-model="queryParams.salesOrderId" placeholder="请选择销售订单" clearable
-          filterable clearable remote :remote-method="filterSalesOrder" loading="salesOrderLoading">
-          <el-option
-            v-for="item in salesOrderOptions"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="审批状态" prop="auditStatus">
-        <el-select v-model="queryParams.auditStatus" placeholder="请选择审批状态" clearable>
-          <el-option
-            v-for="dict in dict.type.erp_sample_audit_status"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item label="进行状态" prop="progressStatus">
-        <el-select v-model="queryParams.progressStatus" placeholder="请选择进行状态" clearable>
-          <el-option
-            v-for="dict in dict.type.erp_progress_status"
-            :key="dict.value"
-            :label="dict.label"
-            :value="dict.value"
-          />
-        </el-select>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-      </el-form-item>
-    </el-form>
+    <!-- 1. 全局顶部操作与筛选区（两区物理隔离） -->
+    <div class="biz-top-bar" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px;">
+      
+      <!-- 左侧极简筛选 -->
+      <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" class="biz-search-form" style="margin-bottom: 0;">
+        <el-form-item prop="customerId" style="margin-bottom: 0; margin-right: 16px;">
+          <el-select v-model="queryParams.customerId" placeholder="选择客户" clearable filterable remote :remote-method="filterCustomer" :loading="customerLoading" style="width: 160px;">
+            <el-option v-for="item in customerOptions" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="salesOrderId" style="margin-bottom: 0; margin-right: 16px;">
+          <el-select v-model="queryParams.salesOrderId" placeholder="销售订单" clearable filterable remote :remote-method="filterSalesOrder" :loading="salesOrderLoading" style="width: 160px;">
+            <el-option v-for="item in salesOrderOptions" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item prop="progressStatus" style="margin-bottom: 0; margin-right: 16px;">
+          <el-select v-model="queryParams.progressStatus" placeholder="进行状态" clearable style="width: 140px;">
+            <el-option v-for="dict in dict.type.erp_progress_status" :key="dict.value" :label="dict.label" :value="dict.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item style="margin-bottom: 0;">
+          <el-button type="primary" icon="el-icon-search" size="small" @click="handleQuery">查询</el-button>
+          <el-button icon="el-icon-refresh" size="small" @click="resetQuery">重置</el-button>
+        </el-form-item>
+      </el-form>
 
-    <el-row :gutter="10" class="mb8">
-      <el-col :span="1.5">
-        <el-button
-          type="primary"
-          plain
-          icon="el-icon-plus"
-          size="mini"
-          @click="handleAdd"
-          v-hasPermi="['erp:bom:add']"
-        >新增</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="success"
-          plain
-          icon="el-icon-edit"
-          size="mini"
-          :disabled="single"
-          @click="handleUpdate"
-          v-hasPermi="['erp:bom:edit']"
-        >修改</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="danger"
-          plain
-          icon="el-icon-delete"
-          size="mini"
-          :disabled="multiple"
-          @click="handleDelete"
-          v-hasPermi="['erp:bom:remove']"
-        >删除</el-button>
-      </el-col>
-      <el-col :span="1.5">
-        <el-button
-          type="warning"
-          plain
-          icon="el-icon-download"
-          size="mini"
-          @click="handleExport"
-          v-hasPermi="['erp:bom:export']"
-        >导出</el-button>
-      </el-col>
-      <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
-    </el-row>
+      <!-- 右侧固定功能按钮区 -->
+      <div class="biz-action-btn-group" style="display: flex; gap: 8px; flex-shrink: 0;">
+        <el-button type="primary" size="small" @click="handleAdd" v-hasPermi="['erp:bom:add']">新增BOM</el-button>
+        <el-button type="default" size="small" :disabled="single" @click="handleUpdate" v-hasPermi="['erp:bom:edit']">编辑</el-button>
+        <el-button type="danger" plain size="small" :disabled="multiple" @click="handleDelete" v-hasPermi="['erp:bom:remove']">删除</el-button>
+        <el-button type="default" size="small" @click="handleExport" v-hasPermi="['erp:bom:export']">导出</el-button>
+        <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" style="margin-left: 8px;"></right-toolbar>
+      </div>
+    </div>
 
-    <el-table v-loading="loading" :data="bomList" @selection-change="handleSelectionChange">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="审批状态" align="center" prop="auditStatus">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.erp_sample_audit_status" :value="scope.row.auditStatus"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="进行状态" align="center" prop="progressStatus" />
-      <el-table-column label="客户" align="center" prop="customerName" />
-      <el-table-column label="打样类型" align="center" prop="sampleType">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.erp_sample_type" :value="scope.row.sampleType"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="样品款式" align="center" prop="styleType">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.erp_sample_style" :value="scope.row.styleType"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="样品类型" align="center" prop="sampleCategoryType">
-        <template slot-scope="scope">
-          <dict-tag :options="dict.type.erp_sample_category" :value="scope.row.sampleCategoryType"/>
-        </template>
-      </el-table-column>
-      <el-table-column label="款号" align="center" prop="styleCode" />
-      <el-table-column label="大货款号" align="center" prop="bulkOrderNo" />
-      <el-table-column label="业务员" align="center" prop="salesName" />
-      <el-table-column label="要求交期" align="center" prop="dueDate" width="120">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.dueDate, '{y}-{m}-{d}') }}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="工艺书编号" align="center" prop="techNo" />
-      <el-table-column label="打样编号" align="center" prop="sampleNo" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
-        <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-edit"
-            @click="handleUpdate(scope.row)"
-            v-hasPermi="['erp:bom:edit']"
-          >修改</el-button>
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-delete"
-            @click="handleDelete(scope.row)"
-            v-hasPermi="['erp:bom:remove']"
-          >删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
+    <!-- 2. 数据表格区 (引入骨架屏缓解加载焦虑) -->
+    <el-skeleton :loading="loading" animated :rows="10">
+      <template>
+        <!-- 移除边框，双击唤起极速编辑 -->
+        <el-table class="biz-table" :data="bomList" @selection-change="handleSelectionChange" @row-dblclick="handleRowDblclick">
+          <el-table-column type="selection" width="55" align="center" />
+          <el-table-column label="打样编号" align="center" prop="sampleNo" />
+          <el-table-column label="客户" align="center" prop="customerName" />
+          <el-table-column label="大货款号" align="center" prop="bulkOrderNo" />
+          <el-table-column label="样品款式" align="center" prop="styleType">
+            <template slot-scope="scope">
+              <span>{{ (dict.type.erp_sample_style.find(d => d.value === scope.row.styleType) || {}).label || scope.row.styleType }}</span>
+            </template>
+          </el-table-column>
+          
+          <el-table-column label="进行状态" align="center" prop="progressStatus">
+            <template slot-scope="scope">
+              <!-- 双击状态时内联编辑 -->
+              <div v-if="scope.row.isEditing">
+                <el-select v-model="scope.row.progressStatus" size="mini" @change="saveInline(scope.row)">
+                  <el-option v-for="dict in dict.type.erp_progress_status" :key="dict.value" :label="dict.label" :value="dict.value" />
+                </el-select>
+              </div>
+              <span v-else>{{ (dict.type.erp_progress_status.find(d => d.value === scope.row.progressStatus) || {}).label || scope.row.progressStatus }}</span>
+            </template>
+          </el-table-column>
 
-    <pagination
-      v-show="total>0"
-      :total="total"
-      :page.sync="queryParams.pageNum"
-      :limit.sync="queryParams.pageSize"
-      @pagination="getList"
-    />
+          <el-table-column label="审批状态" align="center" prop="auditStatus" width="100">
+            <template slot-scope="scope">
+              <span :style="{color: scope.row.auditStatus === '1' ? 'var(--app-success-color)' : (scope.row.auditStatus === '2' ? 'var(--app-danger-color)' : 'var(--app-text-tip)')}">
+                {{ scope.row.auditStatus === '1' ? '● 已审核' : scope.row.auditStatus === '2' ? '● 驳回' : '○ 未审核' }}
+              </span>
+            </template>
+          </el-table-column>
 
-    <!-- 添加或修改样衣BOM对话框 -->
-    <el-dialog :title="title" :visible.sync="open" width="700px" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
-      <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-row>
+          <el-table-column label="要求交期" align="center" prop="dueDate" width="120">
+            <template slot-scope="scope">
+              <span>{{ parseTime(scope.row.dueDate, '{y}-{m}-{d}') }}</span>
+            </template>
+          </el-table-column>
+          
+          <el-table-column label="业务员" align="center" prop="salesName" />
+
+          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+            <template slot-scope="scope">
+              <el-button size="mini" type="text" @click="handleUpdate(scope.row)" v-hasPermi="['erp:bom:edit']">详情</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+
+        <pagination v-show="total>0" :total="total" :page.sync="queryParams.pageNum" :limit.sync="queryParams.pageSize" @pagination="getList" style="margin-top: 16px; text-align: right;" />
+      </template>
+    </el-skeleton>
+
+    <!-- 3. 添加或修改侧边抽屉或轻量弹窗 -->
+    <el-dialog :title="title" :visible.sync="open" width="700px" append-to-body :close-on-click-modal="false" custom-class="biz-dialog">
+      <el-form ref="form" :model="form" :rules="rules" label-width="120px" class="biz-form">
+        <el-row :gutter="24">
           <el-col :span="12">
-            <el-form-item label="客户" prop="customerId">
-              <el-select v-model="form.customerId" placeholder="请选择客户" clearable
-                filterable clearable remote :remote-method="filterCustomer" loading="customerLoading">
-                <el-option
-                  v-for="item in customerOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
+            <el-form-item label="客户" prop="customerId" required>
+              <el-select v-model="form.customerId" placeholder="搜索客户" clearable filterable remote :remote-method="filterCustomer" :loading="customerLoading" style="width: 100%">
+                <el-option v-for="item in customerOptions" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="销售订单" prop="salesOrderId">
-              <el-select v-model="form.salesOrderId" placeholder="请选择销售订单" clearable
-                filterable clearable remote :remote-method="filterSalesOrder" loading="salesOrderLoading">
-                <el-option
-                  v-for="item in salesOrderOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
+              <el-select v-model="form.salesOrderId" placeholder="选择销售订单" clearable filterable remote :remote-method="filterSalesOrder" :loading="salesOrderLoading" style="width: 100%">
+                <el-option v-for="item in salesOrderOptions" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
+        <el-row :gutter="24">
           <el-col :span="12">
             <el-form-item label="打样类型" prop="sampleType" required>
-              <el-select v-model="form.sampleType" placeholder="请选择打样类型">
-                <el-option
-                  v-for="dict in dict.type.erp_sample_type"
-                  :key="dict.value"
-                  :label="dict.label"
-                  :value="dict.value"
-                ></el-option>
+              <el-select v-model="form.sampleType" placeholder="请选择" style="width: 100%">
+                <el-option v-for="dict in dict.type.erp_sample_type" :key="dict.value" :label="dict.label" :value="dict.value" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="样品款式" prop="styleType" required>
-              <el-select v-model="form.styleType" placeholder="请选择样品款式">
-                <el-option
-                  v-for="dict in dict.type.erp_sample_style"
-                  :key="dict.value"
-                  :label="dict.label"
-                  :value="dict.value"
-                ></el-option>
+              <el-select v-model="form.styleType" placeholder="请选择" style="width: 100%">
+                <el-option v-for="dict in dict.type.erp_sample_style" :key="dict.value" :label="dict.label" :value="dict.value" />
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
+        <el-row :gutter="24">
           <el-col :span="12">
             <el-form-item label="样品类型" prop="sampleCategoryType" required>
-              <el-select v-model="form.sampleCategoryType" placeholder="请选择样品类型">
-                <el-option
-                  v-for="dict in dict.type.erp_sample_category"
-                  :key="dict.value"
-                  :label="dict.label"
-                  :value="dict.value"
-                ></el-option>
+              <el-select v-model="form.sampleCategoryType" placeholder="请选择" style="width: 100%">
+                <el-option v-for="dict in dict.type.erp_sample_category" :key="dict.value" :label="dict.label" :value="dict.value" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="要求交期" prop="dueDate" required>
-              <el-date-picker clearable
-                v-model="form.dueDate"
-                type="date"
-                value-format="yyyy-MM-dd"
-                placeholder="请选择要求交期">
-              </el-date-picker>
+              <el-date-picker clearable v-model="form.dueDate" type="date" value-format="yyyy-MM-dd" placeholder="选择交期" style="width: 100%" />
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
+        <el-row :gutter="24">
           <el-col :span="12">
-            <el-form-item label="客户名称" prop="customerName">
-              <el-input v-model="form.customerName" placeholder="请输入客户名称" />
+            <el-form-item label="大货款号" prop="bulkOrderNo">
+              <el-input v-model="form.bulkOrderNo" placeholder="请输入" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="打样编号" prop="sampleNo">
-              <el-input v-model="form.sampleNo" placeholder="请输入打样编号" />
+              <el-input v-model="form.sampleNo" placeholder="请输入" />
             </el-form-item>
           </el-col>
         </el-row>
-        <el-row>
+        <el-row :gutter="24">
           <el-col :span="12">
-            <el-form-item label="大货款号" prop="bulkOrderNo">
-              <el-input v-model="form.bulkOrderNo" placeholder="请输入大货款号" />
+            <el-form-item label="审批状态" prop="auditStatus">
+              <el-select v-model="form.auditStatus" placeholder="请选择" style="width: 100%">
+                <el-option v-for="dict in dict.type.erp_sample_audit_status" :key="dict.value" :label="dict.label" :value="dict.value" />
+              </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="业务员" prop="salesId">
-              <el-select v-model="form.salesId" placeholder="请选择业务员" clearable
-                filterable clearable remote :remote-method="filterUser" loading="userLoading">
-                <el-option
-                  v-for="item in userOptions"
-                  :key="item.value"
-                  :label="item.label"
-                  :value="item.value"
-                />
+            <el-form-item label="进行状态" prop="progressStatus">
+              <el-select v-model="form.progressStatus" placeholder="请选择" style="width: 100%">
+                <el-option v-for="dict in dict.type.erp_progress_status" :key="dict.value" :label="dict.label" :value="dict.value" />
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="审批状态" prop="auditStatus">
-          <el-select v-model="form.auditStatus" placeholder="请选择审批状态">
-            <el-option
-              v-for="dict in dict.type.erp_sample_audit_status"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="进行状态" prop="progressStatus">
-          <el-select v-model="form.progressStatus" placeholder="请选择进行状态">
-            <el-option
-              v-for="dict in dict.type.erp_progress_status"
-              :key="dict.value"
-              :label="dict.label"
-              :value="dict.value"
-            ></el-option>
-          </el-select>
-        </el-form-item>
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -309,34 +186,23 @@ import { listSales } from "@/api/erp/sales"
 
 export default {
   name: "Bom",
-  dicts: ['erp_sample_style', 'erp_sample_emergency', 'erp_sample_category', 'erp_sample_audit_status', 'erp_sample_type', 'erp_progress_status'],
+  dicts: ['erp_sample_style', 'erp_sample_category', 'erp_sample_audit_status', 'erp_sample_type', 'erp_progress_status'],
   data() {
     return {
-      // 遮罩层
       loading: true,
-      // 选中数组
+      submitLoading: false,
       ids: [],
-      // 非单个禁用
       single: true,
-      // 非多个禁用
       multiple: true,
-      // 显示搜索条件
       showSearch: true,
-      // 总条数
       total: 0,
-      // 样衣BOM表格数据
       bomList: [],
-      // 弹出层标题
       title: "",
-      // 是否显示弹出层
       open: false,
-      // 客户选项
       customerOptions: [],
       customerLoading: false,
-      // 销售订单选项
       salesOrderOptions: [],
       salesOrderLoading: false,
-      // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -344,27 +210,14 @@ export default {
         salesOrderId: null,
         auditStatus: null,
         progressStatus: null,
-        salesName: null,
       },
-      // 表单参数
       form: {},
-      // 表单校验
       rules: {
-        sampleType: [
-          { required: true, message: "打样类型不能为空", trigger: "change" }
-        ],
-        customerName: [
-          { required: true, message: "客户名称不能为空", trigger: "blur" }
-        ],
-        styleType: [
-          { required: true, message: "样品款式不能为空", trigger: "change" }
-        ],
-        sampleCategoryType: [
-          { required: true, message: "样品类型不能为空", trigger: "change" }
-        ],
-        dueDate: [
-          { required: true, message: "要求交期不能为空", trigger: "change" }
-        ]
+        customerId: [{ required: true, message: "不能为空", trigger: "change" }],
+        sampleType: [{ required: true, message: "不能为空", trigger: "change" }],
+        styleType: [{ required: true, message: "不能为空", trigger: "change" }],
+        sampleCategoryType: [{ required: true, message: "不能为空", trigger: "change" }],
+        dueDate: [{ required: true, message: "不能为空", trigger: "change" }]
       }
     }
   },
@@ -372,164 +225,112 @@ export default {
     this.getList()
   },
   methods: {
-    /** 过滤客户 */
     filterCustomer(query) {
-      if (!query) {
-        this.customerOptions = []
-        return
-      }
-      this.customerLoading = true
-      listCustomer({ pageNum: 1, pageSize: 20, customerName: query }).then(response => {
-        this.customerOptions = response.rows.map(r => ({
-          value: r.id,
-          label: r.customerName
-        }))
-        this.customerLoading = false
-      }).catch(() => {
-        this.customerLoading = false
-      })
+      if (!query) { this.customerOptions = []; return; }
+      this.customerLoading = true;
+      listCustomer({ pageNum: 1, pageSize: 20, customerName: query }).then(res => {
+        this.customerOptions = res.rows.map(r => ({ value: r.id, label: r.customerName }));
+        this.customerLoading = false;
+      }).catch(() => { this.customerLoading = false });
     },
-    /** 过滤销售订单 */
     filterSalesOrder(query) {
-      if (!query) {
-        this.salesOrderOptions = []
-        return
-      }
-      this.salesOrderLoading = true
-      listSales({ pageNum: 1, pageSize: 20, salesNo: query }).then(response => {
-        this.salesOrderOptions = response.rows.map(r => ({
-          value: r.id,
-          label: r.salesNo
-        }))
-        this.salesOrderLoading = false
-      }).catch(() => {
-        this.salesOrderLoading = false
-      })
+      if (!query) { this.salesOrderOptions = []; return; }
+      this.salesOrderLoading = true;
+      listSales({ pageNum: 1, pageSize: 20, salesNo: query }).then(res => {
+        this.salesOrderOptions = res.rows.map(r => ({ value: r.id, label: r.salesNo }));
+        this.salesOrderLoading = false;
+      }).catch(() => { this.salesOrderLoading = false });
     },
-    /** 过滤用户 */
-    filterUser(query) {
-      if (!query) {
-        this.userOptions = []
-        return
-      }
-      this.userLoading = true
-      const users = this.$store.getters.userList.filter(u => u.nickName.includes(query) || u.userName.includes(query))
-      this.userOptions = users.map(u => ({
-        value: u.userId,
-        label: u.nickName + '(' + u.userName + ')'
-      }))
-      this.userLoading = false
-    },
-    /** 查询样衣BOM列表 */
     getList() {
-      this.loading = true
-      listBom(this.queryParams).then(response => {
-        this.bomList = response.rows
-        this.total = response.total
-        this.loading = false
-      })
+      this.loading = true;
+      listBom(this.queryParams).then(res => {
+        this.bomList = res.rows.map(item => ({ ...item, isEditing: false }));
+        this.total = res.total;
+        this.loading = false;
+      });
     },
-    // 取消按钮
-    cancel() {
-      this.open = false
-      this.reset()
-    },
-    // 表单重置
-    reset() {
-      this.form = {
-        id: null,
-        sampleNo: null,
-        sampleType: null,
-        customerId: null,
-        customerName: null,
-        styleType: null,
-        sampleCategoryType: null,
-        bulkOrderNo: null,
-        dueDate: null,
-        salesId: null,
-        salesName: null,
-        techNo: null,
-        progressStatus: null,
-        auditStatus: null,
-        auditBy: null,
-        auditByNickName: null,
-        auditTime: null,
-        createBy: null,
-        createTime: null,
-        updateBy: null,
-        updateTime: null,
-        remark: null
-      }
-      this.resetForm("form")
-    },
-    /** 搜索按钮操作 */
     handleQuery() {
-      this.queryParams.pageNum = 1
-      this.getList()
+      this.queryParams.pageNum = 1;
+      this.getList();
     },
-    /** 重置按钮操作 */
     resetQuery() {
-      this.resetForm("queryForm")
-      this.handleQuery()
+      this.resetForm("queryForm");
+      this.handleQuery();
     },
-    // 多选框选中数据
     handleSelectionChange(selection) {
-      this.ids = selection.map(item => item.id)
-      this.single = selection.length!==1
-      this.multiple = !selection.length
+      this.ids = selection.map(item => item.id);
+      this.single = selection.length !== 1;
+      this.multiple = !selection.length;
     },
-    /** 新增按钮操作 */
+    reset() {
+      this.form = { id: null, sampleNo: null, sampleType: null, customerId: null, styleType: null, sampleCategoryType: null, dueDate: null };
+      this.resetForm("form");
+    },
     handleAdd() {
-      this.reset()
-      this.open = true
-      this.title = "添加样衣BOM"
+      this.reset();
+      this.open = true;
+      this.title = "添加样衣BOM";
     },
-    /** 修改按钮操作 */
     handleUpdate(row) {
-      this.reset()
-      const id = row.id || this.ids
-      getBom(id).then(response => {
-        this.form = response.data
-        this.open = true
-        this.title = "修改样衣BOM"
-      })
+      this.reset();
+      const id = row.id || this.ids;
+      getBom(id).then(res => {
+        this.form = res.data;
+        this.open = true;
+        this.title = "BOM详情";
+      });
     },
-    /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
-          if (this.form.id != null) {
-            updateBom(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功")
-              this.open = false
-              this.getList()
-            })
-          } else {
-            addBom(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功")
-              this.open = false
-              this.getList()
-            })
-          }
+          this.submitLoading = true;
+          const req = this.form.id != null ? updateBom(this.form) : addBom(this.form);
+          req.then(() => {
+            this.$message.success("操作成功");
+            this.open = false;
+            this.getList();
+          }).finally(() => {
+            this.submitLoading = false;
+          });
         }
-      })
+      });
     },
-    /** 删除按钮操作 */
     handleDelete(row) {
-      const ids = row.id || this.ids
-      this.$modal.confirm('是否确认删除样衣BOM编号为"' + ids + '"的数据项？').then(function() {
-        return delBom(ids)
-      }).then(() => {
-        this.getList()
-        this.$modal.msgSuccess("删除成功")
-      }).catch(() => {})
+      const ids = row.id || this.ids;
+      this.$confirm(`确定销毁BOM编号为 ${ids} 的数据？`, "高危操作确认", { type: 'warning' })
+        .then(() => delBom(ids))
+        .then(() => {
+          this.getList();
+          this.$message.success("数据已销毁");
+        }).catch(() => {});
     },
-    /** 导出按钮操作 */
     handleExport() {
-      this.download('erp/bom/export', {
-        ...this.queryParams
-      }, `bom_${new Date().getTime()}.xlsx`)
+      this.download('erp/bom/export', { ...this.queryParams }, `bom_${new Date().getTime()}.xlsx`);
+    },
+    // 双击内联编辑
+    handleRowDblclick(row, column, event) {
+      if (column.property === 'progressStatus') {
+        row.isEditing = true;
+      }
+    },
+    // 保存内联
+    saveInline(row) {
+      row.isEditing = false;
+      updateBom(row).then(() => {
+        this.$message.success('状态已更新');
+      }).catch(() => {
+        row.isEditing = true;
+      });
     }
   }
 }
 </script>
+
+<style scoped>
+.biz-table >>> .el-table__row {
+  cursor: pointer;
+}
+.biz-search-form >>> .el-form-item__content {
+  line-height: 32px;
+}
+</style>
