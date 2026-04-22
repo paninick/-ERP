@@ -6,61 +6,50 @@
 -- ----------------------------
 -- 给 t_erp_main_material 补全缺失的业务字段
 -- ----------------------------
-ALTER TABLE `t_erp_main_material`
--- 超收超发比例（业务必需，允许供应商少送多送一定比例）
-ADD COLUMN `over_receipt_ratio` decimal(5,2) DEFAULT 0.00 COMMENT '采购允许超收比例%' AFTER factory_no,
-ADD COLUMN `over_ship_ratio` decimal(5,2) DEFAULT 0.00 COMMENT '销售允许超发比例%' AFTER over_receipt_ratio,
--- 库存预警
-ADD COLUMN `min_stock_qty` decimal(18,6) DEFAULT NULL COMMENT '最低库存预警' AFTER default_warehouse_id,
-ADD COLUMN `max_stock_qty` decimal(18,6) DEFAULT NULL COMMENT '最高库存预警' AFTER min_stock_qty,
-ADD COLUMN `safe_stock_qty` decimal(18,6) DEFAULT NULL COMMENT '安全库存' AFTER max_stock_qty,
--- 订货
-ADD COLUMN `min_order_qty` decimal(18,6) DEFAULT NULL COMMENT '最小订货量' AFTER safe_stock_qty,
--- 税率（财务核算必需）
-ADD COLUMN `purchase_tax_rate` decimal(5,2) DEFAULT NULL COMMENT '进项税率%' AFTER outsource_price,
-ADD COLUMN `sales_tax_rate` decimal(5,2) DEFAULT NULL COMMENT '销项税率%' AFTER purchase_tax_rate,
--- 价格体系（多级价格满足不同渠道）
-ADD COLUMN `purchase_price` decimal(18,6) DEFAULT NULL COMMENT '采购价' AFTER sales_tax_rate,
-ADD COLUMN `outsource_price` decimal(18,6) DEFAULT NULL COMMENT '委外价' AFTER purchase_price,
-ADD COLUMN `standard_cost` decimal(18,6) DEFAULT NULL COMMENT '标准成本' AFTER outsource_price,
-ADD COLUMN `retail_price` decimal(18,6) DEFAULT NULL COMMENT '零售价' AFTER standard_cost,
-ADD COLUMN `wholesale_price` decimal(18,6) DEFAULT NULL COMMENT '批发价' AFTER retail_price,
-ADD COLUMN `vip_price` decimal(18,6) DEFAULT NULL COMMENT '会员价' AFTER wholesale_price,
-ADD COLUMN `min_sales_price` decimal(18,6) DEFAULT NULL COMMENT '最低销售价' AFTER vip_price,
--- 物流尺寸重量（快递/仓储计费需要）
-ADD COLUMN `gross_weight` decimal(18,3) DEFAULT NULL COMMENT '毛重' AFTER min_sales_price,
-ADD COLUMN `net_weight` decimal(18,3) DEFAULT NULL COMMENT '净重' AFTER gross_weight,
-ADD COLUMN `length` decimal(18,2) DEFAULT NULL COMMENT '长' AFTER net_weight,
-ADD COLUMN `width` decimal(18,2) DEFAULT NULL COMMENT '宽' AFTER length,
-ADD COLUMN `height` decimal(18,2) DEFAULT NULL COMMENT '高' AFTER width,
-ADD COLUMN `volume` decimal(18,3) DEFAULT NULL COMMENT '体积' AFTER height,
-ADD COLUMN `weight_unit` varchar(20) DEFAULT NULL COMMENT '重量单位' AFTER volume,
-ADD COLUMN `volume_unit` varchar(20) DEFAULT NULL COMMENT '体积单位' AFTER weight_unit,
--- 管理属性
-ADD COLUMN `is_batch_manage` tinyint(1) DEFAULT 0 COMMENT '是否启用批次管理' AFTER volume_unit,
-ADD COLUMN `is_expire_date` tinyint(1) DEFAULT 0 COMMENT '是否启用保质期管理' AFTER is_batch_manage,
--- 业务开关
-ADD COLUMN `is_purchase` tinyint(1) DEFAULT 1 COMMENT '可采购' AFTER is_expire_date,
-ADD COLUMN `is_sale` tinyint(1) DEFAULT 1 COMMENT '可销售' AFTER is_purchase,
-ADD COLUMN `is_outsource` tinyint(1) DEFAULT 0 COMMENT '可委外' AFTER is_sale,
-ADD COLUMN `is_self_make` tinyint(1) DEFAULT 0 COMMENT '可自制' AFTER is_outsource,
-ADD COLUMN `default_warehouse_id` bigint(20) DEFAULT NULL COMMENT '默认仓库ID' AFTER is_self_make,
-ADD COLUMN `default_location_id` bigint(20) DEFAULT NULL COMMENT '默认仓位ID' AFTER default_warehouse_id,
-ADD COLUMN `planner_id` bigint(20) DEFAULT NULL COMMENT '计划员ID' AFTER default_location_id,
-ADD COLUMN `buyer_id` bigint(20) DEFAULT NULL COMMENT '采购员ID' AFTER planner_id,
-ADD COLUMN `producing_department` varchar(100) DEFAULT NULL COMMENT '默认生产车间' AFTER buyer_id;
+CALL sp_erp_add_column('t_erp_main_material', 'over_receipt_ratio', 'decimal(5,2) DEFAULT 0.00 COMMENT ''采购允许超收比例%'' AFTER factory_no');
+CALL sp_erp_add_column('t_erp_main_material', 'over_ship_ratio', 'decimal(5,2) DEFAULT 0.00 COMMENT ''销售允许超发比例%'' AFTER over_receipt_ratio');
+CALL sp_erp_add_column('t_erp_main_material', 'is_purchase', 'tinyint(1) DEFAULT 1 COMMENT ''可采购'' AFTER over_ship_ratio');
+CALL sp_erp_add_column('t_erp_main_material', 'is_sale', 'tinyint(1) DEFAULT 1 COMMENT ''可销售'' AFTER is_purchase');
+CALL sp_erp_add_column('t_erp_main_material', 'is_outsource', 'tinyint(1) DEFAULT 0 COMMENT ''可委外'' AFTER is_sale');
+CALL sp_erp_add_column('t_erp_main_material', 'is_self_make', 'tinyint(1) DEFAULT 0 COMMENT ''可自制'' AFTER is_outsource');
+CALL sp_erp_add_column('t_erp_main_material', 'default_warehouse_id', 'bigint(20) DEFAULT NULL COMMENT ''默认仓库ID'' AFTER is_self_make');
+CALL sp_erp_add_column('t_erp_main_material', 'default_location_id', 'bigint(20) DEFAULT NULL COMMENT ''默认仓位ID'' AFTER default_warehouse_id');
+CALL sp_erp_add_column('t_erp_main_material', 'planner_id', 'bigint(20) DEFAULT NULL COMMENT ''计划员ID'' AFTER default_location_id');
+CALL sp_erp_add_column('t_erp_main_material', 'buyer_id', 'bigint(20) DEFAULT NULL COMMENT ''采购员ID'' AFTER planner_id');
+CALL sp_erp_add_column('t_erp_main_material', 'producing_department', 'varchar(100) DEFAULT NULL COMMENT ''默认生产车间'' AFTER buyer_id');
+CALL sp_erp_add_column('t_erp_main_material', 'min_stock_qty', 'decimal(18,6) DEFAULT NULL COMMENT ''最低库存预警'' AFTER default_warehouse_id');
+CALL sp_erp_add_column('t_erp_main_material', 'max_stock_qty', 'decimal(18,6) DEFAULT NULL COMMENT ''最高库存预警'' AFTER min_stock_qty');
+CALL sp_erp_add_column('t_erp_main_material', 'safe_stock_qty', 'decimal(18,6) DEFAULT NULL COMMENT ''安全库存'' AFTER max_stock_qty');
+CALL sp_erp_add_column('t_erp_main_material', 'min_order_qty', 'decimal(18,6) DEFAULT NULL COMMENT ''最小订货量'' AFTER safe_stock_qty');
+CALL sp_erp_add_column('t_erp_main_material', 'purchase_price', 'decimal(18,6) DEFAULT NULL COMMENT ''采购价'' AFTER min_order_qty');
+CALL sp_erp_add_column('t_erp_main_material', 'outsource_price', 'decimal(18,6) DEFAULT NULL COMMENT ''委外价'' AFTER purchase_price');
+CALL sp_erp_add_column('t_erp_main_material', 'standard_cost', 'decimal(18,6) DEFAULT NULL COMMENT ''标准成本'' AFTER outsource_price');
+CALL sp_erp_add_column('t_erp_main_material', 'retail_price', 'decimal(18,6) DEFAULT NULL COMMENT ''零售价'' AFTER standard_cost');
+CALL sp_erp_add_column('t_erp_main_material', 'wholesale_price', 'decimal(18,6) DEFAULT NULL COMMENT ''批发价'' AFTER retail_price');
+CALL sp_erp_add_column('t_erp_main_material', 'vip_price', 'decimal(18,6) DEFAULT NULL COMMENT ''会员价'' AFTER wholesale_price');
+CALL sp_erp_add_column('t_erp_main_material', 'min_sales_price', 'decimal(18,6) DEFAULT NULL COMMENT ''最低销售价'' AFTER vip_price');
+CALL sp_erp_add_column('t_erp_main_material', 'purchase_tax_rate', 'decimal(5,2) DEFAULT NULL COMMENT ''进项税率%'' AFTER min_sales_price');
+CALL sp_erp_add_column('t_erp_main_material', 'sales_tax_rate', 'decimal(5,2) DEFAULT NULL COMMENT ''销项税率%'' AFTER purchase_tax_rate');
+CALL sp_erp_add_column('t_erp_main_material', 'gross_weight', 'decimal(18,3) DEFAULT NULL COMMENT ''毛重'' AFTER sales_tax_rate');
+CALL sp_erp_add_column('t_erp_main_material', 'net_weight', 'decimal(18,3) DEFAULT NULL COMMENT ''净重'' AFTER gross_weight');
+CALL sp_erp_add_column('t_erp_main_material', 'length', 'decimal(18,2) DEFAULT NULL COMMENT ''长'' AFTER net_weight');
+CALL sp_erp_add_column('t_erp_main_material', 'width', 'decimal(18,2) DEFAULT NULL COMMENT ''宽'' AFTER length');
+CALL sp_erp_add_column('t_erp_main_material', 'height', 'decimal(18,2) DEFAULT NULL COMMENT ''高'' AFTER width');
+CALL sp_erp_add_column('t_erp_main_material', 'volume', 'decimal(18,3) DEFAULT NULL COMMENT ''体积'' AFTER height');
+CALL sp_erp_add_column('t_erp_main_material', 'weight_unit', 'varchar(20) DEFAULT NULL COMMENT ''重量单位'' AFTER volume');
+CALL sp_erp_add_column('t_erp_main_material', 'volume_unit', 'varchar(20) DEFAULT NULL COMMENT ''体积单位'' AFTER weight_unit');
+CALL sp_erp_add_column('t_erp_main_material', 'is_batch_manage', 'tinyint(1) DEFAULT 0 COMMENT ''是否启用批次管理'' AFTER volume_unit');
+CALL sp_erp_add_column('t_erp_main_material', 'is_expire_date', 'tinyint(1) DEFAULT 0 COMMENT ''是否启用保质期管理'' AFTER is_batch_manage');
 
 -- ----------------------------
 -- 给 t_erp_sales_order 补充字段
 -- ----------------------------
-ALTER TABLE `t_erp_sales_order`
-ADD COLUMN `over_ship_ratio` decimal(5,2) DEFAULT NULL COMMENT '允许超发比例%（取自物料，可修改）' AFTER order_qty;
+CALL sp_erp_add_column('t_erp_sales_order', 'over_ship_ratio', 'decimal(5,2) DEFAULT NULL COMMENT ''允许超发比例%（取自物料，可修改）'' AFTER order_qty');
 
 -- ----------------------------
 -- 给 t_erp_purchase_order 补充字段
 -- ----------------------------
-ALTER TABLE `t_erp_purchase_order`
-ADD COLUMN `over_receipt_ratio` decimal(5,2) DEFAULT NULL COMMENT '允许超收比例%（取自物料，可修改）' AFTER order_qty;
+CALL sp_erp_add_column('t_erp_purchase_order', 'over_receipt_ratio', 'decimal(5,2) DEFAULT NULL COMMENT ''允许超收比例%（取自物料，可修改）'' AFTER order_qty');
 
 -- ----------------------------
 -- 创建 物料价格表（支持不同客户不同价格）

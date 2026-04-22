@@ -1,3 +1,4 @@
+SET NAMES utf8mb4;
 -- =============================================
 -- 阶段九：库存模块完善 - 补全设计坑
 -- 基于穷尽爆破后补充：补充缺失表和索引
@@ -11,7 +12,7 @@
 -- 物料SKU表
 -- 一个物料（款式）下，按颜色 × 尺码生成多个SKU，支持三维（aux_id1=颜色, aux_id2=尺码, aux_id3=批次
 -- ----------------------------
-DROP TABLE IF EXISTS `t_erp_material_sku;
+DROP TABLE IF EXISTS `t_erp_material_sku`;
 CREATE TABLE `t_erp_material_sku` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'SKU ID',
   `material_id` bigint(20) NOT NULL COMMENT '物料ID',
@@ -38,7 +39,7 @@ CREATE TABLE `t_erp_material_sku` (
 -- ----------------------------
 -- 辅助属性值表（颜色/尺码等
 -- ----------------------------
-DROP TABLE IF EXISTS `t_erp_aux_property_value;
+DROP TABLE IF EXISTS `t_erp_aux_property_value`;
 CREATE TABLE `t_erp_aux_property_value` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'ID',
   `property_type` varchar(32) NOT NULL COMMENT '属性类型（color/size）',
@@ -57,7 +58,7 @@ CREATE TABLE `t_erp_aux_property_value` (
 -- 库存总表（按SKU + 仓库汇总
 -- 支持可用库存 + 锁定库存分离，乐观锁version防超卖
 -- ----------------------------
-DROP TABLE IF EXISTS `t_erp_inv_stock;
+DROP TABLE IF EXISTS `t_erp_inv_stock`;
 CREATE TABLE `t_erp_inv_stock` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '库存ID',
   `warehouse_id` bigint(20) NOT NULL COMMENT '仓库ID',
@@ -77,7 +78,7 @@ CREATE TABLE `t_erp_inv_stock` (
 -- ----------------------------
 -- 库存调整单（盘点调账，必须留痕
 -- ----------------------------
-DROP TABLE IF EXISTS `t_erp_inv_adjust_bill;
+DROP TABLE IF EXISTS `t_erp_inv_adjust_bill`;
 CREATE TABLE `t_erp_inv_adjust_bill` (
   `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '调整单ID',
   `bill_no` varchar(64) NOT NULL COMMENT '调整单号',
@@ -108,7 +109,7 @@ CREATE TABLE `t_erp_inv_adjust_bill` (
 -- 单据号sequence表（Redis持久化兜底）
 -- Redis宕机重启后，从这里 reload，避免流水号重复
 -- ----------------------------
-DROP TABLE IF EXISTS `t_erp_bill_sequence;
+DROP TABLE IF EXISTS `t_erp_bill_sequence`;
 CREATE TABLE `t_erp_bill_sequence` (
   `seq_date` date NOT NULL COMMENT '日期',
   `bill_type` varchar(32) NOT NULL COMMENT '单据类型（PO=采购单,SO=销售订单,ST=入库单...）',

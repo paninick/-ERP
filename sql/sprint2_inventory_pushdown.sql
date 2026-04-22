@@ -5,56 +5,46 @@
 
 -- 1. 给所有业务主表添加来源单据字段
 -- 用于支持单据下推追溯：下游单据记录上游来源，全程可追溯
-ALTER TABLE `t_erp_purchase`
-ADD COLUMN `src_bill_type` varchar(64) DEFAULT NULL COMMENT '来源单据类型' AFTER `id`,
-ADD COLUMN `src_bill_id` bigint(20) DEFAULT NULL COMMENT '来源单据ID' AFTER `src_bill_type`,
-ADD COLUMN `src_bill_no` varchar(64) DEFAULT NULL COMMENT '来源单据号' AFTER `src_bill_id`;
+CALL sp_erp_add_column('t_erp_purchase', 'src_bill_type', 'varchar(64) DEFAULT NULL COMMENT ''来源单据类型'' AFTER `id`');
+CALL sp_erp_add_column('t_erp_purchase', 'src_bill_id', 'bigint(20) DEFAULT NULL COMMENT ''来源单据ID'' AFTER `src_bill_type`');
+CALL sp_erp_add_column('t_erp_purchase', 'src_bill_no', 'varchar(64) DEFAULT NULL COMMENT ''来源单据号'' AFTER `src_bill_id`');
 
-ALTER TABLE `t_erp_sales_order`
-ADD COLUMN `src_bill_type` varchar(64) DEFAULT NULL COMMENT '来源单据类型' AFTER `id`,
-ADD COLUMN `src_bill_id` bigint(20) DEFAULT NULL COMMENT '来源单据ID' AFTER `src_bill_type`,
-ADD COLUMN `src_bill_no` varchar(64) DEFAULT NULL COMMENT '来源单据号' AFTER `src_bill_id`;
+CALL sp_erp_add_column('t_erp_sales_order', 'src_bill_type', 'varchar(64) DEFAULT NULL COMMENT ''来源单据类型'' AFTER `id`');
+CALL sp_erp_add_column('t_erp_sales_order', 'src_bill_id', 'bigint(20) DEFAULT NULL COMMENT ''来源单据ID'' AFTER `src_bill_type`');
+CALL sp_erp_add_column('t_erp_sales_order', 'src_bill_no', 'varchar(64) DEFAULT NULL COMMENT ''来源单据号'' AFTER `src_bill_id`');
 
-ALTER TABLE `t_erp_stock_in`
-ADD COLUMN `src_bill_type` varchar(64) DEFAULT NULL COMMENT '来源单据类型' AFTER `id`,
-ADD COLUMN `src_bill_id` bigint(20) DEFAULT NULL COMMENT '来源单据ID' AFTER `src_bill_type`,
-ADD COLUMN `src_bill_no` varchar(64) DEFAULT NULL COMMENT '来源单据号' AFTER `src_bill_id`;
+CALL sp_erp_add_column('t_erp_stock_in', 'src_bill_type', 'varchar(64) DEFAULT NULL COMMENT ''来源单据类型'' AFTER `id`');
+CALL sp_erp_add_column('t_erp_stock_in', 'src_bill_id', 'bigint(20) DEFAULT NULL COMMENT ''来源单据ID'' AFTER `src_bill_type`');
+CALL sp_erp_add_column('t_erp_stock_in', 'src_bill_no', 'varchar(64) DEFAULT NULL COMMENT ''来源单据号'' AFTER `src_bill_id`');
 
-ALTER TABLE `t_erp_stock_out`
-ADD COLUMN `src_bill_type` varchar(64) DEFAULT NULL COMMENT '来源单据类型' AFTER `id`,
-ADD COLUMN `src_bill_id` bigint(20) DEFAULT NULL COMMENT '来源单据ID' AFTER `src_bill_type`,
-ADD COLUMN `src_bill_no` varchar(64) DEFAULT NULL COMMENT '来源单据号' AFTER `src_bill_id`;
+CALL sp_erp_add_column('t_erp_stock_out', 'src_bill_type', 'varchar(64) DEFAULT NULL COMMENT ''来源单据类型'' AFTER `id`');
+CALL sp_erp_add_column('t_erp_stock_out', 'src_bill_id', 'bigint(20) DEFAULT NULL COMMENT ''来源单据ID'' AFTER `src_bill_type`');
+CALL sp_erp_add_column('t_erp_stock_out', 'src_bill_no', 'varchar(64) DEFAULT NULL COMMENT ''来源单据号'' AFTER `src_bill_id`');
 
-ALTER TABLE `t_erp_produce_plan`
-ADD COLUMN `src_bill_type` varchar(64) DEFAULT NULL COMMENT '来源单据类型' AFTER `id`,
-ADD COLUMN `src_bill_id` bigint(20) DEFAULT NULL COMMENT '来源单据ID' AFTER `src_bill_type`,
-ADD COLUMN `src_bill_no` varchar(64) DEFAULT NULL COMMENT '来源单据号' AFTER `src_bill_id`;
+CALL sp_erp_add_column('t_erp_produce_plan', 'src_bill_type', 'varchar(64) DEFAULT NULL COMMENT ''来源单据类型'' AFTER `id`');
+CALL sp_erp_add_column('t_erp_produce_plan', 'src_bill_id', 'bigint(20) DEFAULT NULL COMMENT ''来源单据ID'' AFTER `src_bill_type`');
+CALL sp_erp_add_column('t_erp_produce_plan', 'src_bill_no', 'varchar(64) DEFAULT NULL COMMENT ''来源单据号'' AFTER `src_bill_id`');
 
-ALTER TABLE `t_erp_outsource_order`
-ADD COLUMN `src_bill_type` varchar(64) DEFAULT NULL COMMENT '来源单据类型' AFTER `id`,
-ADD COLUMN `src_bill_id` bigint(20) DEFAULT NULL COMMENT '来源单据ID' AFTER `src_bill_type`,
-ADD COLUMN `src_bill_no` varchar(64) DEFAULT NULL COMMENT '来源单据号' AFTER `src_bill_id`;
+CALL sp_erp_add_column('t_erp_outsource_order', 'src_bill_type', 'varchar(64) DEFAULT NULL COMMENT ''来源单据类型'' AFTER `id`');
+CALL sp_erp_add_column('t_erp_outsource_order', 'src_bill_id', 'bigint(20) DEFAULT NULL COMMENT ''来源单据ID'' AFTER `src_bill_type`');
+CALL sp_erp_add_column('t_erp_outsource_order', 'src_bill_no', 'varchar(64) DEFAULT NULL COMMENT ''来源单据号'' AFTER `src_bill_id`');
 
-ALTER TABLE `t_erp_sample_notice`
-ADD COLUMN `src_bill_type` varchar(64) DEFAULT NULL COMMENT '来源单据类型' AFTER `id`,
-ADD COLUMN `src_bill_id` bigint(20) DEFAULT NULL COMMENT '来源单据ID' AFTER `src_bill_type`,
-ADD COLUMN `src_bill_no` varchar(64) DEFAULT NULL COMMENT '来源单据号' AFTER `src_bill_id`;
+CALL sp_erp_add_column('t_erp_sample_notice', 'src_bill_type', 'varchar(64) DEFAULT NULL COMMENT ''来源单据类型'' AFTER `id`');
+CALL sp_erp_add_column('t_erp_sample_notice', 'src_bill_id', 'bigint(20) DEFAULT NULL COMMENT ''来源单据ID'' AFTER `src_bill_type`');
+CALL sp_erp_add_column('t_erp_sample_notice', 'src_bill_no', 'varchar(64) DEFAULT NULL COMMENT ''来源单据号'' AFTER `src_bill_id`');
 
 -- 2. 给单据明细表添加已执行数量
 -- 用于跟踪上游单据（采购订单/销售订单）已被下游执行了多少数量
-ALTER TABLE `t_erp_purchase_item`
-ADD COLUMN `execute_qty` decimal(18,6) NOT NULL DEFAULT 0.000000 COMMENT '已执行数量（已入库）' AFTER `count`;
+CALL sp_erp_add_column('t_erp_purchase_item', 'execute_qty', 'decimal(18,6) NOT NULL DEFAULT 0.000000 COMMENT ''已执行数量（已入库）''');
 
-ALTER TABLE `t_erp_sales_order_item`
-ADD COLUMN `execute_qty` decimal(18,6) NOT NULL DEFAULT 0.000000 COMMENT '已执行数量（已出库）' AFTER `count`;
+CALL sp_erp_add_column('t_erp_sales_order_item', 'execute_qty', 'decimal(18,6) NOT NULL DEFAULT 0.000000 COMMENT ''已执行数量（已出库）''');
 
 -- 3. 给库存流水补充来源字段和SKU
 -- 实现库存变动全程可追溯：每一笔库存变动都知道来自哪张单据
-ALTER TABLE `t_erp_stock_log`
-ADD COLUMN `src_bill_type` varchar(64) DEFAULT NULL COMMENT '来源单据类型' AFTER `relation_id`,
-ADD COLUMN `src_bill_id` bigint(20) DEFAULT NULL COMMENT '来源单据ID' AFTER `src_bill_type`,
-ADD COLUMN `src_bill_no` varchar(64) DEFAULT NULL COMMENT '来源单据号' AFTER `src_bill_id`,
-ADD COLUMN `sku_id` bigint(20) DEFAULT NULL COMMENT 'SKU ID' AFTER `material_id`;
+CALL sp_erp_add_column('t_erp_stock_log', 'src_bill_type', 'varchar(64) DEFAULT NULL COMMENT ''来源单据类型'' AFTER `relation_id`');
+CALL sp_erp_add_column('t_erp_stock_log', 'src_bill_id', 'bigint(20) DEFAULT NULL COMMENT ''来源单据ID'' AFTER `src_bill_type`');
+CALL sp_erp_add_column('t_erp_stock_log', 'src_bill_no', 'varchar(64) DEFAULT NULL COMMENT ''来源单据号'' AFTER `src_bill_id`');
+CALL sp_erp_add_column('t_erp_stock_log', 'sku_id', 'bigint(20) DEFAULT NULL COMMENT ''SKU ID'' AFTER `material_id`');
 
 -- 4. 确保库存总表存在（如果还没有创建）
 -- 库存总表：按仓库+SKU维度汇总当前库存

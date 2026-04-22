@@ -1,3 +1,5 @@
+SET NAMES utf8mb4;
+
 -- 自动化任务表
 CREATE TABLE `sys_automation` (
   `task_id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT '任务ID',

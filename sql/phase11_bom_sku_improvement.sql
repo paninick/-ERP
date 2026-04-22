@@ -4,6 +4,29 @@
 -- =============================================
 
 -- ----------------------------
+-- 确保 t_erp_material_sku 存在（phase9 可能未成功执行）
+-- ----------------------------
+CREATE TABLE IF NOT EXISTS `t_erp_material_sku` (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT COMMENT 'SKU ID',
+  `material_id` bigint(20) NOT NULL COMMENT '物料ID',
+  `sku_code` varchar(128) NOT NULL COMMENT 'SKU编码（全局唯一）',
+  `aux_id1` bigint(20) NOT NULL DEFAULT 1 COMMENT '辅助属性1 - 颜色',
+  `aux_id2` bigint(20) NOT NULL DEFAULT 1 COMMENT '辅助属性2 - 尺码',
+  `aux_id3` bigint(20) DEFAULT NULL COMMENT '辅助属性3 - 批次',
+  `sku_name` varchar(255) DEFAULT NULL COMMENT 'SKU名称',
+  `status` char(1) DEFAULT '0' COMMENT '状态（0正常 1停用）',
+  `is_deleted` bigint(1) NOT NULL DEFAULT 0 COMMENT '软删除',
+  `create_by` varchar(64) DEFAULT '' COMMENT '创建者',
+  `create_time` datetime DEFAULT NULL COMMENT '创建时间',
+  `update_by` varchar(64) DEFAULT '' COMMENT '更新者',
+  `update_time` datetime DEFAULT NULL COMMENT '更新时间',
+  `remark` varchar(500) DEFAULT NULL COMMENT '备注',
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `uk_sku_code` (`sku_code`),
+  KEY `idx_material_id` (`material_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COMMENT='物料SKU表（颜色×尺码多维）';
+
+-- ----------------------------
 -- 物料BOM表（分子分母高精度模型）
 -- 设计：parent_sku (成品) → child_sku (子件/原料)
 -- 用量保存为 分子/分母，避免精度丢失
@@ -46,46 +69,40 @@ CREATE TABLE `t_erp_bom` (
 -- ----------------------------
 -- 补充唯一索引
 -- ----------------------------
--- SKU编码全局唯一
-ALTER TABLE `t_erp_material_sku` ADD UNIQUE KEY `uk_sku_code` (`sku_code`);
+-- SKU编码全局唯一（IF NOT EXISTS 防止重复执行报错）
+CALL sp_erp_add_unique_key('t_erp_material_sku', 'uk_sku_code', '(`sku_code`)');
 
 -- ----------------------------
 -- 给现有单据表补充来源单据字段（按Gemini设计）
 -- ----------------------------
 -- 采购订单
-ALTER TABLE `t_erp_purchase_order`
-ADD COLUMN `src_bill_type` varchar(64) DEFAULT NULL COMMENT '来源单据类型' AFTER id,
-ADD COLUMN `src_bill_id` bigint(20) DEFAULT NULL COMMENT '来源单据ID' AFTER src_bill_type,
-ADD COLUMN `src_bill_no` varchar(64) DEFAULT NULL COMMENT '来源单据号' AFTER src_bill_id;
+CALL sp_erp_add_column('t_erp_purchase_order', 'src_bill_type', 'varchar(64) DEFAULT NULL COMMENT ''来源单据类型'' AFTER id');
+CALL sp_erp_add_column('t_erp_purchase_order', 'src_bill_id', 'bigint(20) DEFAULT NULL COMMENT ''来源单据ID'' AFTER src_bill_type');
+CALL sp_erp_add_column('t_erp_purchase_order', 'src_bill_no', 'varchar(64) DEFAULT NULL COMMENT ''来源单据号'' AFTER src_bill_id');
 
 -- 销售订单
-ALTER TABLE `t_erp_sales_order`
-ADD COLUMN `src_bill_type` varchar(64) DEFAULT NULL COMMENT '来源单据类型' AFTER id,
-ADD COLUMN `src_bill_id` bigint(20) DEFAULT NULL COMMENT '来源单据ID' AFTER src_bill_type,
-ADD COLUMN `src_bill_no` varchar(64) DEFAULT NULL COMMENT '来源单据号' AFTER src_bill_id;
+CALL sp_erp_add_column('t_erp_sales_order', 'src_bill_type', 'varchar(64) DEFAULT NULL COMMENT ''来源单据类型'' AFTER id');
+CALL sp_erp_add_column('t_erp_sales_order', 'src_bill_id', 'bigint(20) DEFAULT NULL COMMENT ''来源单据ID'' AFTER src_bill_type');
+CALL sp_erp_add_column('t_erp_sales_order', 'src_bill_no', 'varchar(64) DEFAULT NULL COMMENT ''来源单据号'' AFTER src_bill_id');
 
 -- 采购入库单
-ALTER TABLE `t_erp_stock_in`
-ADD COLUMN `src_bill_type` varchar(64) DEFAULT NULL COMMENT '来源单据类型' AFTER id,
-ADD COLUMN `src_bill_id` bigint(20) DEFAULT NULL COMMENT '来源单据ID' AFTER src_bill_type,
-ADD COLUMN `src_bill_no` varchar(64) DEFAULT NULL COMMENT '来源单据号' AFTER src_bill_id;
+CALL sp_erp_add_column('t_erp_stock_in', 'src_bill_type', 'varchar(64) DEFAULT NULL COMMENT ''来源单据类型'' AFTER id');
+CALL sp_erp_add_column('t_erp_stock_in', 'src_bill_id', 'bigint(20) DEFAULT NULL COMMENT ''来源单据ID'' AFTER src_bill_type');
+CALL sp_erp_add_column('t_erp_stock_in', 'src_bill_no', 'varchar(64) DEFAULT NULL COMMENT ''来源单据号'' AFTER src_bill_id');
 
 -- 销售出库单
-ALTER TABLE `t_erp_stock_out`
-ADD COLUMN `src_bill_type` varchar(64) DEFAULT NULL COMMENT '来源单据类型' AFTER id,
-ADD COLUMN `src_bill_id` bigint(20) DEFAULT NULL COMMENT '来源单据ID' AFTER src_bill_type,
-ADD COLUMN `src_bill_no` varchar(64) DEFAULT NULL COMMENT '来源单据号' AFTER src_bill_id;
+CALL sp_erp_add_column('t_erp_stock_out', 'src_bill_type', 'varchar(64) DEFAULT NULL COMMENT ''来源单据类型'' AFTER id');
+CALL sp_erp_add_column('t_erp_stock_out', 'src_bill_id', 'bigint(20) DEFAULT NULL COMMENT ''来源单据ID'' AFTER src_bill_type');
+CALL sp_erp_add_column('t_erp_stock_out', 'src_bill_no', 'varchar(64) DEFAULT NULL COMMENT ''来源单据号'' AFTER src_bill_id');
 
 -- ----------------------------
 -- 给单据明细表补充已执行数量
 -- ----------------------------
 -- 采购订单明细表
-ALTER TABLE `t_erp_purchase_order_entry`
-ADD COLUMN `execute_qty` decimal(18,6) NOT NULL DEFAULT 0 COMMENT '已执行数量（已入库）' AFTER qty;
+CALL sp_erp_add_column('t_erp_purchase_order_entry', 'execute_qty', 'decimal(18,6) NOT NULL DEFAULT 0 COMMENT ''已执行数量（已入库）'' AFTER qty');
 
 -- 销售订单明细表
-ALTER TABLE `t_erp_sales_order_entry`
-ADD COLUMN `execute_qty` decimal(18,6) NOT NULL DEFAULT 0 COMMENT '已执行数量（已出库）' AFTER qty;
+CALL sp_erp_add_column('t_erp_sales_order_entry', 'execute_qty', 'decimal(18,6) NOT NULL DEFAULT 0 COMMENT ''已执行数量（已出库）'' AFTER qty');
 
 -- =============================================
 -- 完成！
