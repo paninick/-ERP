@@ -1,14 +1,19 @@
 package com.ruoyi.erp.service.impl;
 
 import com.ruoyi.erp.domain.PieceWage;
+import com.ruoyi.erp.domain.PieceWageDetail;
 import com.ruoyi.erp.mapper.PieceWageMapper;
+import com.ruoyi.erp.mapper.PieceWageDetailMapper;
 import com.ruoyi.erp.service.IPieceWageService;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.math.BigDecimal;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * 计件工资汇总Service业务层处理
@@ -20,6 +25,9 @@ public class PieceWageServiceImpl implements IPieceWageService {
 
     @Autowired
     private PieceWageMapper pieceWageMapper;
+
+    @Autowired
+    private PieceWageDetailMapper pieceWageDetailMapper;
 
     /**
      * 查询计件工资汇总
@@ -96,5 +104,70 @@ public class PieceWageServiceImpl implements IPieceWageService {
     @Override
     public int countByEmployeeAndMonth(Long employeeId, String wageMonth) {
         return pieceWageMapper.countByEmployeeAndMonth(employeeId, wageMonth);
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public int autoGenerateWageByMonth(String wageMonth) {
+        List<Map<String, Object>> summaryRows = pieceWageMapper.selectSummaryByMonth(wageMonth);
+        if (summaryRows == null || summaryRows.isEmpty()) {
+            return 0;
+        }
+        // 按 employee_id 分组
+        Map<Long, List<Map<String, Object>>> byEmployee = summaryRows.stream()
+            .collect(Collectors.groupingBy(r -> ((Number) r.get("employee_id")).longValue()));
+
+        int created = 0;
+        for (Map.Entry<Long, List<Map<String, Object>>> entry : byEmployee.entrySet()) {
+            Long employeeId = entry.getKey();
+            // 幂等：同月同员工已有工资单则跳过
+            if (countByEmployeeAndMonth(employeeId, wageMonth) > 0) continue;
+
+            List<Map<String, Object>> details = entry.getValue();
+            BigDecimal totalShould = details.stream()
+                .map(r -> r.get("should_wage") == null ? BigDecimal.ZERO
+                         : new BigDecimal(r.get("should_wage").toString()))
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+            int totalOkQty = details.stream()
+                .mapToInt(r -> r.get("total_ok_qty") == null ? 0
+                              : ((Number) r.get("total_ok_qty")).intValue())
+                .sum();
+
+            // 1. 插主表
+            PieceWage wage = new PieceWage();
+            wage.setEmployeeId(employeeId);
+            wage.setEmployeeName((String) details.get(0).get("employee_name"));
+            wage.setWageMonth(wageMonth);
+            wage.setTotalOkQty(totalOkQty);
+            wage.setTotalProcessCount(details.size());
+            wage.setShouldWage(totalShould);
+            wage.setActualWage(totalShould);
+            wage.setStatus("0");
+            wage.setCreateBy("system");
+            wage.setCreateTime(DateUtils.getNowDate());
+            pieceWageMapper.insertPieceWage(wage);
+
+            // 2. 插明细
+            for (Map<String, Object> row : details) {
+                PieceWageDetail detail = new PieceWageDetail();
+                detail.setWageId(wage.getId());
+                detail.setEmployeeId(employeeId);
+                detail.setProcessId(((Number) row.get("process_id")).longValue());
+                detail.setProcessName((String) row.get("process_name"));
+                detail.setOkQty(row.get("total_ok_qty") == null ? 0
+                                : ((Number) row.get("total_ok_qty")).intValue());
+                detail.setProcessPrice(row.get("unit_price") == null ? BigDecimal.ZERO
+                                       : new BigDecimal(row.get("unit_price").toString()));
+                BigDecimal sw = row.get("should_wage") == null ? BigDecimal.ZERO
+                               : new BigDecimal(row.get("should_wage").toString());
+                detail.setShouldWage(sw);
+                detail.setActualWage(sw);
+                detail.setCreateBy("system");
+                detail.setCreateTime(DateUtils.getNowDate());
+                pieceWageDetailMapper.insertPieceWageDetail(detail);
+            }
+            created++;
+        }
+        return created;
     }
 }

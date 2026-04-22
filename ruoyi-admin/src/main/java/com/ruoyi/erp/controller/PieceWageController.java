@@ -92,4 +92,17 @@ public class PieceWageController extends BaseController {
     public AjaxResult remove(@PathVariable Long[] ids) {
         return toAjax(pieceWageService.deletePieceWageByIds(ids));
     }
+
+    /**
+     * 按月自动汇总员工产量生成工资单
+     *
+     * @param wageMonth 月份 yyyy-MM，例如 2026-04
+     */
+    @PreAuthorize("@ss.hasPermi('erp:piecewage:add')")
+    @Log(title = "计件工资自动结算", businessType = BusinessType.INSERT)
+    @PostMapping("/autoGenerate")
+    public AjaxResult autoGenerate(@RequestParam String wageMonth) {
+        int count = pieceWageService.autoGenerateWageByMonth(wageMonth);
+        return success("本月共生成 " + count + " 名员工工资单（已存在的自动跳过）");
+    }
 }

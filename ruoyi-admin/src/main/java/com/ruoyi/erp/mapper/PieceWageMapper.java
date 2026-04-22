@@ -3,8 +3,10 @@ package com.ruoyi.erp.mapper;
 import com.ruoyi.erp.domain.PieceWage;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 计件工资汇总Mapper接口
@@ -69,4 +71,14 @@ public interface PieceWageMapper {
      * @return 存在返回数量
      */
     public int countByEmployeeAndMonth(@Param("employeeId") Long employeeId, @Param("wageMonth") String wageMonth);
+
+    /**
+     * 按月份查询工资结算汇总视图
+     * 返回每个员工×工序的产量和应得工资明细，用于 autoGenerateWageByMonth
+     */
+    @Select("SELECT employee_id, employee_name, process_id, process_no, process_name, " +
+            "total_ok_qty, unit_price, should_wage " +
+            "FROM v_erp_piece_wage_summary " +
+            "WHERE wage_month = #{wageMonth}")
+    List<Map<String, Object>> selectSummaryByMonth(@Param("wageMonth") String wageMonth);
 }
