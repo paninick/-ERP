@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.ruoyi.erp.mapper.SalesOrderMapper;
 import com.ruoyi.erp.domain.SalesOrder;
 import com.ruoyi.erp.service.ISalesOrderService;
+import com.ruoyi.erp.utils.BillNoGenerator;
 
 /**
  * 销售订单Service业务层处理
@@ -19,6 +20,9 @@ import com.ruoyi.erp.service.ISalesOrderService;
 public class SalesOrderServiceImpl implements ISalesOrderService {
     @Autowired
     private SalesOrderMapper salesOrderMapper;
+
+    @Autowired
+    private BillNoGenerator billNoGenerator;
 
     /**
      * 查询销售订单
@@ -50,6 +54,9 @@ public class SalesOrderServiceImpl implements ISalesOrderService {
      */
     @Override
     public int insertSalesOrder(SalesOrder salesOrder) {
+        if (salesOrder.getSalesNo() == null || salesOrder.getSalesNo().isEmpty()) {
+            salesOrder.setSalesNo(billNoGenerator.generate("SO"));
+        }
         salesOrder.setCreateBy(SecurityUtils.getUserId().toString());
         salesOrder.setCreateTime(DateUtils.getNowDate());
         return salesOrderMapper.insertSalesOrder(salesOrder);

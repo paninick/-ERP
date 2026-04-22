@@ -3,6 +3,7 @@ package com.ruoyi.erp.service.impl;
 import com.ruoyi.erp.domain.OutsourceOrder;
 import com.ruoyi.erp.mapper.OutsourceOrderMapper;
 import com.ruoyi.erp.service.IOutsourceOrderService;
+import com.ruoyi.erp.utils.BillNoGenerator;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class OutsourceOrderServiceImpl implements IOutsourceOrderService {
 
     @Autowired
     private OutsourceOrderMapper outsourceOrderMapper;
+
+    @Autowired
+    private BillNoGenerator billNoGenerator;
 
     /**
      * 查询外协加工单
@@ -51,6 +55,9 @@ public class OutsourceOrderServiceImpl implements IOutsourceOrderService {
      */
     @Override
     public int insertOutsourceOrder(OutsourceOrder outsourceOrder) {
+        if (outsourceOrder.getOutsourceNo() == null || outsourceOrder.getOutsourceNo().isEmpty()) {
+            outsourceOrder.setOutsourceNo(billNoGenerator.generate("OO"));
+        }
         outsourceOrder.setCreateBy(SecurityUtils.getUsername());
         outsourceOrder.setCreateTime(DateUtils.getNowDate());
         outsourceOrder.setUpdateBy(SecurityUtils.getUsername());

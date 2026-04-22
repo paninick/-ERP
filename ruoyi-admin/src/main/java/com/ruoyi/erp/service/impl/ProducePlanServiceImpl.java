@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.ruoyi.erp.mapper.ProducePlanMapper;
 import com.ruoyi.erp.domain.ProducePlan;
 import com.ruoyi.erp.service.IProducePlanService;
+import com.ruoyi.erp.utils.BillNoGenerator;
 
 /**
  * 生产计划Service业务层处理
@@ -19,6 +20,9 @@ import com.ruoyi.erp.service.IProducePlanService;
 public class ProducePlanServiceImpl implements IProducePlanService {
     @Autowired
     private ProducePlanMapper producePlanMapper;
+
+    @Autowired
+    private BillNoGenerator billNoGenerator;
 
     /**
      * 查询生产计划
@@ -50,6 +54,9 @@ public class ProducePlanServiceImpl implements IProducePlanService {
      */
     @Override
     public int insertProducePlan(ProducePlan producePlan) {
+        if (producePlan.getPlanNo() == null || producePlan.getPlanNo().isEmpty()) {
+            producePlan.setPlanNo(billNoGenerator.generate("PP"));
+        }
         producePlan.setCreateBy(SecurityUtils.getUserId().toString());
         producePlan.setCreateTime(DateUtils.getNowDate());
         return producePlanMapper.insertProducePlan(producePlan);

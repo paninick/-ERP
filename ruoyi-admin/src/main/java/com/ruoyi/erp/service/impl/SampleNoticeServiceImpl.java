@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.ruoyi.erp.mapper.SampleNoticeMapper;
 import com.ruoyi.erp.domain.SampleNotice;
 import com.ruoyi.erp.service.ISampleNoticeService;
+import com.ruoyi.erp.utils.BillNoGenerator;
 
 /**
  * 打样通知Service业务层处理
@@ -19,6 +20,9 @@ import com.ruoyi.erp.service.ISampleNoticeService;
 public class SampleNoticeServiceImpl implements ISampleNoticeService {
     @Autowired
     private SampleNoticeMapper sampleNoticeMapper;
+
+    @Autowired
+    private BillNoGenerator billNoGenerator;
 
     /**
      * 查询打样通知
@@ -50,6 +54,9 @@ public class SampleNoticeServiceImpl implements ISampleNoticeService {
      */
     @Override
     public int insertSampleNotice(SampleNotice sampleNotice) {
+        if (sampleNotice.getSampleNo() == null || sampleNotice.getSampleNo().isEmpty()) {
+            sampleNotice.setSampleNo(billNoGenerator.generate("SN"));
+        }
         sampleNotice.setCreateBy(SecurityUtils.getUserId().toString());
         sampleNotice.setCreateTime(DateUtils.getNowDate());
         return sampleNoticeMapper.insertSampleNotice(sampleNotice);

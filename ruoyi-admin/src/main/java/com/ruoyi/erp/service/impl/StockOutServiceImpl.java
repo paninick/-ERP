@@ -11,6 +11,7 @@ import com.ruoyi.erp.domain.StockOut;
 import com.ruoyi.erp.service.IStockOutService;
 import com.ruoyi.erp.service.IErpPushDownService;
 import com.ruoyi.erp.service.IErpInventoryService;
+import com.ruoyi.erp.utils.BillNoGenerator;
 
 /**
  * 出库单Service业务层处理
@@ -22,6 +23,9 @@ import com.ruoyi.erp.service.IErpInventoryService;
 public class StockOutServiceImpl implements IStockOutService {
     @Autowired
     private StockOutMapper stockOutMapper;
+
+    @Autowired
+    private BillNoGenerator billNoGenerator;
 
     @Autowired
     private IErpPushDownService erpPushDownService;
@@ -59,6 +63,9 @@ public class StockOutServiceImpl implements IStockOutService {
      */
     @Override
     public int insertStockOut(StockOut stockOut) {
+        if (stockOut.getSn() == null || stockOut.getSn().isEmpty()) {
+            stockOut.setSn(billNoGenerator.generate("SOUT"));
+        }
         stockOut.setCreateBy(SecurityUtils.getUserId().toString());
         stockOut.setCreateTime(DateUtils.getNowDate());
         return stockOutMapper.insertStockOut(stockOut);

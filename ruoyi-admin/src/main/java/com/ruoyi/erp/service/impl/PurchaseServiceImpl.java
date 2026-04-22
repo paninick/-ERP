@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import com.ruoyi.erp.mapper.PurchaseMapper;
 import com.ruoyi.erp.domain.Purchase;
 import com.ruoyi.erp.service.IPurchaseService;
+import com.ruoyi.erp.utils.BillNoGenerator;
 
 /**
  * 采购单Service业务层处理
@@ -19,6 +20,9 @@ import com.ruoyi.erp.service.IPurchaseService;
 public class PurchaseServiceImpl implements IPurchaseService {
     @Autowired
     private PurchaseMapper purchaseMapper;
+
+    @Autowired
+    private BillNoGenerator billNoGenerator;
 
     /**
      * 查询采购单
@@ -50,6 +54,9 @@ public class PurchaseServiceImpl implements IPurchaseService {
      */
     @Override
     public int insertPurchase(Purchase purchase) {
+        if (purchase.getSn() == null || purchase.getSn().isEmpty()) {
+            purchase.setSn(billNoGenerator.generate("PO"));
+        }
         purchase.setCreateBy(SecurityUtils.getUserId().toString());
         purchase.setCreateTime(DateUtils.getNowDate());
         return purchaseMapper.insertPurchase(purchase);

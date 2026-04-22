@@ -3,6 +3,7 @@ package com.ruoyi.erp.service.impl;
 import com.ruoyi.erp.domain.ProduceJob;
 import com.ruoyi.erp.mapper.ProduceJobMapper;
 import com.ruoyi.erp.service.IProduceJobService;
+import com.ruoyi.erp.utils.BillNoGenerator;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class ProduceJobServiceImpl implements IProduceJobService {
 
     @Autowired
     private ProduceJobMapper produceJobMapper;
+
+    @Autowired
+    private BillNoGenerator billNoGenerator;
 
     /**
      * 查询生产工票
@@ -51,6 +55,9 @@ public class ProduceJobServiceImpl implements IProduceJobService {
      */
     @Override
     public int insertProduceJob(ProduceJob produceJob) {
+        if (produceJob.getJobNo() == null || produceJob.getJobNo().isEmpty()) {
+            produceJob.setJobNo(billNoGenerator.generate("PJ"));
+        }
         produceJob.setCreateBy(SecurityUtils.getUsername());
         produceJob.setCreateTime(DateUtils.getNowDate());
         produceJob.setUpdateBy(SecurityUtils.getUsername());
@@ -67,6 +74,9 @@ public class ProduceJobServiceImpl implements IProduceJobService {
     @Override
     public int batchInsertProduceJob(List<ProduceJob> produceJobList) {
         for (ProduceJob job : produceJobList) {
+            if (job.getJobNo() == null || job.getJobNo().isEmpty()) {
+                job.setJobNo(billNoGenerator.generate("PJ"));
+            }
             job.setCreateBy(SecurityUtils.getUsername());
             job.setCreateTime(DateUtils.getNowDate());
             job.setUpdateBy(SecurityUtils.getUsername());
