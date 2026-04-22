@@ -32,6 +32,30 @@
 
       </template>
 
+      <!-- 多语言切换 -->
+      <el-dropdown class="right-menu-item hover-effect" trigger="click" @command="handleSetLanguage">
+        <div>
+          <i class="el-icon-chat-dot-square"></i>
+        </div>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="zh-CN">中文简体</el-dropdown-item>
+          <el-dropdown-item command="en-US">English</el-dropdown-item>
+          <el-dropdown-item command="ja-JP">日本語</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+
+      <!-- 主题切换 -->
+      <el-dropdown class="right-menu-item hover-effect" trigger="click" @command="handleTheme">
+        <div>
+          <i class="el-icon-magic-stick"></i>
+        </div>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item command="default">原生风格</el-dropdown-item>
+          <el-dropdown-item command="muji">MUJI极简</el-dropdown-item>
+          <el-dropdown-item command="apple">Apple拟物</el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
+
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="hover">
         <div class="avatar-wrapper">
           <img :src="avatar" class="user-avatar">
@@ -130,6 +154,18 @@ export default {
           location.href = '/index'
         })
       }).catch(() => {})
+    },
+    handleTheme(theme) {
+      this.$store.dispatch('settings/changeSetting', {
+        key: 'themeStyle',
+        value: theme
+      });
+      this.$message.success('界面风格切换成功');
+    },
+    handleSetLanguage(lang) {
+      this.$i18n.locale = lang;
+      this.$store.dispatch('app/setLanguage', lang);
+      this.$message.success(lang === 'zh-CN' ? '切换语言成功' : lang === 'en-US' ? 'Switch Language Success' : '言語切り替え成功');
     }
   }
 }
