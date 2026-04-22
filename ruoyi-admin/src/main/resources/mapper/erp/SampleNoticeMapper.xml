@@ -150,11 +150,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertSampleNoticeBatch" parameterType="java.util.List">
 
         REPLACE INTO t_erp_sample_notice
-        (id,src_bill_type,src_bill_id,src_bill_no,sample_type,customer_id,style_type,sample_category_type,style_code,due_date,emergency_type,picture_url,audit_status,audit_by,audit_time,create_by,create_time,update_by,update_time,remark)
+        (id,src_bill_type,src_bill_id,src_bill_no,sample_no,sample_type,customer_id,style_type,sample_category_type,style_code,due_date,emergency_type,picture_url,audit_status,audit_by,audit_time,create_by,create_time,update_by,update_time,remark)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
 
-            (#{item.id},#{item.srcBillType},#{item.srcBillId},#{item.srcBillNo},#{item.sampleType},#{item.customerId},#{item.styleType},#{item.sampleCategoryType},#{item.styleCode},#{item.dueDate},#{item.emergencyType},#{item.pictureUrl},#{item.auditStatus},#{item.auditBy},#{item.auditTime},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark})
+            (#{item.id},#{item.srcBillType},#{item.srcBillId},#{item.srcBillNo},#{item.sampleNo},#{item.sampleType},#{item.customerId},#{item.styleType},#{item.sampleCategoryType},#{item.styleCode},#{item.dueDate},#{item.emergencyType},#{item.pictureUrl},#{item.auditStatus},#{item.auditBy},#{item.auditTime},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark})
 
         </foreach>
     </insert>
