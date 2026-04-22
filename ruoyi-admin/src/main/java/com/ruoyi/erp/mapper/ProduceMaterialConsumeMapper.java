@@ -84,4 +84,9 @@ public interface ProduceMaterialConsumeMapper {
      * @return 待审批数量
      */
     public int countPendingApproval();
+
+    /**
+     * 查询损耗统计汇总（总数/超限额数/待审批数）
+     */
+    public java.util.Map<String, Object> selectLossStats();
 }

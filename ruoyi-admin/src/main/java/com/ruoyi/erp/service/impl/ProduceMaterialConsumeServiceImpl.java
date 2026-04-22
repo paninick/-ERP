@@ -144,4 +144,31 @@ public class ProduceMaterialConsumeServiceImpl implements IProduceMaterialConsum
         // loss = actualQty - bomQty
         return actualQty.subtract(bomQty);
     }
+
+    @Override
+    public java.util.Map<String, Object> selectLossStats() {
+        java.util.Map<String, Object> stats = produceMaterialConsumeMapper.selectLossStats();
+        if (stats == null) stats = new java.util.HashMap<>();
+        long total = stats.get("totalRecords") != null ? ((Number) stats.get("totalRecords")).longValue() : 0L;
+        long overLimit = stats.get("overLimitCount") != null ? ((Number) stats.get("overLimitCount")).longValue() : 0L;
+        String rate = total > 0
+                ? new BigDecimal(overLimit).divide(new BigDecimal(total), 4, RoundingMode.HALF_UP)
+                        .multiply(new BigDecimal("100")).setScale(2, RoundingMode.HALF_UP).toPlainString()
+                : "0.00";
+        stats.put("overLimitRate", rate);
+        return stats;
+    }
+
+    @Override
+    public int approveLoss(Long id, boolean approved, String remark) {
+        ProduceMaterialConsume consume = produceMaterialConsumeMapper.selectProduceMaterialConsumeById(id);
+        if (consume == null) return 0;
+        consume.setApprovalStatus(approved ? "2" : "3");
+        consume.setApprovalRemark(remark);
+        consume.setApprovalByName(SecurityUtils.getUsername());
+        consume.setApprovalTime(DateUtils.getNowDate());
+        consume.setUpdateBy(SecurityUtils.getUsername());
+        consume.setUpdateTime(DateUtils.getNowDate());
+        return produceMaterialConsumeMapper.updateProduceMaterialConsume(consume);
+    }
 }

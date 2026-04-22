@@ -78,4 +78,19 @@ public interface IProduceMaterialConsumeService {
      * 计算实际损耗：实际领用 - BOM用量
      */
     public BigDecimal calculateActualLoss(BigDecimal actualQty, BigDecimal bomQty);
+
+    /**
+     * 查询损耗统计汇总（总数/超限额数/待审批数/超限额率）
+     */
+    public java.util.Map<String, Object> selectLossStats();
+
+    /**
+     * 审批超领申请
+     *
+     * @param id       记录ID
+     * @param approved true=批准 false=拒绝
+     * @param remark   审批备注
+     * @return 结果
+     */
+    public int approveLoss(Long id, boolean approved, String remark);
 }

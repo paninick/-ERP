@@ -116,4 +116,25 @@ public class ProduceMaterialConsumeController extends BaseController {
     public AjaxResult remove(@PathVariable Long[] ids) {
         return toAjax(produceMaterialConsumeService.deleteProduceMaterialConsumeByIds(ids));
     }
+
+    /**
+     * 损耗统计汇总（统计卡片数据）
+     */
+    @PreAuthorize("@ss.hasPermi('erp:materialconsume:list')")
+    @GetMapping("/lossStats")
+    public AjaxResult lossStats() {
+        return AjaxResult.success(produceMaterialConsumeService.selectLossStats());
+    }
+
+    /**
+     * 审批超领申请
+     */
+    @PreAuthorize("@ss.hasPermi('erp:materialconsume:edit')")
+    @Log(title = "物料消耗记录", businessType = BusinessType.UPDATE)
+    @PutMapping("/approve/{id}")
+    public AjaxResult approve(@PathVariable Long id,
+                              @RequestParam boolean approved,
+                              @RequestParam(required = false, defaultValue = "") String remark) {
+        return toAjax(produceMaterialConsumeService.approveLoss(id, approved, remark));
+    }
 }

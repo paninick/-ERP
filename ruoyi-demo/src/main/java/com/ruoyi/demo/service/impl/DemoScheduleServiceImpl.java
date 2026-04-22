@@ -9,56 +9,22 @@ import com.ruoyi.demo.mapper.DemoScheduleMapper;
 import com.ruoyi.demo.service.IDemoScheduleService;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
-/**
- * 生产排程管理Service实现类
- * 
- * @author ruoyi
- * @date 2026-04-01
- */
 @Service
 public class DemoScheduleServiceImpl extends ServiceImpl<DemoScheduleMapper, DemoSchedule> implements IDemoScheduleService {
 
     @Override
     public IPage<DemoSchedule> selectDemoSchedulePage(DemoSchedule demoSchedule, Integer page, Integer size) {
         Page<DemoSchedule> pageParam = new Page<>(page, size);
-        LambdaQueryWrapper<DemoSchedule> wrapper = new LambdaQueryWrapper<>();
-        
-        // 订单ID查询
-        if (demoSchedule.getOrderId() != null) {
-            wrapper.eq(DemoSchedule::getOrderId, demoSchedule.getOrderId());
-        }
-        
-        // 工序查询
-        if (demoSchedule.getProcess() != null && !demoSchedule.getProcess().isEmpty()) {
-            wrapper.like(DemoSchedule::getProcess, demoSchedule.getProcess());
-        }
-        
-        // 按创建时间倒序排序
-        wrapper.orderByDesc(DemoSchedule::getCreateTime);
-        
+        LambdaQueryWrapper<DemoSchedule> wrapper = buildQueryWrapper(demoSchedule);
         return this.page(pageParam, wrapper);
     }
 
     @Override
     public List<DemoSchedule> selectDemoScheduleList(DemoSchedule demoSchedule) {
-        LambdaQueryWrapper<DemoSchedule> wrapper = new LambdaQueryWrapper<>();
-        
-        // 订单ID查询
-        if (demoSchedule.getOrderId() != null) {
-            wrapper.eq(DemoSchedule::getOrderId, demoSchedule.getOrderId());
-        }
-        
-        // 工序查询
-        if (demoSchedule.getProcess() != null && !demoSchedule.getProcess().isEmpty()) {
-            wrapper.like(DemoSchedule::getProcess, demoSchedule.getProcess());
-        }
-        
-        // 按创建时间倒序排序
-        wrapper.orderByDesc(DemoSchedule::getCreateTime);
-        
-        return this.list(wrapper);
+        return this.list(buildQueryWrapper(demoSchedule));
     }
 
     @Override
@@ -68,23 +34,16 @@ public class DemoScheduleServiceImpl extends ServiceImpl<DemoScheduleMapper, Dem
 
     @Override
     public boolean insertDemoSchedule(DemoSchedule demoSchedule) {
-        // 计算负载率和产能利用率
-        if (demoSchedule.getPlanQty() != null && demoSchedule.getCapacity() != null && demoSchedule.getCapacity() > 0) {
-            BigDecimal loadRate = calculateLoadRate(demoSchedule);
-            demoSchedule.setLoad(loadRate);
-        }
-        
+        recalcLoad(demoSchedule);
+        if (demoSchedule.getScheduleStatus() == null) demoSchedule.setScheduleStatus("1");
+        if (demoSchedule.getConflictFlag() == null) demoSchedule.setConflictFlag("0");
+        if (demoSchedule.getPriority() == null) demoSchedule.setPriority(5);
         return this.save(demoSchedule);
     }
 
     @Override
     public boolean updateDemoSchedule(DemoSchedule demoSchedule) {
-        // 计算负载率和产能利用率
-        if (demoSchedule.getPlanQty() != null && demoSchedule.getCapacity() != null && demoSchedule.getCapacity() > 0) {
-            BigDecimal loadRate = calculateLoadRate(demoSchedule);
-            demoSchedule.setLoad(loadRate);
-        }
-        
+        recalcLoad(demoSchedule);
         return this.updateById(demoSchedule);
     }
 
@@ -95,10 +54,7 @@ public class DemoScheduleServiceImpl extends ServiceImpl<DemoScheduleMapper, Dem
 
     @Override
     public boolean deleteDemoScheduleByIds(Long[] ids) {
-        if (ids == null || ids.length == 0) {
-            return false;
-        }
-        
+        if (ids == null || ids.length == 0) return false;
         return this.removeBatchByIds(List.of(ids));
     }
 
@@ -107,30 +63,100 @@ public class DemoScheduleServiceImpl extends ServiceImpl<DemoScheduleMapper, Dem
         if (demoSchedule.getPlanQty() == null || demoSchedule.getCapacity() == null || demoSchedule.getCapacity() == 0) {
             return BigDecimal.ZERO;
         }
-        
         return BigDecimal.valueOf(demoSchedule.getPlanQty())
-                .divide(BigDecimal.valueOf(demoSchedule.getCapacity()), 4, BigDecimal.ROUND_HALF_UP);
+                .divide(BigDecimal.valueOf(demoSchedule.getCapacity()), 4, BigDecimal.ROUND_HALF_UP)
+                .multiply(BigDecimal.valueOf(100));
     }
 
     @Override
     public boolean isFullLoad(DemoSchedule demoSchedule) {
-        BigDecimal loadRate = calculateLoadRate(demoSchedule);
-        return loadRate.compareTo(BigDecimal.ONE) > 0; // 负载率超过100%认为是爆满
+        return calculateLoadRate(demoSchedule).compareTo(new BigDecimal("100")) > 0;
     }
 
     @Override
     public boolean isIdleLoad(DemoSchedule demoSchedule) {
-        BigDecimal loadRate = calculateLoadRate(demoSchedule);
-        return loadRate.compareTo(new BigDecimal("0.6")) < 0; // 负载率低于60%认为是空闲
+        return calculateLoadRate(demoSchedule).compareTo(new BigDecimal("60")) < 0;
     }
 
     @Override
     public BigDecimal calculateCapacityUtilization(DemoSchedule demoSchedule) {
-        if (demoSchedule.getPlanQty() == null || demoSchedule.getCapacity() == null || demoSchedule.getCapacity() == 0) {
-            return BigDecimal.ZERO;
+        BigDecimal rate = calculateLoadRate(demoSchedule);
+        return rate.compareTo(new BigDecimal("100")) > 0 ? new BigDecimal("100") : rate;
+    }
+
+    @Override
+    public List<DemoSchedule> selectGanttList(String startDate, String endDate, String process) {
+        LambdaQueryWrapper<DemoSchedule> wrapper = new LambdaQueryWrapper<>();
+        if (startDate != null && !startDate.isEmpty()) {
+            wrapper.ge(DemoSchedule::getStartDate, LocalDate.parse(startDate));
         }
-        
-        BigDecimal loadRate = calculateLoadRate(demoSchedule);
-        return loadRate.compareTo(BigDecimal.ONE) > 0 ? BigDecimal.ONE : loadRate; // 产能利用率最高100%
+        if (endDate != null && !endDate.isEmpty()) {
+            wrapper.le(DemoSchedule::getDueDate, LocalDate.parse(endDate));
+        }
+        if (process != null && !process.isEmpty()) {
+            wrapper.like(DemoSchedule::getProcess, process);
+        }
+        wrapper.orderByAsc(DemoSchedule::getPriority).orderByAsc(DemoSchedule::getStartDate);
+        return this.list(wrapper);
+    }
+
+    @Override
+    public boolean detectAndMarkConflicts(Long id) {
+        DemoSchedule s = this.getById(id);
+        if (s == null) return false;
+        String flag = "0";
+        if (s.getLoad() != null && s.getLoad().compareTo(new BigDecimal("100")) > 0) {
+            flag = "1"; // 产能冲突
+        } else if (s.getDueDate() != null && s.getDueDate().isBefore(LocalDate.now())
+                && !"3".equals(s.getScheduleStatus())) {
+            flag = "2"; // 日期冲突
+        }
+        s.setConflictFlag(flag);
+        this.updateById(s);
+        return !"0".equals(flag);
+    }
+
+    @Override
+    public int batchDetectConflicts() {
+        LambdaQueryWrapper<DemoSchedule> wrapper = new LambdaQueryWrapper<>();
+        wrapper.ne(DemoSchedule::getScheduleStatus, "3");
+        List<DemoSchedule> list = this.list(wrapper);
+        int count = 0;
+        for (DemoSchedule s : list) {
+            if (detectAndMarkConflicts(s.getId())) count++;
+        }
+        return count;
+    }
+
+    @Override
+    public boolean reschedule(Long id, String newStartDate, String newDueDate) {
+        DemoSchedule s = this.getById(id);
+        if (s == null) return false;
+        if (newStartDate != null && !newStartDate.isEmpty()) s.setStartDate(LocalDate.parse(newStartDate));
+        if (newDueDate != null && !newDueDate.isEmpty()) s.setDueDate(LocalDate.parse(newDueDate));
+        s.setScheduleStatus("1");
+        s.setConflictFlag("0");
+        this.updateById(s);
+        detectAndMarkConflicts(id);
+        return true;
+    }
+
+    private void recalcLoad(DemoSchedule s) {
+        if (s.getPlanQty() != null && s.getCapacity() != null && s.getCapacity() > 0) {
+            s.setLoad(calculateLoadRate(s));
+        }
+    }
+
+    private LambdaQueryWrapper<DemoSchedule> buildQueryWrapper(DemoSchedule demoSchedule) {
+        LambdaQueryWrapper<DemoSchedule> wrapper = new LambdaQueryWrapper<>();
+        if (demoSchedule.getOrderId() != null) wrapper.eq(DemoSchedule::getOrderId, demoSchedule.getOrderId());
+        if (demoSchedule.getProcess() != null && !demoSchedule.getProcess().isEmpty())
+            wrapper.like(DemoSchedule::getProcess, demoSchedule.getProcess());
+        if (demoSchedule.getWorkDay() != null && !demoSchedule.getWorkDay().isEmpty())
+            wrapper.eq(DemoSchedule::getWorkDay, demoSchedule.getWorkDay());
+        if (demoSchedule.getScheduleStatus() != null && !demoSchedule.getScheduleStatus().isEmpty())
+            wrapper.eq(DemoSchedule::getScheduleStatus, demoSchedule.getScheduleStatus());
+        wrapper.orderByAsc(DemoSchedule::getPriority).orderByAsc(DemoSchedule::getStartDate);
+        return wrapper;
     }
 }

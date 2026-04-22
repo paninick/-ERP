@@ -1,18 +1,17 @@
 import request from '@/utils/request'
 
-// 获取甘特图数据
-export function getGanttData() {
+export function getGanttData(params) {
+  return request({ url: '/erp/producegantt/list', method: 'get', params })
+}
+
+export function updatePlanDate(id, newStartDate, newDueDate) {
   return request({
-    url: '/erp/producegantt/list',
-    method: 'get'
+    url: '/erp/producegantt/reschedule/' + id,
+    method: 'put',
+    params: { newStartDate, newDueDate }
   })
 }
 
-// 更新计划日期
-export function updatePlanDate(id, startDate, dueDate) {
-  return request({
-    url: '/erp/producegantt/updateDate/' + id,
-    method: 'put',
-    params: { startDate, dueDate }
-  })
+export function detectConflicts() {
+  return request({ url: '/erp/producegantt/detectConflicts', method: 'post' })
 }

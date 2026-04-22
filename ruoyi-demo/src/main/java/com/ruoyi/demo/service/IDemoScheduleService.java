@@ -97,9 +97,45 @@ public interface IDemoScheduleService extends IService<DemoSchedule> {
 
     /**
      * 计算生产排程的产能利用率
-     * 
+     *
      * @param demoSchedule 生产排程信息
      * @return 产能利用率
      */
     BigDecimal calculateCapacityUtilization(DemoSchedule demoSchedule);
+
+    /**
+     * 查询甘特图数据（按日期范围+工序过滤）
+     *
+     * @param startDate 开始日期（yyyy-MM-dd）
+     * @param endDate   结束日期（yyyy-MM-dd）
+     * @param process   工序名称（模糊匹配，可为空）
+     * @return 排程列表，按 priority ASC, startDate ASC 排序
+     */
+    List<DemoSchedule> selectGanttList(String startDate, String endDate, String process);
+
+    /**
+     * 检测单条排程是否有冲突并更新 conflict_flag
+     * 1=产能冲突（load>100），2=日期冲突（dueDate<today 且未完成），0=无冲突
+     *
+     * @param id 排程ID
+     * @return 是否存在冲突
+     */
+    boolean detectAndMarkConflicts(Long id);
+
+    /**
+     * 批量检测所有非已完成排程的冲突
+     *
+     * @return 发现的冲突总数
+     */
+    int batchDetectConflicts();
+
+    /**
+     * 重新排期：更新 startDate/dueDate，重置状态并重新检测冲突
+     *
+     * @param id           排程ID
+     * @param newStartDate 新开始日期（yyyy-MM-dd）
+     * @param newDueDate   新截止日期（yyyy-MM-dd）
+     * @return 操作是否成功
+     */
+    boolean reschedule(Long id, String newStartDate, String newDueDate);
 }

@@ -78,7 +78,8 @@
     </insert>
 
     <update id="updateProduceMaterialConsume" parameterType="ProduceMaterialConsume">
-        UPDATE t_erp_produce_material_consume SET
+        UPDATE t_erp_produce_material_consume
+        <set>
             <if test="producePlanId != null">produce_plan_id = #{producePlanId},</if>
             <if test="orderId != null">order_id = #{orderId},</if>
             <if test="processId != null">process_id = #{processId},</if>
@@ -102,6 +103,7 @@
             <if test="remark != null">remark = #{remark},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
+        </set>
         WHERE id = #{id}
     </update>
 
@@ -127,5 +129,14 @@
     <!-- 统计待审批数量 -->
     <select id="countPendingApproval" resultType="int">
         SELECT COUNT(*) FROM t_erp_produce_material_consume WHERE approval_status = '1'
+    </select>
+
+    <!-- 损耗统计汇总 -->
+    <select id="selectLossStats" resultType="java.util.Map">
+        SELECT
+            COUNT(*)                                        AS totalRecords,
+            SUM(CASE WHEN is_over_limit = '1' THEN 1 ELSE 0 END) AS overLimitCount,
+            SUM(CASE WHEN approval_status = '1' THEN 1 ELSE 0 END) AS pendingApprovalCount
+        FROM t_erp_produce_material_consume
     </select>
 </mapper>

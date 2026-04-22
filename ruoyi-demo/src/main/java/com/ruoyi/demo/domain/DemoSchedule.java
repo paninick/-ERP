@@ -5,6 +5,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 import lombok.Data;
 import jakarta.validation.constraints.*;
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  * 排程表
@@ -54,6 +55,25 @@ public class DemoSchedule extends BaseEntity
     @DecimalMin(value = "0", message = "负载率不能为负数")
     @DecimalMax(value = "100", message = "负载率不能大于100%")
     private BigDecimal load;
+
+    /** 优先级（1最高-10最低） */
+    @Min(value = 1, message = "优先级最小为1")
+    @Max(value = 10, message = "优先级最大为10")
+    private Integer priority;
+
+    /** 计划开始日期 */
+    private LocalDate startDate;
+
+    /** 计划完成日期 */
+    private LocalDate dueDate;
+
+    /** 排单状态（0待排 1已排 2进行中 3已完成） */
+    @Size(max = 1, message = "排单状态长度不能超过1个字符")
+    private String scheduleStatus;
+
+    /** 冲突标志（0无冲突 1产能冲突 2日期冲突） */
+    @Size(max = 1, message = "冲突标志长度不能超过1个字符")
+    private String conflictFlag;
 
     /** 删除标志 */
     @TableLogic
