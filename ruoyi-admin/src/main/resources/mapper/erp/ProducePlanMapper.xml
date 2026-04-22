@@ -141,7 +141,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="salesOrderId != null">sales_order_id,</if>
             <if test="noticeId != null">notice_id,</if>
             <if test="techId != null">tech_id,</if>
-            <if test="planNo != null">plan_no,</if>
             <if test="salesId != null">sales_id,</if>
             <if test="startDate != null">start_date,</if>
             <if test="pickedDate != null">picked_date,</if>
@@ -197,7 +196,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="salesOrderId != null">#{salesOrderId},</if>
             <if test="noticeId != null">#{noticeId},</if>
             <if test="techId != null">#{techId},</if>
-            <if test="planNo != null">#{planNo},</if>
             <if test="salesId != null">#{salesId},</if>
             <if test="startDate != null">#{startDate},</if>
             <if test="pickedDate != null">#{pickedDate},</if>

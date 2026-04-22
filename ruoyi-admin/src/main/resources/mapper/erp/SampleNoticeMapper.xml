@@ -68,6 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="srcBillType != null">src_bill_type,</if>
             <if test="srcBillId != null">src_bill_id,</if>
             <if test="srcBillNo != null">src_bill_no,</if>
+            <if test="sampleNo != null">sample_no,</if>
             <if test="sampleType != null">sample_type,</if>
             <if test="customerId != null">customer_id,</if>
             <if test="styleType != null">style_type,</if>
@@ -89,6 +90,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="srcBillType != null">#{srcBillType},</if>
             <if test="srcBillId != null">#{srcBillId},</if>
             <if test="srcBillNo != null">#{srcBillNo},</if>
+            <if test="sampleNo != null">#{sampleNo},</if>
             <if test="sampleType != null">#{sampleType},</if>
             <if test="customerId != null">#{customerId},</if>
             <if test="styleType != null">#{styleType},</if>
