@@ -114,6 +114,8 @@ public class ProduceJobProcess extends BaseEntity {
     /** 损耗是否超标 0否 1是 */
     @Excel(name = "损耗超标")
     private String lossExceed;
+
+    public Long getId() {
         return id;
     }
 

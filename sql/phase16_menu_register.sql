@@ -9,20 +9,20 @@
 -- 1. ERP 顶级目录
 -- ============================================================
 INSERT IGNORE INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component, query, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
-VALUES (2000, '服装ERP', 0, 5, 'erp', NULL, 1, 0, 'M', '0', '0', '', 'ep-goods', 'admin', NOW(), '', NULL, '服装ERP系统');
+VALUES (2000, '服装ERP', 0, 5, 'erp', NULL, '', 1, 0, 'M', '0', '0', '', 'ep-goods', 'admin', NOW(), '', NULL, '服装ERP系统');
 
 -- ============================================================
 -- 2. 二级目录
 -- ============================================================
 INSERT IGNORE INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component, query, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
 VALUES
-(2001, '基础数据',   2000, 1,  'base',       NULL, 1, 0, 'M', '0', '0', '', 'ep-setting',    'admin', NOW(), '', NULL, ''),
-(2002, '销售管理',   2000, 2,  'sale',       NULL, 1, 0, 'M', '0', '0', '', 'ep-shopping-cart', 'admin', NOW(), '', NULL, ''),
-(2003, '生产管理',   2000, 3,  'produce',    NULL, 1, 0, 'M', '0', '0', '', 'ep-cpu',        'admin', NOW(), '', NULL, ''),
-(2004, '质量管理',   2000, 4,  'quality',    NULL, 1, 0, 'M', '0', '0', '', 'ep-finished',   'admin', NOW(), '', NULL, ''),
-(2005, '库存管理',   2000, 5,  'inventory',  NULL, 1, 0, 'M', '0', '0', '', 'ep-box',        'admin', NOW(), '', NULL, ''),
-(2006, '财务管理',   2000, 6,  'finance',    NULL, 1, 0, 'M', '0', '0', '', 'ep-money',      'admin', NOW(), '', NULL, ''),
-(2007, '报表中心',   2000, 7,  'report',     NULL, 1, 0, 'M', '0', '0', '', 'ep-data-line',  'admin', NOW(), '', NULL, '');
+(2001, '基础数据',   2000, 1,  'base',       NULL, '', 1, 0, 'M', '0', '0', '', 'ep-setting',    'admin', NOW(), '', NULL, ''),
+(2002, '销售管理',   2000, 2,  'sale',       NULL, '', 1, 0, 'M', '0', '0', '', 'ep-shopping-cart', 'admin', NOW(), '', NULL, ''),
+(2003, '生产管理',   2000, 3,  'produce',    NULL, '', 1, 0, 'M', '0', '0', '', 'ep-cpu',        'admin', NOW(), '', NULL, ''),
+(2004, '质量管理',   2000, 4,  'quality',    NULL, '', 1, 0, 'M', '0', '0', '', 'ep-finished',   'admin', NOW(), '', NULL, ''),
+(2005, '库存管理',   2000, 5,  'inventory',  NULL, '', 1, 0, 'M', '0', '0', '', 'ep-box',        'admin', NOW(), '', NULL, ''),
+(2006, '财务管理',   2000, 6,  'finance',    NULL, '', 1, 0, 'M', '0', '0', '', 'ep-money',      'admin', NOW(), '', NULL, ''),
+(2007, '报表中心',   2000, 7,  'report',     NULL, '', 1, 0, 'M', '0', '0', '', 'ep-data-line',  'admin', NOW(), '', NULL, '');
 
 -- ============================================================
 -- 3. 基础数据（parent=2001）
@@ -75,7 +75,7 @@ VALUES
 INSERT IGNORE INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component, query, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
 VALUES
 (2060, '质检管理', 2004, 1, 'check',  'erp/check/index',  '', 1, 0, 'C', '0', '0', 'erp:check:list',  'ep-finished', 'admin', NOW(), '', NULL, ''),
-(2061, '次品管理', 2004, 2, 'defect', 'erp/defect/index', 1, 0, 'C', '0', '0', 'erp:defect:list', 'ep-close-bold','admin', NOW(), '', NULL, '');
+(2061, '次品管理', 2004, 2, 'defect', 'erp/defect/index', '', 1, 0, 'C', '0', '0', 'erp:defect:list', 'ep-close-bold','admin', NOW(), '', NULL, '');
 
 -- ============================================================
 -- 7. 库存管理（parent=2005）
@@ -95,7 +95,7 @@ VALUES
 INSERT IGNORE INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component, query, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
 VALUES
 (2080, '计件工资',   2006, 1, 'piecewage',       'erp/piecewage/index',       '', 1, 0, 'C', '0', '0', 'erp:piecewage:list',       'ep-coin',       'admin', NOW(), '', NULL, ''),
-(2081, '工资明细',   2006, 2, 'piecewagedetail', 'erp/piecewagedetail/index', 1, 0, 'C', '0', '0', 'erp:piecewagedetail:list', 'ep-document',   'admin', NOW(), '', NULL, ''),
+(2081, '工资明细',   2006, 2, 'piecewagedetail', 'erp/piecewagedetail/index', '', 1, 0, 'C', '0', '0', 'erp:piecewagedetail:list', 'ep-document',   'admin', NOW(), '', NULL, ''),
 (2082, '成本核算',   2006, 3, 'cost',            'erp/cost/index',            '', 1, 0, 'C', '0', '0', 'erp:cost:list',            'ep-data-analysis','admin', NOW(), '', NULL, ''),
 (2083, '采购管理',   2006, 4, 'purchase',        'erp/purchase/index',        '', 1, 0, 'C', '0', '0', 'erp:purchase:list',        'ep-shopping-bag','admin', NOW(), '', NULL, '');
 
@@ -104,29 +104,29 @@ VALUES
 -- ============================================================
 INSERT IGNORE INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component, query, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
 VALUES
-(2450, '查询', 2045, 1, '#', '', 1, 0, 'F', '0', '0', 'erp:materialconsume:list',   '#', 'admin', NOW(), '', NULL, ''),
-(2451, '审批', 2045, 2, '#', '', 1, 0, 'F', '0', '0', 'erp:materialconsume:edit',   '#', 'admin', NOW(), '', NULL, ''),
-(2452, '导出', 2045, 3, '#', '', 1, 0, 'F', '0', '0', 'erp:materialconsume:export', '#', 'admin', NOW(), '', NULL, '');
+(2450, '查询', 2045, 1, '#', '', '', 1, 0, 'F', '0', '0', 'erp:materialconsume:list',   '#', 'admin', NOW(), '', NULL, ''),
+(2451, '审批', 2045, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:materialconsume:edit',   '#', 'admin', NOW(), '', NULL, ''),
+(2452, '导出', 2045, 3, '#', '', '', 1, 0, 'F', '0', '0', 'erp:materialconsume:export', '#', 'admin', NOW(), '', NULL, '');
 
 -- ============================================================
 -- 10. 柔性排单按钮权限（parent=2046）
 -- ============================================================
 INSERT IGNORE INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component, query, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
 VALUES
-(2460, '查询',     2046, 1, '#', '', 1, 0, 'F', '0', '0', 'erp:producegantt:list',   '#', 'admin', NOW(), '', NULL, ''),
-(2461, '重新排期', 2046, 2, '#', '', 1, 0, 'F', '0', '0', 'erp:producegantt:edit',   '#', 'admin', NOW(), '', NULL, ''),
-(2462, '冲突检测', 2046, 3, '#', '', 1, 0, 'F', '0', '0', 'erp:producegantt:detect', '#', 'admin', NOW(), '', NULL, '');
+(2460, '查询',     2046, 1, '#', '', '', 1, 0, 'F', '0', '0', 'erp:producegantt:list',   '#', 'admin', NOW(), '', NULL, ''),
+(2461, '重新排期', 2046, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:producegantt:edit',   '#', 'admin', NOW(), '', NULL, ''),
+(2462, '冲突检测', 2046, 3, '#', '', '', 1, 0, 'F', '0', '0', 'erp:producegantt:detect', '#', 'admin', NOW(), '', NULL, '');
 
 -- ============================================================
 -- 11. 物料消耗按钮权限（parent=2044）
 -- ============================================================
 INSERT IGNORE INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component, query, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
 VALUES
-(2440, '查询', 2044, 1, '#', '', 1, 0, 'F', '0', '0', 'erp:materialconsume:list',   '#', 'admin', NOW(), '', NULL, ''),
-(2441, '新增', 2044, 2, '#', '', 1, 0, 'F', '0', '0', 'erp:materialconsume:add',    '#', 'admin', NOW(), '', NULL, ''),
-(2442, '修改', 2044, 3, '#', '', 1, 0, 'F', '0', '0', 'erp:materialconsume:edit',   '#', 'admin', NOW(), '', NULL, ''),
-(2443, '删除', 2044, 4, '#', '', 1, 0, 'F', '0', '0', 'erp:materialconsume:remove', '#', 'admin', NOW(), '', NULL, ''),
-(2444, '导出', 2044, 5, '#', '', 1, 0, 'F', '0', '0', 'erp:materialconsume:export', '#', 'admin', NOW(), '', NULL, '');
+(2440, '查询', 2044, 1, '#', '', '', 1, 0, 'F', '0', '0', 'erp:materialconsume:list',   '#', 'admin', NOW(), '', NULL, ''),
+(2441, '新增', 2044, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:materialconsume:add',    '#', 'admin', NOW(), '', NULL, ''),
+(2442, '修改', 2044, 3, '#', '', '', 1, 0, 'F', '0', '0', 'erp:materialconsume:edit',   '#', 'admin', NOW(), '', NULL, ''),
+(2443, '删除', 2044, 4, '#', '', '', 1, 0, 'F', '0', '0', 'erp:materialconsume:remove', '#', 'admin', NOW(), '', NULL, ''),
+(2444, '导出', 2044, 5, '#', '', '', 1, 0, 'F', '0', '0', 'erp:materialconsume:export', '#', 'admin', NOW(), '', NULL, '');
 
 -- ============================================================
 -- 12. 将新菜单授权给超级管理员角色（role_id=1）

@@ -31,14 +31,14 @@
 
     <select id="selectBizAbnormalPoolById" parameterType="Long" resultMap="BaseResultMap">
         SELECT
-        <include preffix="overlap" refid="Base_Column_List"/>
+        <include refid="Base_Column_List"/>
         FROM t_erp_biz_abnormal_pool
         WHERE id = #{id}
     </select>
 
     <select id="selectBizAbnormalPoolList" parameterType="com.ruoyi.erp.domain.BizAbnormalPool" resultMap="BaseResultMap">
         SELECT
-        <include preffix="overlap" refid="Base_Column_List"/>
+        <include refid="Base_Column_List"/>
         FROM t_erp_biz_abnormal_pool
         <where>
             <if test="bizType != null and bizType != ''">

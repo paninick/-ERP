@@ -25,7 +25,7 @@ public class BillNoGenerator {
     private static final Logger log = LoggerFactory.getLogger(BillNoGenerator.class);
 
     @Autowired
-    private RedisTemplate<String, Long> redisTemplate;
+    private RedisTemplate<Object, Object> redisTemplate;
 
     @Autowired
     private BillSequenceMapper billSequenceMapper;

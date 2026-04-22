@@ -144,6 +144,8 @@ public class SalesOrder extends ErpBaseBillEntity {
     /** 贸易条款（FOB/CIF/EXW等） */
     @Excel(name = "贸易条款")
     private String tradeTerms;
+
+    public void setId(Long id) {
         this.id = id;
     }
 
