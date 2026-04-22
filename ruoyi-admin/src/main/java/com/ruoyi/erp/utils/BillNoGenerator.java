@@ -4,7 +4,7 @@ import com.ruoyi.erp.mapper.BillSequenceMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
@@ -25,7 +25,7 @@ public class BillNoGenerator {
     private static final Logger log = LoggerFactory.getLogger(BillNoGenerator.class);
 
     @Autowired
-    private RedisTemplate<Object, Object> redisTemplate;
+    private StringRedisTemplate redisTemplate;
 
     @Autowired
     private BillSequenceMapper billSequenceMapper;
