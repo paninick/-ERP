@@ -2,6 +2,7 @@ package com.ruoyi.erp.controller;
 
 import com.ruoyi.erp.domain.ProductSerial;
 import com.ruoyi.erp.service.IProductSerialService;
+import com.ruoyi.erp.mapper.ProductSerialMapper;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 单件流水号Controller
@@ -26,6 +28,9 @@ public class ProductSerialController extends BaseController {
 
     @Autowired
     private IProductSerialService productSerialService;
+
+    @Autowired
+    private ProductSerialMapper productSerialMapper;
 
     /**
      * 查询单件流水号列表
@@ -121,5 +126,29 @@ public class ProductSerialController extends BaseController {
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {
         return toAjax(productSerialService.deleteProductSerialByIds(ids));
+    }
+
+    /**
+     * 全链路追溯：按销售订单ID查询衫件生产状态链路
+     *
+     * @param salesOrderId 销售订单ID
+     */
+    @PreAuthorize("@ss.hasPermi('erp:productSerial:query')")
+    @GetMapping("/trace/byOrder/{salesOrderId}")
+    public AjaxResult traceByOrder(@PathVariable Long salesOrderId) {
+        List<Map<String, Object>> trace = productSerialMapper.selectTraceByOrderId(salesOrderId);
+        return success(trace);
+    }
+
+    /**
+     * 款号生产进度汇总：按 KN 款号（style_no）
+     *
+     * @param styleNo 款号，格式如 KN-26-SP-001
+     */
+    @PreAuthorize("@ss.hasPermi('erp:productSerial:query')")
+    @GetMapping("/trace/styleProgress")
+    public AjaxResult styleProgress(@RequestParam String styleNo) {
+        Map<String, Object> progress = productSerialMapper.selectStyleProgress(styleNo);
+        return success(progress);
     }
 }

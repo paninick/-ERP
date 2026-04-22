@@ -3,8 +3,10 @@ package com.ruoyi.erp.mapper;
 import com.ruoyi.erp.domain.ProductSerial;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * 单件流水号Mapper接口
@@ -92,4 +94,16 @@ public interface ProductSerialMapper {
      * @return 数量
      */
     public int countProductSerialByJobId(Long jobId);
+
+    /**
+     * 全链路追溯查询：按销售订单ID，返回 v_erp_product_trace 视图数据
+     */
+    @Select("SELECT * FROM v_erp_product_trace WHERE sales_order_id = #{salesOrderId} ORDER BY serial_id")
+    List<Map<String, Object>> selectTraceByOrderId(@Param("salesOrderId") Long salesOrderId);
+
+    /**
+     * 按款号（style_no）追溯完整生产链路，返回汇总统计
+     */
+    @Select("SELECT * FROM v_erp_style_progress WHERE style_no = #{styleNo}")
+    Map<String, Object> selectStyleProgress(@Param("styleNo") String styleNo);
 }
