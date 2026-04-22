@@ -1,10 +1,10 @@
 # 11 · Codex PR Review Brief v3(触发档)
 
 > **定位**:Codex PR review 的**启动 brief**。任何一次对 `D:/erp/RuoYi-Vue` 的对抗式 / 二次 review 都以本文档为输入,保证跨会话一致性。
-> **产出日**:2026-04-22 · **版本**:v3.0(由 Codex v3 计划 + 本会话 6 条微调合并而成)
+> **产出日**:2026-04-22 · **修订日**:2026-04-22 · **版本**:v3.1(baseline 推进至最新 HEAD + Slice A/D 扩展)
 > **对应分支**:`appmod/java-upgrade-20260421103946`
-> **对应 baseline**:`master (56dc40be) .. HEAD (685c9b0c)`
-> **对应 scope**:`13 commits / 78 files / +4108 -2589`(已由 `git diff` 验证)
+> **对应 baseline**:`master (56dc40be) .. HEAD (ae2e5033)`
+> **对应 scope**:`15 commits / 88 files / +4169 -2591`(已由 `git diff` 验证)
 
 ---
 
@@ -34,26 +34,28 @@
 
 ```
 base: master (56dc40be Sprint 2: 流程打通 - 下推工作流 & 库存锁定机制)
-head: HEAD (685c9b0c refactor(erp): BillNoGenerator 改用 StringRedisTemplate)
+head: HEAD (ae2e5033 fix(mapper): 修 BillNoGenerator 接入后暴露的 2 处 Mapper 老 bug)
 远程: erp/main (已同步 HEAD,所有 commit 已 push)
 ```
 
-### 1.2 13 个 commits(review 对象)
+### 1.2 15 个 commits(review 对象)
 
 ```
-685c9b0c  refactor(erp): BillNoGenerator 改用 StringRedisTemplate  ← Slice A 专项
+ae2e5033  fix(mapper): 修 BillNoGenerator 接入后暴露的 2 处 Mapper 老 bug  ← Slice D P0 样本
+8a4fb34b  feat(erp): 接入 BillNoGenerator 到 8 个业务单据 Service        ← Slice A 扩展
+685c9b0c  refactor(erp): BillNoGenerator 改用 StringRedisTemplate         ← Slice A 专项
 3ee631da  fix(erp): 部署验证踩出的 4 类阻塞问题
-4372f289  security: 外化 MySQL/上传路径/Redis 至环境变量           ← Slice B
-b7832c2d  fix(sql): 修复 phase9-11/sprint2 反引号缺失与字符集     ← Slice C 扩展
+4372f289  security: 外化 MySQL/上传路径/Redis 至环境变量                  ← Slice B
+b7832c2d  fix(sql): 修复 phase9-11/sprint2 反引号缺失与字符集             ← Slice C 扩展
 9f289fe3  feat(erp): 补齐 ErpInventory CRUD 控制器与 API
-7700f8f5  refactor(ui): 列表页 UI/UX 重构 + 主题引擎               ← Slice E
-ce4d6151  feat(ui): 前端 i18n 三语言                               ← Slice E
+7700f8f5  refactor(ui): 列表页 UI/UX 重构 + 主题引擎                      ← Slice E
+ce4d6151  feat(ui): 前端 i18n 三语言                                     ← Slice E
 85476b0c  chore(git): ignore local Claude cache 与 sql/.backup
-243ab38b  chore(sql): phase16 ERP菜单注册 + README + 归档          ← Slice C
+243ab38b  chore(sql): phase16 ERP菜单注册 + README + 归档                 ← Slice C
 237262ff  feat(erp): P2 甘特图 + 损耗管控
-e2aefa40  feat(erp): P1 拼接SOP/染整/RBAC                          ← Slice C
+e2aefa40  feat(erp): P1 拼接SOP/染整/RBAC                                 ← Slice C
 cd03c861  feat(erp): P0 缺陷/JIS/工序放行
-6dfd59a3  security: 外化 JWT / Redis / Druid 凭据                  ← Slice B
+6dfd59a3  security: 外化 JWT / Redis / Druid 凭据                         ← Slice B
 ```
 
 ### 1.3 过滤规则(不审查)
@@ -70,7 +72,10 @@ cd03c861  feat(erp): P0 缺陷/JIS/工序放行
 
 ### Slice A · BillNoGenerator 并发与原子性 🔴
 
-**范围**:`685c9b0c` 及其相邻实现(调用方、Mapper、序列表结构、Redis key 约定)
+**范围**(v3.1 扩展):
+- `685c9b0c` 核心实现及相邻(调用方、Mapper、序列表结构、Redis key 约定)
+- **`8a4fb34b` 接入 8 个业务单据 Service** 的一致性审查:8 个 Service 是否**都走统一入口**(避免绕开 BillNoGenerator 自行拼号);事务边界是否正确(先 INCR 后 DB insert,异常回滚处理)
+- **`ae2e5033` 的 2 处 Mapper 老 bug 修复**(SampleNoticeMapper 漏写 sample_no、ProducePlanMapper plan_no 重复)— 作为**历史 review 失察样本**,反向检查 Slice D 对 Mapper 一致性的覆盖是否充分
 
 **必查项**(每条须明确给出结论):
 1. `INCR` 是否满足原子性;**验收标准**:1000 并发、10s 内、符合下方 Assumption 5 的"允许跳号"规则
@@ -147,7 +152,7 @@ cd03c861  feat(erp): P0 缺陷/JIS/工序放行
 
 **范围**:`ruoyi-admin/src/main/java/com/ruoyi/erp/**`、`mapper/erp/**`,加 `ruoyi-demo/src/main/java/com/ruoyi/demo/**`(实际 ERP 业务,见 Slice G)
 
-**重点 commits**:`cd03c861` / `e2aefa40` / `237262ff` / `9f289fe3` / `3ee631da` / `685c9b0c`
+**重点 commits**:`cd03c861` / `e2aefa40` / `237262ff` / `9f289fe3` / `3ee631da` / `685c9b0c` / `8a4fb34b` / `ae2e5033`
 
 **审查重点**:
 1. 字段新增是否 Java / XML / SQL / UI 全链一致
@@ -156,6 +161,10 @@ cd03c861  feat(erp): P0 缺陷/JIS/工序放行
 4. 运行时 SQL 映射和 controller / service 契约
 5. 单号生成、排程、损耗、缺陷、JIS 合规等关键路径回归
 6. **`3ee631da` hotfix 质量审查**:4 类阻塞修复是否遗漏类似场景,未来是否还会再踩
+7. **`ae2e5033` Mapper bug 样本警示**(v3.1 新增):
+   - SampleNoticeMapper.xml `insertSampleNotice` 原本漏写 `sample_no` 字段 → Service 层即使 set 也落 NULL
+   - ProducePlanMapper.xml `insertProducePlan` `plan_no` 重复声明 → 非空时 500 错
+   - **反向审查**:本 PR 涉及的**其他 Mapper XML**(`ProduceDefectMapper` / `SalesOrderMapper` / `SampleTechMapper` / `ProcessDefMapper` / `ProduceJobProcessMapper` / `ProduceMaterialConsumeMapper` / `BizAbnormalPoolMapper`)是否也有同类漏写或重复的隐患
 
 ---
 
@@ -374,7 +383,20 @@ D:/erp/docs/11-codex-review-findings-v{N}.md
 
 ## 9. 版本与变更日志
 
-### v3.0(2026-04-22)· 当前版
+### v3.1(2026-04-22)· 当前版
+
+baseline 推进修订,因会话期间 RuoYi-Vue 落地 2 个新 commit:
+- `8a4fb34b feat(erp): 接入 BillNoGenerator 到 8 个业务单据 Service`
+- `ae2e5033 fix(mapper): 修 BillNoGenerator 接入后暴露的 2 处 Mapper 老 bug`
+
+调整:
+- §1.1 HEAD 从 `685c9b0c` 推进至 `ae2e5033`
+- §1.2 commit 列表 13 → 15,scope 78 → 88 files,+4108 → +4169 插入
+- Slice A 扩展到 3 个 commit 的"单号生成 + 8 Service 接入 + 2 Mapper bug 修复"三层审查
+- Slice D 新增第 7 审查重点:参照 `ae2e5033` 修复的 2 处 Mapper 老 bug(漏写字段 / 字段重复),
+  **反向审查本 PR 其他 7 张 Mapper XML 是否存在同类隐患**
+
+### v3.0(2026-04-22)· 前版
 
 由以下输入合并:
 - Codex 自提 v3 计划(7 slice 结构 + 审查标准数字化 + 优先级排序)
