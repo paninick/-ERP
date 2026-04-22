@@ -149,6 +149,34 @@ public class SampleTech extends BaseEntity {
     @Excel(name = "审批时间", width = 30, dateFormat = "yyyy-MM-dd")
     private Date auditTime;
 
+    /** 染整：缩水率上限（%，超出触发预缩工序） */
+    @Excel(name = "缩水率上限(%)")
+    private java.math.BigDecimal shrinkageRateLimit;
+
+    /** 染整：色差等级下限（GB/T 250，低于此值不合格） */
+    @Excel(name = "色差等级下限")
+    private java.math.BigDecimal colorDifferenceGradeMin;
+
+    /** 染整：定型温度上限（℃，超出损伤面料） */
+    @Excel(name = "定型温度上限(℃)")
+    private Integer settingTempMax;
+
+    /** 染整：定型温度下限（℃） */
+    @Excel(name = "定型温度下限(℃)")
+    private Integer settingTempMin;
+
+    /** 染整：水洗色牢度要求（JIS L 0844，4级以上） */
+    @Excel(name = "水洗色牢度要求")
+    private String washFastnessRequirement;
+
+    /** 染整：摩擦色牢度要求（JIS L 0849） */
+    @Excel(name = "摩擦色牢度要求")
+    private String rubFastnessRequirement;
+
+    /** 染整：pH值范围（对日要求 4.0-7.5） */
+    @Excel(name = "pH值范围")
+    private String phRange;
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -318,6 +346,27 @@ public class SampleTech extends BaseEntity {
         return auditTime;
     }
 
+    public java.math.BigDecimal getShrinkageRateLimit() { return shrinkageRateLimit; }
+    public void setShrinkageRateLimit(java.math.BigDecimal shrinkageRateLimit) { this.shrinkageRateLimit = shrinkageRateLimit; }
+
+    public java.math.BigDecimal getColorDifferenceGradeMin() { return colorDifferenceGradeMin; }
+    public void setColorDifferenceGradeMin(java.math.BigDecimal colorDifferenceGradeMin) { this.colorDifferenceGradeMin = colorDifferenceGradeMin; }
+
+    public Integer getSettingTempMax() { return settingTempMax; }
+    public void setSettingTempMax(Integer settingTempMax) { this.settingTempMax = settingTempMax; }
+
+    public Integer getSettingTempMin() { return settingTempMin; }
+    public void setSettingTempMin(Integer settingTempMin) { this.settingTempMin = settingTempMin; }
+
+    public String getWashFastnessRequirement() { return washFastnessRequirement; }
+    public void setWashFastnessRequirement(String washFastnessRequirement) { this.washFastnessRequirement = washFastnessRequirement; }
+
+    public String getRubFastnessRequirement() { return rubFastnessRequirement; }
+    public void setRubFastnessRequirement(String rubFastnessRequirement) { this.rubFastnessRequirement = rubFastnessRequirement; }
+
+    public String getPhRange() { return phRange; }
+    public void setPhRange(String phRange) { this.phRange = phRange; }
+
     public void setAuditStatus(String auditStatus) {
         this.auditStatus = auditStatus;
     }
@@ -427,6 +476,13 @@ public class SampleTech extends BaseEntity {
             .append("auditStatus", getAuditStatus())
             .append("auditBy", getAuditBy())
             .append("auditTime", getAuditTime())
+            .append("shrinkageRateLimit", getShrinkageRateLimit())
+            .append("colorDifferenceGradeMin", getColorDifferenceGradeMin())
+            .append("settingTempMax", getSettingTempMax())
+            .append("settingTempMin", getSettingTempMin())
+            .append("washFastnessRequirement", getWashFastnessRequirement())
+            .append("rubFastnessRequirement", getRubFastnessRequirement())
+            .append("phRange", getPhRange())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())

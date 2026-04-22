@@ -171,6 +171,20 @@
           <span>{{ parseTime(scope.row.dueDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
+      <el-table-column label="缩水率上限" align="center" prop="shrinkageRateLimit" width="90">
+        <template slot-scope="scope">
+          <span v-if="scope.row.shrinkageRateLimit != null">{{ scope.row.shrinkageRateLimit }}%</span>
+          <span v-else style="color:#C0C4CC">—</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="定型温度" align="center" width="100">
+        <template slot-scope="scope">
+          <span v-if="scope.row.settingTempMin != null || scope.row.settingTempMax != null">
+            {{ scope.row.settingTempMin || '?' }}~{{ scope.row.settingTempMax || '?' }}℃
+          </span>
+          <span v-else style="color:#C0C4CC">—</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="200">
         <template slot-scope="scope">
           <el-button
@@ -305,6 +319,60 @@
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
+        <el-divider content-position="left">染整阈值约束（对日JIS）</el-divider>
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <el-form-item label="缩水率上限(%)" prop="shrinkageRateLimit">
+              <el-input-number v-model="form.shrinkageRateLimit" :precision="2" :min="0" :max="30" placeholder="超出触发预缩" style="width:100%" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="色差等级下限" prop="colorDifferenceGradeMin">
+              <el-input-number v-model="form.colorDifferenceGradeMin" :precision="1" :min="1" :max="5" :step="0.5" placeholder="GB/T 250" style="width:100%" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="pH值范围" prop="phRange">
+              <el-input v-model="form.phRange" placeholder="如 4.0-7.5" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="8">
+            <el-form-item label="定型温度下限(℃)" prop="settingTempMin">
+              <el-input-number v-model="form.settingTempMin" :min="0" :max="300" placeholder="下限" style="width:100%" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="8">
+            <el-form-item label="定型温度上限(℃)" prop="settingTempMax">
+              <el-input-number v-model="form.settingTempMax" :min="0" :max="300" placeholder="上限" style="width:100%" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row :gutter="20">
+          <el-col :span="12">
+            <el-form-item label="水洗色牢度要求" prop="washFastnessRequirement">
+              <el-select v-model="form.washFastnessRequirement" placeholder="JIS L 0844" clearable style="width:100%">
+                <el-option label="5级（优）" value="5" />
+                <el-option label="4-5级" value="4.5" />
+                <el-option label="4级（合格）" value="4" />
+                <el-option label="3-4级" value="3.5" />
+                <el-option label="3级（警告）" value="3" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item label="摩擦色牢度要求" prop="rubFastnessRequirement">
+              <el-select v-model="form.rubFastnessRequirement" placeholder="JIS L 0849" clearable style="width:100%">
+                <el-option label="5级（优）" value="5" />
+                <el-option label="4-5级" value="4.5" />
+                <el-option label="4级（合格）" value="4" />
+                <el-option label="3-4级" value="3.5" />
+                <el-option label="3级（警告）" value="3" />
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -419,7 +487,14 @@ export default {
         createTime: null,
         updateBy: null,
         updateTime: null,
-        remark: null
+        remark: null,
+        shrinkageRateLimit: null,
+        colorDifferenceGradeMin: null,
+        settingTempMax: null,
+        settingTempMin: null,
+        washFastnessRequirement: null,
+        rubFastnessRequirement: null,
+        phRange: null
       }
       this.resetForm("form")
     },

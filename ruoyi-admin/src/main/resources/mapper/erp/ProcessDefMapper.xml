@@ -15,6 +15,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="needQualityCheck"    column="need_quality_check"    />
         <result property="sortOrder"    column="sort_order"    />
         <result property="status"    column="status"    />
+        <result property="isSpliceProcess"        column="is_splice_process"       />
+        <result property="shrinkageBaseline"      column="shrinkage_baseline"      />
+        <result property="elasticityCompensation" column="elasticity_compensation" />
+        <result property="seamWidth"              column="seam_width"              />
+        <result property="spliceDirection"        column="splice_direction"        />
+        <result property="fabricCompatibility"    column="fabric_compatibility"    />
         <result property="remark"    column="remark"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
@@ -23,7 +29,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectProcessDefVo">
-        select a.id, a.process_code, a.process_name, a.process_type, a.department, a.default_price, a.enable_outsource, a.need_quality_check, a.sort_order, a.status, a.remark, a.create_by, a.create_time, a.update_by, a.update_time
+        select a.id, a.process_code, a.process_name, a.process_type, a.department, a.default_price, a.enable_outsource, a.need_quality_check, a.sort_order, a.status,
+               a.is_splice_process, a.shrinkage_baseline, a.elasticity_compensation, a.seam_width, a.splice_direction, a.fabric_compatibility,
+               a.remark, a.create_by, a.create_time, a.update_by, a.update_time
         from t_erp_process_def a
     </sql>
 
@@ -61,6 +69,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="needQualityCheck != null">need_quality_check,</if>
             <if test="sortOrder != null">sort_order,</if>
             <if test="status != null">status,</if>
+            <if test="isSpliceProcess != null">is_splice_process,</if>
+            <if test="shrinkageBaseline != null">shrinkage_baseline,</if>
+            <if test="elasticityCompensation != null">elasticity_compensation,</if>
+            <if test="seamWidth != null">seam_width,</if>
+            <if test="spliceDirection != null">splice_direction,</if>
+            <if test="fabricCompatibility != null">fabric_compatibility,</if>
             <if test="remark != null">remark,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
@@ -77,6 +91,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="needQualityCheck != null">#{needQualityCheck},</if>
             <if test="sortOrder != null">#{sortOrder},</if>
             <if test="status != null">#{status},</if>
+            <if test="isSpliceProcess != null">#{isSpliceProcess},</if>
+            <if test="shrinkageBaseline != null">#{shrinkageBaseline},</if>
+            <if test="elasticityCompensation != null">#{elasticityCompensation},</if>
+            <if test="seamWidth != null">#{seamWidth},</if>
+            <if test="spliceDirection != null">#{spliceDirection},</if>
+            <if test="fabricCompatibility != null">#{fabricCompatibility},</if>
             <if test="remark != null">#{remark},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
@@ -97,6 +117,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="needQualityCheck != null">need_quality_check = #{needQualityCheck},</if>
             <if test="sortOrder != null">sort_order = #{sortOrder},</if>
             <if test="status != null">status = #{status},</if>
+            <if test="isSpliceProcess != null">is_splice_process = #{isSpliceProcess},</if>
+            <if test="shrinkageBaseline != null">shrinkage_baseline = #{shrinkageBaseline},</if>
+            <if test="elasticityCompensation != null">elasticity_compensation = #{elasticityCompensation},</if>
+            <if test="seamWidth != null">seam_width = #{seamWidth},</if>
+            <if test="spliceDirection != null">splice_direction = #{spliceDirection},</if>
+            <if test="fabricCompatibility != null">fabric_compatibility = #{fabricCompatibility},</if>
             <if test="remark != null">remark = #{remark},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>

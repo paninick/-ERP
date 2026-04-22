@@ -39,6 +39,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="auditStatus"    column="audit_status"    />
         <result property="auditBy"    column="audit_by"    />
         <result property="auditTime"    column="audit_time"    />
+        <result property="shrinkageRateLimit"      column="shrinkage_rate_limit"      />
+        <result property="colorDifferenceGradeMin" column="color_difference_grade_min"/>
+        <result property="settingTempMax"          column="setting_temp_max"          />
+        <result property="settingTempMin"          column="setting_temp_min"          />
+        <result property="washFastnessRequirement" column="wash_fastness_requirement" />
+        <result property="rubFastnessRequirement"  column="rub_fastness_requirement"  />
+        <result property="phRange"                 column="ph_range"                  />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
@@ -47,7 +54,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectSampleTechVo">
-        select a.id, a.audit_status, a.progress_status, a.customer_name, a.sample_type_display, a.style_type, a.sample_category_type, a.style_no, a.bulk_order_no, a.sales_name, a.sample_type, a.sample_id, a.due_date, a.style_pic, a.tag_pic, a.tag_pic_remark, a.patten_marker, a.patten_checker, a.cutting_tip, a.lining_tip, a.thread_tip, a.needle_tip, a.sewing_tip, a.back_garment_tip, a.tag_hanging_tip, a.ironing_tip, a.fabric_tip, a.seam_sealing_tip, a.hand_stitching_tip, a.hand_stitching_inspection, a.washing_tip, a.audit_status, a.audit_by, a.audit_time, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
+        select a.id, a.audit_status, a.progress_status, a.customer_name, a.sample_type_display, a.style_type, a.sample_category_type, a.style_no, a.bulk_order_no, a.sales_name, a.sample_type, a.sample_id, a.due_date, a.style_pic, a.tag_pic, a.tag_pic_remark, a.patten_marker, a.patten_checker, a.cutting_tip, a.lining_tip, a.thread_tip, a.needle_tip, a.sewing_tip, a.back_garment_tip, a.tag_hanging_tip, a.ironing_tip, a.fabric_tip, a.seam_sealing_tip, a.hand_stitching_tip, a.hand_stitching_inspection, a.washing_tip, a.audit_status, a.audit_by, a.audit_time,
+               a.shrinkage_rate_limit, a.color_difference_grade_min, a.setting_temp_max, a.setting_temp_min, a.wash_fastness_requirement, a.rub_fastness_requirement, a.ph_range,
+               a.create_by, a.create_time, a.update_by, a.update_time, a.remark
         from t_erp_sample_tech a
     </sql>
 
@@ -122,6 +131,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="auditStatus != null">audit_status,</if>
             <if test="auditBy != null">audit_by,</if>
             <if test="auditTime != null">audit_time,</if>
+            <if test="shrinkageRateLimit != null">shrinkage_rate_limit,</if>
+            <if test="colorDifferenceGradeMin != null">color_difference_grade_min,</if>
+            <if test="settingTempMax != null">setting_temp_max,</if>
+            <if test="settingTempMin != null">setting_temp_min,</if>
+            <if test="washFastnessRequirement != null">wash_fastness_requirement,</if>
+            <if test="rubFastnessRequirement != null">rub_fastness_requirement,</if>
+            <if test="phRange != null">ph_range,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
@@ -162,6 +178,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="auditStatus != null">#{auditStatus},</if>
             <if test="auditBy != null">#{auditBy},</if>
             <if test="auditTime != null">#{auditTime},</if>
+            <if test="shrinkageRateLimit != null">#{shrinkageRateLimit},</if>
+            <if test="colorDifferenceGradeMin != null">#{colorDifferenceGradeMin},</if>
+            <if test="settingTempMax != null">#{settingTempMax},</if>
+            <if test="settingTempMin != null">#{settingTempMin},</if>
+            <if test="washFastnessRequirement != null">#{washFastnessRequirement},</if>
+            <if test="rubFastnessRequirement != null">#{rubFastnessRequirement},</if>
+            <if test="phRange != null">#{phRange},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
@@ -206,6 +229,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="auditStatus != null">audit_status = #{auditStatus},</if>
             <if test="auditBy != null">audit_by = #{auditBy},</if>
             <if test="auditTime != null">audit_time = #{auditTime},</if>
+            <if test="shrinkageRateLimit != null">shrinkage_rate_limit = #{shrinkageRateLimit},</if>
+            <if test="colorDifferenceGradeMin != null">color_difference_grade_min = #{colorDifferenceGradeMin},</if>
+            <if test="settingTempMax != null">setting_temp_max = #{settingTempMax},</if>
+            <if test="settingTempMin != null">setting_temp_min = #{settingTempMin},</if>
+            <if test="washFastnessRequirement != null">wash_fastness_requirement = #{washFastnessRequirement},</if>
+            <if test="rubFastnessRequirement != null">rub_fastness_requirement = #{rubFastnessRequirement},</if>
+            <if test="phRange != null">ph_range = #{phRange},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>

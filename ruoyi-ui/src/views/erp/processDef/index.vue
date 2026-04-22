@@ -101,6 +101,12 @@
         </template>
       </el-table-column>
       <el-table-column label="备注" align="center" prop="remark" />
+      <el-table-column label="拼接工序" align="center" prop="isSpliceProcess" width="80">
+        <template slot-scope="scope">
+          <el-tag v-if="scope.row.isSpliceProcess === '1'" type="warning" size="mini">拼接</el-tag>
+          <span v-else style="color:#C0C4CC">—</span>
+        </template>
+      </el-table-column>
       <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
@@ -171,6 +177,35 @@
         <el-form-item label="备注" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
+        <el-divider content-position="left">拼接工艺SOP</el-divider>
+        <el-form-item label="是否拼接工序" prop="isSpliceProcess">
+          <el-radio-group v-model="form.isSpliceProcess">
+            <el-radio label="0">否</el-radio>
+            <el-radio label="1">是</el-radio>
+          </el-radio-group>
+        </el-form-item>
+        <template v-if="form.isSpliceProcess === '1'">
+          <el-form-item label="缩水基线(%)" prop="shrinkageBaseline">
+            <el-input-number v-model="form.shrinkageBaseline" :precision="2" :min="0" :max="30" placeholder="拼接前预缩处理基准值" style="width:200px" />
+          </el-form-item>
+          <el-form-item label="弹力补偿(%)" prop="elasticityCompensation">
+            <el-input-number v-model="form.elasticityCompensation" :precision="2" :min="0" :max="50" placeholder="弹力损耗补偿量" style="width:200px" />
+          </el-form-item>
+          <el-form-item label="拼缝规格(mm)" prop="seamWidth">
+            <el-input-number v-model="form.seamWidth" :precision="1" :min="0" :max="30" placeholder="拼缝宽度标准" style="width:200px" />
+          </el-form-item>
+          <el-form-item label="拼接方向" prop="spliceDirection">
+            <el-select v-model="form.spliceDirection" placeholder="请选择" clearable>
+              <el-option label="经向" value="WARP" />
+              <el-option label="纬向" value="WEFT" />
+              <el-option label="斜向" value="BIAS" />
+              <el-option label="不限" value="ANY" />
+            </el-select>
+          </el-form-item>
+          <el-form-item label="面料兼容性" prop="fabricCompatibility">
+            <el-input v-model="form.fabricCompatibility" type="textarea" :rows="2" placeholder="拼接面料兼容性说明" />
+          </el-form-item>
+        </template>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button type="primary" @click="submitForm">确 定</el-button>
@@ -253,7 +288,13 @@ export default {
         needQualityCheck: 0,
         sortOrder: 0,
         status: '0',
-        remark: null
+        remark: null,
+        isSpliceProcess: '0',
+        shrinkageBaseline: null,
+        elasticityCompensation: null,
+        seamWidth: null,
+        spliceDirection: null,
+        fabricCompatibility: null
       }
       this.resetForm("form")
     },

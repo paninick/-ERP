@@ -53,6 +53,30 @@ public class ProcessDef extends BaseEntity {
     @Excel(name = "状态", readConverterExp = "0=正常,1=停用")
     private String status;
 
+    /** 拼接工艺：是否拼接工序 0否 1是 */
+    @Excel(name = "是否拼接工序")
+    private String isSpliceProcess;
+
+    /** 缩水基线（%，拼接前预缩处理基准值） */
+    @Excel(name = "缩水基线(%)")
+    private java.math.BigDecimal shrinkageBaseline;
+
+    /** 弹力补偿量（%，拼接时弹力损耗补偿） */
+    @Excel(name = "弹力补偿(%)")
+    private java.math.BigDecimal elasticityCompensation;
+
+    /** 拼缝规格（mm，拼缝宽度标准） */
+    @Excel(name = "拼缝规格(mm)")
+    private java.math.BigDecimal seamWidth;
+
+    /** 拼接方向要求：WARP=经向 WEFT=纬向 BIAS=斜向 ANY=不限 */
+    @Excel(name = "拼接方向")
+    private String spliceDirection;
+
+    /** 拼接面料兼容性说明 */
+    @Excel(name = "面料兼容性")
+    private String fabricCompatibility;
+
     /** 备注 */
     private String remark;
 
@@ -144,6 +168,24 @@ public class ProcessDef extends BaseEntity {
         return remark;
     }
 
+    public String getIsSpliceProcess() { return isSpliceProcess; }
+    public void setIsSpliceProcess(String isSpliceProcess) { this.isSpliceProcess = isSpliceProcess; }
+
+    public java.math.BigDecimal getShrinkageBaseline() { return shrinkageBaseline; }
+    public void setShrinkageBaseline(java.math.BigDecimal shrinkageBaseline) { this.shrinkageBaseline = shrinkageBaseline; }
+
+    public java.math.BigDecimal getElasticityCompensation() { return elasticityCompensation; }
+    public void setElasticityCompensation(java.math.BigDecimal elasticityCompensation) { this.elasticityCompensation = elasticityCompensation; }
+
+    public java.math.BigDecimal getSeamWidth() { return seamWidth; }
+    public void setSeamWidth(java.math.BigDecimal seamWidth) { this.seamWidth = seamWidth; }
+
+    public String getSpliceDirection() { return spliceDirection; }
+    public void setSpliceDirection(String spliceDirection) { this.spliceDirection = spliceDirection; }
+
+    public String getFabricCompatibility() { return fabricCompatibility; }
+    public void setFabricCompatibility(String fabricCompatibility) { this.fabricCompatibility = fabricCompatibility; }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -157,6 +199,12 @@ public class ProcessDef extends BaseEntity {
             .append("needQualityCheck", getNeedQualityCheck())
             .append("sortOrder", getSortOrder())
             .append("status", getStatus())
+            .append("isSpliceProcess", getIsSpliceProcess())
+            .append("shrinkageBaseline", getShrinkageBaseline())
+            .append("elasticityCompensation", getElasticityCompensation())
+            .append("seamWidth", getSeamWidth())
+            .append("spliceDirection", getSpliceDirection())
+            .append("fabricCompatibility", getFabricCompatibility())
             .append("remark", getRemark())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())
