@@ -1,7 +1,11 @@
 package com.ruoyi.erp.service.impl;
 
 import com.ruoyi.erp.domain.ProduceJob;
+import com.ruoyi.erp.domain.ProduceJobProcess;
+import com.ruoyi.erp.domain.ProcessRouteItem;
 import com.ruoyi.erp.mapper.ProduceJobMapper;
+import com.ruoyi.erp.mapper.ProduceJobProcessMapper;
+import com.ruoyi.erp.mapper.ProcessRouteItemMapper;
 import com.ruoyi.erp.service.IProduceJobService;
 import com.ruoyi.erp.utils.BillNoGenerator;
 import com.ruoyi.common.utils.DateUtils;
@@ -21,6 +25,12 @@ public class ProduceJobServiceImpl implements IProduceJobService {
 
     @Autowired
     private ProduceJobMapper produceJobMapper;
+
+    @Autowired
+    private ProduceJobProcessMapper produceJobProcessMapper;
+
+    @Autowired
+    private ProcessRouteItemMapper processRouteItemMapper;
 
     @Autowired
     private BillNoGenerator billNoGenerator;
@@ -62,7 +72,22 @@ public class ProduceJobServiceImpl implements IProduceJobService {
         produceJob.setCreateTime(DateUtils.getNowDate());
         produceJob.setUpdateBy(SecurityUtils.getUsername());
         produceJob.setUpdateTime(DateUtils.getNowDate());
-        return produceJobMapper.insertProduceJob(produceJob);
+        int result = produceJobMapper.insertProduceJob(produceJob);
+        // 按工艺路线自动初始化工序队列
+        if (result > 0 && produceJob.getProcessRouteId() != null) {
+            ProcessRouteItem query = new ProcessRouteItem();
+            query.setRouteId(produceJob.getProcessRouteId());
+            List<ProcessRouteItem> items = processRouteItemMapper.selectProcessRouteItemList(query);
+            for (ProcessRouteItem item : items) {
+                ProduceJobProcess p = new ProduceJobProcess();
+                p.setJobId(produceJob.getId());
+                p.setProcessId(item.getProcessId());
+                p.setCreateBy("system");
+                p.setCreateTime(DateUtils.getNowDate());
+                produceJobProcessMapper.insertProduceJobProcess(p);
+            }
+        }
+        return result;
     }
 
     /**

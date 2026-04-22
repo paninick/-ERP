@@ -39,6 +39,12 @@ public class ProduceJob extends BaseEntity {
     private Long orderId;
 
     /**
+     * 工艺路线ID（创建工单时按此路线自动初始化 ProduceJobProcess 工序队列）
+     */
+    @Excel(name = "工艺路线ID")
+    private Long processRouteId;
+
+    /**
      * 颜色编码
      */
     @Excel(name = "颜色编码")
@@ -159,6 +165,9 @@ public class ProduceJob extends BaseEntity {
     public void setOrderId(Long orderId) {
         this.orderId = orderId;
     }
+
+    public Long getProcessRouteId() { return processRouteId; }
+    public void setProcessRouteId(Long processRouteId) { this.processRouteId = processRouteId; }
 
     public String getColorCode() {
         return colorCode;

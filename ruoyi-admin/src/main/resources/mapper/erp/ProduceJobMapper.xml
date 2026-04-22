@@ -76,12 +76,12 @@
 
     <insert id="insertProduceJob" parameterType="ProduceJob" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO t_erp_produce_job (
-            job_no, produce_plan_id, order_id, color_code, size_code, plan_qty, actual_qty, defect_qty,
+            job_no, produce_plan_id, order_id, process_route_id, color_code, size_code, plan_qty, actual_qty, defect_qty,
             current_process_id, current_process_status, start_time, finish_time, outsource_batch_barcode,
             outbound_time, receive_time, confirm_qty, outsource_id, status, create_by, create_time,
             update_by, update_time, remark
         ) VALUES (
-            #{jobNo}, #{producePlanId}, #{orderId}, #{colorCode}, #{sizeCode}, #{planQty}, #{actualQty}, #{defectQty},
+            #{jobNo}, #{producePlanId}, #{orderId}, #{processRouteId}, #{colorCode}, #{sizeCode}, #{planQty}, #{actualQty}, #{defectQty},
             #{currentProcessId}, #{currentProcessStatus}, #{startTime}, #{finishTime}, #{outsourceBatchBarcode},
             #{outboundTime}, #{receiveTime}, #{confirmQty}, #{outsourceId}, #{status}, #{createBy}, #{createTime},
             #{updateBy}, #{updateTime}, #{remark}
