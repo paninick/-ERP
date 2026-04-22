@@ -180,6 +180,8 @@
 
 <script>
 import { getBoardStats, getWipStats, getEmployeeRank, getBottleneckWarnings } from "@/api/erp/produceboard";
+import SockJS from "sockjs-client";
+import Stomp from "@stomp/stompjs";
 
 export default {
   name: "ProduceBoard",
@@ -201,11 +203,17 @@ export default {
       },
       wipStats: [],
       employeeRank: [],
-      bottleneckWarnings: []
+      bottleneckWarnings: [],
+      wsClient: null,
+      wsConnected: false
     };
   },
   created() {
     this.loadData();
+    this.connectWs();
+  },
+  beforeDestroy() {
+    this.disconnectWs();
   },
   methods: {
     loadData() {
@@ -224,6 +232,39 @@ export default {
       }).catch(() => {
         this.loading = false;
       });
+    },
+    connectWs() {
+      try {
+        const baseUrl = process.env.VUE_APP_BASE_API || '';
+        const wsUrl = baseUrl.replace(/^http/, 'http') + '/ws/erp';
+        const socket = new SockJS(wsUrl);
+        const client = Stomp.over(socket);
+        client.debug = () => {}; // 静默 STOMP debug 日志
+        client.connect({}, () => {
+          this.wsConnected = true;
+          // 订阅生产看板刷新信号
+          client.subscribe('/topic/erp/produce', (msg) => {
+            const data = JSON.parse(msg.body);
+            if (data.type === 'REFRESH' || data.type === 'PROCESS_COMPLETE') {
+              this.loadData(); // 收到推送后自动刷新看板数据
+            }
+          });
+          // 订阅报警
+          client.subscribe('/topic/erp/alert', (msg) => {
+            const data = JSON.parse(msg.body);
+            this.$notify({ type: data.level === 'ERROR' ? 'error' : 'warning', title: '生产报警', message: data.message });
+          });
+        }, () => { this.wsConnected = false; });
+        this.wsClient = client;
+      } catch (e) {
+        console.warn('WebSocket 连接失败（非致命，看板仍可手动刷新）:', e.message);
+      }
+    },
+    disconnectWs() {
+      if (this.wsClient && this.wsConnected) {
+        try { this.wsClient.disconnect(); } catch (e) {}
+        this.wsConnected = false;
+      }
     },
     getProgressColor(percentage) {
       if (percentage < 50) {
