@@ -106,6 +106,16 @@
           v-hasPermi="['erp:notice:export']"
         >导出</el-button>
       </el-col>
+      <el-col :span="1.5">
+        <el-button
+          type="success"
+          plain
+          icon="el-icon-upload"
+          size="mini"
+          @click="handleImport"
+          v-hasPermi="['erp:notice:import']"
+        >导入</el-button>
+      </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
@@ -263,11 +273,31 @@
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
+
+    <!-- 打样通知导入对话框 -->
+    <el-dialog :title="upload.title" :visible.sync="upload.open" width="400px" append-to-body>
+      <el-upload ref="upload" :limit="1" accept=".xlsx, .xls" :headers="upload.headers"
+        :action="upload.url + '?updateSupport=' + upload.updateSupport"
+        :disabled="upload.isUploading" :on-progress="handleFileUploadProgress"
+        :on-success="handleFileSuccess" :auto-upload="false" drag>
+        <i class="el-icon-upload"></i>
+        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div class="el-upload__tip text-center" slot="tip">
+          <span>仅允许导入 xls、xlsx 格式文件。</span>
+          <el-link type="primary" :underline="false" style="font-size:12px;vertical-align:baseline" @click="importTemplate">下载模板</el-link>
+        </div>
+      </el-upload>
+      <div slot="footer" class="dialog-footer">
+        <el-button type="primary" @click="submitFileForm">确 定</el-button>
+        <el-button @click="upload.open = false">取 消</el-button>
+      </div>
+    </el-dialog>
   </div>
 </template>
 
 <script>
 import { listNotice, getNotice, delNotice, addNotice, updateNotice } from "@/api/erp/notice"
+import { getToken } from "@/utils/auth"
 
 export default {
   name: "Notice",
@@ -307,6 +337,14 @@ export default {
       form: {},
       // 表单校验
       rules: {
+      },
+      upload: {
+        open: false,
+        title: "",
+        isUploading: false,
+        updateSupport: 0,
+        headers: { Authorization: "Bearer " + getToken() },
+        url: process.env.VUE_APP_BASE_API + "/erp/notice/importData"
       }
     }
   },
@@ -421,6 +459,31 @@ export default {
       this.download('erp/notice/export', {
         ...this.queryParams
       }, `notice_${new Date().getTime()}.xlsx`)
+    },
+    handleImport() {
+      this.upload.title = "打样通知导入"
+      this.upload.open = true
+    },
+    importTemplate() {
+      this.download('erp/notice/importTemplate', {}, `notice_template_${new Date().getTime()}.xlsx`)
+    },
+    handleFileUploadProgress() {
+      this.upload.isUploading = true
+    },
+    handleFileSuccess(response) {
+      this.upload.open = false
+      this.upload.isUploading = false
+      this.$refs.upload.clearFiles()
+      this.$alert("<div style='overflow:auto;max-height:70vh;padding:10px 20px 0'>" + response.msg + "</div>", "导入结果", { dangerouslyUseHTMLString: true })
+      this.getList()
+    },
+    submitFileForm() {
+      const file = this.$refs.upload.uploadFiles
+      if (!file || file.length === 0 || (!file[0].name.toLowerCase().endsWith('.xls') && !file[0].name.toLowerCase().endsWith('.xlsx'))) {
+        this.$modal.msgError("请选择后缀为 "xls" 或 "xlsx" 的文件。")
+        return
+      }
+      this.$refs.upload.submit()
     }
   }
 }
