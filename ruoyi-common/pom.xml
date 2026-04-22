@@ -71,6 +71,12 @@
             <artifactId>commons-io</artifactId>
         </dependency>
 
+        <!-- ip2region 离线 IP 地理定位（不调公网，PIPL 合规） -->
+        <dependency>
+            <groupId>org.lionsoul</groupId>
+            <artifactId>ip2region</artifactId>
+        </dependency>
+
         <!-- excel工具 -->
         <dependency>
             <groupId>org.apache.poi</groupId>
