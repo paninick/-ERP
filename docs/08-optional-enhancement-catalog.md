@@ -4,7 +4,7 @@
 > **产出日**:2026-04-22 · **项目**:对日针织外贸 ERP(基于 RuoYi-Vue 3.9.2 + Spring Boot 4.0.3)
 > **读者**:架构师、PM、技术负责人
 > **性质**:**评估目录,不含承诺**。每项需走独立决策(EnterPlanMode)后再实施。
-> **版本**:v1.1(覆盖全量 24 包)
+> **版本**:v1.2(覆盖全量 24 包 + BD-002/007/008 决策同步)
 
 ---
 
@@ -60,7 +60,7 @@ CLAUDE.md 规定:**禁止修改 `ruoyi-framework/` 框架核心代码**。以下
 
 | ID | 包 | 来源 | 文件 | 关键依赖 | 适配 | 对齐点 | 阶段 |
 | :-- | :-- | :-- | :-: | :-- | :-: | :-- | :-- |
-| E1 | `minio` 分布式文件存储 | `ruoyi/` | 3 | `io.minio:minio-sdk` | 2d | 02 AR-005 | P3.4 |
+| E1 | ~~`minio` 分布式文件存储~~ → **阿里云 OSS 替代** | `ruoyi/` | 3 | ❌ 不用 MinIO | — | **BD-008 v1.2 锁定 OSS** | — |
 | E2 | `websocket` 实时通信 | `ruoyi-vue/` | 5 | spring-boot-starter-websocket | 1.5d | P8 BI 看板 | P3 末 / P8 |
 | E8 | `easyexcel` Excel 增强 | `ruoyi/` | 6 | `com.alibaba:easyexcel` | 2d | **BOM/订单导入,P3 即用** | P3.0 即时 |
 | E11 | `ip2region` 离线地理定位 | `ruoyi/` | 4 | `org.lionsoul:ip2region` | 0.5d | 登录日志地理字段 | P3.4 |
@@ -70,7 +70,7 @@ CLAUDE.md 规定:**禁止修改 `ruoyi-framework/` 框架核心代码**。以下
 | ID | 包 | 来源 | 文件 | 关键依赖 | 适配 | 对齐点 | 阶段 |
 | :-- | :-- | :-- | :-: | :-- | :-: | :-- | :-- |
 | E3 | `aj-captcha` 滑块验证码 | `ruoyi-vue/` | 11 | `anji-plus:captcha-boot-starter` | 2d | 03 §6 防暴破 | P4.1 |
-| E4 | `JustAuth` 第三方 SSO | `ruoyi-vue/` | 19 | `me.zhyd.oauth:JustAuth` | 5-7d | 03 §7 日方 SSO | P4.1(先确认需求)|
+| E4 | ~~`JustAuth` 第三方 SSO~~ → **❌ 不集成**(BD-002 决策账号密码)| `ruoyi-vue/` | 19 | — | — | BD-002 v1.2 | — |
 | E12 | `docker` 一键部署(Vue)| `ruoyi-vue/` | 7 | — | 3d | **P6.1 Pilot 直接用** | P5/P6.1 |
 
 ### 1.3 条件触发 ⏸(等条件满足)
@@ -110,17 +110,18 @@ CLAUDE.md 规定:**禁止修改 `ruoyi-framework/` 框架核心代码**。以下
 
 ## 2. 推荐与重要类条目详情(E1-E12 关键项)
 
-### E1 · MinIO 分布式文件存储 ⭐⭐⭐
+### E1 · ~~MinIO 分布式文件存储~~ ❌ 不集成(BD-008)
 
-**文件(3)**:`MinioConfig.java`(`@ConfigurationProperties(prefix="minio")`)、`MinioUtil.java`、`FileUploadUtils.java`(覆盖式修改)
+**状态**:**不集成**,已被**阿里云 OSS** 替代(BD-008 v1.2 锁定)
 
-**依赖**:`io.minio:minio:8.5+`
+**替代方案**:
+- 阿里云 OSS SDK(`com.aliyun.oss:aliyun-sdk-oss`)
+- 工作量 1 人日(比自建 MinIO 2 人日省 1d)
+- 私有桶 + 预签名 URL + CDN 回源
+- 与阿里云 KMS 联动做服务端加密(SSE-KMS)
 
-**对齐**:02 ADR AR-005(大文件 MinIO/OSS 二选一)
-
-**冲突**:`FileUploadUtils.java` 是 ruoyi-common 共享类,不能直接覆盖,改造为双实现(本地 / MinIO)
-
-**建议**:P3.4 样品图/色卡落地时一并做
+**历史备份**:本节原内容作为"自建存储"参考保留;若未来触发"禁用阿里云"条件可回切此方案。
+见 `docs/12 BD-008` 与 `docs/02 ADR-008`。
 
 ---
 
@@ -148,15 +149,17 @@ CLAUDE.md 规定:**禁止修改 `ruoyi-framework/` 框架核心代码**。以下
 
 ---
 
-### E4 · JustAuth 第三方 SSO ⭐⭐(5-7 人日最重)
+### E4 · ~~JustAuth 第三方 SSO~~ ❌ 不集成(BD-002)
 
-**文件(19)**:后端 7 + 前端 11 + SQL 1
+**状态**:**不集成**。BD-002 决议"账号密码登录,无 SSO"(2026-04-22)
 
-**依赖**:`me.zhyd.oauth:JustAuth:1.16.6+`
+**历史备份**:本节原内容保留作参考;若未来日方客户强制要求 SSO 再重新评估。
+见 `docs/12 BD-002` 与 `docs/02 ADR-008`。
 
-**冲突**:⚠️⚠️⚠️ 高 — `SysUserServiceImpl` / `login.vue` / `request.js` / `permission.js` 都有本项目改造
-
-**建议**:**先确认日方是否需 SSO 与协议类型**(OAuth2 / SAML / LINE / Yahoo Japan),如确定 OAuth2 可考虑用 `spring-security-oauth2-client` 替代
+**若启用,原方案细节**:
+- 文件(19):后端 7 + 前端 11 + SQL 1;依赖 `me.zhyd.oauth:JustAuth:1.16.6+`
+- 5-7 人日,与 SysUserServiceImpl / login.vue / request.js / permission.js 冲突高
+- 若确定 OAuth2,**考虑直接用 `spring-security-oauth2-client`**(更轻,避免 JustAuth 冲突)
 
 ---
 
@@ -321,6 +324,11 @@ tar -czf D:/erp/vendor-ruoyi-extensions-20260422.tar.gz -C "D:/下载" ruoyi ruo
 
 ## 变更日志
 
+- **2026-04-22 v1.2**:BD-002 / BD-007 / BD-008 决策反映:
+  - **E1 MinIO** → ❌ 不集成,被阿里云 OSS 替代(BD-008 锁定)
+  - **E4 JustAuth** → ❌ 不集成,BD-002 决议账号密码登录
+  - 两节原内容改为"历史备份",若未来回切(禁用阿里云 / 日方强制 SSO)可启用
+  - 总览矩阵第 E1/E4 行状态更新
 - **2026-04-22 v1.1**:覆盖全量 24 个扩展包(E1-E24),从 v1.0 的 7 包扩展至全量。
   新增 E8 EasyExcel(⭐⭐⭐ P3.0 即时,消 Python 脚本技术债)、E11 ip2region(⭐⭐⭐ 0.5 人日高性价比)、E12 Docker(⭐⭐ Pilot 部署)作为强推项;
   扩展不推荐类 (E14-E24 + 升级 SB3.x) 的明确判断理由;
