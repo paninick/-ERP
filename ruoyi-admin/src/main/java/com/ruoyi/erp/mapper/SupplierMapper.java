@@ -1,7 +1,11 @@
 package com.ruoyi.erp.mapper;
 
 import java.util.List;
+import java.util.Map;
 import com.ruoyi.erp.domain.Supplier;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+import org.apache.ibatis.annotations.Select;
 
 /**
  * 供应商Mapper接口
@@ -73,4 +77,16 @@ public interface SupplierMapper {
      * @return 供应商信息
      */
     Supplier selectSupplierByNo(String supplierNo);
+
+    /**
+     * 调用存储过程自动计算指定供应商的评级
+     */
+    @Select("CALL sp_erp_rate_supplier(#{supplierId})")
+    void rateSupplier(@Param("supplierId") Long supplierId);
+
+    /**
+     * 查询供应商评级概览视图（全部供应商）
+     */
+    @Select("SELECT * FROM v_erp_supplier_rating ORDER BY overall_rating DESC")
+    List<Map<String, Object>> selectSupplierRatingView();
 }

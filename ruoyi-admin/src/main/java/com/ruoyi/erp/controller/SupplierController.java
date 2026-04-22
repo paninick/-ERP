@@ -1,6 +1,7 @@
 package com.ruoyi.erp.controller;
 
 import java.util.List;
+import java.util.Map;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,7 @@ import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.erp.domain.Supplier;
 import com.ruoyi.erp.service.ISupplierService;
+import com.ruoyi.erp.mapper.SupplierMapper;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.common.core.page.TableDataInfo;
 
@@ -33,6 +35,9 @@ import com.ruoyi.common.core.page.TableDataInfo;
 public class SupplierController extends BaseController {
     @Autowired
     private ISupplierService supplierService;
+
+    @Autowired
+    private SupplierMapper supplierMapper;
 
     /**
      * 查询供应商列表
@@ -117,5 +122,35 @@ public class SupplierController extends BaseController {
         List<Supplier> list = util.importExcel(file.getInputStream());
         String message = supplierService.importSupplier(list, updateSupport);
         return success(message);
+    }
+
+    /**
+     * 触发指定供应商评级计算
+     *
+     * @param id 供应商ID（传 0 则批量评级所有供应商）
+     */
+    @PreAuthorize("@ss.hasPermi('erp:supplier:edit')")
+    @Log(title = "供应商评级", businessType = BusinessType.UPDATE)
+    @PutMapping("/rate/{id}")
+    public AjaxResult rateSupplier(@PathVariable Long id) {
+        if (id == 0) {
+            // 批量：查所有供应商 ID 逐一评级
+            List<Supplier> all = supplierService.selectSupplierList(new Supplier());
+            for (Supplier s : all) {
+                supplierMapper.rateSupplier(s.getId());
+            }
+            return success("已批量评级 " + all.size() + " 家供应商");
+        }
+        supplierMapper.rateSupplier(id);
+        return success("评级完成");
+    }
+
+    /**
+     * 供应商评级概览（按综合评级降序）
+     */
+    @PreAuthorize("@ss.hasPermi('erp:supplier:list')")
+    @GetMapping("/ratingView")
+    public AjaxResult ratingView() {
+        return success(supplierMapper.selectSupplierRatingView());
     }
 }
