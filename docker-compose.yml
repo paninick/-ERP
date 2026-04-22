@@ -1,0 +1,74 @@
+# =====================================================================
+# docker-compose.yml — 服装 ERP 一键部署
+#
+# 使用方式：
+#   1. 复制 .env.example → .env，填写真实生产值
+#   2. docker compose up -d
+#
+# 说明：
+#   - MySQL/Redis 使用阿里云托管（RDS + Tair），不在 compose 内启动
+#   - backend: Spring Boot 4.0.3 / JDK 17
+#   - frontend: Nginx 1.25 反代 /prod-api/ → backend:8080
+# =====================================================================
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    image: erp-backend:latest
+    container_name: erp-backend
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      # ── 数据库（阿里云 RDS for MySQL 5.7）────────────
+      DB_URL: ${DB_URL:-jdbc:mysql://localhost:3306/ry_vue?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8}
+      DB_USERNAME: ${DB_USERNAME:-root}
+      DB_PASSWORD: ${DB_PASSWORD}
+      # ── Redis（阿里云 Redis Tair）────────────────────
+      REDIS_HOST: ${REDIS_HOST:-localhost}
+      REDIS_PORT: ${REDIS_PORT:-6379}
+      REDIS_PASSWORD: ${REDIS_PASSWORD}
+      # ── JWT / Druid 监控 ─────────────────────────────
+      JWT_SECRET: ${JWT_SECRET}
+      DRUID_USERNAME: ${DRUID_USERNAME:-erp_druid}
+      DRUID_PASSWORD: ${DRUID_PASSWORD}
+      DRUID_ALLOW: ${DRUID_ALLOW:-127.0.0.1}
+      # ── 文件上传路径（容器内路径，映射到宿主机卷）──
+      UPLOAD_PATH: /app/uploadPath
+      # ── JVM ─────────────────────────────────────────
+      JAVA_OPTS: "-Xms512m -Xmx1g -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"
+    volumes:
+      # 上传文件 + ip2region.xdb（宿主机持久化）
+      - erp_upload:/app/uploadPath
+    networks:
+      - erp_net
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/login"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    image: erp-frontend:latest
+    container_name: erp-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      backend:
+        condition: service_healthy
+    networks:
+      - erp_net
+
+volumes:
+  erp_upload:
+    driver: local
+
+networks:
+  erp_net:
+    driver: bridge

@@ -1,0 +1,16 @@
+# Docker 构建忽略文件
+.git
+.gitignore
+*.md
+target/
+node_modules/
+dist/
+.env
+.env.*
+!.env.example
+bin/.claude/
+sql/.backup/
+uploadPath/
+*.log
+ruoyi-ui/node_modules/
+ruoyi-admin/target/

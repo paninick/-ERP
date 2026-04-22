@@ -1,0 +1,52 @@
+# ========================================================
+# 后端 Dockerfile（多阶段构建）
+# Stage 1: Maven 构建
+# Stage 2: 精简 JRE 17 运行时
+# ========================================================
+FROM eclipse-temurin:17-jdk-alpine AS builder
+WORKDIR /build
+
+# 优先复制 pom 文件，利用 Docker 层缓存减少重复下载依赖
+COPY pom.xml .
+COPY ruoyi-admin/pom.xml ruoyi-admin/
+COPY ruoyi-common/pom.xml ruoyi-common/
+COPY ruoyi-framework/pom.xml ruoyi-framework/
+COPY ruoyi-generator/pom.xml ruoyi-generator/
+COPY ruoyi-quartz/pom.xml ruoyi-quartz/
+COPY ruoyi-system/pom.xml ruoyi-system/
+COPY ruoyi-demo/pom.xml ruoyi-demo/
+
+# 下载依赖（网络层缓存）
+RUN mvn -f pom.xml dependency:go-offline -q 2>/dev/null || true
+
+# 复制源码并编译
+COPY . .
+RUN mvn -pl ruoyi-admin -am clean package -DskipTests -q
+
+# ========================================================
+# Stage 2: 精简运行时
+# ========================================================
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+
+# 时区
+RUN apk add --no-cache tzdata && \
+    cp /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
+    echo "Asia/Shanghai" > /etc/timezone && \
+    apk del tzdata
+
+# 上传目录 + ip2region 数据目录
+RUN mkdir -p /app/uploadPath /app/uploadPath/avatar
+
+# 从 builder 阶段复制 jar
+COPY --from=builder /build/ruoyi-admin/target/ruoyi-admin.jar app.jar
+
+# 复制启动脚本
+COPY docker/entrypoint.sh entrypoint.sh
+RUN chmod +x entrypoint.sh
+
+EXPOSE 8080
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD wget -qO- http://localhost:8080/login || exit 1
+
+ENTRYPOINT ["./entrypoint.sh"]
