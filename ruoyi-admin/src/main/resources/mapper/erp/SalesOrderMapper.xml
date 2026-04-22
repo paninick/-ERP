@@ -32,6 +32,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="auditTime"    column="audit_time"    />
         <result property="bulkOpinion"    column="bulk_opinion"    />
         <result property="productionExceed"    column="production_exceed"    />
+        <result property="japanOrderNo"        column="japan_order_no"       />
+        <result property="jisLabelStatus"      column="jis_label_status"     />
+        <result property="hazardTestStatus"    column="hazard_test_status"   />
+        <result property="hazardReportNo"      column="hazard_report_no"     />
+        <result property="colorFastnessGrade"  column="color_fastness_grade" />
+        <result property="auditFactoryStatus"  column="audit_factory_status" />
+        <result property="auditFactoryDate"    column="audit_factory_date"   />
+        <result property="exportDeclareType"   column="export_declare_type"  />
+        <result property="tradeTerms"          column="trade_terms"          />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
@@ -40,7 +49,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectSalesOrderVo">
-        select a.id, a.src_bill_type, a.src_bill_id, a.src_bill_no, a.sales_type, a.customer_name, a.bulk_order_no, a.sample_style_no, a.style_category, a.sample_no, a.sales_name, a.notice_id, a.tech_id, a.sales_no, a.sales_date, a.sales_id, a.customer_id, a.due_date, a.quantity, a.amount, a.pay_amount, a.order_status, a.audit_status, a.audit_by, a.audit_time, a.bulk_opinion, a.production_exceed, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
+        select a.id, a.src_bill_type, a.src_bill_id, a.src_bill_no, a.sales_type, a.customer_name, a.bulk_order_no, a.sample_style_no, a.style_category, a.sample_no, a.sales_name, a.notice_id, a.tech_id, a.sales_no, a.sales_date, a.sales_id, a.customer_id, a.due_date, a.quantity, a.amount, a.pay_amount, a.order_status, a.audit_status, a.audit_by, a.audit_time, a.bulk_opinion, a.production_exceed,
+               a.japan_order_no, a.jis_label_status, a.hazard_test_status, a.hazard_report_no, a.color_fastness_grade, a.audit_factory_status, a.audit_factory_date, a.export_declare_type, a.trade_terms,
+               a.create_by, a.create_time, a.update_by, a.update_time, a.remark
         from t_erp_sales_order a
     </sql>
 
@@ -88,6 +99,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="auditTime != null">audit_time,</if>
             <if test="bulkOpinion != null">bulk_opinion,</if>
             <if test="productionExceed != null">production_exceed,</if>
+            <if test="japanOrderNo != null">japan_order_no,</if>
+            <if test="jisLabelStatus != null">jis_label_status,</if>
+            <if test="hazardTestStatus != null">hazard_test_status,</if>
+            <if test="hazardReportNo != null">hazard_report_no,</if>
+            <if test="colorFastnessGrade != null">color_fastness_grade,</if>
+            <if test="auditFactoryStatus != null">audit_factory_status,</if>
+            <if test="auditFactoryDate != null">audit_factory_date,</if>
+            <if test="exportDeclareType != null">export_declare_type,</if>
+            <if test="tradeTerms != null">trade_terms,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
@@ -121,6 +141,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="auditTime != null">#{auditTime},</if>
             <if test="bulkOpinion != null">#{bulkOpinion},</if>
             <if test="productionExceed != null">#{productionExceed},</if>
+            <if test="japanOrderNo != null">#{japanOrderNo},</if>
+            <if test="jisLabelStatus != null">#{jisLabelStatus},</if>
+            <if test="hazardTestStatus != null">#{hazardTestStatus},</if>
+            <if test="hazardReportNo != null">#{hazardReportNo},</if>
+            <if test="colorFastnessGrade != null">#{colorFastnessGrade},</if>
+            <if test="auditFactoryStatus != null">#{auditFactoryStatus},</if>
+            <if test="auditFactoryDate != null">#{auditFactoryDate},</if>
+            <if test="exportDeclareType != null">#{exportDeclareType},</if>
+            <if test="tradeTerms != null">#{tradeTerms},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
@@ -158,6 +187,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="auditTime != null">audit_time = #{auditTime},</if>
             <if test="bulkOpinion != null">bulk_opinion = #{bulkOpinion},</if>
             <if test="productionExceed != null">production_exceed = #{productionExceed},</if>
+            <if test="japanOrderNo != null">japan_order_no = #{japanOrderNo},</if>
+            <if test="jisLabelStatus != null">jis_label_status = #{jisLabelStatus},</if>
+            <if test="hazardTestStatus != null">hazard_test_status = #{hazardTestStatus},</if>
+            <if test="hazardReportNo != null">hazard_report_no = #{hazardReportNo},</if>
+            <if test="colorFastnessGrade != null">color_fastness_grade = #{colorFastnessGrade},</if>
+            <if test="auditFactoryStatus != null">audit_factory_status = #{auditFactoryStatus},</if>
+            <if test="auditFactoryDate != null">audit_factory_date = #{auditFactoryDate},</if>
+            <if test="exportDeclareType != null">export_declare_type = #{exportDeclareType},</if>
+            <if test="tradeTerms != null">trade_terms = #{tradeTerms},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>

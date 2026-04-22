@@ -106,7 +106,44 @@ public class SalesOrder extends ErpBaseBillEntity {
     @Excel(name = "排产需求是否超出")
     private String productionExceed;
 
-    public void setId(Long id) {
+    // ===== JIS 对日合规字段 =====
+
+    /** 日本客户订单号（日方管理编号） */
+    @Excel(name = "日方订单号")
+    private String japanOrderNo;
+
+    /** JIS标签合规状态 0未确认 1合规 2不合规 */
+    @Excel(name = "JIS标签状态")
+    private String jisLabelStatus;
+
+    /** 有害物质检测状态 0未检测 1通过 2不通过 */
+    @Excel(name = "有害物质检测")
+    private String hazardTestStatus;
+
+    /** 有害物质检测报告编号 */
+    @Excel(name = "检测报告编号")
+    private String hazardReportNo;
+
+    /** 色牢度等级（日本JIS标准，4级以上合格） */
+    @Excel(name = "色牢度等级")
+    private String colorFastnessGrade;
+
+    /** 验厂审计状态 0未审计 1通过 2整改中 3不通过 */
+    @Excel(name = "验厂状态")
+    private String auditFactoryStatus;
+
+    /** 验厂日期 */
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Excel(name = "验厂日期", width = 30, dateFormat = "yyyy-MM-dd")
+    private Date auditFactoryDate;
+
+    /** 出口申报类型（一般贸易/加工贸易） */
+    @Excel(name = "出口申报类型")
+    private String exportDeclareType;
+
+    /** 贸易条款（FOB/CIF/EXW等） */
+    @Excel(name = "贸易条款")
+    private String tradeTerms;
         this.id = id;
     }
 
@@ -277,6 +314,33 @@ public class SalesOrder extends ErpBaseBillEntity {
         return productionExceed;
     }
 
+    public String getJapanOrderNo() { return japanOrderNo; }
+    public void setJapanOrderNo(String japanOrderNo) { this.japanOrderNo = japanOrderNo; }
+
+    public String getJisLabelStatus() { return jisLabelStatus; }
+    public void setJisLabelStatus(String jisLabelStatus) { this.jisLabelStatus = jisLabelStatus; }
+
+    public String getHazardTestStatus() { return hazardTestStatus; }
+    public void setHazardTestStatus(String hazardTestStatus) { this.hazardTestStatus = hazardTestStatus; }
+
+    public String getHazardReportNo() { return hazardReportNo; }
+    public void setHazardReportNo(String hazardReportNo) { this.hazardReportNo = hazardReportNo; }
+
+    public String getColorFastnessGrade() { return colorFastnessGrade; }
+    public void setColorFastnessGrade(String colorFastnessGrade) { this.colorFastnessGrade = colorFastnessGrade; }
+
+    public String getAuditFactoryStatus() { return auditFactoryStatus; }
+    public void setAuditFactoryStatus(String auditFactoryStatus) { this.auditFactoryStatus = auditFactoryStatus; }
+
+    public Date getAuditFactoryDate() { return auditFactoryDate; }
+    public void setAuditFactoryDate(Date auditFactoryDate) { this.auditFactoryDate = auditFactoryDate; }
+
+    public String getExportDeclareType() { return exportDeclareType; }
+    public void setExportDeclareType(String exportDeclareType) { this.exportDeclareType = exportDeclareType; }
+
+    public String getTradeTerms() { return tradeTerms; }
+    public void setTradeTerms(String tradeTerms) { this.tradeTerms = tradeTerms; }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this,ToStringStyle.MULTI_LINE_STYLE)
@@ -304,6 +368,15 @@ public class SalesOrder extends ErpBaseBillEntity {
             .append("auditTime", getAuditTime())
             .append("bulkOpinion", getBulkOpinion())
             .append("productionExceed", getProductionExceed())
+            .append("japanOrderNo", getJapanOrderNo())
+            .append("jisLabelStatus", getJisLabelStatus())
+            .append("hazardTestStatus", getHazardTestStatus())
+            .append("hazardReportNo", getHazardReportNo())
+            .append("colorFastnessGrade", getColorFastnessGrade())
+            .append("auditFactoryStatus", getAuditFactoryStatus())
+            .append("auditFactoryDate", getAuditFactoryDate())
+            .append("exportDeclareType", getExportDeclareType())
+            .append("tradeTerms", getTradeTerms())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())

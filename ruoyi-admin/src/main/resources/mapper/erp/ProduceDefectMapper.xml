@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.ProduceDefectMapper">
+
+    <resultMap id="BaseResultMap" type="com.ruoyi.erp.domain.ProduceDefect">
+        <id     property="id"               column="id"/>
+        <result property="jobId"            column="job_id"/>
+        <result property="processId"        column="process_id"/>
+        <result property="processName"      column="process_name"/>
+        <result property="employeeId"       column="employee_id"/>
+        <result property="employeeName"     column="employee_name"/>
+        <result property="defectQty"        column="defect_qty"/>
+        <result property="defectReasonCode" column="defect_reason_code"/>
+        <result property="defectReasonDesc" column="defect_reason_desc"/>
+        <result property="isScrap"          column="is_scrap"/>
+        <result property="isRepair"         column="is_repair"/>
+        <result property="findTime"         column="find_time"/>
+        <result property="outsourceId"      column="outsource_id"/>
+        <result property="isOutsource"      column="is_outsource"/>
+        <result property="defectCategory"   column="defect_category"/>
+        <result property="defectLevel"      column="defect_level"/>
+        <result property="handleType"       column="handle_type"/>
+        <result property="handleResult"     column="handle_result"/>
+        <result property="responsibility"   column="responsibility"/>
+        <result property="isBrokenNeedle"   column="is_broken_needle"/>
+        <result property="needleConfirmBy"  column="needle_confirm_by"/>
+        <result property="needleConfirmTime" column="needle_confirm_time"/>
+        <result property="createBy"         column="create_by"/>
+        <result property="createTime"       column="create_time"/>
+        <result property="updateBy"         column="update_by"/>
+        <result property="updateTime"       column="update_time"/>
+        <result property="remark"           column="remark"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, job_id, process_id, process_name, employee_id, employee_name, defect_qty,
+        defect_reason_code, defect_reason_desc, is_scrap, is_repair, find_time,
+        outsource_id, is_outsource,
+        defect_category, defect_level, handle_type, handle_result, responsibility,
+        is_broken_needle, needle_confirm_by, needle_confirm_time,
+        create_by, create_time, update_by, update_time, remark
+    </sql>
+
+    <select id="selectProduceDefectById" parameterType="Long" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM t_erp_produce_defect WHERE id = #{id}
+    </select>
+
+    <select id="selectProduceDefectList" parameterType="com.ruoyi.erp.domain.ProduceDefect" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/> FROM t_erp_produce_defect
+        <where>
+            <if test="jobId != null">AND job_id = #{jobId}</if>
+            <if test="processId != null">AND process_id = #{processId}</if>
+            <if test="employeeId != null">AND employee_id = #{employeeId}</if>
+            <if test="isScrap != null and isScrap != ''">AND is_scrap = #{isScrap}</if>
+            <if test="isRepair != null and isRepair != ''">AND is_repair = #{isRepair}</if>
+            <if test="isOutsource != null and isOutsource != ''">AND is_outsource = #{isOutsource}</if>
+            <if test="defectCategory != null and defectCategory != ''">AND defect_category = #{defectCategory}</if>
+            <if test="defectLevel != null and defectLevel != ''">AND defect_level = #{defectLevel}</if>
+            <if test="isBrokenNeedle != null and isBrokenNeedle != ''">AND is_broken_needle = #{isBrokenNeedle}</if>
+            <if test="outsourceId != null">AND outsource_id = #{outsourceId}</if>
+        </where>
+        ORDER BY find_time DESC
+    </select>
+
+    <insert id="insertProduceDefect" parameterType="com.ruoyi.erp.domain.ProduceDefect" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_erp_produce_defect
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="jobId != null">job_id,</if>
+            <if test="processId != null">process_id,</if>
+            <if test="processName != null">process_name,</if>
+            <if test="employeeId != null">employee_id,</if>
+            <if test="employeeName != null">employee_name,</if>
+            <if test="defectQty != null">defect_qty,</if>
+            <if test="defectReasonCode != null">defect_reason_code,</if>
+            <if test="defectReasonDesc != null">defect_reason_desc,</if>
+            <if test="isScrap != null">is_scrap,</if>
+            <if test="isRepair != null">is_repair,</if>
+            <if test="findTime != null">find_time,</if>
+            <if test="outsourceId != null">outsource_id,</if>
+            <if test="isOutsource != null">is_outsource,</if>
+            <if test="defectCategory != null">defect_category,</if>
+            <if test="defectLevel != null">defect_level,</if>
+            <if test="handleType != null">handle_type,</if>
+            <if test="handleResult != null">handle_result,</if>
+            <if test="responsibility != null">responsibility,</if>
+            <if test="isBrokenNeedle != null">is_broken_needle,</if>
+            <if test="needleConfirmBy != null">needle_confirm_by,</if>
+            <if test="needleConfirmTime != null">needle_confirm_time,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="jobId != null">#{jobId},</if>
+            <if test="processId != null">#{processId},</if>
+            <if test="processName != null">#{processName},</if>
+            <if test="employeeId != null">#{employeeId},</if>
+            <if test="employeeName != null">#{employeeName},</if>
+            <if test="defectQty != null">#{defectQty},</if>
+            <if test="defectReasonCode != null">#{defectReasonCode},</if>
+            <if test="defectReasonDesc != null">#{defectReasonDesc},</if>
+            <if test="isScrap != null">#{isScrap},</if>
+            <if test="isRepair != null">#{isRepair},</if>
+            <if test="findTime != null">#{findTime},</if>
+            <if test="outsourceId != null">#{outsourceId},</if>
+            <if test="isOutsource != null">#{isOutsource},</if>
+            <if test="defectCategory != null">#{defectCategory},</if>
+            <if test="defectLevel != null">#{defectLevel},</if>
+            <if test="handleType != null">#{handleType},</if>
+            <if test="handleResult != null">#{handleResult},</if>
+            <if test="responsibility != null">#{responsibility},</if>
+            <if test="isBrokenNeedle != null">#{isBrokenNeedle},</if>
+            <if test="needleConfirmBy != null">#{needleConfirmBy},</if>
+            <if test="needleConfirmTime != null">#{needleConfirmTime},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateProduceDefect" parameterType="com.ruoyi.erp.domain.ProduceDefect">
+        UPDATE t_erp_produce_defect
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="jobId != null">job_id = #{jobId},</if>
+            <if test="processId != null">process_id = #{processId},</if>
+            <if test="processName != null">process_name = #{processName},</if>
+            <if test="employeeId != null">employee_id = #{employeeId},</if>
+            <if test="employeeName != null">employee_name = #{employeeName},</if>
+            <if test="defectQty != null">defect_qty = #{defectQty},</if>
+            <if test="defectReasonCode != null">defect_reason_code = #{defectReasonCode},</if>
+            <if test="defectReasonDesc != null">defect_reason_desc = #{defectReasonDesc},</if>
+            <if test="isScrap != null">is_scrap = #{isScrap},</if>
+            <if test="isRepair != null">is_repair = #{isRepair},</if>
+            <if test="findTime != null">find_time = #{findTime},</if>
+            <if test="outsourceId != null">outsource_id = #{outsourceId},</if>
+            <if test="isOutsource != null">is_outsource = #{isOutsource},</if>
+            <if test="defectCategory != null">defect_category = #{defectCategory},</if>
+            <if test="defectLevel != null">defect_level = #{defectLevel},</if>
+            <if test="handleType != null">handle_type = #{handleType},</if>
+            <if test="handleResult != null">handle_result = #{handleResult},</if>
+            <if test="responsibility != null">responsibility = #{responsibility},</if>
+            <if test="isBrokenNeedle != null">is_broken_needle = #{isBrokenNeedle},</if>
+            <if test="needleConfirmBy != null">needle_confirm_by = #{needleConfirmBy},</if>
+            <if test="needleConfirmTime != null">needle_confirm_time = #{needleConfirmTime},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteProduceDefectById" parameterType="Long">
+        DELETE FROM t_erp_produce_defect WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteProduceDefectByIds">
+        DELETE FROM t_erp_produce_defect WHERE id IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="sumDefectQtyByJobId" parameterType="Long" resultType="java.lang.Integer">
+        SELECT COALESCE(SUM(defect_qty), 0) FROM t_erp_produce_defect WHERE job_id = #{jobId}
+    </select>
+
+</mapper>

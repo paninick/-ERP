@@ -70,6 +70,37 @@ public class ProduceDefect extends BaseEntity {
     @Excel(name = "是否外协次品", readConverterExp = "0=否,1=是")
     private String isOutsource;
 
+    /** 缺陷大类：WEAVE=织造疵 DYE=染色疵 SPLICE=拼接疵 SEW=缝制疵 NEEDLE=残断针 PACK=包装疵 */
+    @Excel(name = "缺陷大类")
+    private String defectCategory;
+
+    /** 缺陷严重等级：CRITICAL=致命 MAJOR=严重 MINOR=轻微 */
+    @Excel(name = "缺陷等级")
+    private String defectLevel;
+
+    /** 处理方式：REPAIR=返工修复 DOWNGRADE=降级处理 SCRAP=报废 */
+    @Excel(name = "处理方式")
+    private String handleType;
+
+    /** 处理结果描述 */
+    @Excel(name = "处理结果")
+    private String handleResult;
+
+    /** 责任归属：SELF=本厂 OUTSOURCE=外协 MATERIAL=原料 */
+    @Excel(name = "责任归属")
+    private String responsibility;
+
+    /** 是否残断针（对日零容忍红线）0否 1是 */
+    @Excel(name = "是否残断针", readConverterExp = "0=否,1=是")
+    private String isBrokenNeedle;
+
+    /** 残断针处理确认人 */
+    private String needleConfirmBy;
+
+    /** 残断针处理确认时间 */
+    @Excel(name = "残断针确认时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date needleConfirmTime;
+
     public Long getId() {
         return id;
     }
@@ -182,6 +213,30 @@ public class ProduceDefect extends BaseEntity {
         this.isOutsource = isOutsource;
     }
 
+    public String getDefectCategory() { return defectCategory; }
+    public void setDefectCategory(String defectCategory) { this.defectCategory = defectCategory; }
+
+    public String getDefectLevel() { return defectLevel; }
+    public void setDefectLevel(String defectLevel) { this.defectLevel = defectLevel; }
+
+    public String getHandleType() { return handleType; }
+    public void setHandleType(String handleType) { this.handleType = handleType; }
+
+    public String getHandleResult() { return handleResult; }
+    public void setHandleResult(String handleResult) { this.handleResult = handleResult; }
+
+    public String getResponsibility() { return responsibility; }
+    public void setResponsibility(String responsibility) { this.responsibility = responsibility; }
+
+    public String getIsBrokenNeedle() { return isBrokenNeedle; }
+    public void setIsBrokenNeedle(String isBrokenNeedle) { this.isBrokenNeedle = isBrokenNeedle; }
+
+    public String getNeedleConfirmBy() { return needleConfirmBy; }
+    public void setNeedleConfirmBy(String needleConfirmBy) { this.needleConfirmBy = needleConfirmBy; }
+
+    public Date getNeedleConfirmTime() { return needleConfirmTime; }
+    public void setNeedleConfirmTime(Date needleConfirmTime) { this.needleConfirmTime = needleConfirmTime; }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -199,6 +254,14 @@ public class ProduceDefect extends BaseEntity {
             .append("findTime", getFindTime())
             .append("outsourceId", getOutsourceId())
             .append("isOutsource", getIsOutsource())
+            .append("defectCategory", getDefectCategory())
+            .append("defectLevel", getDefectLevel())
+            .append("handleType", getHandleType())
+            .append("handleResult", getHandleResult())
+            .append("responsibility", getResponsibility())
+            .append("isBrokenNeedle", getIsBrokenNeedle())
+            .append("needleConfirmBy", getNeedleConfirmBy())
+            .append("needleConfirmTime", getNeedleConfirmTime())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())

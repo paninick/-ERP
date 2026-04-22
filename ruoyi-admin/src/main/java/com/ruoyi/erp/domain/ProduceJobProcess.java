@@ -92,7 +92,28 @@ public class ProduceJobProcess extends BaseEntity {
     @Excel(name = "外协ID")
     private Long outsourceId;
 
-    public Long getId() {
+    /** 工序流转状态：PENDING=待开工 RUNNING=进行中 WAIT_CHECK=完工待检 PASS=检验通过 FAIL=检验不合格 OUTSOURCE=外发中 */
+    @Excel(name = "流转状态")
+    private String processStatus;
+
+    /** 放行人（质检通过后签字） */
+    private String releaseBy;
+
+    /** 放行时间 */
+    @Excel(name = "放行时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
+    private Date releaseTime;
+
+    /** 不合格处理方式：REPAIR=返工 DOWNGRADE=降级 SCRAP=报废 */
+    @Excel(name = "不合格处理")
+    private String failHandleType;
+
+    /** 损耗数量（本工序实际损耗） */
+    @Excel(name = "损耗数量")
+    private Integer lossQty;
+
+    /** 损耗是否超标 0否 1是 */
+    @Excel(name = "损耗超标")
+    private String lossExceed;
         return id;
     }
 
@@ -195,6 +216,24 @@ public class ProduceJobProcess extends BaseEntity {
     public void setOutsourceId(Long outsourceId) {
         this.outsourceId = outsourceId;
     }
+
+    public String getProcessStatus() { return processStatus; }
+    public void setProcessStatus(String processStatus) { this.processStatus = processStatus; }
+
+    public String getReleaseBy() { return releaseBy; }
+    public void setReleaseBy(String releaseBy) { this.releaseBy = releaseBy; }
+
+    public Date getReleaseTime() { return releaseTime; }
+    public void setReleaseTime(Date releaseTime) { this.releaseTime = releaseTime; }
+
+    public String getFailHandleType() { return failHandleType; }
+    public void setFailHandleType(String failHandleType) { this.failHandleType = failHandleType; }
+
+    public Integer getLossQty() { return lossQty; }
+    public void setLossQty(Integer lossQty) { this.lossQty = lossQty; }
+
+    public String getLossExceed() { return lossExceed; }
+    public void setLossExceed(String lossExceed) { this.lossExceed = lossExceed; }
 
     @Override
     public String toString() {

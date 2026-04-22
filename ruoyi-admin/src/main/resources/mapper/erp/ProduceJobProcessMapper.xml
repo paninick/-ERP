@@ -16,6 +16,12 @@
         <result property="finishTime" column="finish_time"/>
         <result property="isOutsource" column="is_outsource"/>
         <result property="outsourceId" column="outsource_id"/>
+        <result property="processStatus" column="process_status"/>
+        <result property="releaseBy" column="release_by"/>
+        <result property="releaseTime" column="release_time"/>
+        <result property="failHandleType" column="fail_handle_type"/>
+        <result property="lossQty" column="loss_qty"/>
+        <result property="lossExceed" column="loss_exceed"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
         <result property="remark" column="remark"/>
@@ -23,7 +29,9 @@
 
     <sql id="Base_Column_List">
         id, job_id, process_id, process_seq, employee_id, employee_name, in_qty, out_qty, defect_qty,
-        start_time, finish_time, is_outsource, outsource_id, create_by, create_time, remark
+        start_time, finish_time, is_outsource, outsource_id,
+        process_status, release_by, release_time, fail_handle_type, loss_qty, loss_exceed,
+        create_by, create_time, remark
     </sql>
 
     <select id="selectProduceJobProcessById" parameterType="Long" resultMap="BaseResultMap">
@@ -55,10 +63,14 @@
     <insert id="insertProduceJobProcess" parameterType="ProduceJobProcess" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO t_erp_produce_job_process (
             job_id, process_id, process_seq, employee_id, employee_name, in_qty, out_qty, defect_qty,
-            start_time, finish_time, is_outsource, outsource_id, create_by, create_time, remark
+            start_time, finish_time, is_outsource, outsource_id,
+            process_status, release_by, release_time, fail_handle_type, loss_qty, loss_exceed,
+            create_by, create_time, remark
         ) VALUES (
             #{jobId}, #{processId}, #{processSeq}, #{employeeId}, #{employeeName}, #{inQty}, #{outQty}, #{defectQty},
-            #{startTime}, #{finishTime}, #{isOutsource}, #{outsourceId}, #{createBy}, #{createTime}, #{remark}
+            #{startTime}, #{finishTime}, #{isOutsource}, #{outsourceId},
+            #{processStatus}, #{releaseBy}, #{releaseTime}, #{failHandleType}, #{lossQty}, #{lossExceed},
+            #{createBy}, #{createTime}, #{remark}
         )
     </insert>
 
@@ -76,6 +88,12 @@
             <if test="finishTime != null">finish_time = #{finishTime},</if>
             <if test="isOutsource != null">is_outsource = #{isOutsource},</if>
             <if test="outsourceId != null">outsource_id = #{outsourceId},</if>
+            <if test="processStatus != null and processStatus != ''">process_status = #{processStatus},</if>
+            <if test="releaseBy != null">release_by = #{releaseBy},</if>
+            <if test="releaseTime != null">release_time = #{releaseTime},</if>
+            <if test="failHandleType != null">fail_handle_type = #{failHandleType},</if>
+            <if test="lossQty != null">loss_qty = #{lossQty},</if>
+            <if test="lossExceed != null">loss_exceed = #{lossExceed},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="remark != null">remark = #{remark},</if>
