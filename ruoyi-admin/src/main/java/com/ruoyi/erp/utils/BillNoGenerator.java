@@ -7,8 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -23,6 +23,7 @@ import java.util.concurrent.TimeUnit;
 public class BillNoGenerator {
 
     private static final Logger log = LoggerFactory.getLogger(BillNoGenerator.class);
+    private static final DateTimeFormatter DISPLAY_FMT = DateTimeFormatter.ofPattern("yyyyMMdd");
 
     @Autowired
     private StringRedisTemplate redisTemplate;
@@ -39,7 +40,8 @@ public class BillNoGenerator {
      * @return 唯一单据号
      */
     public String generate(String prefix) {
-        String dateStr = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        LocalDate today = LocalDate.now();
+        String dateStr = today.format(DISPLAY_FMT);
         String redisKey = "seq:erp:" + prefix + ":" + dateStr;
 
         Long seq;
@@ -48,12 +50,12 @@ public class BillNoGenerator {
             seq = redisTemplate.opsForValue().increment(redisKey);
             // 设置过期时间2天，自动清理
             redisTemplate.expire(redisKey, 2, TimeUnit.DAYS);
-            // 同步更新到数据库兜底
-            syncToDatabase(prefix, dateStr, seq);
+            // 同步更新到数据库兜底（使用 LocalDate 避免 Date.valueOf 的格式约束）
+            syncToDatabase(prefix, today, seq);
         } catch (Exception e) {
-            // Redis异常，降级到数据库兜底
+            // Redis异常，降级到数据库原子兜底
             log.warn("Redis unavailable, fallback to database for bill sequence generation");
-            seq = incrementDatabase(prefix, dateStr);
+            seq = incrementDatabase(prefix, today);
         }
 
         return String.format("%s-%s-%05d", prefix, dateStr, seq);
@@ -62,11 +64,12 @@ public class BillNoGenerator {
     /**
      * 同步当前序号到数据库，Redis宕机后可以恢复
      */
-    private void syncToDatabase(String billType, String dateStr, Long currentVal) {
+    private void syncToDatabase(String billType, LocalDate seqDate, Long currentVal) {
         try {
-            int updated = billSequenceMapper.upsertSequence(java.sql.Date.valueOf(dateStr), billType, currentVal);
+            java.sql.Date sqlDate = java.sql.Date.valueOf(seqDate);
+            int updated = billSequenceMapper.upsertSequence(sqlDate, billType, currentVal);
             if (updated == 0) {
-                billSequenceMapper.insertSequence(java.sql.Date.valueOf(dateStr), billType, currentVal);
+                billSequenceMapper.insertSequence(sqlDate, billType, currentVal);
             }
         } catch (Exception e) {
             log.error("Failed to sync sequence to database", e);
@@ -75,20 +78,11 @@ public class BillNoGenerator {
     }
 
     /**
-     * 数据库兜底：SELECT ... FOR UPDATE  increment
+     * 数据库兜底：单条原子 INSERT ON DUPLICATE KEY UPDATE，并发安全
      */
-    private Long incrementDatabase(String billType, String dateStr) {
-        java.sql.Date date = java.sql.Date.valueOf(dateStr);
-        // 先查询
-        Long current = billSequenceMapper.selectCurrentVal(date, billType);
-        if (current == null) {
-            // 不存在，插入
-            billSequenceMapper.insertSequence(date, billType, 1L);
-            return 1L;
-        } else {
-            // 存在，加1
-            billSequenceMapper.incrementSequence(date, billType);
-            return current + 1;
-        }
+    private Long incrementDatabase(String billType, LocalDate seqDate) {
+        java.sql.Date sqlDate = java.sql.Date.valueOf(seqDate);
+        billSequenceMapper.atomicIncrementOrInsert(sqlDate, billType);
+        return billSequenceMapper.getLastInsertId();
     }
 }
