@@ -144,7 +144,7 @@
     <el-dialog :title="title" :visible.sync="open" width="70%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-form-item label="外协单号" prop="outsourceNo">
-          <el-input v-model="form.outsourceNo" placeholder="请输入外协单号" />
+          <el-input v-model="form.outsourceNo" placeholder="保存时自动生成（OO-yyyyMMdd-序号）" disabled />
         </el-form-item>
         <el-form-item label="工序" prop="processId">
           <el-input v-model="form.processId" placeholder="工序ID" />

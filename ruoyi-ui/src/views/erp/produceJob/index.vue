@@ -91,7 +91,7 @@
         <el-row :gutter="24">
           <el-col :span="12">
             <el-form-item label="工票编号" prop="jobNo">
-              <el-input v-model="form.jobNo" placeholder="请输入" />
+              <el-input v-model="form.jobNo" placeholder="保存时自动生成（PJ-yyyyMMdd-序号）" disabled />
             </el-form-item>
           </el-col>
           <el-col :span="12">

@@ -216,7 +216,7 @@
         <el-row>
           <el-col :span="12">
             <el-form-item label="生产计划编号" prop="planNo" required>
-              <el-input v-model="form.planNo" placeholder="请输入生产计划编号" />
+              <el-input v-model="form.planNo" placeholder="保存时自动生成（PP-yyyyMMdd-序号）" disabled />
             </el-form-item>
           </el-col>
           <el-col :span="12">

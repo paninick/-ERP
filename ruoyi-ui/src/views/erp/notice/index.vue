@@ -217,7 +217,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="打样编号" prop="sampleNo">
-          <el-input v-model="form.sampleNo" placeholder="请输入打样编号" />
+          <el-input v-model="form.sampleNo" placeholder="保存时自动生成（SN-yyyyMMdd-序号）" disabled />
         </el-form-item>
         <el-form-item label="大货款号" prop="bulkOrderNo">
           <el-input v-model="form.bulkOrderNo" placeholder="请输入大货款号" />
