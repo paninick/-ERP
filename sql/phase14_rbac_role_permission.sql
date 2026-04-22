@@ -3,22 +3,22 @@
 -- 执行顺序: 第16步（在 sys_automation.sql 之前）
 --
 -- 岗位角色设计：
---   role_id 100: 生产主管  - 生产全链路读写，不含财务/人事
---   role_id 101: 技术员    - 工艺/BOM/工序只读+编辑，不含财务/销售
---   role_id 102: 销售员    - 销售/客户/打样通知读写，不含生产内部/财务
---   role_id 103: 财务      - 计件工资/成本/发票读写，其余只读
---   role_id 104: 仓库管理员 - 库存/出入库读写，其余只读
+--   role_id 200: 生产主管  - 生产全链路读写，不含财务/人事
+--   role_id 201: 技术员    - 工艺/BOM/工序只读+编辑，不含财务/销售
+--   role_id 202: 销售员    - 销售/客户/打样通知读写，不含生产内部/财务
+--   role_id 203: 财务      - 计件工资/成本/发票读写，其余只读
+--   role_id 204: 仓库管理员 - 库存/出入库读写，其余只读
 
 -- ============================================================
 -- 1. 角色定义
 -- ============================================================
 INSERT IGNORE INTO sys_role (role_id, role_name, role_key, role_sort, data_scope, menu_check_strictly, dept_check_strictly, status, del_flag, create_by, create_time, remark)
 VALUES
-(100, '生产主管',   'erp_produce_manager', 10, '1', 1, 1, '0', '0', 'admin', NOW(), 'ERP生产主管，生产全链路管理'),
-(101, '技术员',     'erp_technician',      11, '1', 1, 1, '0', '0', 'admin', NOW(), 'ERP技术员，工艺/BOM/工序管理'),
-(102, '销售员',     'erp_salesperson',     12, '1', 1, 1, '0', '0', 'admin', NOW(), 'ERP销售员，销售订单与客户管理'),
-(103, '财务',       'erp_finance',         13, '1', 1, 1, '0', '0', 'admin', NOW(), 'ERP财务，工资/成本/发票管理'),
-(104, '仓库管理员', 'erp_warehouse_admin', 14, '1', 1, 1, '0', '0', 'admin', NOW(), 'ERP仓库管理员，库存出入库管理');
+(200, '生产主管',   'erp_produce_manager', 10, '1', 1, 1, '0', '0', 'admin', NOW(), 'ERP生产主管，生产全链路管理'),
+(201, '技术员',     'erp_technician',      11, '1', 1, 1, '0', '0', 'admin', NOW(), 'ERP技术员，工艺/BOM/工序管理'),
+(202, '销售员',     'erp_salesperson',     12, '1', 1, 1, '0', '0', 'admin', NOW(), 'ERP销售员，销售订单与客户管理'),
+(203, '财务',       'erp_finance',         13, '1', 1, 1, '0', '0', 'admin', NOW(), 'ERP财务，工资/成本/发票管理'),
+(204, '仓库管理员', 'erp_warehouse_admin', 14, '1', 1, 1, '0', '0', 'admin', NOW(), 'ERP仓库管理员，库存出入库管理');
 
 -- ============================================================
 -- 2. 权限字符串表（sys_menu perms 字段对应）
@@ -28,12 +28,12 @@ VALUES
 --    由于 menu_id 在不同环境可能不同，改用存储过程动态关联
 -- ============================================================
 
--- 动态关联：生产主管（role_id=100）
+-- 动态关联：生产主管（role_id=200）
 -- 拥有权限：plan/produceJob/produceJobProcess/defect/outsource/piecewage/piecewagedetail/
 --           materialconsume/produceboard/producegantt/check/bizabnormal/productSerial
 --           + 基础数据只读（customer/supplier/material/warehouse/employee）
 INSERT IGNORE INTO sys_role_menu (role_id, menu_id)
-SELECT 100, menu_id FROM sys_menu
+SELECT 200, menu_id FROM sys_menu
 WHERE perms IN (
   -- 生产计划
   'erp:plan:list','erp:plan:query','erp:plan:add','erp:plan:edit','erp:plan:remove','erp:plan:export',
@@ -70,11 +70,11 @@ WHERE perms IN (
   'erp:bom:list','erp:bom:query'
 );
 
--- 技术员（role_id=101）
+-- 技术员（role_id=201）
 -- 拥有权限：tech/techmaterial/techsize/processDef/processRoute/processRouteItem/
 --           processLossMatrix/bom/standardColor/check + 基础数据只读
 INSERT IGNORE INTO sys_role_menu (role_id, menu_id)
-SELECT 101, menu_id FROM sys_menu
+SELECT 201, menu_id FROM sys_menu
 WHERE perms IN (
   -- 工艺指示书
   'erp:tech:list','erp:tech:query','erp:tech:add','erp:tech:edit','erp:tech:remove','erp:tech:export','erp:tech:import',
@@ -102,10 +102,10 @@ WHERE perms IN (
   'erp:unitConversion:list','erp:unitConversion:query'
 );
 
--- 销售员（role_id=102）
+-- 销售员（role_id=202）
 -- 拥有权限：sales/salesitem/salesmaterial/customer/contacts/invoice/notice + 打样通知
 INSERT IGNORE INTO sys_role_menu (role_id, menu_id)
-SELECT 102, menu_id FROM sys_menu
+SELECT 202, menu_id FROM sys_menu
 WHERE perms IN (
   -- 销售订单
   'erp:sales:list','erp:sales:query','erp:sales:add','erp:sales:edit','erp:sales:remove','erp:sales:export','erp:sales:import',
@@ -125,10 +125,10 @@ WHERE perms IN (
   'erp:stock:list','erp:stock:query'
 );
 
--- 财务（role_id=103）
+-- 财务（role_id=203）
 -- 拥有权限：piecewage/piecewagedetail/cost/invoice + 其余只读
 INSERT IGNORE INTO sys_role_menu (role_id, menu_id)
-SELECT 103, menu_id FROM sys_menu
+SELECT 203, menu_id FROM sys_menu
 WHERE perms IN (
   -- 计件工资
   'erp:piecewage:list','erp:piecewage:query','erp:piecewage:add','erp:piecewage:edit','erp:piecewage:remove','erp:piecewage:export',
@@ -150,10 +150,10 @@ WHERE perms IN (
   'erp:supplier:list','erp:supplier:query'
 );
 
--- 仓库管理员（role_id=104）
+-- 仓库管理员（role_id=204）
 -- 拥有权限：stock/stockin/stockout/warehouse/warehousearea/warehouselocation/inventory/materialconsume
 INSERT IGNORE INTO sys_role_menu (role_id, menu_id)
-SELECT 104, menu_id FROM sys_menu
+SELECT 204, menu_id FROM sys_menu
 WHERE perms IN (
   -- 库存
   'erp:stock:list','erp:stock:query','erp:stock:add','erp:stock:edit','erp:stock:remove','erp:stock:export',
