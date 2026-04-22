@@ -2,7 +2,7 @@
 
 > **定位**：把法律条文、行业标准、客户验厂规则翻译为系统层的**硬约束清单**（字段、流程、日志、基础设施），避免"纸面合规、系统裸奔"。
 > **产出日**：2026-04-21 · **修订日**：2026-04-22 · **项目**：对日针织外贸 ERP
-> **状态**：v1.1（同步 02 ADR-001 事实校正）
+> **状态**：v1.2（同步 docs/10 老库人脸数据合规风险）
 > **前置阅读**：`01-requirements-normalization.md` §3.2、`02-architecture-and-key-system.md` §6
 
 ---
@@ -358,6 +358,7 @@ CREATE TABLE t_erp_material_batch (
 | 邮箱 | 展示脱敏（可选） | `@Sensitive(EMAIL)` | 🟡 |
 | 工资金额 | 列级访问控制 | Spring Security `@PreAuthorize("hasRole('hr')")` | 🔴 |
 | 成本单价 | 列级访问控制 | Spring Security `@PreAuthorize("hasRole('finance_manager')")` | 🟡 |
+| **人脸数据**(legacy `sys_user.facedata`) | **不迁入新库**；若迁,须独立表 `sys_user_biometric` + KMS 加密 + PIPIA 备案 | **PIPL 第 28 条敏感信息**,单独同意 + 严格访问控制 | 🔴 |
 
 ### 6.2 流程层硬约束
 
@@ -522,6 +523,8 @@ public class DataArchiveJob {
 
 ## 变更日志
 
+- **2026-04-22 v1.2**:同步 `docs/10` 发现 — 富泉历史 RuoYi 库含 `sys_user.facedata mediumtext` 人脸字段,属 PIPL 第 28 条敏感信息。
+  §6.1 字段层硬约束表追加 🔴 "人脸数据" 行,记录默认处置"不迁入新库",并给出迁入时的合规门槛(独立表 + KMS + PIPIA)。
 - **2026-04-22 v1.1**：同步 02 ADR-001 事实校正。§6.1 敏感数据清单工资金额/成本单价两行、
   §6.2 流程层硬约束密码策略行,由 Shiro 注解/Realm 改为 Spring Security `@PreAuthorize` /
   `UserDetailsService` + `BCryptPasswordEncoder`。实现语义不变,仅与实际鉴权框架对齐。

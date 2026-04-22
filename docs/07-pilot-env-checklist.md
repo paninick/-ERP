@@ -5,7 +5,7 @@
 > **产出日**:2026-04-22 · **项目**:对日针织外贸 ERP(基于 RuoYi-Vue 3.9.2)
 > **适用读者**:Pilot 现场部署运维、DevOps、架构师(会签人)
 > **使用节奏**:首次全项核查 1 次 + 每次环境变更后增量核查 + 上线演练前强制重跑
-> **版本**:v1.1
+> **版本**:v1.2
 
 ---
 
@@ -63,6 +63,15 @@
 
 > **偏离若依官方语境说明**:RuoYi-Vue 官方 `hjbs` 文档以 Spring Boot 2.x 为默认语境建议 JDK 1.8。本项目 `pom.xml` 锁定 Spring Boot 4.0.3 + `java.version=17`,**JDK 8/11 必然失败**。详见 `06 §6.1` 的偏离说明。
 
+### 2.x 禁用安装包清单(对应 `D:/下载/其他/`,详见 `09 §2`)
+
+| 🔴 安装包 | 禁用原因 |
+| :-- | :-- |
+| `jdk-8u161-windows-x64.zip` | Spring Boot 4.x 要求 JDK 17+,JDK 8 编译 / 启动必败 |
+| `nginx-1.8.1.zip` | 2015 年版,多个 CVE,低于 §3.3 要求 1.18+ |
+| `Redis-x64-3.2.100.msi` | 2016 年微软 fork 已弃,缺 Stream / ACL,低于 §3.2 要求 5.0+ |
+| `mysql57221.zip`(5.7.22) | 2018 年版,距 5.7 末版(5.7.44)累积 1000+ 补丁;**建议替换为 5.7.44 或 8.0 LTS** |
+
 ---
 
 ## 3. C 组 · 中间件
@@ -71,10 +80,11 @@
 
 | 🔴🟡🟢 | 检查项 | 期望值 | 实际值 | 验证命令 |
 | :-- | :-- | :-- | :-- | :-- |
-| 🔴 | 版本 | **5.7.x**(若依官方推荐)| | `mysql --version` |
-| 🔴 | 字符集 | utf8mb4 / utf8mb4_unicode_ci | | `show variables like 'character_set_%';` |
+| 🔴 | 版本 | **5.7.x**,**小版本下限 ≥ 5.7.44**(5.7 末版,2023-10)| | `mysql --version` |
+| 🔴 | 字符集 | utf8mb4 / utf8mb4_unicode_ci(**不可用 utf8**,丢日文 IVS / emoji)| | `show variables like 'character_set_%';` |
 | 🔴 | 时区 | `+08:00` 或 `Asia/Shanghai` | | `show variables like 'time_zone';` |
 | 🔴 | 数据库 `ry_vue` | 已建,字符集 utf8mb4 | | `show create database ry_vue;` |
+| 🔴 | 老库迁入时字符集转换 | 迁入前每张表 `ALTER TABLE x CONVERT TO CHARACTER SET utf8mb4`,禁止沿用 utf8 | | 见 `10 §4.2` |
 | 🔴 | 应用账号 | 非 root,最小权限(INSERT/UPDATE/SELECT/DELETE/EXECUTE + DDL) | | `show grants for 'erp'@'%';` |
 | 🟡 | `max_connections` | ≥ 500 | | `show variables like 'max_connections';` |
 | 🟡 | `innodb_buffer_pool_size` | ≥ 2G | | 同上 |
@@ -243,6 +253,10 @@ PM 归档(姓名/日期)            CCB 决策(上线 Go/No-Go)
 
 ## 变更日志
 
+- **2026-04-22 v1.2**:同步 `docs/09`(基础设施审计)与 `docs/10`(老库参考)。
+  §2 追加"禁用安装包清单"(JDK 8 / Nginx 1.8.1 / Redis 3.2 / MySQL 5.7.22 过老)。
+  §3.1 MySQL 段新增"小版本下限 ≥ 5.7.44"与"老库迁入时必须 `ALTER TABLE CONVERT TO utf8mb4`"两行。
+  字符集期望值强调"不可用 utf8,丢日文 IVS / emoji"。
 - **2026-04-22 v1.1**:同日补丁落地 5 项 P0 外化
   (`DB_URL` / `DB_USERNAME` / `DB_PASSWORD` / `UPLOAD_PATH` / `REDIS_HOST` / `REDIS_PORT`)。
   §4.2 从"尚未外化"改为"第二轮外化已完成",§9 遗留动作清空。
