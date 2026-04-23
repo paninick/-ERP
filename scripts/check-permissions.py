@@ -37,16 +37,12 @@ def is_annotation_line(line):
 
 def is_mapping_annotation(line):
     """判断是否为方法级别的请求映射注解"""
-    return bool(re.search(r'@(?:GetMapping|PostMapping|PutMapping|DeleteMapping|PatchMapping)\b', line))
+    return bool(re.search(r'@(?:GetMapping|PostMapping|PutMapping|DeleteMapping|PatchMapping|RequestMapping)\b', line))
 
 
-def check_file(filepath):
-    """检查单个Controller文件，返回缺失 @PreAuthorize 的问题列表"""
+def check_file(lines, relpath):
+    """检查单个Controller文件内容，返回缺失 @PreAuthorize 的问题列表"""
     issues = []
-    relpath = os.path.relpath(filepath, start=os.path.join(os.path.dirname(__file__), '..'))
-
-    with open(filepath, 'r', encoding='utf-8') as f:
-        lines = f.readlines()
 
     for i, line in enumerate(lines):
         if not is_mapping_annotation(line):
@@ -75,10 +71,10 @@ def check_file(filepath):
             break
 
         if not found:
-            # 提取方法名
+            # 提取方法名（支持 static、final 等修饰符）
             method_name = 'unknown'
             for k in range(i, min(i + 5, len(lines))):
-                m = re.search(r'(?:public|private|protected)\s+(\S+)\s+(\w+)\s*\(', lines[k])
+                m = re.search(r'(?:public|private|protected)\s+(?:static\s+)?(\S+)\s+(\w+)\s*\(', lines[k])
                 if m:
                     method_name = m.group(2)
                     break
@@ -102,8 +98,13 @@ def scan_directory(controller_path, is_production_path=False):
                 continue
             filepath = os.path.join(root, file)
 
-            with open(filepath, 'r', encoding='utf-8') as f:
-                content = f.read()
+            try:
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    content = f.read()
+            except (IOError, OSError) as e:
+                relpath = os.path.relpath(filepath, start=os.path.join(os.path.dirname(__file__), '..'))
+                print(f"  [错误] 无法读取文件 {relpath}: {e}")
+                continue
 
             if '@RestController' not in content:
                 continue
@@ -113,8 +114,14 @@ def scan_directory(controller_path, is_production_path=False):
                 continue
 
             total_files += 1
-            file_issues = check_file(filepath)
-            all_issues.extend(file_issues)
+            lines = content.splitlines(True)
+            relpath = os.path.relpath(filepath, start=os.path.join(os.path.dirname(__file__), '..'))
+            try:
+                file_issues = check_file(lines, relpath)
+                all_issues.extend(file_issues)
+            except Exception as e:
+                print(f"  [错误] 检查文件 {relpath} 时发生异常: {e}")
+                continue
 
     return all_issues, total_files
 
