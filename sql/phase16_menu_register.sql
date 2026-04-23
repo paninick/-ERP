@@ -136,10 +136,10 @@ SELECT 1, menu_id FROM sys_menu
 WHERE menu_id BETWEEN 2000 AND 2999;
 
 -- ============================================================
--- 13. 将损耗管控/柔性排单授权给生产主管（role_id=100）
+-- 13. 将损耗管控/柔性排单授权给生产主管（role_id=200，见 phase14）
 -- ============================================================
 INSERT IGNORE INTO sys_role_menu (role_id, menu_id)
-SELECT 100, menu_id FROM sys_menu
+SELECT 200, menu_id FROM sys_menu
 WHERE perms IN (
   'erp:producegantt:list','erp:producegantt:edit','erp:producegantt:detect',
   'erp:materialconsume:list','erp:materialconsume:query','erp:materialconsume:add',
@@ -148,4 +148,4 @@ WHERE perms IN (
 
 -- 同时授权目录菜单（无 perms 的目录节点）
 INSERT IGNORE INTO sys_role_menu (role_id, menu_id)
-SELECT 100, menu_id FROM sys_menu WHERE menu_id IN (2000, 2003);
+SELECT 200, menu_id FROM sys_menu WHERE menu_id IN (2000, 2003);

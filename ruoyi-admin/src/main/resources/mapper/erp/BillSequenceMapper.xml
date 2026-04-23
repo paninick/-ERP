@@ -22,4 +22,15 @@
         WHERE seq_date = #{seqDate} AND bill_type = #{billType}
     </update>
 
+    <!-- 原子取号：首次插入时 LAST_INSERT_ID(1)=1，重复时 LAST_INSERT_ID(current_val+1) -->
+    <insert id="atomicIncrementOrInsert">
+        INSERT INTO t_erp_bill_sequence (seq_date, bill_type, current_val)
+        VALUES (#{seqDate}, #{billType}, LAST_INSERT_ID(1))
+        ON DUPLICATE KEY UPDATE current_val = LAST_INSERT_ID(current_val + 1)
+    </insert>
+
+    <select id="getLastInsertId" resultType="java.lang.Long">
+        SELECT LAST_INSERT_ID()
+    </select>
+
 </mapper>

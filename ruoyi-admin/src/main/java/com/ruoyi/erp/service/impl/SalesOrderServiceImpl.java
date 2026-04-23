@@ -130,13 +130,8 @@ public class SalesOrderServiceImpl implements ISalesOrderService {
         {
             try
             {
-                boolean isEmptyRecord = salesOrder == null;
-                if (!isEmptyRecord) {
-                    boolean hasSalesNo = salesOrder.getSalesNo() != null && !salesOrder.getSalesNo().trim().isEmpty();
-                    isEmptyRecord = !hasSalesNo;
-                }
-
-                if (isEmptyRecord)
+                // 只跳过 null 对象（Excel 空行），空 salesNo 视为待自动生成
+                if (salesOrder == null)
                 {
                     skipNum++;
                     continue;
@@ -164,7 +159,8 @@ public class SalesOrderServiceImpl implements ISalesOrderService {
                 }
                 else
                 {
-                    salesOrderMapper.insertSalesOrder(salesOrder);
+                    // 统一经由 insertSalesOrder()，空单号自动生成，保证所有单号出自同一入口
+                    this.insertSalesOrder(salesOrder);
                     successNum++;
                     successMsg.append("\n").append(successNum).append("、销售单号 " + salesOrder.getSalesNo() + " 导入成功");
                 }

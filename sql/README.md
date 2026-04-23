@@ -14,17 +14,18 @@
 | 8 | `phase7_biz_abnormal_pool.sql` | 业务异常池 |
 | 9 | `phase8_produce_board_gantt.sql` | 生产看板甘特图 |
 | 10 | `phase9_inventory_improvement.sql` | 库存改进 |
-| 11 | `phase10_complete_material_fields.sql` | 物料字段完善 |
-| 12 | `phase11_bom_sku_improvement.sql` | BOM & SKU 改进 |
-| 13 | `phase12_p0_defect_jis_process.sql` | P0：缺陷字典库 + JIS合规字段 + 工序放行标准 |
-| 14 | `phase13_p1_splice_dye_threshold.sql` | P1：拼接工艺SOP字段 + 染整阈值约束字段 |
-| 15 | `phase14_rbac_role_permission.sql` | P1：RBAC岗位权限矩阵（5个ERP岗位角色） |
-| 16 | `phase15_flexible_schedule.sql` | P2：柔性排单字段（priority/start_date/due_date/schedule_status/conflict_flag） |
-| 17 | `phase16_menu_register.sql` | P2：ERP 菜单全量注册（顶级目录+7个二级目录+所有功能页+losscontrol+producegantt） |
-| 18 | `sprint2_inventory_pushdown.sql` | 库存下推 |
-| 18 | `sys_automation.sql` | 系统自动化配置 |
-| 19 | `init_inventory_data.sql` | 初始库存数据（可选） |
-| 20 | `ops_panel_init.sql` | 运维面板（可选） |
+| 11 | `_helpers.sql` | 存储过程定义（sp_erp_add_column/index/unique_key），phase10 及后续均依赖 |
+| 12 | `phase10_complete_material_fields.sql` | 物料字段完善 |
+| 13 | `phase11_bom_sku_improvement.sql` | BOM & SKU 改进 |
+| 14 | `phase12_p0_defect_jis_process.sql` | P0：缺陷字典库 + JIS合规字段 + 工序放行标准 |
+| 15 | `phase13_p1_splice_dye_threshold.sql` | P1：拼接工艺SOP字段 + 染整阈值约束字段 |
+| 16 | `phase14_rbac_role_permission.sql` | P1：RBAC岗位权限矩阵（5个ERP岗位角色） |
+| 17 | `phase15_flexible_schedule.sql` | P2：柔性排单字段（priority/start_date/due_date/schedule_status/conflict_flag） |
+| 18 | `phase16_menu_register.sql` | P2：ERP 菜单全量注册（顶级目录+7个二级目录+所有功能页+losscontrol+producegantt） |
+| 19 | `sprint2_inventory_pushdown.sql` | 库存下推 |
+| 20 | `sys_automation.sql` | 系统自动化配置 |
+| 21 | `init_inventory_data.sql` | 初始库存数据（可选） |
+| 22 | `ops_panel_init.sql` | 运维面板（可选） |
 
 ## 其他脚本
 

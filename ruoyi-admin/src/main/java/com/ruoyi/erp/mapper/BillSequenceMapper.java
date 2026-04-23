@@ -33,4 +33,15 @@ public interface BillSequenceMapper {
      * upsert 更新
      */
     int upsertSequence(@Param("seqDate") Date seqDate, @Param("billType") String billType, @Param("currentVal") Long currentVal);
+
+    /**
+     * 原子 upsert：INSERT ... ON DUPLICATE KEY UPDATE current_val = LAST_INSERT_ID(current_val + 1)
+     * Redis 不可达时使用，保证并发安全
+     */
+    int atomicIncrementOrInsert(@Param("seqDate") Date seqDate, @Param("billType") String billType);
+
+    /**
+     * 取 LAST_INSERT_ID()，配合 atomicIncrementOrInsert 使用
+     */
+    Long getLastInsertId();
 }
