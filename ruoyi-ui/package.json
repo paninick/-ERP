@@ -25,6 +25,7 @@
   },
   "dependencies": {
     "@riophae/vue-treeselect": "0.4.0",
+    "@stomp/stompjs": "^6.1.2",
     "axios": "0.30.3",
     "clipboard": "2.0.8",
     "core-js": "3.37.1",
@@ -39,6 +40,7 @@
     "nprogress": "0.2.0",
     "quill": "2.0.2",
     "screenfull": "5.0.2",
+    "sockjs-client": "^1.6.1",
     "sortablejs": "1.10.2",
     "splitpanes": "2.4.1",
     "vue": "2.6.12",
@@ -47,8 +49,6 @@
     "vue-i18n": "^8.28.2",
     "vue-router": "3.4.9",
     "vuedraggable": "2.24.3",
-    "@stomp/stompjs": "^7.0.0",
-    "sockjs-client": "^1.6.1",
     "vuex": "3.6.0"
   },
   "devDependencies": {
