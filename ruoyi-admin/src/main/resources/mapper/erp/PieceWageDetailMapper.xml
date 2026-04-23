@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.PieceWageDetailMapper">
+
+    <resultMap type="PieceWageDetail" id="PieceWageDetailResult">
+        <result property="id" column="id" />
+        <result property="wageId" column="wage_id" />
+        <result property="employeeId" column="employee_id" />
+        <result property="processId" column="process_id" />
+        <result property="processName" column="process_name" />
+        <result property="jobId" column="job_id" />
+        <result property="okQty" column="ok_qty" />
+        <result property="defectQty" column="defect_qty" />
+        <result property="processPrice" column="process_price" />
+        <result property="shouldWage" column="should_wage" />
+        <result property="deductWage" column="deduct_wage" />
+        <result property="actualWage" column="actual_wage" />
+        <result property="remark" column="remark" />
+        <result property="createBy" column="create_by" />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy" column="update_by" />
+        <result property="updateTime" column="update_time" />
+    </resultMap>
+
+    <sql id="selectPieceWageDetailVo">
+        select id, wage_id, employee_id, process_id, process_name, job_id, ok_qty,
+               defect_qty, process_price, should_wage, deduct_wage, actual_wage,
+               remark, create_by, create_time, update_by, update_time
+        from t_erp_piece_wage_detail
+    </sql>
+
+    <select id="selectPieceWageDetailById" parameterType="Long" resultMap="PieceWageDetailResult">
+        <include refid="selectPieceWageDetailVo"/>
+        where id = #{id}
+    </select>
+
+    <select id="selectPieceWageDetailList" parameterType="PieceWageDetail" resultMap="PieceWageDetailResult">
+        <include refid="selectPieceWageDetailVo"/>
+        <where>
+            <if test="wageId != null">and wage_id = #{wageId}</if>
+            <if test="employeeId != null">and employee_id = #{employeeId}</if>
+            <if test="processId != null">and process_id = #{processId}</if>
+            <if test="processName != null and processName != ''">
+                and process_name like concat('%', #{processName}, '%')
+            </if>
+            <if test="jobId != null">and job_id = #{jobId}</if>
+        </where>
+        order by wage_id desc, id desc
+    </select>
+
+    <select id="selectByWageId" parameterType="Long" resultMap="PieceWageDetailResult">
+        <include refid="selectPieceWageDetailVo"/>
+        where wage_id = #{wageId}
+        order by id asc
+    </select>
+
+    <insert id="insertPieceWageDetail" parameterType="PieceWageDetail" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_piece_wage_detail (
+            wage_id, employee_id, process_id, process_name, job_id,
+            ok_qty, defect_qty, process_price, should_wage, deduct_wage,
+            actual_wage, remark, create_by, create_time, update_by, update_time
+        ) values (
+            #{wageId}, #{employeeId}, #{processId}, #{processName}, #{jobId},
+            #{okQty}, #{defectQty}, #{processPrice}, #{shouldWage}, #{deductWage},
+            #{actualWage}, #{remark}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime}
+        )
+    </insert>
+
+    <insert id="batchInsertPieceWageDetail" parameterType="java.util.List">
+        insert into t_erp_piece_wage_detail (
+            wage_id, employee_id, process_id, process_name, job_id,
+            ok_qty, defect_qty, process_price, should_wage, deduct_wage,
+            actual_wage, remark, create_by, create_time, update_by, update_time
+        ) values
+        <foreach collection="list" item="item" separator=",">
+            (
+                #{item.wageId}, #{item.employeeId}, #{item.processId}, #{item.processName}, #{item.jobId},
+                #{item.okQty}, #{item.defectQty}, #{item.processPrice}, #{item.shouldWage}, #{item.deductWage},
+                #{item.actualWage}, #{item.remark}, #{item.createBy}, #{item.createTime}, #{item.updateBy}, #{item.updateTime}
+            )
+        </foreach>
+    </insert>
+
+    <update id="updatePieceWageDetail" parameterType="PieceWageDetail">
+        update t_erp_piece_wage_detail
+        <trim prefix="set" suffixOverrides=",">
+            <if test="wageId != null">wage_id = #{wageId},</if>
+            <if test="employeeId != null">employee_id = #{employeeId},</if>
+            <if test="processId != null">process_id = #{processId},</if>
+            <if test="processName != null">process_name = #{processName},</if>
+            <if test="jobId != null">job_id = #{jobId},</if>
+            <if test="okQty != null">ok_qty = #{okQty},</if>
+            <if test="defectQty != null">defect_qty = #{defectQty},</if>
+            <if test="processPrice != null">process_price = #{processPrice},</if>
+            <if test="shouldWage != null">should_wage = #{shouldWage},</if>
+            <if test="deductWage != null">deduct_wage = #{deductWage},</if>
+            <if test="actualWage != null">actual_wage = #{actualWage},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deletePieceWageDetailById" parameterType="Long">
+        delete from t_erp_piece_wage_detail where id = #{id}
+    </delete>
+
+    <delete id="deletePieceWageDetailByIds">
+        delete from t_erp_piece_wage_detail where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deletePieceWageDetailByWageId" parameterType="Long">
+        delete from t_erp_piece_wage_detail where wage_id = #{wageId}
+    </delete>
+</mapper>

@@ -14,7 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="planNo"    column="plan_no"    />
         <result property="bulkOrderNo"    column="bulk_order_no"    />
         <result property="sampleStyleNo"    column="sample_style_no"    />
-        <result property="styleNo"           column="style_no"           />
+        <result property="styleCode"         column="style_no"           />
         <result property="customerName"    column="customer_name"    />
         <result property="styleCategory"    column="style_category"    />
         <result property="salesName"    column="sales_name"    />
@@ -76,6 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="planNo != null  and planNo != ''"> and a.plan_no like concat('%', #{planNo}, '%')</if>
             <if test="bulkOrderNo != null  and bulkOrderNo != ''"> and a.bulk_order_no like concat('%', #{bulkOrderNo}, '%')</if>
             <if test="sampleStyleNo != null  and sampleStyleNo != ''"> and a.sample_style_no like concat('%', #{sampleStyleNo}, '%')</if>
+            <if test="styleCode != null  and styleCode != ''"> and a.style_no like concat('%', #{styleCode}, '%')</if>
             <if test="customerName != null  and customerName != ''"> and a.customer_name like concat('%', #{customerName}, '%')</if>
             <if test="styleCategory != null  and styleCategory != ''"> and a.style_category like concat('%', #{styleCategory}, '%')</if>
             <if test="salesName != null  and salesName != ''"> and a.sales_name like concat('%', #{salesName}, '%')</if>
@@ -132,7 +133,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="planNo != null">plan_no,</if>
             <if test="bulkOrderNo != null">bulk_order_no,</if>
             <if test="sampleStyleNo != null">sample_style_no,</if>
-            <if test="styleNo != null">style_no,</if>
+            <if test="styleCode != null">style_no,</if>
             <if test="customerName != null">customer_name,</if>
             <if test="styleCategory != null">style_category,</if>
             <if test="salesName != null">sales_name,</if>
@@ -184,7 +185,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="planNo != null">#{planNo},</if>
             <if test="bulkOrderNo != null">#{bulkOrderNo},</if>
             <if test="sampleStyleNo != null">#{sampleStyleNo},</if>
-            <if test="styleNo != null">#{styleNo},</if>
+            <if test="styleCode != null">#{styleCode},</if>
             <if test="customerName != null">#{customerName},</if>
             <if test="styleCategory != null">#{styleCategory},</if>
             <if test="salesName != null">#{salesName},</if>
@@ -240,7 +241,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="planNo != null">plan_no = #{planNo},</if>
             <if test="bulkOrderNo != null">bulk_order_no = #{bulkOrderNo},</if>
             <if test="sampleStyleNo != null">sample_style_no = #{sampleStyleNo},</if>
-            <if test="styleNo != null">style_no = #{styleNo},</if>
+            <if test="styleCode != null">style_no = #{styleCode},</if>
             <if test="customerName != null">customer_name = #{customerName},</if>
             <if test="styleCategory != null">style_category = #{styleCategory},</if>
             <if test="salesName != null">sales_name = #{salesName},</if>
@@ -305,11 +306,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertProducePlanBatch" parameterType="java.util.List">
 
         REPLACE INTO t_erp_produce_plan
-        (id,src_bill_type,src_bill_id,src_bill_no,produce_status,type,plan_no,bulk_order_no,sample_style_no,customer_name,style_category,sales_name,material_arrival_date,pre_process_date,inspection_date,in_bound_date,sales_order_id,notice_id,tech_id,sales_id,start_date,picked_date,complete_date,up_date,down_date,produce_type,in_factory,out_factory,out_date,inspection_corp,shipping_date,post_process_date,due_date,plan_status,audit_status,audit_by,audit_time,create_by,create_time,update_by,update_time,remark,pre_produce_type,pre_in_factory,pre_out_factory,pre_out_date,post_produce_type,post_in_factory,post_out_factory,post_out_date)
+        (id,src_bill_type,src_bill_id,src_bill_no,produce_status,type,plan_no,bulk_order_no,sample_style_no,style_no,customer_name,style_category,sales_name,material_arrival_date,pre_process_date,inspection_date,in_bound_date,sales_order_id,notice_id,tech_id,sales_id,start_date,picked_date,complete_date,up_date,down_date,produce_type,in_factory,out_factory,out_date,inspection_corp,shipping_date,post_process_date,due_date,plan_status,audit_status,audit_by,audit_time,create_by,create_time,update_by,update_time,remark,pre_produce_type,pre_in_factory,pre_out_factory,pre_out_date,post_produce_type,post_in_factory,post_out_factory,post_out_date)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
 
-            (#{item.id},#{item.srcBillType},#{item.srcBillId},#{item.srcBillNo},#{item.produceStatus},#{item.type},#{item.planNo},#{item.bulkOrderNo},#{item.sampleStyleNo},#{item.customerName},#{item.styleCategory},#{item.salesName},#{item.materialArrivalDate},#{item.preProcessDate},#{item.inspectionDate},#{item.inBoundDate},#{item.salesOrderId},#{item.noticeId},#{item.techId},#{item.salesId},#{item.startDate},#{item.pickedDate},#{item.completeDate},#{item.upDate},#{item.downDate},#{item.produceType},#{item.inFactory},#{item.outFactory},#{item.outDate},#{item.inspectionCorp},#{item.shippingDate},#{item.postProcessDate},#{item.dueDate},#{item.planStatus},#{item.auditStatus},#{item.auditBy},#{item.auditTime},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark},#{item.preProduceType},#{item.preInFactory},#{item.preOutFactory},#{item.preOutDate},#{item.postProduceType},#{item.postInFactory},#{item.postOutFactory},#{item.postOutDate})
+            (#{item.id},#{item.srcBillType},#{item.srcBillId},#{item.srcBillNo},#{item.produceStatus},#{item.type},#{item.planNo},#{item.bulkOrderNo},#{item.sampleStyleNo},#{item.styleCode},#{item.customerName},#{item.styleCategory},#{item.salesName},#{item.materialArrivalDate},#{item.preProcessDate},#{item.inspectionDate},#{item.inBoundDate},#{item.salesOrderId},#{item.noticeId},#{item.techId},#{item.salesId},#{item.startDate},#{item.pickedDate},#{item.completeDate},#{item.upDate},#{item.downDate},#{item.produceType},#{item.inFactory},#{item.outFactory},#{item.outDate},#{item.inspectionCorp},#{item.shippingDate},#{item.postProcessDate},#{item.dueDate},#{item.planStatus},#{item.auditStatus},#{item.auditBy},#{item.auditTime},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark},#{item.preProduceType},#{item.preInFactory},#{item.preOutFactory},#{item.preOutDate},#{item.postProduceType},#{item.postInFactory},#{item.postOutFactory},#{item.postOutDate})
 
         </foreach>
     </insert>

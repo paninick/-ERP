@@ -36,7 +36,7 @@ public class ProducePlan extends ErpBaseBillEntity {
 
     /** 工厂内部款号（KN-YY-SS-NNN） */
     @Excel(name = "款号")
-    private String styleNo;
+    private String styleCode;
 
     /** 客户名称 */
     @Excel(name = "客户名称")
@@ -242,14 +242,12 @@ public class ProducePlan extends ErpBaseBillEntity {
         this.sampleStyleNo = sampleStyleNo;
     }
 
-    public String getStyleNo() {
-        return styleNo;
+    public String getStyleCode() {
+        return styleCode;
     }
 
-    public void setStyleNo(String styleNo) {
-        this.styleNo = styleNo;
-    }
-        this.sampleStyleNo = sampleStyleNo;
+    public void setStyleCode(String styleCode) {
+        this.styleCode = styleCode;
     }
 
     public String getCustomerName() {
@@ -523,6 +521,7 @@ public class ProducePlan extends ErpBaseBillEntity {
             .append("planNo", getPlanNo())
             .append("bulkOrderNo", getBulkOrderNo())
             .append("sampleStyleNo", getSampleStyleNo())
+            .append("styleCode", getStyleCode())
             .append("customerName", getCustomerName())
             .append("styleCategory", getStyleCategory())
             .append("salesName", getSalesName())

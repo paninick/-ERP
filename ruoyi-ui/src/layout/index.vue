@@ -79,6 +79,14 @@ export default {
     }
   }
 
+  .main-container {
+    min-height: 100%;
+
+    > main {
+      min-height: 0;
+    }
+  }
+
   .main-container:has(.fixed-header) {
     height: 100vh;
     overflow: hidden;
@@ -113,5 +121,16 @@ export default {
 
   .mobile .fixed-header {
     width: 100%;
+  }
+
+  .fixed-header + main {
+    margin-top: 50px;
+    height: calc(100vh - 50px);
+    overflow: hidden;
+  }
+
+  .hasTagsView .fixed-header + main {
+    margin-top: 84px;
+    height: calc(100vh - 84px);
   }
 </style>

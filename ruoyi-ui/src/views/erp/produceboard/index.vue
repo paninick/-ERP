@@ -181,7 +181,7 @@
 <script>
 import { getBoardStats, getWipStats, getEmployeeRank, getBottleneckWarnings } from "@/api/erp/produceboard";
 import SockJS from "sockjs-client";
-import Stomp from "@stomp/stompjs";
+import { Stomp } from "@stomp/stompjs";
 
 export default {
   name: "ProduceBoard",

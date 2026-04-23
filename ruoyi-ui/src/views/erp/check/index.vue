@@ -59,9 +59,9 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="款号" prop="styleNo">
+      <el-form-item label="款号" prop="styleCode">
         <el-input
-          v-model="queryParams.styleNo"
+          v-model="queryParams.styleCode"
           placeholder="请输入款号"
           clearable
           @keyup.enter.native="handleQuery"
@@ -189,7 +189,7 @@
           <dict-tag :options="dict.type.erp_sample_category" :value="scope.row.sampleCategoryType"/>
         </template>
       </el-table-column>
-      <el-table-column label="款号" align="center" prop="styleNo" width="120" />
+      <el-table-column label="款号" align="center" prop="styleCode" width="120" />
       <el-table-column label="大货款号" align="center" prop="bulkOrderNo" width="120" />
       <el-table-column label="业务员" align="center" prop="salesName" width="100" />
       <el-table-column label="要求交期" align="center" prop="dueDate" width="120">
@@ -303,8 +303,8 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="款号" prop="styleNo">
-              <el-input v-model="form.styleNo" placeholder="请输入款号" />
+            <el-form-item label="款号" prop="styleCode">
+              <el-input v-model="form.styleCode" placeholder="请输入款号" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -424,7 +424,7 @@ export default {
         sampleType: null,
         styleType: null,
         sampleCategoryType: null,
-        styleNo: null,
+        styleCode: null,
         bulkOrderNo: null,
         salesName: null,
         techNo: null,
@@ -474,7 +474,7 @@ export default {
         sampleType: null,
         styleType: null,
         sampleCategoryType: null,
-        styleNo: null,
+        styleCode: null,
         bulkOrderNo: null,
         customerId: null,
         customerName: null,

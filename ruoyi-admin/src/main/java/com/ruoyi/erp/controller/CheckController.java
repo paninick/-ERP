@@ -141,7 +141,7 @@ public class CheckController extends BaseController
                     Check check = list.get(i);
                     System.out.println("记录[" + i + "]:");
                     System.out.println("  checkNo=" + check.getCheckNo());
-                    System.out.println("  styleNo=" + check.getStyleNo());
+                    System.out.println("  styleCode=" + check.getStyleCode());
                     System.out.println("  customerName=" + check.getCustomerName());
                 }
                 System.out.println("=== 前5条解析数据结束 ===");

@@ -54,3 +54,4 @@ nbdist/
 # Claude Code 本地缓存
 bin/.claude/
 sql/.backup/
+.gstack/

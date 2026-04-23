@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.system.mapper.QcInspectionMapper">
+
+    <resultMap type="com.ruoyi.system.domain.QcInspection" id="QcInspectionResult">
+        <id     property="id"             column="id"             />
+        <result property="batchNo"        column="batch_no"       />
+        <result property="styleNo"        column="style_no"       />
+        <result property="orderNo"        column="order_no"       />
+        <result property="result"         column="result"         />
+        <result property="passRate"       column="pass_rate"      />
+        <result property="sampleQty"      column="sample_qty"     />
+        <result property="defectQty"      column="defect_qty"     />
+        <result property="inspectorId"    column="inspector_id"   />
+        <result property="inspectorName"  column="inspector_name" />
+        <result property="factoryId"      column="factory_id"     />
+        <result property="status"         column="status"         />
+        <result property="rejectReason"   column="reject_reason"  />
+        <result property="createBy"       column="create_by"      />
+        <result property="createTime"     column="create_time"    />
+        <result property="updateBy"       column="update_by"      />
+        <result property="updateTime"     column="update_time"    />
+    </resultMap>
+
+    <sql id="selectQcVo">
+        SELECT id, batch_no, style_no, order_no, result, pass_rate,
+               sample_qty, defect_qty, inspector_id, inspector_name,
+               factory_id, status, reject_reason, create_by, create_time,
+               update_by, update_time
+        FROM t_erp_qc_inspection
+    </sql>
+
+    <!-- 列表查询，末尾注入工厂权限过滤 -->
+    <select id="selectQcList" parameterType="com.ruoyi.system.domain.QcInspection"
+            resultMap="QcInspectionResult">
+        <include refid="selectQcVo"/>
+        <where>
+            <if test="batchNo != null and batchNo != ''">
+                AND batch_no LIKE CONCAT('%', #{batchNo}, '%')
+            </if>
+            <if test="styleNo != null and styleNo != ''">
+                AND style_no = #{styleNo}
+            </if>
+            <if test="result != null and result != ''">
+                AND result = #{result}
+            </if>
+            <if test="status != null and status != ''">
+                AND status = #{status}
+            </if>
+            <if test="factoryId != null">
+                AND factory_id = #{factoryId}
+            </if>
+        </where>
+        ${params.factoryDataScope}
+        ORDER BY create_time DESC
+    </select>
+
+    <select id="selectQcById" parameterType="Long" resultMap="QcInspectionResult">
+        <include refid="selectQcVo"/>
+        WHERE id = #{id}
+    </select>
+
+    <select id="selectQcByBatchNo" parameterType="String" resultMap="QcInspectionResult">
+        <include refid="selectQcVo"/>
+        WHERE batch_no = #{batchNo}
+        ORDER BY create_time DESC LIMIT 1
+    </select>
+
+    <!-- KPI 统计：待检批次 / 今日已检 / 合格率 / Critical 缺陷数 -->
+    <select id="selectQcStats" parameterType="Long" resultType="java.util.Map">
+        SELECT
+            SUM(CASE WHEN result = 'HOLD' THEN 1 ELSE 0 END)                      AS pendingCount,
+            SUM(CASE WHEN DATE(create_time) = CURDATE() THEN 1 ELSE 0 END)         AS todayChecked,
+            COALESCE(ROUND(AVG(pass_rate), 1), 0)                                  AS passRate,
+            (SELECT COUNT(DISTINCT inspection_id)
+             FROM t_erp_qc_defect_record
+             WHERE defect_level = 'CRITICAL')                                       AS criticalCount
+        FROM t_erp_qc_inspection
+        WHERE factory_id = #{factoryId}
+          AND create_time >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+    </select>
+
+    <!-- TOP5 不合格原因 -->
+    <select id="selectDefectReasonTop5" parameterType="Long" resultType="java.util.Map">
+        SELECT dr.defect_type AS name, COUNT(*) AS count
+        FROM t_erp_qc_defect_record dr
+        INNER JOIN t_erp_qc_inspection qi ON dr.inspection_id = qi.id
+        WHERE qi.factory_id = #{factoryId}
+          AND qi.create_time >= DATE_SUB(NOW(), INTERVAL 30 DAY)
+        GROUP BY dr.defect_type
+        ORDER BY count DESC
+        LIMIT 5
+    </select>
+
+    <insert id="insertQcInspection" parameterType="com.ruoyi.system.domain.QcInspection"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_erp_qc_inspection (
+            batch_no, style_no, order_no, result, pass_rate,
+            sample_qty, defect_qty, inspector_id, inspector_name,
+            factory_id, status, remark, create_by, create_time
+        ) VALUES (
+            #{batchNo}, #{styleNo}, #{orderNo}, #{result}, #{passRate},
+            #{sampleQty}, #{defectQty}, #{inspectorId}, #{inspectorName},
+            #{factoryId}, #{status}, #{remark}, #{createBy}, NOW()
+        )
+    </insert>
+
+    <update id="updateQcInspection" parameterType="com.ruoyi.system.domain.QcInspection">
+        UPDATE t_erp_qc_inspection
+        <set>
+            <if test="result != null">result = #{result},</if>
+            <if test="passRate != null">pass_rate = #{passRate},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="rejectReason != null">reject_reason = #{rejectReason},</if>
+            update_by = #{updateBy},
+            update_time = NOW()
+        </set>
+        WHERE id = #{id}
+    </update>
+
+</mapper>

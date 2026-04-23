@@ -13,7 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="customerName"    column="customer_name"    />
         <result property="bulkOrderNo"    column="bulk_order_no"    />
         <result property="sampleStyleNo"    column="sample_style_no"    />
-        <result property="styleNo"           column="style_no"           />
+        <result property="styleCode"         column="style_no"           />
         <result property="styleCategory"    column="style_category"    />
         <result property="sampleNo"    column="sample_no"    />
         <result property="salesName"    column="sales_name"    />
@@ -63,7 +63,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="noticeId != null "> and a.notice_id = #{noticeId}</if>
             <if test="techId != null "> and a.tech_id = #{techId}</if>
             <if test="salesNo != null  and salesNo != ''"> and a.sales_no = #{salesNo}</if>
-            <if test="styleNo != null  and styleNo != ''"> and a.style_no = #{styleNo}</if>
+            <if test="styleCode != null  and styleCode != ''"> and a.style_no = #{styleCode}</if>
             <if test="sampleStyleNo != null  and sampleStyleNo != ''"> and a.sample_style_no = #{sampleStyleNo}</if>
         </where>
     </select>
@@ -83,7 +83,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="customerName != null">customer_name,</if>
             <if test="bulkOrderNo != null">bulk_order_no,</if>
             <if test="sampleStyleNo != null">sample_style_no,</if>
-            <if test="styleNo != null">style_no,</if>
+            <if test="styleCode != null">style_no,</if>
             <if test="styleCategory != null">style_category,</if>
             <if test="sampleNo != null">sample_no,</if>
             <if test="salesName != null">sales_name,</if>
@@ -126,7 +126,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="customerName != null">#{customerName},</if>
             <if test="bulkOrderNo != null">#{bulkOrderNo},</if>
             <if test="sampleStyleNo != null">#{sampleStyleNo},</if>
-            <if test="styleNo != null">#{styleNo},</if>
+            <if test="styleCode != null">#{styleCode},</if>
             <if test="styleCategory != null">#{styleCategory},</if>
             <if test="sampleNo != null">#{sampleNo},</if>
             <if test="salesName != null">#{salesName},</if>
@@ -173,7 +173,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="customerName != null">customer_name = #{customerName},</if>
             <if test="bulkOrderNo != null">bulk_order_no = #{bulkOrderNo},</if>
             <if test="sampleStyleNo != null">sample_style_no = #{sampleStyleNo},</if>
-            <if test="styleNo != null">style_no = #{styleNo},</if>
+            <if test="styleCode != null">style_no = #{styleCode},</if>
             <if test="styleCategory != null">style_category = #{styleCategory},</if>
             <if test="sampleNo != null">sample_no = #{sampleNo},</if>
             <if test="salesName != null">sales_name = #{salesName},</if>
@@ -225,11 +225,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertSalesOrderBatch" parameterType="java.util.List">
 
         REPLACE INTO t_erp_sales_order
-        (id,src_bill_type,src_bill_id,src_bill_no,sales_type,customer_name,bulk_order_no,sample_style_no,style_category,sample_no,sales_name,notice_id,tech_id,sales_no,sales_date,sales_id,customer_id,due_date,quantity,amount,pay_amount,order_status,audit_status,audit_by,audit_time,bulk_opinion,production_exceed,japan_order_no,jis_label_status,hazard_test_status,hazard_report_no,color_fastness_grade,audit_factory_status,audit_factory_date,export_declare_type,trade_terms,create_by,create_time,update_by,update_time,remark)
+        (id,src_bill_type,src_bill_id,src_bill_no,sales_type,customer_name,bulk_order_no,sample_style_no,style_no,style_category,sample_no,sales_name,notice_id,tech_id,sales_no,sales_date,sales_id,customer_id,due_date,quantity,amount,pay_amount,order_status,audit_status,audit_by,audit_time,bulk_opinion,production_exceed,japan_order_no,jis_label_status,hazard_test_status,hazard_report_no,color_fastness_grade,audit_factory_status,audit_factory_date,export_declare_type,trade_terms,create_by,create_time,update_by,update_time,remark)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
 
-            (#{item.id},#{item.srcBillType},#{item.srcBillId},#{item.srcBillNo},#{item.salesType},#{item.customerName},#{item.bulkOrderNo},#{item.sampleStyleNo},#{item.styleCategory},#{item.sampleNo},#{item.salesName},#{item.noticeId},#{item.techId},#{item.salesNo},#{item.salesDate},#{item.salesId},#{item.customerId},#{item.dueDate},#{item.quantity},#{item.amount},#{item.payAmount},#{item.orderStatus},#{item.auditStatus},#{item.auditBy},#{item.auditTime},#{item.bulkOpinion},#{item.productionExceed},#{item.japanOrderNo},#{item.jisLabelStatus},#{item.hazardTestStatus},#{item.hazardReportNo},#{item.colorFastnessGrade},#{item.auditFactoryStatus},#{item.auditFactoryDate},#{item.exportDeclareType},#{item.tradeTerms},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark})
+            (#{item.id},#{item.srcBillType},#{item.srcBillId},#{item.srcBillNo},#{item.salesType},#{item.customerName},#{item.bulkOrderNo},#{item.sampleStyleNo},#{item.styleCode},#{item.styleCategory},#{item.sampleNo},#{item.salesName},#{item.noticeId},#{item.techId},#{item.salesNo},#{item.salesDate},#{item.salesId},#{item.customerId},#{item.dueDate},#{item.quantity},#{item.amount},#{item.payAmount},#{item.orderStatus},#{item.auditStatus},#{item.auditBy},#{item.auditTime},#{item.bulkOpinion},#{item.productionExceed},#{item.japanOrderNo},#{item.jisLabelStatus},#{item.hazardTestStatus},#{item.hazardReportNo},#{item.colorFastnessGrade},#{item.auditFactoryStatus},#{item.auditFactoryDate},#{item.exportDeclareType},#{item.tradeTerms},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark})
 
         </foreach>
     </insert>

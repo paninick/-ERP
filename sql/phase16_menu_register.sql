@@ -25,6 +25,13 @@ VALUES
 (2007, '报表中心',   2000, 7,  'report',     NULL, '', 1, 0, 'M', '0', '0', '', 'ep-data-line',  'admin', NOW(), '', NULL, '');
 
 -- ============================================================
+-- 2.1 报表中心子页（parent=2007）
+-- ============================================================
+INSERT IGNORE INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component, query, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+VALUES
+(2084, '报表总览', 2007, 1, 'reportHub', 'erp/report/index', '', 1, 0, 'C', '0', '0', 'erp:report:list', 'ep-data-analysis', 'admin', NOW(), '', NULL, '报表中心入口页');
+
+-- ============================================================
 -- 3. 基础数据（parent=2001）
 -- ============================================================
 INSERT IGNORE INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component, query, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
@@ -149,3 +156,49 @@ WHERE perms IN (
 -- 同时授权目录菜单（无 perms 的目录节点）
 INSERT IGNORE INTO sys_role_menu (role_id, menu_id)
 SELECT 200, menu_id FROM sys_menu WHERE menu_id IN (2000, 2003);
+
+-- ============================================================
+-- 14. ERP CRUD button permissions
+-- ============================================================
+INSERT IGNORE INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component, query, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+VALUES
+(2512, '查询', 2012, 1, '#', '', '', 1, 0, 'F', '0', '0', 'erp:employee:query', '#', 'admin', NOW(), '', NULL, ''),
+(2513, '新增', 2012, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:employee:add', '#', 'admin', NOW(), '', NULL, ''),
+(2514, '修改', 2012, 3, '#', '', '', 1, 0, 'F', '0', '0', 'erp:employee:edit', '#', 'admin', NOW(), '', NULL, ''),
+(2515, '删除', 2012, 4, '#', '', '', 1, 0, 'F', '0', '0', 'erp:employee:remove', '#', 'admin', NOW(), '', NULL, ''),
+(2516, '导出', 2012, 5, '#', '', '', 1, 0, 'F', '0', '0', 'erp:employee:export', '#', 'admin', NOW(), '', NULL, ''),
+(2517, '查询', 2016, 1, '#', '', '', 1, 0, 'F', '0', '0', 'erp:processDef:query', '#', 'admin', NOW(), '', NULL, ''),
+(2518, '新增', 2016, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:processDef:add', '#', 'admin', NOW(), '', NULL, ''),
+(2519, '修改', 2016, 3, '#', '', '', 1, 0, 'F', '0', '0', 'erp:processDef:edit', '#', 'admin', NOW(), '', NULL, ''),
+(2520, '删除', 2016, 4, '#', '', '', 1, 0, 'F', '0', '0', 'erp:processDef:remove', '#', 'admin', NOW(), '', NULL, ''),
+(2521, '导出', 2016, 5, '#', '', '', 1, 0, 'F', '0', '0', 'erp:processDef:export', '#', 'admin', NOW(), '', NULL, ''),
+(2522, '查询', 2019, 1, '#', '', '', 1, 0, 'F', '0', '0', 'erp:standardColor:query', '#', 'admin', NOW(), '', NULL, ''),
+(2523, '新增', 2019, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:standardColor:add', '#', 'admin', NOW(), '', NULL, ''),
+(2524, '修改', 2019, 3, '#', '', '', 1, 0, 'F', '0', '0', 'erp:standardColor:edit', '#', 'admin', NOW(), '', NULL, ''),
+(2525, '删除', 2019, 4, '#', '', '', 1, 0, 'F', '0', '0', 'erp:standardColor:remove', '#', 'admin', NOW(), '', NULL, ''),
+(2526, '导出', 2019, 5, '#', '', '', 1, 0, 'F', '0', '0', 'erp:standardColor:export', '#', 'admin', NOW(), '', NULL, ''),
+(2527, '查询', 2021, 1, '#', '', '', 1, 0, 'F', '0', '0', 'erp:processLossMatrix:query', '#', 'admin', NOW(), '', NULL, ''),
+(2528, '新增', 2021, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:processLossMatrix:add', '#', 'admin', NOW(), '', NULL, ''),
+(2529, '修改', 2021, 3, '#', '', '', 1, 0, 'F', '0', '0', 'erp:processLossMatrix:edit', '#', 'admin', NOW(), '', NULL, ''),
+(2530, '删除', 2021, 4, '#', '', '', 1, 0, 'F', '0', '0', 'erp:processLossMatrix:remove', '#', 'admin', NOW(), '', NULL, ''),
+(2531, '导出', 2021, 5, '#', '', '', 1, 0, 'F', '0', '0', 'erp:processLossMatrix:export', '#', 'admin', NOW(), '', NULL, ''),
+(2532, '查询', 2048, 1, '#', '', '', 1, 0, 'F', '0', '0', 'erp:productSerial:query', '#', 'admin', NOW(), '', NULL, ''),
+(2533, '新增', 2048, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:productSerial:add', '#', 'admin', NOW(), '', NULL, ''),
+(2534, '修改', 2048, 3, '#', '', '', 1, 0, 'F', '0', '0', 'erp:productSerial:edit', '#', 'admin', NOW(), '', NULL, ''),
+(2535, '删除', 2048, 4, '#', '', '', 1, 0, 'F', '0', '0', 'erp:productSerial:remove', '#', 'admin', NOW(), '', NULL, ''),
+(2536, '导出', 2048, 5, '#', '', '', 1, 0, 'F', '0', '0', 'erp:productSerial:export', '#', 'admin', NOW(), '', NULL, ''),
+(2537, '查询', 2080, 1, '#', '', '', 1, 0, 'F', '0', '0', 'erp:piecewage:query', '#', 'admin', NOW(), '', NULL, ''),
+(2538, '新增', 2080, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:piecewage:add', '#', 'admin', NOW(), '', NULL, ''),
+(2539, '修改', 2080, 3, '#', '', '', 1, 0, 'F', '0', '0', 'erp:piecewage:edit', '#', 'admin', NOW(), '', NULL, ''),
+(2540, '删除', 2080, 4, '#', '', '', 1, 0, 'F', '0', '0', 'erp:piecewage:remove', '#', 'admin', NOW(), '', NULL, ''),
+(2541, '导出', 2080, 5, '#', '', '', 1, 0, 'F', '0', '0', 'erp:piecewage:export', '#', 'admin', NOW(), '', NULL, ''),
+(2542, '查询', 2081, 1, '#', '', '', 1, 0, 'F', '0', '0', 'erp:piecewagedetail:query', '#', 'admin', NOW(), '', NULL, ''),
+(2543, '新增', 2081, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:piecewagedetail:add', '#', 'admin', NOW(), '', NULL, ''),
+(2544, '修改', 2081, 3, '#', '', '', 1, 0, 'F', '0', '0', 'erp:piecewagedetail:edit', '#', 'admin', NOW(), '', NULL, ''),
+(2545, '删除', 2081, 4, '#', '', '', 1, 0, 'F', '0', '0', 'erp:piecewagedetail:remove', '#', 'admin', NOW(), '', NULL, ''),
+(2546, '导出', 2081, 5, '#', '', '', 1, 0, 'F', '0', '0', 'erp:piecewagedetail:export', '#', 'admin', NOW(), '', NULL, '');
+
+INSERT IGNORE INTO sys_role_menu (role_id, menu_id)
+SELECT 1, menu_id
+FROM sys_menu
+WHERE menu_id BETWEEN 2512 AND 2546;

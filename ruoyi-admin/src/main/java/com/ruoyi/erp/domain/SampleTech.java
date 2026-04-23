@@ -45,7 +45,7 @@ public class SampleTech extends BaseEntity {
 
     /** 款号 */
     @Excel(name = "款号")
-    private String styleNo;
+    private String styleCode;
 
     /** 大货款号 */
     @Excel(name = "大货款号")
@@ -415,12 +415,12 @@ public class SampleTech extends BaseEntity {
         return sampleCategoryType;
     }
 
-    public void setStyleNo(String styleNo) {
-        this.styleNo = styleNo;
+    public void setStyleCode(String styleCode) {
+        this.styleCode = styleCode;
     }
 
-    public String getStyleNo() {
-        return styleNo;
+    public String getStyleCode() {
+        return styleCode;
     }
 
     public void setBulkOrderNo(String bulkOrderNo) {
@@ -449,7 +449,7 @@ public class SampleTech extends BaseEntity {
             .append("sampleTypeDisplay", getSampleTypeDisplay())
             .append("styleType", getStyleType())
             .append("sampleCategoryType", getSampleCategoryType())
-            .append("styleNo", getStyleNo())
+            .append("styleCode", getStyleCode())
             .append("bulkOrderNo", getBulkOrderNo())
             .append("salesName", getSalesName())
             .append("sampleType", getSampleType())

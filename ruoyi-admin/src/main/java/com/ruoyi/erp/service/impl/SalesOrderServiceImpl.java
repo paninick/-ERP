@@ -57,8 +57,8 @@ public class SalesOrderServiceImpl implements ISalesOrderService {
         if (salesOrder.getSalesNo() == null || salesOrder.getSalesNo().isEmpty()) {
             salesOrder.setSalesNo(billNoGenerator.generate("SO"));
         }
-        if (salesOrder.getStyleNo() == null || salesOrder.getStyleNo().isEmpty()) {
-            salesOrder.setStyleNo(billNoGenerator.generateStyleNo(null));
+        if (salesOrder.getStyleCode() == null || salesOrder.getStyleCode().isEmpty()) {
+            salesOrder.setStyleCode(billNoGenerator.generateStyleNo(null));
         }
         salesOrder.setCreateBy(SecurityUtils.getUserId().toString());
         salesOrder.setCreateTime(DateUtils.getNowDate());

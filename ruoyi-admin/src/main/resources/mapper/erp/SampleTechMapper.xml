@@ -12,7 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="sampleTypeDisplay"    column="sample_type_display"    />
         <result property="styleType"    column="style_type"    />
         <result property="sampleCategoryType"    column="sample_category_type"    />
-        <result property="styleNo"    column="style_no"    />
+        <result property="styleCode"    column="style_no"    />
         <result property="bulkOrderNo"    column="bulk_order_no"    />
         <result property="salesName"    column="sales_name"    />
         <result property="sampleType"    column="sample_type"    />
@@ -104,7 +104,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sampleTypeDisplay != null">sample_type_display,</if>
             <if test="styleType != null">style_type,</if>
             <if test="sampleCategoryType != null">sample_category_type,</if>
-            <if test="styleNo != null">style_no,</if>
+            <if test="styleCode != null">style_no,</if>
             <if test="bulkOrderNo != null">bulk_order_no,</if>
             <if test="salesName != null">sales_name,</if>
             <if test="sampleType != null">sample_type,</if>
@@ -151,7 +151,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sampleTypeDisplay != null">#{sampleTypeDisplay},</if>
             <if test="styleType != null">#{styleType},</if>
             <if test="sampleCategoryType != null">#{sampleCategoryType},</if>
-            <if test="styleNo != null">#{styleNo},</if>
+            <if test="styleCode != null">#{styleCode},</if>
             <if test="bulkOrderNo != null">#{bulkOrderNo},</if>
             <if test="salesName != null">#{salesName},</if>
             <if test="sampleType != null">#{sampleType},</if>
@@ -202,7 +202,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sampleTypeDisplay != null">sample_type_display = #{sampleTypeDisplay},</if>
             <if test="styleType != null">style_type = #{styleType},</if>
             <if test="sampleCategoryType != null">sample_category_type = #{sampleCategoryType},</if>
-            <if test="styleNo != null">style_no = #{styleNo},</if>
+            <if test="styleCode != null">style_no = #{styleCode},</if>
             <if test="bulkOrderNo != null">bulk_order_no = #{bulkOrderNo},</if>
             <if test="salesName != null">sales_name = #{salesName},</if>
             <if test="sampleType != null">sample_type = #{sampleType},</if>
@@ -263,7 +263,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
 
-            (#{item.id},#{item.auditStatus},#{item.progressStatus},#{item.customerName},#{item.sampleTypeDisplay},#{item.styleType},#{item.sampleCategoryType},#{item.styleNo},#{item.bulkOrderNo},#{item.salesName},#{item.sampleType},#{item.sampleId},#{item.dueDate},#{item.stylePic},#{item.tagPic},#{item.tagPicRemark},#{item.pattenMarker},#{item.pattenChecker},#{item.cuttingTip},#{item.liningTip},#{item.threadTip},#{item.needleTip},#{item.sewingTip},#{item.backGarmentTip},#{item.tagHangingTip},#{item.ironingTip},#{item.fabricTip},#{item.seamSealingTip},#{item.handStitchingTip},#{item.handStitchingInspection},#{item.washingTip},#{item.auditBy},#{item.auditTime},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark})
+            (#{item.id},#{item.auditStatus},#{item.progressStatus},#{item.customerName},#{item.sampleTypeDisplay},#{item.styleType},#{item.sampleCategoryType},#{item.styleCode},#{item.bulkOrderNo},#{item.salesName},#{item.sampleType},#{item.sampleId},#{item.dueDate},#{item.stylePic},#{item.tagPic},#{item.tagPicRemark},#{item.pattenMarker},#{item.pattenChecker},#{item.cuttingTip},#{item.liningTip},#{item.threadTip},#{item.needleTip},#{item.sewingTip},#{item.backGarmentTip},#{item.tagHangingTip},#{item.ironingTip},#{item.fabricTip},#{item.seamSealingTip},#{item.handStitchingTip},#{item.handStitchingInspection},#{item.washingTip},#{item.auditBy},#{item.auditTime},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark})
 
         </foreach>
     </insert>

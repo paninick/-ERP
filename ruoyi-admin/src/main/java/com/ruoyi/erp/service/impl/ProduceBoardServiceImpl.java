@@ -102,7 +102,8 @@ public class ProduceBoardServiceImpl implements IProduceBoardService {
         List<ProcessWipStatsVO> result = new ArrayList<>();
 
         for (ProcessDef process : processes) {
-            if ("1".equals(process.getStatus())) {
+            // ERP 基础数据里 0=启用，1=停用；看板只统计启用工序
+            if ("0".equals(process.getStatus())) {
                 ProcessWipStatsVO vo = new ProcessWipStatsVO();
                 vo.setProcessId(process.getId());
                 vo.setProcessName(process.getProcessName());

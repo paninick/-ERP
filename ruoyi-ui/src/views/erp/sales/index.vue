@@ -8,8 +8,8 @@
         <el-form-item prop="salesNo" style="margin-bottom: 0; margin-right: 16px;">
           <el-input v-model="queryParams.salesNo" placeholder="搜索单号" clearable @keyup.enter.native="handleQuery" style="width: 200px;" />
         </el-form-item>
-        <el-form-item prop="styleNo" style="margin-bottom: 0; margin-right: 16px;">
-          <el-input v-model="queryParams.styleNo" placeholder="搜索款号" clearable @keyup.enter.native="handleQuery" style="width: 160px;" />
+        <el-form-item prop="styleCode" style="margin-bottom: 0; margin-right: 16px;">
+          <el-input v-model="queryParams.styleCode" placeholder="搜索款号" clearable @keyup.enter.native="handleQuery" style="width: 160px;" />
         </el-form-item>
         <el-form-item prop="customerId" style="margin-bottom: 0; margin-right: 16px;">
           <el-select v-model="queryParams.customerId" placeholder="选择客户" clearable filterable remote :remote-method="filterCustomer" :loading="customerLoading" style="width: 160px;">
@@ -44,7 +44,7 @@
         <el-table class="biz-table" :data="salesList" @selection-change="handleSelectionChange" @row-dblclick="handleRowDblclick">
           <el-table-column type="selection" width="55" align="center" />
           <el-table-column label="销售单号" align="center" prop="salesNo" />
-          <el-table-column label="款号" align="center" prop="styleNo" width="140" />
+          <el-table-column label="款号" align="center" prop="styleCode" width="140" />
           <el-table-column label="客户名称" align="center" prop="customerName" />
           <el-table-column label="大货款号" align="center" prop="bulkOrderNo" />
           <el-table-column label="款式/品类" align="center" prop="styleCategory" />
@@ -114,8 +114,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="款号" prop="styleNo">
-              <el-input v-model="form.styleNo" placeholder="保存时自动生成（KN-YY-SS-NNN），可手动填写" />
+            <el-form-item label="款号" prop="styleCode">
+              <el-input v-model="form.styleCode" placeholder="保存时自动生成（KN-YY-SS-NNN），可手动填写" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -166,7 +166,7 @@ export default {
         salesType: null,
         customerId: null,
         salesNo: null,
-        styleNo: null,
+        styleCode: null,
         orderStatus: null
       },
       form: {},
@@ -211,7 +211,7 @@ export default {
       this.multiple = !selection.length;
     },
     reset() {
-      this.form = { id: null, salesType: null, salesNo: null, styleNo: null, salesDate: null, customerId: null };
+      this.form = { id: null, salesType: null, salesNo: null, styleCode: null, salesDate: null, customerId: null };
       this.resetForm("form");
     },
     handleAdd() {

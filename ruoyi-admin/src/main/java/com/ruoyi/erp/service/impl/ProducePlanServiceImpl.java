@@ -65,15 +65,15 @@ public class ProducePlanServiceImpl implements IProducePlanService {
         if (producePlan.getPlanNo() == null || producePlan.getPlanNo().isEmpty()) {
             producePlan.setPlanNo(billNoGenerator.generate("PP"));
         }
-        if (producePlan.getStyleNo() == null || producePlan.getStyleNo().isEmpty()) {
+        if (producePlan.getStyleCode() == null || producePlan.getStyleCode().isEmpty()) {
             String inherited = null;
             if (producePlan.getSalesOrderId() != null) {
                 SalesOrder so = salesOrderMapper.selectSalesOrderById(producePlan.getSalesOrderId());
-                if (so != null && so.getStyleNo() != null && !so.getStyleNo().isEmpty()) {
-                    inherited = so.getStyleNo();
+                if (so != null && so.getStyleCode() != null && !so.getStyleCode().isEmpty()) {
+                    inherited = so.getStyleCode();
                 }
             }
-            producePlan.setStyleNo(inherited != null ? inherited : billNoGenerator.generateStyleNo(null));
+            producePlan.setStyleCode(inherited != null ? inherited : billNoGenerator.generateStyleNo(null));
         }
         producePlan.setCreateBy(SecurityUtils.getUserId().toString());
         producePlan.setCreateTime(DateUtils.getNowDate());

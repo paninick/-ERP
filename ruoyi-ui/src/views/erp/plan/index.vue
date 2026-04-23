@@ -39,6 +39,14 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item label="款号" prop="styleCode">
+        <el-input
+          v-model="queryParams.styleCode"
+          placeholder="请输入款号"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
       <el-form-item label="生产状态" prop="produceStatus">
         <el-input
           v-model="queryParams.produceStatus"
@@ -115,6 +123,7 @@
       <el-table-column label="生产计划编号" align="center" prop="planNo" width="160" show-overflow-tooltip />
       <el-table-column label="大货款号" align="center" prop="bulkOrderNo" width="140" show-overflow-tooltip />
       <el-table-column label="打样款号" align="center" prop="sampleStyleNo" width="120" show-overflow-tooltip />
+      <el-table-column label="款号" align="center" prop="styleCode" width="140" show-overflow-tooltip />
       <el-table-column label="客户名称" align="center" prop="customerName" width="120" show-overflow-tooltip />
       <el-table-column label="款式/品类" align="center" prop="styleCategory" width="100" show-overflow-tooltip />
       <el-table-column label="业务员" align="center" prop="salesName" width="80" />
@@ -232,21 +241,30 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="客户名称" prop="customerName">
-              <el-input v-model="form.customerName" placeholder="请输入客户名称" />
+            <el-form-item label="款号" prop="styleCode">
+              <el-input v-model="form.styleCode" placeholder="保存时自动继承销售单款号，可手动填写" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
+            <el-form-item label="客户名称" prop="customerName">
+              <el-input v-model="form.customerName" placeholder="请输入客户名称" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
             <el-form-item label="款式/品类" prop="styleCategory">
               <el-input v-model="form.styleCategory" placeholder="请输入款式/品类" />
             </el-form-item>
           </el-col>
+        </el-row>
+        <el-row>
           <el-col :span="12">
             <el-form-item label="生产状态" prop="produceStatus">
               <el-input v-model="form.produceStatus" placeholder="请输入生产状态" />
             </el-form-item>
+          </el-col>
+          <el-col :span="12">
           </el-col>
         </el-row>
         <el-row>
@@ -377,6 +395,7 @@ export default {
         customerId: null,
         bulkOrderNo: null,
         sampleStyleNo: null,
+        styleCode: null,
         customerName: null,
         produceStatus: null,
         salesName: null
@@ -457,6 +476,7 @@ export default {
         planNo: null,
         bulkOrderNo: null,
         sampleStyleNo: null,
+        styleCode: null,
         customerName: null,
         styleCategory: null,
         salesName: null,

@@ -47,7 +47,7 @@ public class Check extends BaseEntity
 
     /** 款号 */
     @Excel(name = "款号")
-    private String styleNo;
+    private String styleCode;
 
     /** 大货款号 */
     @Excel(name = "大货款号")
@@ -171,14 +171,14 @@ public class Check extends BaseEntity
     {
         return sampleCategoryType;
     }
-    public void setStyleNo(String styleNo)
+    public void setStyleCode(String styleCode)
     {
-        this.styleNo = styleNo;
+        this.styleCode = styleCode;
     }
 
-    public String getStyleNo()
+    public String getStyleCode()
     {
-        return styleNo;
+        return styleCode;
     }
     public void setBulkOrderNo(String bulkOrderNo)
     {
@@ -326,7 +326,7 @@ public class Check extends BaseEntity
             .append("sampleType", getSampleType())
             .append("styleType", getStyleType())
             .append("sampleCategoryType", getSampleCategoryType())
-            .append("styleNo", getStyleNo())
+            .append("styleCode", getStyleCode())
             .append("bulkOrderNo", getBulkOrderNo())
             .append("customerId", getCustomerId())
             .append("customerName", getCustomerName())
