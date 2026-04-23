@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.QcInspectionMapper">
+
+    <resultMap type="com.ruoyi.erp.domain.QcInspection" id="QcResult">
+        <id property="id" column="id"/>
+        <result property="batchNo" column="batch_no"/>
+        <result property="styleNo" column="style_no"/>
+        <result property="orderNo" column="order_no"/>
+        <result property="result" column="result"/>
+        <result property="passRate" column="pass_rate"/>
+        <result property="sampleQty" column="sample_qty"/>
+        <result property="defectQty" column="defect_qty"/>
+        <result property="inspectorId" column="inspector_id"/>
+        <result property="inspectorName" column="inspector_name"/>
+        <result property="factoryId" column="factory_id"/>
+        <result property="status" column="status"/>
+        <result property="rejectReason" column="reject_reason"/>
+        <result property="remark" column="remark"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+    </resultMap>
+
+    <select id="selectById" resultMap="QcResult">
+        SELECT * FROM t_erp_qc_inspection WHERE id = #{id}
+    </select>
+
+    <select id="selectList" parameterType="com.ruoyi.erp.domain.QcInspection" resultMap="QcResult">
+        SELECT * FROM t_erp_qc_inspection
+        <where>
+            <if test="batchNo != null and batchNo != ''">AND batch_no LIKE CONCAT('%',#{batchNo},'%')</if>
+            <if test="styleNo != null and styleNo != ''">AND style_no = #{styleNo}</if>
+            <if test="result != null and result != ''">AND result = #{result}</if>
+            <if test="status != null and status != ''">AND status = #{status}</if>
+        </where>
+        ORDER BY create_time DESC
+    </select>
+
+    <insert id="insert" parameterType="com.ruoyi.erp.domain.QcInspection" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_erp_qc_inspection
+        (batch_no, style_no, order_no, result, pass_rate, sample_qty, defect_qty, inspector_id, inspector_name, factory_id, status, remark, create_by, create_time)
+        VALUES
+        (#{batchNo}, #{styleNo}, #{orderNo}, #{result}, #{passRate}, #{sampleQty}, #{defectQty}, #{inspectorId}, #{inspectorName}, #{factoryId}, #{status}, #{remark}, #{createBy}, #{createTime})
+    </insert>
+
+    <update id="update" parameterType="com.ruoyi.erp.domain.QcInspection">
+        UPDATE t_erp_qc_inspection
+        <set>
+            <if test="result != null">result = #{result},</if>
+            <if test="passRate != null">pass_rate = #{passRate},</if>
+            <if test="defectQty != null">defect_qty = #{defectQty},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="rejectReason != null">reject_reason = #{rejectReason},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </set>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteById">DELETE FROM t_erp_qc_inspection WHERE id = #{id}</delete>
+
+    <update id="updateStatus">
+        UPDATE t_erp_qc_inspection SET status = #{status}, reject_reason = #{rejectReason}, update_time = NOW() WHERE id = #{id}
+    </update>
+
+    <select id="selectStats" resultType="java.util.Map">
+        SELECT
+            COUNT(CASE WHEN status = 'ACTIVE' AND result = 'HOLD' THEN 1 END) AS pendingCount,
+            COUNT(CASE WHEN DATE(create_time) = CURDATE() THEN 1 END) AS todayChecked,
+            ROUND(COUNT(CASE WHEN result = 'PASS' THEN 1 END) * 100.0 / NULLIF(COUNT(*), 0), 1) AS passRate,
+            (SELECT COUNT(*) FROM t_erp_qc_defect_record WHERE defect_level = 'CRITICAL' AND DATE(create_time) = CURDATE()) AS criticalCount
+        FROM t_erp_qc_inspection
+    </select>
+
+    <select id="selectDefectReasons" resultType="java.util.Map">
+        SELECT defect_type AS name, SUM(qty) AS count
+        FROM t_erp_qc_defect_record
+        GROUP BY defect_type
+        ORDER BY count DESC
+        LIMIT 5
+    </select>
+</mapper>
