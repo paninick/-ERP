@@ -73,7 +73,7 @@ public class ProducePlanServiceImpl implements IProducePlanService {
                     inherited = so.getStyleCode();
                 }
             }
-            producePlan.setStyleCode(inherited != null ? inherited : billNoGenerator.generateStyleNo(null));
+            producePlan.setStyleCode(inherited != null ? inherited : billNoGenerator.generateStyleCode(null));
         }
         producePlan.setCreateBy(SecurityUtils.getUserId().toString());
         producePlan.setCreateTime(DateUtils.getNowDate());

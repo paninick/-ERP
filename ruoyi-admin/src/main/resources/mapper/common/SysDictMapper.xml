@@ -5,18 +5,18 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 <mapper namespace="com.ruoyi.common.mapper.SysDictMapper">
 
     <resultMap type="SysDict" id="SysDictResult">
-        <result property="id"    column="id"    />
-        <result property="parentId"    column="parent_id"    />
-        <result property="parentIds"    column="parent_ids"    />
-        <result property="name"    column="name"    />
-        <result property="type"    column="type"    />
-        <result property="orderNum"    column="order_num"    />
-        <result property="status"    column="status"    />
-        <result property="createBy"    column="create_by"    />
-        <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
-        <result property="updateTime"    column="update_time"    />
-        <result property="remark"    column="remark"    />
+        <result property="id" column="id" />
+        <result property="parentId" column="parent_id" />
+        <result property="parentIds" column="parent_ids" />
+        <result property="name" column="name" />
+        <result property="type" column="type" />
+        <result property="orderNum" column="order_num" />
+        <result property="status" column="status" />
+        <result property="createBy" column="create_by" />
+        <result property="createTime" column="create_time" />
+        <result property="updateBy" column="update_by" />
+        <result property="updateTime" column="update_time" />
+        <result property="remark" column="remark" />
     </resultMap>
 
     <sql id="selectSysDictVo">
@@ -27,8 +27,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectSysDictList" parameterType="SysDict" resultMap="SysDictResult">
         <include refid="selectSysDictVo"/>
         <where>
-            <if test="name != null  and name != ''"> and a.name like concat('%', #{name}, '%')</if>
-            <if test="type != null  and type != ''"> and a.type = #{type}</if>
+            <if test="name != null and name != ''"> and a.name like concat('%', #{name}, '%')</if>
+            <if test="type != null and type != ''"> and a.type = #{type}</if>
         </where>
     </select>
 
@@ -51,7 +51,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">update_by,</if>
             <if test="updateTime != null">update_time,</if>
             <if test="remark != null">remark,</if>
-         </trim>
+        </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="parentId != null">#{parentId},</if>
             <if test="parentIds != null">#{parentIds},</if>
@@ -64,7 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="updateBy != null">#{updateBy},</if>
             <if test="updateTime != null">#{updateTime},</if>
             <if test="remark != null">#{remark},</if>
-         </trim>
+        </trim>
     </insert>
 
     <update id="updateSysDict" parameterType="SysDict">
@@ -97,14 +97,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </delete>
 
     <insert id="insertSysDictBatch" parameterType="java.util.List">
-
         REPLACE INTO sys_dict
-        (id,parent_id,parent_ids,name,type,order_num,status,create_by,create_time,update_by,update_time,remark)
+        (id, parent_id, parent_ids, name, type, order_num, status, create_by, create_time, update_by, update_time, remark)
         VALUES
-        <foreach collection="list" item="item" index="index" separator=",">
-
-            (#{item.id},#{item.parentId},#{item.parentIds},#{item.name},#{item.type},#{item.orderNum},#{item.status},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark})
-
+        <foreach collection="list" item="item" separator=",">
+            (#{item.id}, #{item.parentId}, #{item.parentIds}, #{item.name}, #{item.type}, #{item.orderNum}, #{item.status}, #{item.createBy}, #{item.createTime}, #{item.updateBy}, #{item.updateTime}, #{item.remark})
         </foreach>
     </insert>
 

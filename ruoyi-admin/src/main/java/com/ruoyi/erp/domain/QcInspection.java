@@ -8,7 +8,7 @@ import com.ruoyi.common.core.domain.BaseEntity;
 public class QcInspection extends BaseEntity {
     private Long id;
     private String batchNo;
-    private String styleNo;
+    private String styleCode;
     private String orderNo;
     private String result;
     private BigDecimal passRate;
@@ -24,8 +24,8 @@ public class QcInspection extends BaseEntity {
     public void setId(Long id) { this.id = id; }
     public String getBatchNo() { return batchNo; }
     public void setBatchNo(String batchNo) { this.batchNo = batchNo; }
-    public String getStyleNo() { return styleNo; }
-    public void setStyleNo(String styleNo) { this.styleNo = styleNo; }
+    public String getStyleCode() { return styleCode; }
+    public void setStyleCode(String styleCode) { this.styleCode = styleCode; }
     public String getOrderNo() { return orderNo; }
     public void setOrderNo(String orderNo) { this.orderNo = orderNo; }
     public String getResult() { return result; }

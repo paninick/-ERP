@@ -12,7 +12,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="sampleTypeDisplay"    column="sample_type_display"    />
         <result property="styleType"    column="style_type"    />
         <result property="sampleCategoryType"    column="sample_category_type"    />
-        <result property="styleCode"    column="style_no"    />
+        <result property="styleCode"    column="style_code"    />
         <result property="bulkOrderNo"    column="bulk_order_no"    />
         <result property="salesName"    column="sales_name"    />
         <result property="sampleType"    column="sample_type"    />
@@ -54,7 +54,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectSampleTechVo">
-        select a.id, a.audit_status, a.progress_status, a.customer_name, a.sample_type_display, a.style_type, a.sample_category_type, a.style_no, a.bulk_order_no, a.sales_name, a.sample_type, a.sample_id, a.due_date, a.style_pic, a.tag_pic, a.tag_pic_remark, a.patten_marker, a.patten_checker, a.cutting_tip, a.lining_tip, a.thread_tip, a.needle_tip, a.sewing_tip, a.back_garment_tip, a.tag_hanging_tip, a.ironing_tip, a.fabric_tip, a.seam_sealing_tip, a.hand_stitching_tip, a.hand_stitching_inspection, a.washing_tip, a.audit_status, a.audit_by, a.audit_time,
+        select a.id, a.audit_status, a.progress_status, a.customer_name, a.sample_type_display, a.style_type, a.sample_category_type, a.style_code, a.bulk_order_no, a.sales_name, a.sample_type, a.sample_id, a.due_date, a.style_pic, a.tag_pic, a.tag_pic_remark, a.patten_marker, a.patten_checker, a.cutting_tip, a.lining_tip, a.thread_tip, a.needle_tip, a.sewing_tip, a.back_garment_tip, a.tag_hanging_tip, a.ironing_tip, a.fabric_tip, a.seam_sealing_tip, a.hand_stitching_tip, a.hand_stitching_inspection, a.washing_tip, a.audit_status, a.audit_by, a.audit_time,
                a.shrinkage_rate_limit, a.color_difference_grade_min, a.setting_temp_max, a.setting_temp_min, a.wash_fastness_requirement, a.rub_fastness_requirement, a.ph_range,
                a.create_by, a.create_time, a.update_by, a.update_time, a.remark
         from t_erp_sample_tech a
@@ -104,7 +104,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sampleTypeDisplay != null">sample_type_display,</if>
             <if test="styleType != null">style_type,</if>
             <if test="sampleCategoryType != null">sample_category_type,</if>
-            <if test="styleCode != null">style_no,</if>
+            <if test="styleCode != null">style_code,</if>
             <if test="bulkOrderNo != null">bulk_order_no,</if>
             <if test="salesName != null">sales_name,</if>
             <if test="sampleType != null">sample_type,</if>
@@ -202,7 +202,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sampleTypeDisplay != null">sample_type_display = #{sampleTypeDisplay},</if>
             <if test="styleType != null">style_type = #{styleType},</if>
             <if test="sampleCategoryType != null">sample_category_type = #{sampleCategoryType},</if>
-            <if test="styleCode != null">style_no = #{styleCode},</if>
+            <if test="styleCode != null">style_code = #{styleCode},</if>
             <if test="bulkOrderNo != null">bulk_order_no = #{bulkOrderNo},</if>
             <if test="salesName != null">sales_name = #{salesName},</if>
             <if test="sampleType != null">sample_type = #{sampleType},</if>
@@ -259,7 +259,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertSampleTechBatch" parameterType="java.util.List">
 
         REPLACE INTO t_erp_sample_tech
-        (id,audit_status,progress_status,customer_name,sample_type_display,style_type,sample_category_type,style_no,bulk_order_no,sales_name,sample_type,sample_id,due_date,style_pic,tag_pic,tag_pic_remark,patten_marker,patten_checker,cutting_tip,lining_tip,thread_tip,needle_tip,sewing_tip,back_garment_tip,tag_hanging_tip,ironing_tip,fabric_tip,seam_sealing_tip,hand_stitching_tip,hand_stitching_inspection,washing_tip,audit_by,audit_time,create_by,create_time,update_by,update_time,remark)
+        (id,audit_status,progress_status,customer_name,sample_type_display,style_type,sample_category_type,style_code,bulk_order_no,sales_name,sample_type,sample_id,due_date,style_pic,tag_pic,tag_pic_remark,patten_marker,patten_checker,cutting_tip,lining_tip,thread_tip,needle_tip,sewing_tip,back_garment_tip,tag_hanging_tip,ironing_tip,fabric_tip,seam_sealing_tip,hand_stitching_tip,hand_stitching_inspection,washing_tip,audit_by,audit_time,create_by,create_time,update_by,update_time,remark)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
 

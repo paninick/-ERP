@@ -13,9 +13,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
 /**
- * 分布式唯一单据号生成器
- * 支持：Redis INCR 原子生成 + 数据库持久化兜底
- * 保证：Redis宕机重启不会重复，每天自动归零
+ * Distributed bill number generator backed by Redis and database fallback.
  *
  * @author ruoyi
  * @date 2026-04-16
@@ -33,12 +31,10 @@ public class BillNoGenerator {
     private BillSequenceMapper billSequenceMapper;
 
     /**
-     * 生成单据号
-     * 格式：前缀 + yyyyMMdd + - + 序号（补零到5位）
-     * 示例：PO-20260416-00001
+     * Generate a bill number with date and 5-digit sequence.
      *
-     * @param prefix 单据前缀 如 PO=采购单, SO=销售订单, SI=入库单
-     * @return 唯一单据号
+     * @param prefix bill prefix such as PO, SO or SI
+     * @return generated bill number
      */
     public String generate(String prefix) {
         LocalDate today = LocalDate.now();
@@ -47,14 +43,10 @@ public class BillNoGenerator {
 
         Long seq;
         try {
-            // 优先用Redis INCR 原子生成
             seq = redisTemplate.opsForValue().increment(redisKey);
-            // 设置过期时间2天，自动清理
             redisTemplate.expire(redisKey, 2, TimeUnit.DAYS);
-            // 同步更新到数据库兜底（使用 LocalDate 避免 Date.valueOf 的格式约束）
             syncToDatabase(prefix, today, seq);
         } catch (Exception e) {
-            // Redis异常，降级到数据库原子兜底
             log.warn("Redis unavailable, fallback to database for bill sequence generation");
             seq = incrementDatabase(prefix, today);
         }
@@ -63,15 +55,12 @@ public class BillNoGenerator {
     }
 
     /**
-     * 生成款号（KN 双轨业务主键）
-     * 格式：KN-{YY}-{SS}-{NNN}，如 KN-26-SP-001
-     * 季节代码：SP=春(3-5月) SU=夏(6-8月) FA=秋(9-11月) WI=冬(12-2月)
-     * Redis key 按年季归零，序号3位
+     * Generate a style code in KN-YY-SS-NNN format.
      *
-     * @param season 季节代码 SP/SU/FA/WI，传 null 则根据当前月份自动推断
-     * @return 款号，如 KN-26-SP-001
+     * @param season season code SP, SU, FA or WI; null means infer from current month
+     * @return generated style code
      */
-    public String generateStyleNo(String season) {
+    public String generateStyleCode(String season) {
         LocalDate today = LocalDate.now();
         String yy = String.format("%02d", today.getYear() % 100);
         String ss = (season != null && !season.isEmpty()) ? season : inferSeason(today.getMonth());
@@ -83,7 +72,7 @@ public class BillNoGenerator {
             redisTemplate.expire(redisKey, 200, TimeUnit.DAYS);
             syncToDatabase("KN" + yy + ss, today, seq);
         } catch (Exception e) {
-            log.warn("Redis unavailable, fallback to database for style_no generation");
+            log.warn("Redis unavailable, fallback to database for style code generation");
             seq = incrementDatabase("KN" + yy + ss, today);
         }
 
@@ -92,14 +81,20 @@ public class BillNoGenerator {
 
     private String inferSeason(Month month) {
         int m = month.getValue();
-        if (m >= 3 && m <= 5) return "SP";
-        if (m >= 6 && m <= 8) return "SU";
-        if (m >= 9 && m <= 11) return "FA";
+        if (m >= 3 && m <= 5) {
+            return "SP";
+        }
+        if (m >= 6 && m <= 8) {
+            return "SU";
+        }
+        if (m >= 9 && m <= 11) {
+            return "FA";
+        }
         return "WI";
     }
 
     /**
-     * 同步当前序号到数据库，Redis宕机后可以恢复
+     * Persist current sequence value so Redis restart can recover.
      */
     private void syncToDatabase(String billType, LocalDate seqDate, Long currentVal) {
         try {
@@ -110,12 +105,11 @@ public class BillNoGenerator {
             }
         } catch (Exception e) {
             log.error("Failed to sync sequence to database", e);
-            // 不同步不影响生成，只是兜底降级会丢，记录日志就行
         }
     }
 
     /**
-     * 数据库兜底：单条原子 INSERT ON DUPLICATE KEY UPDATE，并发安全
+     * Database fallback using atomic insert-or-update semantics.
      */
     private Long incrementDatabase(String billType, LocalDate seqDate) {
         java.sql.Date sqlDate = java.sql.Date.valueOf(seqDate);

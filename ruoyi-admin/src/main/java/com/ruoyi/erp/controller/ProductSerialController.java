@@ -1,24 +1,32 @@
 package com.ruoyi.erp.controller;
 
-import com.ruoyi.erp.domain.ProductSerial;
-import com.ruoyi.erp.service.IProductSerialService;
-import com.ruoyi.erp.mapper.ProductSerialMapper;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
+import com.ruoyi.erp.domain.ProductSerial;
+import com.ruoyi.erp.mapper.ProductSerialMapper;
+import com.ruoyi.erp.service.IProductSerialService;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import jakarta.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
 
 /**
- * 单件流水号Controller
+ * Product serial controller.
  *
  * @author ruoyi
  */
@@ -33,7 +41,7 @@ public class ProductSerialController extends BaseController {
     private ProductSerialMapper productSerialMapper;
 
     /**
-     * 查询单件流水号列表
+     * Query product serial list.
      */
     @PreAuthorize("@ss.hasPermi('erp:productSerial:list')")
     @GetMapping("/list")
@@ -44,7 +52,7 @@ public class ProductSerialController extends BaseController {
     }
 
     /**
-     * 根据工票ID查询单件流水号列表
+     * Query product serial list by job id.
      */
     @PreAuthorize("@ss.hasPermi('erp:productSerial:list')")
     @GetMapping("/listByJob/{jobId}")
@@ -54,7 +62,7 @@ public class ProductSerialController extends BaseController {
     }
 
     /**
-     * 根据流水号查询详细信息
+     * Query product serial detail by serial number.
      */
     @PreAuthorize("@ss.hasPermi('erp:productSerial:query')")
     @GetMapping(value = "/scan/{serialNo}")
@@ -62,25 +70,24 @@ public class ProductSerialController extends BaseController {
         ProductSerial productSerial = productSerialService.selectProductSerialBySerialNo(serialNo);
         if (productSerial != null) {
             return AjaxResult.success(productSerial);
-        } else {
-            return AjaxResult.error("未找到该产品");
         }
+        return AjaxResult.error("Product serial not found");
     }
 
     /**
-     * 导出单件流水号列表
+     * Export product serial list.
      */
     @PreAuthorize("@ss.hasPermi('erp:productSerial:export')")
-    @Log(title = "单件流水号", businessType = BusinessType.EXPORT)
+    @Log(title = "Product Serial", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, ProductSerial productSerial) {
         List<ProductSerial> list = productSerialService.selectProductSerialList(productSerial);
-        ExcelUtil<ProductSerial> util = new ExcelUtil<ProductSerial>(ProductSerial.class);
-        util.exportExcel(response, list, "单件流水号数据");
+        ExcelUtil<ProductSerial> util = new ExcelUtil<>(ProductSerial.class);
+        util.exportExcel(response, list, "product_serial");
     }
 
     /**
-     * 获取单件流水号详细信息
+     * Query product serial by id.
      */
     @PreAuthorize("@ss.hasPermi('erp:productSerial:query')")
     @GetMapping(value = "/{id}")
@@ -89,49 +96,49 @@ public class ProductSerialController extends BaseController {
     }
 
     /**
-     * 新增单件流水号
+     * Create one product serial.
      */
     @PreAuthorize("@ss.hasPermi('erp:productSerial:add')")
-    @Log(title = "单件流水号", businessType = BusinessType.INSERT)
+    @Log(title = "Product Serial", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody ProductSerial productSerial) {
         return toAjax(productSerialService.insertProductSerial(productSerial));
     }
 
     /**
-     * 批量新增单件流水号
+     * Batch create product serials.
      */
     @PreAuthorize("@ss.hasPermi('erp:productSerial:add')")
-    @Log(title = "单件流水号", businessType = BusinessType.INSERT)
+    @Log(title = "Product Serial", businessType = BusinessType.INSERT)
     @PostMapping("/batchAdd")
     public AjaxResult batchAdd(@RequestBody List<ProductSerial> serialList) {
         return toAjax(productSerialService.batchInsertProductSerial(serialList));
     }
 
     /**
-     * 修改单件流水号
+     * Update one product serial.
      */
     @PreAuthorize("@ss.hasPermi('erp:productSerial:edit')")
-    @Log(title = "单件流水号", businessType = BusinessType.UPDATE)
+    @Log(title = "Product Serial", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody ProductSerial productSerial) {
         return toAjax(productSerialService.updateProductSerial(productSerial));
     }
 
     /**
-     * 删除单件流水号
+     * Delete product serials by ids.
      */
     @PreAuthorize("@ss.hasPermi('erp:productSerial:remove')")
-    @Log(title = "单件流水号", businessType = BusinessType.DELETE)
+    @Log(title = "Product Serial", businessType = BusinessType.DELETE)
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {
         return toAjax(productSerialService.deleteProductSerialByIds(ids));
     }
 
     /**
-     * 全链路追溯：按销售订单ID查询衫件生产状态链路
+     * Query full trace data by sales order id.
      *
-     * @param salesOrderId 销售订单ID
+     * @param salesOrderId sales order id
      */
     @PreAuthorize("@ss.hasPermi('erp:productSerial:query')")
     @GetMapping("/trace/byOrder/{salesOrderId}")
@@ -141,14 +148,17 @@ public class ProductSerialController extends BaseController {
     }
 
     /**
-     * 款号生产进度汇总：按 KN 款号（style_no）
+     * Query style progress summary by style code.
      *
-     * @param styleNo 款号，格式如 KN-26-SP-001
+     * @param styleCode style code, for example KN-26-SP-001
      */
     @PreAuthorize("@ss.hasPermi('erp:productSerial:query')")
     @GetMapping("/trace/styleProgress")
-    public AjaxResult styleProgress(@RequestParam String styleNo) {
-        Map<String, Object> progress = productSerialMapper.selectStyleProgress(styleNo);
+    public AjaxResult styleProgress(@RequestParam(required = false) String styleCode) {
+        if (styleCode == null || styleCode.isBlank()) {
+            return AjaxResult.error("styleCode is required");
+        }
+        Map<String, Object> progress = productSerialMapper.selectStyleProgress(styleCode.trim());
         return success(progress);
     }
 }

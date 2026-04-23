@@ -5,7 +5,7 @@
     <resultMap type="com.ruoyi.erp.domain.QcInspection" id="QcResult">
         <id property="id" column="id"/>
         <result property="batchNo" column="batch_no"/>
-        <result property="styleNo" column="style_no"/>
+        <result property="styleCode" column="style_code"/>
         <result property="orderNo" column="order_no"/>
         <result property="result" column="result"/>
         <result property="passRate" column="pass_rate"/>
@@ -31,7 +31,7 @@
         SELECT /*+ USE_INDEX(t_erp_qc_inspection idx_factory_id, idx_batch_no) */ * FROM t_erp_qc_inspection
         <where>
             <if test="batchNo != null and batchNo != ''">AND batch_no LIKE CONCAT('%',#{batchNo},'%')</if>
-            <if test="styleNo != null and styleNo != ''">AND style_no = #{styleNo}</if>
+            <if test="styleCode != null and styleCode != ''">AND style_code = #{styleCode}</if>
             <if test="result != null and result != ''">AND result = #{result}</if>
             <if test="status != null and status != ''">AND status = #{status}</if>
             <if test="factoryId != null">AND factory_id = #{factoryId}</if>
@@ -42,9 +42,9 @@
 
     <insert id="insert" parameterType="com.ruoyi.erp.domain.QcInspection" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO t_erp_qc_inspection
-        (batch_no, style_no, order_no, result, pass_rate, sample_qty, defect_qty, inspector_id, inspector_name, factory_id, status, remark, create_by, create_time)
+        (batch_no, style_code, order_no, result, pass_rate, sample_qty, defect_qty, inspector_id, inspector_name, factory_id, status, remark, create_by, create_time)
         VALUES
-        (#{batchNo}, #{styleNo}, #{orderNo}, #{result}, #{passRate}, #{sampleQty}, #{defectQty}, #{inspectorId}, #{inspectorName}, #{factoryId}, #{status}, #{remark}, #{createBy}, #{createTime})
+        (#{batchNo}, #{styleCode}, #{orderNo}, #{result}, #{passRate}, #{sampleQty}, #{defectQty}, #{inspectorId}, #{inspectorName}, #{factoryId}, #{status}, #{remark}, #{createBy}, #{createTime})
     </insert>
 
     <update id="update" parameterType="com.ruoyi.erp.domain.QcInspection">

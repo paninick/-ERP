@@ -11,7 +11,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="sampleType" column="sample_type" />
         <result property="styleType" column="style_type" />
         <result property="sampleCategoryType" column="sample_category_type" />
-        <result property="styleCode" column="style_no" />
+        <result property="styleCode" column="style_code" />
         <result property="bulkOrderNo" column="bulk_order_no" />
         <result property="customerId" column="customer_id" />
         <result property="customerName" column="customer_name" />
@@ -35,7 +35,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectCheckVo">
-        select check_id, check_no, sample_no, tech_no, sample_type, style_type, sample_category_type, style_no, bulk_order_no, customer_id, customer_name, sales_id, sales_name, due_date, progress_status, audit_status, audit_by, audit_by_name, audit_time, quantity, check_description, check_result, status, remark, create_by, create_time, update_by, update_time from t_erp_check
+        select check_id, check_no, sample_no, tech_no, sample_type, style_type, sample_category_type, style_code, bulk_order_no, customer_id, customer_name, sales_id, sales_name, due_date, progress_status, audit_status, audit_by, audit_by_name, audit_time, quantity, check_description, check_result, status, remark, create_by, create_time, update_by, update_time from t_erp_check
     </sql>
 
     <select id="selectCheckByCheckId" parameterType="Long" resultMap="CheckResult">
@@ -55,7 +55,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 AND check_no like concat('%', #{checkNo}, '%')
             </if>
             <if test="styleCode != null and styleCode != ''">
-                AND style_no like concat('%', #{styleCode}, '%')
+                AND style_code like concat('%', #{styleCode}, '%')
             </if>
             <if test="customerName != null and customerName != ''">
                 AND customer_name like concat('%', #{customerName}, '%')
@@ -88,7 +88,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 sample_category_type,
             </if>
             <if test="styleCode != null and styleCode != ''">
-                style_no,
+                style_code,
             </if>
             <if test="bulkOrderNo != null and bulkOrderNo != ''">
                 bulk_order_no,
@@ -258,7 +258,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
                 sample_category_type = #{sampleCategoryType},
             </if>
             <if test="styleCode != null and styleCode != ''">
-                style_no = #{styleCode},
+                style_code = #{styleCode},
             </if>
             <if test="bulkOrderNo != null and bulkOrderNo != ''">
                 bulk_order_no = #{bulkOrderNo},

@@ -66,7 +66,7 @@
                 :class="{ 'row-critical': item.resultLevel === 'CRITICAL', 'row-flash': item._flash }">
               <td class="row-indicator" :class="{ 'indicator-critical': item.resultLevel === 'CRITICAL' }"></td>
               <td>{{ item.batchNo || item.bulkOrderNo }}</td>
-              <td>{{ item.styleNo }}</td>
+              <td>{{ item.styleCode }}</td>
               <td>
                 <span class="result-tag" :class="'result-' + (item.resultLevel || 'PASS').toLowerCase()">
                   {{ item.resultLevel === 'CRITICAL' ? '致命' : item.resultLevel === 'MAJOR' ? '严重' : item.resultLevel === 'MINOR' ? '轻微' : '合格' }}
@@ -94,7 +94,7 @@
       <div class="drawer-body">
         <div class="drawer-info">
           <div class="drawer-info-row"><span class="drawer-info-label">批次号</span><span>{{ rejectItem.batchNo }}</span></div>
-          <div class="drawer-info-row"><span class="drawer-info-label">款号</span><span>{{ rejectItem.styleNo }}</span></div>
+          <div class="drawer-info-row"><span class="drawer-info-label">款号</span><span>{{ rejectItem.styleCode }}</span></div>
           <div class="drawer-info-row"><span class="drawer-info-label">缺陷类型</span><el-tag type="danger" size="small">致命缺陷</el-tag></div>
         </div>
         <el-input v-model="rejectReason" type="textarea" :rows="3" placeholder="打回原因（选填）" style="margin-top: 20px" />

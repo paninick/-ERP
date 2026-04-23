@@ -14,7 +14,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="planNo"    column="plan_no"    />
         <result property="bulkOrderNo"    column="bulk_order_no"    />
         <result property="sampleStyleNo"    column="sample_style_no"    />
-        <result property="styleCode"         column="style_no"           />
+        <result property="styleCode"         column="style_code"         />
         <result property="customerName"    column="customer_name"    />
         <result property="styleCategory"    column="style_category"    />
         <result property="salesName"    column="sales_name"    />
@@ -64,7 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectProducePlanVo">
-        select a.id, a.src_bill_type, a.src_bill_id, a.src_bill_no, a.produce_status, a.type, a.plan_no, a.bulk_order_no, a.sample_style_no, a.style_no, a.customer_name, a.style_category, a.sales_name, a.material_arrival_date, a.pre_process_date, a.inspection_date, a.in_bound_date, a.sales_order_id, a.notice_id, a.tech_id, a.plan_no, a.sales_id, a.start_date, a.picked_date, a.complete_date, a.material_arrival_date, a.up_date, a.down_date, a.produce_type, a.in_factory, a.out_factory, a.out_date, a.pre_process_date, a.inspection_date, a.inspection_corp, a.in_bound_date, a.shipping_date, a.post_process_date, a.due_date, a.plan_status, a.audit_status, a.audit_by, a.audit_time, a.create_by, a.create_time, a.update_by, a.update_time, a.remark, a.pre_produce_type, a.pre_in_factory, a.pre_out_factory, a.pre_out_date, a.post_produce_type, a.post_in_factory, a.post_out_factory, a.post_out_date
+        select a.id, a.src_bill_type, a.src_bill_id, a.src_bill_no, a.produce_status, a.type, a.plan_no, a.bulk_order_no, a.sample_style_no, a.style_code, a.customer_name, a.style_category, a.sales_name, a.material_arrival_date, a.pre_process_date, a.inspection_date, a.in_bound_date, a.sales_order_id, a.notice_id, a.tech_id, a.plan_no, a.sales_id, a.start_date, a.picked_date, a.complete_date, a.material_arrival_date, a.up_date, a.down_date, a.produce_type, a.in_factory, a.out_factory, a.out_date, a.pre_process_date, a.inspection_date, a.inspection_corp, a.in_bound_date, a.shipping_date, a.post_process_date, a.due_date, a.plan_status, a.audit_status, a.audit_by, a.audit_time, a.create_by, a.create_time, a.update_by, a.update_time, a.remark, a.pre_produce_type, a.pre_in_factory, a.pre_out_factory, a.pre_out_date, a.post_produce_type, a.post_in_factory, a.post_out_factory, a.post_out_date
         from t_erp_produce_plan a
     </sql>
 
@@ -76,7 +76,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="planNo != null  and planNo != ''"> and a.plan_no like concat('%', #{planNo}, '%')</if>
             <if test="bulkOrderNo != null  and bulkOrderNo != ''"> and a.bulk_order_no like concat('%', #{bulkOrderNo}, '%')</if>
             <if test="sampleStyleNo != null  and sampleStyleNo != ''"> and a.sample_style_no like concat('%', #{sampleStyleNo}, '%')</if>
-            <if test="styleCode != null  and styleCode != ''"> and a.style_no like concat('%', #{styleCode}, '%')</if>
+            <if test="styleCode != null  and styleCode != ''"> and a.style_code like concat('%', #{styleCode}, '%')</if>
             <if test="customerName != null  and customerName != ''"> and a.customer_name like concat('%', #{customerName}, '%')</if>
             <if test="styleCategory != null  and styleCategory != ''"> and a.style_category like concat('%', #{styleCategory}, '%')</if>
             <if test="salesName != null  and salesName != ''"> and a.sales_name like concat('%', #{salesName}, '%')</if>
@@ -133,7 +133,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="planNo != null">plan_no,</if>
             <if test="bulkOrderNo != null">bulk_order_no,</if>
             <if test="sampleStyleNo != null">sample_style_no,</if>
-            <if test="styleCode != null">style_no,</if>
+            <if test="styleCode != null">style_code,</if>
             <if test="customerName != null">customer_name,</if>
             <if test="styleCategory != null">style_category,</if>
             <if test="salesName != null">sales_name,</if>
@@ -241,7 +241,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="planNo != null">plan_no = #{planNo},</if>
             <if test="bulkOrderNo != null">bulk_order_no = #{bulkOrderNo},</if>
             <if test="sampleStyleNo != null">sample_style_no = #{sampleStyleNo},</if>
-            <if test="styleCode != null">style_no = #{styleCode},</if>
+            <if test="styleCode != null">style_code = #{styleCode},</if>
             <if test="customerName != null">customer_name = #{customerName},</if>
             <if test="styleCategory != null">style_category = #{styleCategory},</if>
             <if test="salesName != null">sales_name = #{salesName},</if>
@@ -306,7 +306,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertProducePlanBatch" parameterType="java.util.List">
 
         REPLACE INTO t_erp_produce_plan
-        (id,src_bill_type,src_bill_id,src_bill_no,produce_status,type,plan_no,bulk_order_no,sample_style_no,style_no,customer_name,style_category,sales_name,material_arrival_date,pre_process_date,inspection_date,in_bound_date,sales_order_id,notice_id,tech_id,sales_id,start_date,picked_date,complete_date,up_date,down_date,produce_type,in_factory,out_factory,out_date,inspection_corp,shipping_date,post_process_date,due_date,plan_status,audit_status,audit_by,audit_time,create_by,create_time,update_by,update_time,remark,pre_produce_type,pre_in_factory,pre_out_factory,pre_out_date,post_produce_type,post_in_factory,post_out_factory,post_out_date)
+        (id,src_bill_type,src_bill_id,src_bill_no,produce_status,type,plan_no,bulk_order_no,sample_style_no,style_code,customer_name,style_category,sales_name,material_arrival_date,pre_process_date,inspection_date,in_bound_date,sales_order_id,notice_id,tech_id,sales_id,start_date,picked_date,complete_date,up_date,down_date,produce_type,in_factory,out_factory,out_date,inspection_corp,shipping_date,post_process_date,due_date,plan_status,audit_status,audit_by,audit_time,create_by,create_time,update_by,update_time,remark,pre_produce_type,pre_in_factory,pre_out_factory,pre_out_date,post_produce_type,post_in_factory,post_out_factory,post_out_date)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
 
