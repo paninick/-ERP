@@ -23,6 +23,10 @@
   --app-blur: none;
   
   --app-transition: all 0.3s;
+
+  --app-card-bg-secondary: #f9fafb;
+  --app-ring-track: #f0f0f0;
+  --app-critical-glow: rgba(255, 59, 48, 0.08);
 }
 
 /* ============================================================= */
@@ -108,4 +112,50 @@ body.theme-apple .el-button:active {
 }
 body.theme-muji .el-button:active {
   transform: none; /* MUJI禁止缩放 */
+}
+/* plain 按钮在主题切换后容易出现文字对比度不足，统一提升可读性 */
+.el-button--primary.is-plain,
+.el-button--success.is-plain,
+.el-button--warning.is-plain,
+.el-button--danger.is-plain,
+.el-button--info.is-plain {
+  font-weight: 500;
+}
+
+.el-button--primary.is-plain {
+  color: var(--app-primary-color);
+}
+
+.el-button--success.is-plain {
+  color: var(--app-success-color);
+}
+
+.el-button--warning.is-plain {
+  color: var(--app-warning-color);
+}
+
+.el-button--danger.is-plain {
+  color: var(--app-danger-color);
+}
+
+.el-button--info.is-plain {
+  color: var(--app-text-main);
+}
+
+.el-button--primary.is-plain:hover,
+.el-button--primary.is-plain:focus,
+.el-button--primary.is-plain:active,
+.el-button--success.is-plain:hover,
+.el-button--success.is-plain:focus,
+.el-button--success.is-plain:active,
+.el-button--warning.is-plain:hover,
+.el-button--warning.is-plain:focus,
+.el-button--warning.is-plain:active,
+.el-button--danger.is-plain:hover,
+.el-button--danger.is-plain:focus,
+.el-button--danger.is-plain:active,
+.el-button--info.is-plain:hover,
+.el-button--info.is-plain:focus,
+.el-button--info.is-plain:active {
+  color: #fff;
 }
