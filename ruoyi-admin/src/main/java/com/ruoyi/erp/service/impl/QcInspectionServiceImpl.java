@@ -61,10 +61,12 @@ public class QcInspectionServiceImpl {
     }
 
     public Map<String, Object> getStats() {
-        return inspectionMapper.selectStats();
+        Long factoryId = com.ruoyi.common.utils.SecurityUtils.getLoginUser().getUser().getDeptId();
+        return inspectionMapper.selectStats(factoryId);
     }
 
     public List<Map<String, Object>> getDefectReasons() {
-        return inspectionMapper.selectDefectReasons();
+        Long factoryId = com.ruoyi.common.utils.SecurityUtils.getLoginUser().getUser().getDeptId();
+        return inspectionMapper.selectDefectReasons(factoryId);
     }
 }

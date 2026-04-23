@@ -1,0 +1,257 @@
+﻿﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>鍒濅竴鍒板垵涓夋暟瀛﹂€夋嫈鍗峰鐢熺増</title>
+  <style>
+    @page { size: A4; margin: 18mm 16mm; }
+    body {
+      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif;
+      color: #111;
+      line-height: 1.55;
+      font-size: 14px;
+      margin: 0;
+    }
+    .paper {
+      page-break-after: always;
+    }
+    .paper:last-child {
+      page-break-after: auto;
+    }
+    h1, h2, h3 {
+      margin: 0;
+      font-weight: 700;
+    }
+    h1 {
+      text-align: center;
+      font-size: 24px;
+      margin-top: 6px;
+    }
+    .subtitle {
+      text-align: center;
+      margin: 6px 0 10px;
+      font-size: 14px;
+    }
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      margin: 8px 0 10px;
+      font-size: 14px;
+    }
+    .student {
+      border: 1px solid #333;
+      padding: 8px 10px;
+      margin-bottom: 10px;
+    }
+    .notice {
+      border: 1px solid #333;
+      padding: 8px 10px;
+      margin-bottom: 14px;
+    }
+    .section-title {
+      font-size: 17px;
+      margin: 14px 0 8px;
+    }
+    .q {
+      margin: 8px 0;
+    }
+    .indent {
+      margin-left: 1.5em;
+    }
+    .answer-line {
+      display: inline-block;
+      min-width: 90px;
+      border-bottom: 1px solid #111;
+      height: 1em;
+      vertical-align: bottom;
+    }
+    .space-sm { height: 18px; }
+    .space-md { height: 34px; }
+    .space-lg { height: 72px; }
+    .space-xl { height: 110px; }
+    .grid-note {
+      color: #444;
+      font-size: 13px;
+    }
+    .tag {
+      display: inline-block;
+      border: 1px solid #222;
+      padding: 0 6px;
+      margin-left: 8px;
+      font-size: 12px;
+      vertical-align: middle;
+    }
+      body.with-seal {
+      margin-left: 82px;
+    }
+    .seal-line {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 64px;
+      border-right: 2px solid #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      letter-spacing: 2px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .seal-meta {
+      position: fixed;
+      left: 8px;
+      top: 16px;
+      width: 48px;
+      font-size: 11px;
+      line-height: 1.4;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+    }
+    @media print {
+      body.with-seal {
+        margin-left: 78px;
+      }
+    }
+  </style>
+</head>
+<body class='with-seal'><div class='seal-line'>&#23494;&#23553;&#32447;</div><div class='seal-meta'>&#23398;&#26657; &#29677;&#32423; &#22995;&#21517; &#32771;&#21495;</div>
+  <section class="paper">
+    <h1>鍒濅竴鍒板垵涓夋暟瀛︾患鍚堝嵎 A 鍗?/h1>
+    <div class="subtitle">浜烘暀鐗堟暀鏉愬熀纭€涓庤鍐呭紩鐢?/div>
+    <div class="meta">
+      <div>婊″垎锛?50 鍒?/div>
+      <div>鑰冭瘯鏃堕棿锛?20 鍒嗛挓</div>
+    </div>
+    <div class="student">瀛︽牎锛歘___________銆€鐝骇锛歘___________銆€濮撳悕锛歘___________銆€鑰冨彿锛歘___________</div>
+    <div class="notice">
+      1. 鏈嵎鎸変汉鏁欑増鍒濅腑鏁板涓诲共鐭ヨ瘑缂栧啓锛岃鐩栧垵涓€鍒板垵涓夊熀纭€鍐呭涓庤鍐呭父瑙勫紩鐢炽€?br />
+      2. 閫夋嫨棰樿鐩存帴濉啓閫夐」锛屽～绌洪鍐欏嚭缁撴灉锛岃В绛旈璇峰啓鍑哄繀瑕佽繃绋嬨€?br />
+      3. 淇濇寔鍗烽潰鏁存磥锛屾楠よ鑼冦€?    </div>
+
+    <h2 class="section-title">涓€銆侀€夋嫨棰橈紙鏈ぇ棰樺叡 10 灏忛锛屾瘡灏忛 4 鍒嗭紝鍏?40 鍒嗭級</h2>
+    <div class="q">1. 9 鐨勫钩鏂规牴鏄紙銆€锛?br />A. 3銆€B. -3銆€C. 卤3銆€D. 81</div>
+    <div class="q">2. 浠ｆ暟寮?1/(x-2) 鏈夋剰涔夋椂锛寈 鐨勫€间笉鑳芥槸锛堛€€锛?br />A. 0銆€B. 1銆€C. 2銆€D. 3</div>
+    <div class="q">3. 涓嬪垪鍥犲紡鍒嗚В姝ｇ‘鐨勬槸锛堛€€锛?br />A. x虏-4=(x-2)虏銆€B. x虏+4=(x+2)虏銆€C. x虏-4x+4=(x-2)虏銆€D. x虏-2x=x(x-2x)</div>
+    <div class="q">4. 鏂圭▼ x虏-5x+6=0 鐨勮В鏄紙銆€锛?br />A. 1 鍜?6銆€B. 2 鍜?3銆€C. -2 鍜?-3銆€D. 0 鍜?6</div>
+    <div class="q">5. 涓€娆″嚱鏁?y=2x-1 鐨勫浘璞′竴瀹氱粡杩囩偣锛堛€€锛?br />A. (0,1)銆€B. (1,1)銆€C. (1,-1)銆€D. (2,1)</div>
+    <div class="q">6. 鐐?(-3,2) 浣嶄簬锛堛€€锛?br />A. 绗竴璞￠檺銆€B. 绗簩璞￠檺銆€C. 绗笁璞￠檺銆€D. 绗洓璞￠檺</div>
+    <div class="q">7. 鍦ㄧ洿瑙掍笁瑙掑舰涓紝涓ょ洿瑙掕竟鍒嗗埆涓?6 鍜?8锛屽垯鏂滆竟闀夸负锛堛€€锛?br />A. 7銆€B. 8銆€C. 9銆€D. 10</div>
+    <div class="q">8. 骞宠鍥涜竟褰㈠叿鏈夌殑鎬ц川鏄紙銆€锛?br />A. 鍥涙潯杈归兘鐩哥瓑銆€B. 鍥涗釜瑙掗兘鐩哥瓑銆€C. 瀵硅绾夸簰鐩稿钩鍒嗐€€D. 瀵硅绾夸簰鐩稿瀭鐩?/div>
+    <div class="q">9. 鍗婂緞涓?6锛屽渾蹇冭涓?90掳 鐨勬墖褰㈤潰绉槸锛堛€€锛?br />A. 6蟺銆€B. 9蟺銆€C. 12蟺銆€D. 18蟺</div>
+    <div class="q">10. 涓€涓涓鏈?3 涓孩鐞冦€? 涓櫧鐞冿紝浠绘剰鎽稿嚭 1 涓悆锛屾懜鍒扮孩鐞冪殑姒傜巼鏄紙銆€锛?br />A. 1/5銆€B. 2/5銆€C. 3/5銆€D. 2/3</div>
+
+    <h2 class="section-title">浜屻€佸～绌洪锛堟湰澶ч鍏?8 灏忛锛屾瘡灏忛 5 鍒嗭紝鍏?40 鍒嗭級</h2>
+    <div class="q">11. |-3| + 鈭?6 = <span class="answer-line"></span></div>
+    <div class="q">12. 鍒嗚В鍥犲紡锛歛虏-b虏 = <span class="answer-line"></span></div>
+    <div class="q">13. 瑙ｆ柟绋嬶細2x-3=7锛屽緱 x = <span class="answer-line"></span></div>
+    <div class="q">14. 瑙ｄ笉绛夊紡锛?x-1&lt;8锛屽緱 x &lt; <span class="answer-line"></span></div>
+    <div class="q">15. 鑻ユ姣斾緥鍑芥暟 y=kx 缁忚繃鐐?(2,6)锛屽垯 k = <span class="answer-line"></span></div>
+    <div class="q">16. 鐐?(0,-5) 鍦?<span class="answer-line"></span> 杞翠笂銆?/div>
+    <div class="q">17. 宸茬煡鐭╁舰鐨勯暱涓?8锛屽涓?6锛屽垯闈㈢Н涓?<span class="answer-line"></span>銆?/div>
+    <div class="q">18. 鏁版嵁 2锛?锛?锛?锛? 鐨勫钩鍧囨暟鏄?<span class="answer-line"></span>銆?/div>
+
+    <h2 class="section-title">涓夈€佽В绛旈锛堟湰澶ч鍏?7 灏忛锛屽叡 70 鍒嗭級</h2>
+    <div class="q">19. 璁＄畻锛? 鍒嗭級<br />[(1/2)^(-1)] + (-2)^3 - 鈭?5<div class="space-md"></div></div>
+    <div class="q">20. 瑙ｆ柟绋嬬粍锛?0 鍒嗭級<br />2x+y=7<br />x-y=2<div class="space-lg"></div></div>
+    <div class="q">21. 瑙ｅ垎寮忔柟绋嬶紙10 鍒嗭級<br />x/(x-1) - 1 = 1/(x-1)<div class="space-lg"></div></div>
+    <div class="q">22. 搴旂敤棰橈紙10 鍒嗭級<br />鏌愭枃鍏峰簵閿€鍞瑪璁版湰鍜屼腑鎬х瑪銆備拱 2 鏈瑪璁版湰鍜?3 鏀腑鎬х瑪鍏遍渶 18 鍏冿紝涔?4 鏈瑪璁版湰鍜?1 鏀腑鎬х瑪鍏遍渶 22 鍏冦€?br />锛?锛夋眰姣忔湰绗旇鏈拰姣忔敮涓€х瑪鐨勫崟浠凤紱<br />锛?锛夎嫢涔?5 鏈瑪璁版湰鍜?2 鏀腑鎬х瑪锛屽叡闇€澶氬皯鍏冿紵<div class="space-xl"></div></div>
+    <div class="q">23. 浜屾鍑芥暟鍩虹缁煎悎锛?2 鍒嗭級<br />宸茬煡浜屾鍑芥暟 y=x虏-4x+3銆?br />锛?锛夋眰瀵圭О杞达紱锛?锛夋眰椤剁偣鍧愭爣锛涳紙3锛夋眰 y&lt;0 鏃?x 鐨勫彇鍊艰寖鍥淬€?div class="space-xl"></div></div>
+    <div class="q">24. 鍑犱綍鍩虹棰橈紙10 鍒嗭級<br />鍦ㄧ煩褰?ABCD 涓紝AB=8锛孊C=6銆?br />锛?锛夋眰鍛ㄩ暱锛涳紙2锛夋眰瀵硅绾?AC锛涳紙3锛夎嫢 E 鏄?AB 鐨勪腑鐐癸紝姹?AE銆?div class="space-lg"></div></div>
+    <div class="q">25. 缁熻涓庢鐜囷紙10 鍒嗭級<br />鏌愮彮 5 鍚嶅悓瀛︽暟瀛︽祴楠屾垚缁╀负 78锛?2锛?5锛?5锛?0銆?br />锛?锛夋眰骞冲潎鏁帮紱锛?锛夋眰涓綅鏁帮紱锛?锛変换鍙?1 涓垚缁╋紝鍙栧埌 85 鍒嗙殑姒傜巼鏄灏戯紵<div class="space-lg"></div></div>
+  </section>
+
+  <section class="paper">
+    <h1>鍒濅竴鍒板垵涓夋暟瀛︾患鍚堝嵎 B 鍗?/h1>
+    <div class="subtitle">浜烘暀鐗堜富绾?+ 鍗楅€氭湰鍦版嫈灏栫彮鍏紑棰橀鏍兼敼缂?<span class="tag">鏀圭紪鍗?/span></div>
+    <div class="meta">
+      <div>婊″垎锛?50 鍒?/div>
+      <div>鑰冭瘯鏃堕棿锛?20 鍒嗛挓</div>
+    </div>
+    <div class="student">瀛︽牎锛歘___________銆€鐝骇锛歘___________銆€濮撳悕锛歘___________銆€鑰冨彿锛歘___________</div>
+    <div class="notice">
+      1. 鏈嵎浠嶄互浜烘暀鐗堢煡璇嗕綋绯讳负涓伙紝浣嗙患鍚堟柟寮忋€佸帇杞寸粨鏋勬洿鎺ヨ繎鏈湴鐏鐝€佷笜鐝澶囪缁冦€?br />
+      2. 棰樼洰涓烘敼缂栧師鍒涳紝涓嶇洿鎺ュ鍒诲師濮嬬湡棰樸€?br />
+      3. 瑙ｇ瓟棰樿鍐欏嚭鍏抽敭鎺ㄧ悊涓庤绠楁楠ゃ€?    </div>
+
+    <h2 class="section-title">涓€銆侀€夋嫨棰橈紙鏈ぇ棰樺叡 10 灏忛锛屾瘡灏忛 4 鍒嗭紝鍏?40 鍒嗭級</h2>
+    <div class="q">1. 鑻?x虏-4x+1=0锛屽垯 x+1/x 鐨勫€兼槸锛堛€€锛?br />A. 2銆€B. 3銆€C. 4銆€D. 5</div>
+    <div class="q">2. 涓€娆″嚱鏁?y=-2x+3 涓庡潗鏍囪酱鍥存垚鐨勪笁瑙掑舰闈㈢Н鏄紙銆€锛?br />A. 3/2銆€B. 9/4銆€C. 3銆€D. 6</div>
+    <div class="q">3. 鑻ョ偣 P(a,2a-1) 鍦ㄧ鍥涜薄闄愶紝鍒?a 鐨勫彇鍊艰寖鍥存槸锛堛€€锛?br />A. a&lt;0銆€B. 0&lt;a&lt;1/2銆€C. a&gt;1/2銆€D. -1/2&lt;a&lt;0</div>
+    <div class="q">4. 宸茬煡 x+1/x=3锛屽垯 x虏+1/x虏 鐨勫€兼槸锛堛€€锛?br />A. 5銆€B. 7銆€C. 9銆€D. 11</div>
+    <div class="q">5. 鍦ㄧ洿瑙掍笁瑙掑舰涓紝涓夎竟闀夸负 5锛?2锛?3锛屽垯鍏堕潰绉槸锛堛€€锛?br />A. 25銆€B. 30銆€C. 60銆€D. 65</div>
+    <div class="q">6. 灏嗗椤瑰紡 x鲁-4x 鍥犲紡鍒嗚В锛岀粨鏋滄纭殑鏄紙銆€锛?br />A. x(x-4)銆€B. x(x-2)虏銆€C. x(x-2)(x+2)銆€D. (x虏-4)(x+1)</div>
+    <div class="q">7. 鍗婂緞涓?5 鐨勫渾涓紝120掳 鍦嗗績瑙掓墍瀵瑰姬闀夸负锛堛€€锛?br />A. 5蟺/3銆€B. 10蟺/3銆€C. 20蟺/3銆€D. 25蟺/3</div>
+    <div class="q">8. 涓€涓笉閫忔槑琚嬩腑鏈?2 涓孩鐞冦€? 涓粍鐞冦€? 涓摑鐞冿紝浠诲彇 1 涓悆锛屽彇鍒伴粍鐞冪殑姒傜巼鏄紙銆€锛?br />A. 1/2銆€B. 1/3銆€C. 1/6銆€D. 2/3</div>
+    <div class="q">9. 鑻ュ叧浜?x 鐨勬柟绋?x虏+mx+6=0 鏈変竴涓牴鏄?-2锛屽垯 m 鐨勫€兼槸锛堛€€锛?br />A. -5銆€B. -1銆€C. 1銆€D. 5</div>
+    <div class="q">10. 鍦ㄥ钩琛屽洓杈瑰舰 ABCD 涓紝鑻?鈭燗=70掳锛屽垯 鈭燙 鐨勫害鏁版槸锛堛€€锛?br />A. 70掳銆€B. 110掳銆€C. 120掳銆€D. 140掳</div>
+
+    <h2 class="section-title">浜屻€佸～绌洪锛堟湰澶ч鍏?8 灏忛锛屾瘡灏忛 5 鍒嗭紝鍏?40 鍒嗭級</h2>
+    <div class="q">11. 鈭?0/鈭? = <span class="answer-line"></span></div>
+    <div class="q">12. 鍒嗚В鍥犲紡锛?x虏-8 = <span class="answer-line"></span></div>
+    <div class="q">13. 瑙ｄ笉绛夊紡缁勶細x-1鈮?锛?x+1&lt;9锛屽垯 x 鐨勫彇鍊艰寖鍥存槸 <span class="answer-line"></span></div>
+    <div class="q">14. 鑻ュ弽姣斾緥鍑芥暟 y=k/x 缁忚繃鐐?(2,3)锛屽垯 k = <span class="answer-line"></span></div>
+    <div class="q">15. 鐩寸嚎 y=-2x+5 涓婏紝褰?y&gt;1 鏃讹紝x 鐨勫彇鍊艰寖鍥存槸 <span class="answer-line"></span></div>
+    <div class="q">16. 鐭╁舰闀?6锛屽 8锛屽垯瀵硅绾块暱涓?<span class="answer-line"></span></div>
+    <div class="q">17. 鏁版嵁 1锛?锛?锛?锛?锛? 鐨勪腑浣嶆暟鏄?<span class="answer-line"></span></div>
+    <div class="q">18. 鑻ユ姏鐗╃嚎 y=(x-1)虏-4 鐨勯《鐐瑰潗鏍囨槸 <span class="answer-line"></span></div>
+
+    <h2 class="section-title">涓夈€佽В绛旈锛堟湰澶ч鍏?7 灏忛锛屽叡 70 鍒嗭級</h2>
+    <div class="q">19. 璁＄畻涓庡寲绠€锛? 鍒嗭級<br />鈭?4 - |-3| + (1-2)虏 - 2鈦宦?div class="space-md"></div></div>
+    <div class="q">20. 瑙ｆ柟绋嬩笌妫€楠岋紙10 鍒嗭級<br />(x+1)(x-3)=4<div class="space-lg"></div></div>
+    <div class="q">21. 涓€娆″嚱鏁扮患鍚堬紙10 鍒嗭級<br />宸茬煡鐩寸嚎 l鈧侊細y=-x+4锛岀洿绾?l鈧傦細y=2x-2銆?br />锛?锛夋眰涓ょ洿绾夸氦鐐瑰潗鏍囷紱锛?锛夋眰涓ょ洿绾夸笌 x 杞村洿鎴愪笁瑙掑舰鐨勯潰绉€?div class="space-xl"></div></div>
+    <div class="q">22. 搴旂敤棰橈紙10 鍒嗭級<br />鏌愬晢搴楄喘杩涚敳銆佷箼涓ょ缁冧範鍐岋紝3 鏈敳鍜?2 鏈箼鍏?29 鍏冿紝2 鏈敳鍜?5 鏈箼鍏?31 鍏冦€?br />锛?锛夋眰涓ょ缁冧範鍐屽崟浠凤紱锛?锛夎嫢璐拱 4 鏈敳鍜?4 鏈箼锛屽叡闇€澶氬皯鍏冿紵<div class="space-xl"></div></div>
+    <div class="q">23. 浜屾鍑芥暟缁煎悎锛?2 鍒嗭級<br />宸茬煡 y=x虏-2x-3銆?br />锛?锛夋眰鎶涚墿绾夸笌 x 杞寸殑浜ょ偣锛涳紙2锛夋眰椤剁偣鍧愭爣锛涳紙3锛夊綋 -1鈮鈮? 鏃讹紝姹?y 鐨勬渶灏忓€笺€?div class="space-xl"></div></div>
+    <div class="q">24. 鍑犱綍缁煎悎锛?0 鍒嗭級<br />鍦ㄧ煩褰?ABCD 涓紝AB=10锛孊C=8锛岀偣 E 鍦ㄨ竟 BC 涓婏紝涓?CE=3銆?br />锛?锛夋眰 DE 鐨勯暱锛涳紙2锛夋眰 鈻矨DE 鐨勯潰绉€?div class="space-lg"></div></div>
+    <div class="q">25. 姒傜巼涓庣粺璁＄患鍚堬紙10 鍒嗭級<br />鏌愮彮 6 娆￠殢鍫傛祴鎴愮哗涓?72锛?6锛?0锛?4锛?4锛?2銆?br />锛?锛夋眰骞冲潎鏁帮紱锛?锛夋眰涓綅鏁帮紱锛?锛夎嫢浠庝腑闅忔満鎶藉彇 1 涓垚缁╋紝鎶藉埌涓嶄綆浜?84 鍒嗙殑姒傜巼鏄灏戯紵<div class="space-lg"></div></div>
+  </section>
+
+  <section class="paper">
+    <h1>鍒濅竴鍒板垵涓夋暟瀛︾患鍚堝嵎 C 鍗?/h1>
+    <div class="subtitle">浜烘暀鐗堝己鍖栧紩鐢冲嵎</div>
+    <div class="meta">
+      <div>婊″垎锛?50 鍒?/div>
+      <div>鑰冭瘯鏃堕棿锛?20 鍒嗛挓</div>
+    </div>
+    <div class="student">瀛︽牎锛歘___________銆€鐝骇锛歘___________銆€濮撳悕锛歘___________銆€鑰冨彿锛歘___________</div>
+    <div class="notice">
+      1. 鏈嵎寤虹珛鍦ㄤ汉鏁欑増鏁欐潗涓诲共涔嬩笂锛岀獊鍑哄弬鏁般€佹渶鍊笺€佹瀯閫犮€佸垎绫讳笌缁煎悎杩愮敤銆?br />
+      2. 棰樼洰涓嶈劚绂昏鏈煡璇嗚竟鐣岋紝浣嗙患鍚堝己搴︽槑鏄鹃珮浜庡父瑙勬牎鍐呭嵎銆?br />
+      3. 瑙ｇ瓟棰樿灏介噺鍐欏嚭鎬濊矾锛屼笉鍙啓缁撴灉銆?    </div>
+
+    <h2 class="section-title">涓€銆侀€夋嫨棰橈紙鏈ぇ棰樺叡 10 灏忛锛屾瘡灏忛 4 鍒嗭紝鍏?40 鍒嗭級</h2>
+    <div class="q">1. 鑻ュ叧浜?x 鐨勬柟绋?x虏-2mx+m-1=0 鐨勪竴涓牴鏄?1锛屽垯 m 鐨勫€兼槸锛堛€€锛?br />A. -1銆€B. 0銆€C. 1銆€D. 2</div>
+    <div class="q">2. 鍦ㄥ嚱鏁?y=(k-1)x+k 涓紝鑻ュ嚱鏁板浘璞＄粡杩囩涓€銆佷簩銆佸洓璞￠檺锛屽垯 k 鐨勫彇鍊艰寖鍥存槸锛堛€€锛?br />A. k&gt;1銆€B. 0&lt;k&lt;1銆€C. k&lt;0銆€D. k=1</div>
+    <div class="q">3. 宸茬煡鐐?A(1,2)锛孊(5,2)锛孭 鍦?x 杞翠笂锛屽垯 鈻矨BP 鐨勯潰绉渶灏忓€兼槸锛堛€€锛?br />A. 0銆€B. 2銆€C. 4銆€D. 8</div>
+    <div class="q">4. 鑻?a+b=5锛宎b=3锛屽垯 a虏+b虏 鐨勫€兼槸锛堛€€锛?br />A. 13銆€B. 19銆€C. 25銆€D. 31</div>
+    <div class="q">5. 涓€涓渾閿ョ殑搴曢潰鍗婂緞涓?3锛屾瘝绾块暱涓?5锛屽垯渚ч潰绉槸锛堛€€锛?br />A. 8蟺銆€B. 12蟺銆€C. 15蟺銆€D. 25蟺</div>
+    <div class="q">6. 鍦ㄥ弽姣斾緥鍑芥暟 y=6/x 鐨勫浘璞′笂鏈夌偣 M(x鈧?y鈧?銆丯(x鈧?y鈧?锛岃嫢 x鈧?lt;x鈧?lt;0锛屽垯 y鈧?涓?y鈧?鐨勫ぇ灏忓叧绯绘槸锛堛€€锛?br />A. y鈧?lt;y鈧傘€€B. y鈧?gt;y鈧傘€€C. y鈧?y鈧傘€€D. 鏃犳硶纭畾</div>
+    <div class="q">7. 宸茬煡涓€缁勬暟鎹?2锛?锛?锛寈锛?0 鐨勫钩鍧囨暟鏄?5锛屽垯杩欑粍鏁版嵁鐨勬柟宸笌涓嬪垪鍝釜鏁版瘮杈冩渶鎺ヨ繎锛堛€€锛?br />A. 6銆€B. 8銆€C. 10銆€D. 12</div>
+    <div class="q">8. 鑻ョ偣 P(m,2m-3) 鍦ㄧ浜岃薄闄愶紝鍒?m 鐨勫彇鍊艰寖鍥存槸锛堛€€锛?br />A. m&lt;0銆€B. 0&lt;m&lt;3/2銆€C. m&gt;3/2銆€D. -3/2&lt;m&lt;0</div>
+    <div class="q">9. 宸茬煡涓€鍏冧簩娆℃柟绋?x虏-4x+c=0 鏈変袱涓浉绛夌殑瀹炴暟鏍癸紝鍒?c 鐨勫€间负锛堛€€锛?br />A. 2銆€B. 4銆€C. 6銆€D. 8</div>
+    <div class="q">10. 濡傚浘璞″緛鎰忎箟涓紝鑻ヤ袱涓簨浠?A銆丅 鐙珛涓?P(A)=1/2锛孭(B)=1/3锛屽垯 P(A 涓?B)=锛堛€€锛?br />A. 1/6銆€B. 1/5銆€C. 2/3銆€D. 5/6</div>
+
+    <h2 class="section-title">浜屻€佸～绌洪锛堟湰澶ч鍏?8 灏忛锛屾瘡灏忛 5 鍒嗭紝鍏?40 鍒嗭級</h2>
+    <div class="q">11. 鑻?x+1/x=4锛屽垯 x虏+1/x虏 = <span class="answer-line"></span></div>
+    <div class="q">12. 鍥犲紡鍒嗚В锛歺鲁-9x = <span class="answer-line"></span></div>
+    <div class="q">13. 宸茬煡鍏充簬 x 鐨勪笉绛夊紡 (m-1)x&gt;2锛屽綋 m=3 鏃讹紝鍏惰В闆嗕负 <span class="answer-line"></span></div>
+    <div class="q">14. 鑻ヤ簩娆″嚱鏁?y=x虏-6x+5 鐨勬渶灏忓€间负 <span class="answer-line"></span></div>
+    <div class="q">15. 宸茬煡鑿卞舰鐨勪竴鏉″瑙掔嚎闀夸负 8锛屽彟涓€鏉″瑙掔嚎闀夸负 6锛屽垯闈㈢Н涓?<span class="answer-line"></span></div>
+    <div class="q">16. 鍗婂緞涓?4 鐨勫渾鍐呮帴姝ｆ柟褰㈢殑杈归暱涓?<span class="answer-line"></span></div>
+    <div class="q">17. 鑻ュ叧浜?x 鐨勫垎寮忔柟绋?2/(x-1)=m/(x+1) 鐨勮В涓?x=3锛屽垯 m = <span class="answer-line"></span></div>
+    <div class="q">18. 鏁版嵁 3锛?锛?锛?锛? 鐨勬柟宸槸 <span class="answer-line"></span></div>
+
+    <h2 class="section-title">涓夈€佽В绛旈锛堟湰澶ч鍏?6 灏忛锛屽叡 70 鍒嗭級</h2>
+    <div class="q">19. 璁＄畻涓庡寲绠€锛?0 鍒嗭級<br />(鈭?2-鈭?)/鈭? + (2-1)鈦?- | -4 |<div class="space-md"></div></div>
+    <div class="q">20. 鍙傛暟鏂圭▼缁勶紙12 鍒嗭級<br />宸茬煡鏂圭▼缁勶細<br />x+y=5<br />mx-y=1<br />鑻ュ叾瑙ｆ弧瓒?x-y=3锛屾眰 m 鐨勫€笺€?div class="space-lg"></div></div>
+    <div class="q">21. 涓€娆″嚱鏁颁笌鍑犱綍锛?2 鍒嗭級<br />宸茬煡鐩寸嚎 y=-x+6 涓庡潗鏍囪酱浜や簬 A銆丅 涓ょ偣锛岀偣 P 鍦ㄧ涓€璞￠檺涓旀弧瓒?P 鍒?x 杞淬€亂 杞寸殑璺濈鐩哥瓑銆?br />锛?锛夋眰 A銆丅 鍧愭爣锛涳紙2锛夎嫢 P 鍦ㄨ鐩寸嚎涓婏紝姹?P 鍧愭爣锛涳紙3锛夋眰 鈻矨OP 鐨勯潰绉€?div class="space-xl"></div></div>
+    <div class="q">22. 浜屾鍑芥暟寮哄寲锛?2 鍒嗭級<br />宸茬煡鎶涚墿绾?y=x虏-4x+a銆?br />锛?锛夊綋鎶涚墿绾跨粡杩囩偣 (1,0) 鏃讹紝姹?a锛?br />锛?锛夊湪锛?锛夌殑鏉′欢涓嬶紝姹傛姏鐗╃嚎涓?x 杞寸殑鍙︿竴浜ょ偣锛?br />锛?锛夋眰璇ユ姏鐗╃嚎鍦ㄥ尯闂?[0,4] 涓婄殑鏈€澶у€间笌鏈€灏忓€笺€?div class="space-xl"></div></div>
+    <div class="q">23. 鍑犱綍寮哄寲锛?2 鍒嗭級<br />鍦?Rt鈻矨BC 涓紝鈭燙=90掳锛孉C=6锛孊C=8銆傜偣 D 涓?AB 涓偣銆?br />锛?锛夋眰 AB锛涳紙2锛夋眰 CD锛涳紙3锛変互 C 涓哄渾蹇冦€丆D 涓哄崐寰勪綔鍦嗭紝鍒ゆ柇鐐?A 鏄惁鍦ㄥ渾涓婏紝骞惰鏄庣悊鐢便€?div class="space-xl"></div></div>
+    <div class="q">24. 缁熻涓庢鐜囩患鍚堬紙12 鍒嗭級<br />鐢层€佷箼涓ょ粍鍚勬湁 5 涓暟鎹€傜敳缁勶細3锛?锛?锛?锛?锛涗箼缁勶細2锛?锛?锛?锛?銆?br />锛?锛夊垎鍒眰涓ょ粍鏁版嵁鐨勫钩鍧囨暟锛涳紙2锛夋瘮杈冧袱缁勬暟鎹殑鏂瑰樊澶у皬锛涳紙3锛夊皢鏁板瓧 1锛?锛? 鍐欏湪涓夊紶鍗＄墖涓婏紝闅忔満鎶藉彇 1 寮狅紝鍐嶆斁鍥炲悗鍐嶆娊 1 寮狅紝姹備袱娆℃暟瀛楀拰涓?4 鐨勬鐜囥€?div class="space-xl"></div></div>
+  </section>
+</body>
+</html>
+

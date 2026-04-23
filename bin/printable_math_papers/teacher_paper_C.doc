@@ -1,0 +1,61 @@
+﻿﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>鍒濅竴鍒板垵涓夋暟瀛﹂€夋嫈鍗锋暀甯堢増</title>
+  <style>
+    @page { size: A4; margin: 18mm 16mm; }
+    body {
+      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif;
+      color: #111;
+      line-height: 1.55;
+      font-size: 14px;
+      margin: 0;
+    }
+    .paper { page-break-after: always; }
+    .paper:last-child { page-break-after: auto; }
+    h1, h2 { margin: 0; }
+    h1 { text-align: center; font-size: 24px; margin-top: 6px; }
+    .subtitle { text-align: center; margin: 6px 0 10px; }
+    .meta { margin-bottom: 12px; }
+    .box { border: 1px solid #333; padding: 8px 10px; margin-bottom: 12px; }
+    .section-title { font-size: 17px; margin: 14px 0 8px; }
+    .q { margin: 8px 0; }
+    .ans { color: #000; font-weight: 700; }
+    .learn { color: #333; }
+    .rubric { color: #444; }
+  </style>
+</head>
+<body>
+  <section class="paper">
+    <h1>鍒濅竴鍒板垵涓夋暟瀛︾患鍚堝嵎 C 鍗?/h1>
+    <div class="subtitle">鏁欏笀鐗堬細绛旀銆佽瘎鍒嗙粏鍒欍€佸涔犵偣</div>
+    <div class="box">
+      瀹氫綅锛氫汉鏁欑増寮哄寲寮曠敵銆?br />
+      璇存槑锛氬己鍖栧弬鏁般€佹渶鍊笺€佸垎绫诲拰缁煎悎杩愮敤锛屼粛涓嶈秺鍑轰汉鏁欑増鐭ヨ瘑杈圭晫銆?    </div>
+
+    <h2 class="section-title">涓€銆侀€夋嫨棰樼瓟妗?/h2>
+    <div class="q">1.B銆€2.B銆€3.C銆€4.B銆€5.C銆€6.B銆€7.B銆€8.B銆€9.B銆€10.A</div>
+
+    <h2 class="section-title">浜屻€佸～绌洪绛旀</h2>
+    <div class="q">11. <span class="ans">14</span></div>
+    <div class="q">12. <span class="ans">x(x-3)(x+3)</span></div>
+    <div class="q">13. <span class="ans">x&gt;1</span></div>
+    <div class="q">14. <span class="ans">-4</span></div>
+    <div class="q">15. <span class="ans">24</span></div>
+    <div class="q">16. <span class="ans">4鈭?</span></div>
+    <div class="q">17. <span class="ans">2</span></div>
+    <div class="q">18. <span class="ans">2</span></div>
+    <div class="learn">瀛︿範鐐癸細骞虫柟鍏崇郴銆佺珛鏂瑰樊寮忋€佸弬鏁颁笉绛夊紡銆佷簩娆″嚱鏁版渶鍊笺€佽彵褰㈤潰绉€佸渾涓庢鏂瑰舰銆佹柟宸€?/div>
+
+    <h2 class="section-title">涓夈€佽В绛旈绛旀涓庤瘎鍒嗚鐐?/h2>
+    <div class="q">19. <span class="ans">-2</span><br /><span class="rubric">杩囩▼锛?鈭?2-鈭?)/鈭? = (2鈭?-鈭?)/鈭? = 1锛?2-1)鈦?1锛?+1-4=-2銆傝瘎鍒嗗缓璁細鍖栫畝鏍瑰紡 4 鍒嗭紝鎸囨暟骞備笌缁濆鍊?3 鍒嗭紝缁撴灉 3 鍒嗐€?/span><br /><span class="learn">瀛︿範鐐癸細寮哄寲鍗蜂腑瑕佹敞鎰忓绉嶅熀鏈繍绠楁贩鍚堟椂鐨勯『搴忎笌鍑嗙‘鐜囥€?/span></div>
+    <div class="q">20. <span class="ans">m=1/2</span><br /><span class="rubric">杩囩▼锛氱敱 x+y=5 涓?x-y=3 寰?x=4锛寉=1锛屼唬鍏?mx-y=1 寰?4m-1=1锛屾晠 m=1/2銆傝瘎鍒嗗缓璁細鑱旂珛姹?x,y 6 鍒嗭紝姹?m 6 鍒嗐€?/span><br /><span class="learn">瀛︿範鐐癸細鍙傛暟棰樺厛鎶娾€滃凡婊¤冻鐨勯澶栨潯浠垛€濊浆鎴愭柊鐨勬柟绋嬨€?/span></div>
+    <div class="q">21. <span class="ans">A(6,0)锛孊(0,6)锛孭(3,3)锛屸柍AOP 闈㈢Н 9</span><br /><span class="rubric">璇勫垎寤鸿锛欰銆丅 鍧愭爣 4 鍒嗭紝P 鍧愭爣 4 鍒嗭紝闈㈢Н 4 鍒嗐€?/span><br /><span class="learn">瀛︿範鐐癸細鐐瑰埌涓よ酱璺濈鐩哥瓑鍙浆鍖栦负妯旱鍧愭爣鐩哥瓑銆?/span></div>
+    <div class="q">22. <span class="ans">a=3锛涘彟涓€浜ょ偣 (3,0)锛涘尯闂?[0,4] 涓婃渶澶у€?3锛屾渶灏忓€?-1</span><br /><span class="rubric">璇勫垎寤鸿锛氭眰 a 3 鍒嗭紝姹傚彟涓€浜ょ偣 4 鍒嗭紝姹傚尯闂存渶鍊?5 鍒嗐€?/span><br /><span class="learn">瀛︿範鐐癸細浜屾鍑芥暟寮哄寲棰樿鍚屾椂鎺屾彙鈥滀唬鐐规眰鍙傘€佸绉拌酱銆佸尯闂存渶鍊尖€濄€?/span></div>
+    <div class="q">23. <span class="ans">AB=10锛汣D=5锛涚偣 A 涓嶅湪鍦嗕笂</span><br /><span class="rubric">杩囩▼锛氱敱鍕捐偂瀹氱悊寰?AB=10锛涚洿瑙掍笁瑙掑舰鏂滆竟涓偣鍒颁笁椤剁偣璺濈鐩哥瓑锛屾墍浠?CD=AB/2=5锛涜€?AC=6鈮?锛屾墍浠ョ偣 A 涓嶅湪璇ュ渾涓娿€傝瘎鍒嗗缓璁細AB 4 鍒嗭紝CD 4 鍒嗭紝鍒ゆ柇涓庤鏄?4 鍒嗐€?/span><br /><span class="learn">瀛︿範鐐癸細鍒╃敤鈥滅洿瑙掍笁瑙掑舰鏂滆竟涓偣鎬ц川鈥濊兘蹇€熷緱鍒扮嚎娈电浉绛夊叧绯汇€?/span></div>
+    <div class="q">24. <span class="ans">涓ょ粍骞冲潎鏁伴兘涓?5锛涚敳缁勬柟宸?2锛屼箼缁勬柟宸?4锛屼箼缁勬洿澶э紱姒傜巼 1/3</span><br /><span class="rubric">杩囩▼锛氱敳缁勬柟宸?= [(3-5)虏+(4-5)虏+(5-5)虏+(6-5)虏+(7-5)虏]/5 = 2锛涗箼缁勬柟宸?= [(2-5)虏+(4-5)虏+(5-5)虏+(6-5)虏+(8-5)虏]/5 = 4锛涘拰涓?4 鐨勬湁 (1,3)銆?2,2)銆?3,1)锛屽叡 3 绉嶏紝姒傜巼 3/9=1/3銆傝瘎鍒嗗缓璁細骞冲潎鏁?3 鍒嗭紝鏂瑰樊姣旇緝 5 鍒嗭紝姒傜巼 4 鍒嗐€?/span><br /><span class="learn">瀛︿範鐐癸細缁熻缁煎悎棰樻棦瑕佹瘮杈冨钩鍧囨按骞筹紝涔熻姣旇緝绂绘暎绋嬪害銆?/span></div>
+  </section>
+</body>
+</html>
+

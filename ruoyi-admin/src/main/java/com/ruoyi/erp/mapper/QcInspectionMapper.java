@@ -12,6 +12,6 @@ public interface QcInspectionMapper {
     int update(QcInspection inspection);
     int deleteById(Long id);
     int updateStatus(@Param("id") Long id, @Param("status") String status, @Param("rejectReason") String rejectReason);
-    Map<String, Object> selectStats();
-    List<Map<String, Object>> selectDefectReasons();
+    Map<String, Object> selectStats(@Param("factoryId") Long factoryId);
+    List<Map<String, Object>> selectDefectReasons(@Param("factoryId") Long factoryId);
 }

@@ -135,7 +135,7 @@ public class CheckServiceImpl implements ICheckService
                 boolean isEmptyRecord = check == null;
                 if (!isEmptyRecord) {
                     boolean hasCheckNo = check.getCheckNo() != null && !check.getCheckNo().trim().isEmpty();
-                    boolean hasStyleNo = check.getStyleNo() != null && !check.getStyleNo().trim().isEmpty();
+                    boolean hasStyleNo = check.getStyleCode() != null && !check.getStyleCode().trim().isEmpty();
                     boolean hasCustomerName = check.getCustomerName() != null && !check.getCustomerName().trim().isEmpty();
                     isEmptyRecord = !hasCheckNo && !hasStyleNo && !hasCustomerName;
                 }

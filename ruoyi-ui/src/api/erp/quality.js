@@ -1,21 +1,22 @@
 import request from '@/utils/request'
 
+// 路由对接 Model C: QcInspectionController (@RequestMapping("/erp/qc"))
 export function getQualityStats() {
-  return request({ url: '/erp/check/stats', method: 'get' })
+  return request({ url: '/erp/qc/stats', method: 'get' })
 }
 
 export function getDefectReasons() {
-  return request({ url: '/erp/check/defectReasons', method: 'get' })
+  return request({ url: '/erp/qc/defectReasons', method: 'get' })
 }
 
 export function listRecentChecks(query) {
-  return request({ url: '/erp/check/list', method: 'get', params: query })
+  return request({ url: '/erp/qc/list', method: 'get', params: query })
 }
 
 export function rejectCheck(id, data) {
-  return request({ url: '/erp/check/reject/' + id, method: 'post', data })
+  return request({ url: '/erp/qc/reject/' + id, method: 'post', data })
 }
 
 export function getCheckByBarcode(barcode) {
-  return request({ url: '/erp/check/barcode/' + barcode, method: 'get' })
+  return request({ url: '/erp/qc/barcode/' + barcode, method: 'get' })
 }

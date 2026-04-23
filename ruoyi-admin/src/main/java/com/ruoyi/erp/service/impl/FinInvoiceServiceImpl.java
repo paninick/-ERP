@@ -135,19 +135,7 @@ public class FinInvoiceServiceImpl {
      * 看板统计
      */
     public java.util.Map<String, Object> getBoardStats() {
-        List<FinInvoice> all = invoiceMapper.selectList(new FinInvoice());
-        BigDecimal invoiced = BigDecimal.ZERO;
-        BigDecimal pending = BigDecimal.ZERO;
-        int settled = 0;
-        for (FinInvoice inv : all) {
-            invoiced = invoiced.add(inv.getTotalAmount());
-            pending = pending.add(inv.getTotalAmount().subtract(inv.getSettledAmount()));
-            if ("SETTLED".equals(inv.getStatus())) settled++;
-        }
-        java.util.Map<String, Object> map = new java.util.HashMap<>();
-        map.put("invoicedAmount", invoiced);
-        map.put("pendingAmount", pending);
-        map.put("reconcileRate", all.isEmpty() ? 0 : Math.round(settled * 1000.0 / all.size()) / 10.0);
-        return map;
+        Long factoryId = SecurityUtils.getLoginUser().getUser().getDeptId();
+        return invoiceMapper.selectBoardStats(factoryId);
     }
 }

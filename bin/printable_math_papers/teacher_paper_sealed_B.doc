@@ -1,0 +1,99 @@
+﻿﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <title>鍒濅竴鍒板垵涓夋暟瀛﹂€夋嫈鍗锋暀甯堢増</title>
+  <style>
+    @page { size: A4; margin: 18mm 16mm; }
+    body {
+      font-family: "Microsoft YaHei", "PingFang SC", "Noto Sans CJK SC", sans-serif;
+      color: #111;
+      line-height: 1.55;
+      font-size: 14px;
+      margin: 0;
+    }
+    .paper { page-break-after: always; }
+    .paper:last-child { page-break-after: auto; }
+    h1, h2 { margin: 0; }
+    h1 { text-align: center; font-size: 24px; margin-top: 6px; }
+    .subtitle { text-align: center; margin: 6px 0 10px; }
+    .meta { margin-bottom: 12px; }
+    .box { border: 1px solid #333; padding: 8px 10px; margin-bottom: 12px; }
+    .section-title { font-size: 17px; margin: 14px 0 8px; }
+    .q { margin: 8px 0; }
+    .ans { color: #000; font-weight: 700; }
+    .learn { color: #333; }
+    .rubric { color: #444; }
+      body.with-seal {
+      margin-left: 82px;
+    }
+    .seal-line {
+      position: fixed;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 64px;
+      border-right: 2px solid #222;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #fff;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+      letter-spacing: 2px;
+      font-size: 16px;
+      font-weight: 700;
+    }
+    .seal-meta {
+      position: fixed;
+      left: 8px;
+      top: 16px;
+      width: 48px;
+      font-size: 11px;
+      line-height: 1.4;
+      writing-mode: vertical-rl;
+      text-orientation: mixed;
+    }
+    @media print {
+      body.with-seal {
+        margin-left: 78px;
+      }
+    }
+  </style>
+</head>
+<body class='with-seal'>
+  <section class="paper">
+    <h1>鍒濅竴鍒板垵涓夋暟瀛︾患鍚堝嵎 B 鍗?/h1>
+    <div class="subtitle">鏁欏笀鐗堬細绛旀銆佽瘎鍒嗙粏鍒欍€佸涔犵偣</div>
+    <div class="box">
+      瀹氫綅锛氫汉鏁欑増涓荤嚎 + 鍗楅€氭湰鍦版嫈灏栫彮鍏紑棰橀鏍兼敼缂栥€?br />
+      璇存槑锛氶鍨嬬患鍚堟柟寮忔洿寮猴紝浣嗙煡璇嗚惤鐐逛粛鎺у埗鍦ㄤ汉鏁欑増鏁欐潗鑼冨洿鍐呫€?    </div>
+
+    <h2 class="section-title">涓€銆侀€夋嫨棰樼瓟妗?/h2>
+    <div class="q">1.C銆€2.B銆€3.B銆€4.B銆€5.B銆€6.C銆€7.B銆€8.A銆€9.D銆€10.A</div>
+    <div class="learn">瀛︿範鐐癸細鏁翠綋姣?A 鍗锋洿寮鸿皟鈥滀唬鏁板紡鍙樺舰銆佸嚱鏁板浘璞°€佸弬鏁拌寖鍥淬€佺患鍚堣绠椻€濄€?/div>
+
+    <h2 class="section-title">浜屻€佸～绌洪绛旀</h2>
+    <div class="q">11. <span class="ans">5</span></div>
+    <div class="q">12. <span class="ans">2(x-2)(x+2)</span></div>
+    <div class="q">13. <span class="ans">3鈮&lt;4</span></div>
+    <div class="q">14. <span class="ans">6</span></div>
+    <div class="q">15. <span class="ans">x&lt;2</span></div>
+    <div class="q">16. <span class="ans">10</span></div>
+    <div class="q">17. <span class="ans">5</span></div>
+    <div class="q">18. <span class="ans">(1,-4)</span></div>
+    <div class="learn">瀛︿範鐐癸細鏍瑰紡鍖栫畝銆佸洜寮忓垎瑙ｃ€佷笉绛夊紡缁勩€佸弽姣斾緥鍑芥暟銆佷腑浣嶆暟銆侀《鐐瑰紡銆?/div>
+
+    <h2 class="section-title">涓夈€佽В绛旈绛旀涓庤瘎鍒嗚鐐?/h2>
+    <div class="q">19. <span class="ans">11/2</span><br /><span class="rubric">杩囩▼锛?-3+1-1/2=11/2銆傝瘎鍒嗗缓璁細姝ラ 6 鍒嗭紝缁撴灉 2 鍒嗐€?/span><br /><span class="learn">瀛︿範鐐癸細鏍瑰紡銆佺粷瀵瑰€笺€侀浂鎸囨暟骞傘€佽礋鎸囨暟骞傛斁鍦ㄥ悓涓€棰樹腑鏃惰鎺у埗杩愮畻椤哄簭銆?/span></div>
+    <div class="q">20. <span class="ans">x=1卤2鈭?</span><br /><span class="rubric">杩囩▼锛歺虏-2x-7=0锛屽鍏紡鎴栭厤鏂规硶姹傛牴銆傝瘎鍒嗗缓璁細鍖栦负鏍囧噯寮?3 鍒嗭紝姹傛牴 5 鍒嗭紝妫€楠?2 鍒嗐€?/span><br /><span class="learn">瀛︿範鐐癸細閬囧埌涔樼Н鍨嬫柟绋嬪厛灞曞紑鏁寸悊鎴愭爣鍑嗕簩娆℃柟绋嬨€?/span></div>
+    <div class="q">21. <span class="ans">浜ょ偣 (2,2)锛涗笁瑙掑舰闈㈢Н 3</span><br /><span class="rubric">杩囩▼锛氫袱绾夸氦鐐圭敱 -x+4=2x-2 寰?x=2锛寉=2锛涗笌 x 杞翠氦鐐瑰垎鍒负 (4,0)銆?1,0)锛屽簳闀?3锛岄珮 2锛岄潰绉?3脳2梅2=3銆傝瘎鍒嗗缓璁細浜ょ偣 5 鍒嗭紝闈㈢Н 5 鍒嗐€?/span><br /><span class="learn">瀛︿範鐐癸細鍑芥暟缁煎悎棰樺厛姹傚叧閿偣鍧愭爣锛屽啀杞寲涓哄嚑浣曢噺銆?/span></div>
+    <div class="q">22. <span class="ans">鐢?7 鍏冿紝涔?4 鍏冿紱鍏?44 鍏?/span><br /><span class="rubric">璇勫垎寤鸿锛氳鍏冨垪寮?3 鍒嗭紝姹傚嚭鍗曚环 5 鍒嗭紝姹傛€讳环 2 鍒嗐€?/span><br /><span class="learn">瀛︿範鐐癸細浜屽厓涓€娆℃柟绋嬬粍浠嶆槸搴旂敤棰樼殑涓绘ā鍨嬨€?/span></div>
+    <div class="q">23. <span class="ans">涓?x 杞翠氦鐐?(-1,0)銆?3,0)锛涢《鐐?(1,-4)锛涙渶灏忓€?-4</span><br /><span class="rubric">璇勫垎寤鸿锛氫氦鐐?4 鍒嗭紝椤剁偣 4 鍒嗭紝鍖洪棿鏈€鍊?4 鍒嗐€?/span><br /><span class="learn">瀛︿範鐐癸細椤剁偣寮忓拰鍖洪棿鏈€鍊兼槸涓€冧笌鎷斿皷璁粌鐨勫叡鍚岄噸鐐广€?/span></div>
+    <div class="q">24. <span class="ans">DE=鈭?09锛涒柍ADE 闈㈢Н 40</span><br /><span class="rubric">杩囩▼锛氳鍧愭爣 A(0,0)锛孊(10,0)锛孋(10,8)锛孌(0,8)锛屽垯 E(10,5)銆侱E=鈭歔(10-0)虏+(5-8)虏]=鈭?09锛涒柍ADE 闈㈢Н = 1/2脳AD脳鐐?E 鍒?AD 鐨勮窛绂?= 1/2脳8脳10 = 40銆傝瘎鍒嗗缓璁細闀垮害 5 鍒嗭紝闈㈢Н 5 鍒嗐€?/span><br /><span class="learn">瀛︿範鐐癸細鐭╁舰杈逛笂瀹氱偣闂閫傚悎鐢ㄥ潗鏍囨硶鍜屽簳涔橀珮闄や互 2 澶勭悊銆?/span></div>
+    <div class="q">25. <span class="ans">骞冲潎鏁?244/3锛涗腑浣嶆暟 82锛涙鐜?1/2</span><br /><span class="rubric">杩囩▼锛氭€诲拰 488锛屽钩鍧囨暟 488/6=244/3锛涙湁搴忓悗涓棿涓ゆ暟涓?80銆?4锛屼腑浣嶆暟涓?82锛涗笉浣庝簬 84 鍒嗙殑鏈?84銆?4銆?2锛屽叡 3 涓紝姒傜巼 3/6=1/2銆傝瘎鍒嗗缓璁細骞冲潎鏁?4 鍒嗭紝涓綅鏁?3 鍒嗭紝姒傜巼 3 鍒嗐€?/span><br /><span class="learn">瀛︿範鐐癸細骞冲潎鏁板嚭鐜板垎鏁版椂瑕佷繚鐣欏噯纭€硷紝涓綅鏁板湪鍋舵暟涓暟鎹椂鍙栦腑闂翠袱鏁扮殑骞冲潎鏁般€?/span></div>
+  </section>
+</body>
+</html>
+
+
