@@ -1,0 +1,95 @@
+# ──────────────────────────────────────────────────────────
+# 生产环境配置
+# 激活方式：
+#   环境变量：SPRING_PROFILES_ACTIVE=prod,druid
+#   CLI 参数：--spring.profiles.active=prod,druid
+# 说明：
+#   与 application.yml + application-druid.yml 配合使用。
+#   本文件覆盖生产环境敏感值（数据库、连接池、日志级别等）。
+# ──────────────────────────────────────────────────────────
+
+server:
+  servlet:
+    # 生产环境 context-path，与 nginx 反向代理配合
+    context-path: /ruoyi-admin
+  tomcat:
+    uri-encoding: UTF-8
+    threads:
+      # 生产环境最大线程数
+      max: 1000
+      # 最小空闲线程数
+      min-spare: 30
+
+spring:
+  datasource:
+    druid:
+      # ── 生产数据库（多环境隔离：ry_erp_prod）─────────────
+      master:
+        # 通过环境变量 MYSQL_HOST / MYSQL_USER / MYSQL_PASSWORD 注入
+        url: jdbc:mysql://${MYSQL_HOST:localhost}:3306/ry_erp_prod?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8
+        username: ${MYSQL_USER:erp_prod_user}
+        password: ${MYSQL_PASSWORD:}
+      # ── 连接池调优 ────────────────────────────────────────
+      initial-size: 5
+      min-idle: 5
+      max-active: 20
+      max-wait: 60000
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      filters: stat,wall
+      connection-properties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      use-global-data-source-stat: true
+
+  redis:
+    lettuce:
+      pool:
+        # 生产环境连接池容量
+        max-active: 200
+        max-wait: -1ms
+        max-idle: 10
+        min-idle: 0
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 100MB
+
+mybatis:
+  mapper-locations: classpath*:mapper/**/*.xml
+  type-aliases-package: com.ruoyi.**.domain
+  configuration:
+    map-underscore-to-camel-case: true
+
+# ── 日志：生产级配置 ───────────────────────────────────────
+logging:
+  level:
+    com.ruoyi: info
+    org.springframework: warn
+  file:
+    name: logs/ruoyi-admin-prod.log
+  logback:
+    rollingpolicy:
+      max-file-size: 10MB
+      max-history: 30
+
+# ── 若依框架生产配置 ──────────────────────────────────────
+ruoyi:
+  name: 服装生产ERP系统
+  version: 1.0.0
+  copyrightYear: 2026
+  demoEnabled: false
+  captchaEnabled: true
+  # 生产环境文件上传路径（通过环境变量 UPLOAD_PATH 注入，Linux 默认 /home/erp/uploadPath）
+  profile: /home/erp/uploadPath
+  xss:
+    enabled: true
+    excludes:
+      - /system/notice
+    urlPatterns:
+      - /*

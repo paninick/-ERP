@@ -1,0 +1,171 @@
+# =====================================================================
+# deploy/docker-compose.prod.yml — 服装生产ERP 生产环境部署
+#
+# 使用方式（从项目根目录执行）：
+#   1. cp .env.production.example deploy/.env.prod
+#   2. 编辑 deploy/.env.prod 填入真实生产值
+#   3. docker compose -f deploy/docker-compose.prod.yml --env-file deploy/.env.prod up -d
+#
+# 相比根目录 docker-compose.yml（阿里云托管 MySQL/Redis）的不同：
+#   - 自建 MySQL 8.0 + Redis 7 服务（适用于未使用云托管的部署场景）
+#   - 启用 prod Spring 配置文件，关闭 debug 日志、优化连接池
+#   - 内置数据库初始化脚本
+#   - 健康检查与数据卷持久化
+# =====================================================================
+
+services:
+
+  # ── MySQL 8.0 数据库 ────────────────────────────────────
+  mysql:
+    image: mysql:8.0
+    container_name: erp-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?请设置 MySQL root 密码}
+      MYSQL_DATABASE: ry_erp_prod
+      MYSQL_USER: ${MYSQL_USER:-erp_prod_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?请设置 MySQL 应用用户密码}
+      TZ: Asia/Shanghai
+    ports:
+      - "127.0.0.1:3306:3306"
+    volumes:
+      # 数据持久化
+      - erp_mysql_data:/var/lib/mysql
+      # 初始化脚本（按文件名顺序执行）
+      - ../sql/ry_20260321.sql:/docker-entrypoint-initdb.d/01_ry_base.sql
+      - ../sql/phase2_produce_core.sql:/docker-entrypoint-initdb.d/02_produce_core.sql
+      - ../sql/phase3_outsource_defect.sql:/docker-entrypoint-initdb.d/03_outsource.sql
+      # MySQL 配置
+      - ../docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf:ro
+    networks:
+      - erp_prod_net
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${MYSQL_ROOT_PASSWORD}"]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 60s
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+        reservations:
+          memory: 512m
+
+  # ── Redis 7 ─────────────────────────────────────────────
+  redis:
+    image: redis:7-alpine
+    container_name: erp-redis
+    restart: unless-stopped
+    command: >
+      redis-server
+      --requirepass ${REDIS_PASSWORD:?请设置 Redis 密码}
+      --appendonly yes
+      --appendfsync everysec
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+    ports:
+      - "127.0.0.1:6379:6379"
+    volumes:
+      - erp_redis_data:/data
+    networks:
+      - erp_prod_net
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "${REDIS_PASSWORD}", "ping"]
+      interval: 15s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+        reservations:
+          memory: 256m
+
+  # ── 后端服务 ────────────────────────────────────────────
+  backend:
+    build:
+      context: ..
+      dockerfile: Dockerfile.backend
+    image: erp-backend:${BUILD_TAG:-latest}
+    container_name: erp-backend
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:8080:8080"
+    environment:
+      # ── Spring 配置 ─────────────────────────────────────
+      SPRING_PROFILES_ACTIVE: prod,druid
+      # ── 数据库 ──────────────────────────────────────────
+      MYSQL_HOST: mysql
+      MYSQL_USER: ${MYSQL_USER:-erp_prod_user}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?请设置 MySQL 密码}
+      # ── Redis ───────────────────────────────────────────
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:?请设置 Redis 密码}
+      # ── JWT ─────────────────────────────────────────────
+      JWT_SECRET: ${JWT_SECRET:?请设置 JWT 密钥}
+      # ── Druid 监控 ──────────────────────────────────────
+      DRUID_USERNAME: ${DRUID_USERNAME:-erp_druid}
+      DRUID_PASSWORD: ${DRUID_PASSWORD:?请设置 Druid 密码}
+      DRUID_ALLOW: ${DRUID_ALLOW:-127.0.0.1}
+      # ── 文件上传路径 ────────────────────────────────────
+      UPLOAD_PATH: /app/uploadPath
+      # ── JVM ─────────────────────────────────────────────
+      JAVA_OPTS: "-Xms512m -Xmx1g -XX:+UseContainerSupport -XX:MaxRAMPercentage=75.0"
+    volumes:
+      - erp_upload:/app/uploadPath
+    networks:
+      - erp_prod_net
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/ruoyi-admin/login"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+    deploy:
+      resources:
+        limits:
+          memory: 1.5g
+        reservations:
+          memory: 1g
+
+  # ── 前端服务 ────────────────────────────────────────────
+  frontend:
+    build:
+      context: ..
+      dockerfile: Dockerfile.frontend
+    image: erp-frontend:${BUILD_TAG:-latest}
+    container_name: erp-frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    networks:
+      - erp_prod_net
+    depends_on:
+      backend:
+        condition: service_healthy
+    deploy:
+      resources:
+        limits:
+          memory: 256m
+        reservations:
+          memory: 128m
+
+volumes:
+  erp_mysql_data:
+    driver: local
+  erp_redis_data:
+    driver: local
+  erp_upload:
+    driver: local
+
+networks:
+  erp_prod_net:
+    driver: bridge
