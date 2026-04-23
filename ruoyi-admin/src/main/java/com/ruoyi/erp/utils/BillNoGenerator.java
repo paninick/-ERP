@@ -8,6 +8,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
+import java.time.Month;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
 
@@ -59,6 +60,42 @@ public class BillNoGenerator {
         }
 
         return String.format("%s-%s-%05d", prefix, dateStr, seq);
+    }
+
+    /**
+     * 生成款号（KN 双轨业务主键）
+     * 格式：KN-{YY}-{SS}-{NNN}，如 KN-26-SP-001
+     * 季节代码：SP=春(3-5月) SU=夏(6-8月) FA=秋(9-11月) WI=冬(12-2月)
+     * Redis key 按年季归零，序号3位
+     *
+     * @param season 季节代码 SP/SU/FA/WI，传 null 则根据当前月份自动推断
+     * @return 款号，如 KN-26-SP-001
+     */
+    public String generateStyleNo(String season) {
+        LocalDate today = LocalDate.now();
+        String yy = String.format("%02d", today.getYear() % 100);
+        String ss = (season != null && !season.isEmpty()) ? season : inferSeason(today.getMonth());
+        String redisKey = "seq:erp:KN:" + yy + ss;
+
+        Long seq;
+        try {
+            seq = redisTemplate.opsForValue().increment(redisKey);
+            redisTemplate.expire(redisKey, 200, TimeUnit.DAYS);
+            syncToDatabase("KN" + yy + ss, today, seq);
+        } catch (Exception e) {
+            log.warn("Redis unavailable, fallback to database for style_no generation");
+            seq = incrementDatabase("KN" + yy + ss, today);
+        }
+
+        return String.format("KN-%s-%s-%03d", yy, ss, seq);
+    }
+
+    private String inferSeason(Month month) {
+        int m = month.getValue();
+        if (m >= 3 && m <= 5) return "SP";
+        if (m >= 6 && m <= 8) return "SU";
+        if (m >= 9 && m <= 11) return "FA";
+        return "WI";
     }
 
     /**

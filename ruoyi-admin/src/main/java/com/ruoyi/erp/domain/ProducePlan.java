@@ -34,6 +34,10 @@ public class ProducePlan extends ErpBaseBillEntity {
     @Excel(name = "打样款号")
     private String sampleStyleNo;
 
+    /** 工厂内部款号（KN-YY-SS-NNN） */
+    @Excel(name = "款号")
+    private String styleNo;
+
     /** 客户名称 */
     @Excel(name = "客户名称")
     private String customerName;
@@ -235,6 +239,16 @@ public class ProducePlan extends ErpBaseBillEntity {
     }
 
     public void setSampleStyleNo(String sampleStyleNo) {
+        this.sampleStyleNo = sampleStyleNo;
+    }
+
+    public String getStyleNo() {
+        return styleNo;
+    }
+
+    public void setStyleNo(String styleNo) {
+        this.styleNo = styleNo;
+    }
         this.sampleStyleNo = sampleStyleNo;
     }
 

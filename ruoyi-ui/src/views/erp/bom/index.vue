@@ -45,6 +45,7 @@
           <el-table-column type="selection" width="55" align="center" />
           <el-table-column label="打样编号" align="center" prop="sampleNo" />
           <el-table-column label="客户" align="center" prop="customerName" />
+          <el-table-column label="款号" align="center" prop="styleCode" width="140" />
           <el-table-column label="大货款号" align="center" prop="bulkOrderNo" />
           <el-table-column label="样品款式" align="center" prop="styleType">
             <template slot-scope="scope">

@@ -13,6 +13,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="customerName"    column="customer_name"    />
         <result property="bulkOrderNo"    column="bulk_order_no"    />
         <result property="sampleStyleNo"    column="sample_style_no"    />
+        <result property="styleNo"           column="style_no"           />
         <result property="styleCategory"    column="style_category"    />
         <result property="sampleNo"    column="sample_no"    />
         <result property="salesName"    column="sales_name"    />
@@ -49,7 +50,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectSalesOrderVo">
-        select a.id, a.src_bill_type, a.src_bill_id, a.src_bill_no, a.sales_type, a.customer_name, a.bulk_order_no, a.sample_style_no, a.style_category, a.sample_no, a.sales_name, a.notice_id, a.tech_id, a.sales_no, a.sales_date, a.sales_id, a.customer_id, a.due_date, a.quantity, a.amount, a.pay_amount, a.order_status, a.audit_status, a.audit_by, a.audit_time, a.bulk_opinion, a.production_exceed,
+        select a.id, a.src_bill_type, a.src_bill_id, a.src_bill_no, a.sales_type, a.customer_name, a.bulk_order_no, a.sample_style_no, a.style_no, a.style_category, a.sample_no, a.sales_name, a.notice_id, a.tech_id, a.sales_no, a.sales_date, a.sales_id, a.customer_id, a.due_date, a.quantity, a.amount, a.pay_amount, a.order_status, a.audit_status, a.audit_by, a.audit_time, a.bulk_opinion, a.production_exceed,
                a.japan_order_no, a.jis_label_status, a.hazard_test_status, a.hazard_report_no, a.color_fastness_grade, a.audit_factory_status, a.audit_factory_date, a.export_declare_type, a.trade_terms,
                a.create_by, a.create_time, a.update_by, a.update_time, a.remark
         from t_erp_sales_order a
@@ -62,6 +63,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="noticeId != null "> and a.notice_id = #{noticeId}</if>
             <if test="techId != null "> and a.tech_id = #{techId}</if>
             <if test="salesNo != null  and salesNo != ''"> and a.sales_no = #{salesNo}</if>
+            <if test="styleNo != null  and styleNo != ''"> and a.style_no = #{styleNo}</if>
+            <if test="sampleStyleNo != null  and sampleStyleNo != ''"> and a.sample_style_no = #{sampleStyleNo}</if>
         </where>
     </select>
 
@@ -80,6 +83,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="customerName != null">customer_name,</if>
             <if test="bulkOrderNo != null">bulk_order_no,</if>
             <if test="sampleStyleNo != null">sample_style_no,</if>
+            <if test="styleNo != null">style_no,</if>
             <if test="styleCategory != null">style_category,</if>
             <if test="sampleNo != null">sample_no,</if>
             <if test="salesName != null">sales_name,</if>
@@ -122,6 +126,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="customerName != null">#{customerName},</if>
             <if test="bulkOrderNo != null">#{bulkOrderNo},</if>
             <if test="sampleStyleNo != null">#{sampleStyleNo},</if>
+            <if test="styleNo != null">#{styleNo},</if>
             <if test="styleCategory != null">#{styleCategory},</if>
             <if test="sampleNo != null">#{sampleNo},</if>
             <if test="salesName != null">#{salesName},</if>
@@ -168,6 +173,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="customerName != null">customer_name = #{customerName},</if>
             <if test="bulkOrderNo != null">bulk_order_no = #{bulkOrderNo},</if>
             <if test="sampleStyleNo != null">sample_style_no = #{sampleStyleNo},</if>
+            <if test="styleNo != null">style_no = #{styleNo},</if>
             <if test="styleCategory != null">style_category = #{styleCategory},</if>
             <if test="sampleNo != null">sample_no = #{sampleNo},</if>
             <if test="salesName != null">sales_name = #{salesName},</if>

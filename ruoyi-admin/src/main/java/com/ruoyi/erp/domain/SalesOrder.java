@@ -35,6 +35,10 @@ public class SalesOrder extends ErpBaseBillEntity {
     @Excel(name = "打样款号")
     private String sampleStyleNo;
 
+    /** 工厂内部款号（KN-YY-SS-NNN） */
+    @Excel(name = "款号")
+    private String styleNo;
+
     /** 款式/品类 */
     @Excel(name = "款式/品类")
     private String styleCategory;
@@ -179,6 +183,14 @@ public class SalesOrder extends ErpBaseBillEntity {
 
     public String getSampleStyleNo() {
         return sampleStyleNo;
+    }
+
+    public void setStyleNo(String styleNo) {
+        this.styleNo = styleNo;
+    }
+
+    public String getStyleNo() {
+        return styleNo;
     }
     public void setStyleCategory(String styleCategory) {
         this.styleCategory = styleCategory;

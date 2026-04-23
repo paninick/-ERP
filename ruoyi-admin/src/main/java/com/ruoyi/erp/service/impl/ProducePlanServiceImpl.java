@@ -9,7 +9,9 @@ import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ruoyi.erp.mapper.ProducePlanMapper;
+import com.ruoyi.erp.mapper.SalesOrderMapper;
 import com.ruoyi.erp.domain.ProducePlan;
+import com.ruoyi.erp.domain.SalesOrder;
 import com.ruoyi.erp.service.IProducePlanService;
 import com.ruoyi.erp.utils.BillNoGenerator;
 
@@ -23,6 +25,9 @@ import com.ruoyi.erp.utils.BillNoGenerator;
 public class ProducePlanServiceImpl implements IProducePlanService {
     @Autowired
     private ProducePlanMapper producePlanMapper;
+
+    @Autowired
+    private SalesOrderMapper salesOrderMapper;
 
     @Autowired
     private BillNoGenerator billNoGenerator;
@@ -59,6 +64,16 @@ public class ProducePlanServiceImpl implements IProducePlanService {
     public int insertProducePlan(ProducePlan producePlan) {
         if (producePlan.getPlanNo() == null || producePlan.getPlanNo().isEmpty()) {
             producePlan.setPlanNo(billNoGenerator.generate("PP"));
+        }
+        if (producePlan.getStyleNo() == null || producePlan.getStyleNo().isEmpty()) {
+            String inherited = null;
+            if (producePlan.getSalesOrderId() != null) {
+                SalesOrder so = salesOrderMapper.selectSalesOrderById(producePlan.getSalesOrderId());
+                if (so != null && so.getStyleNo() != null && !so.getStyleNo().isEmpty()) {
+                    inherited = so.getStyleNo();
+                }
+            }
+            producePlan.setStyleNo(inherited != null ? inherited : billNoGenerator.generateStyleNo(null));
         }
         producePlan.setCreateBy(SecurityUtils.getUserId().toString());
         producePlan.setCreateTime(DateUtils.getNowDate());

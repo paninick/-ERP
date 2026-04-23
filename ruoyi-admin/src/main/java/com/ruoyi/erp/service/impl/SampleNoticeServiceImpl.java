@@ -57,6 +57,9 @@ public class SampleNoticeServiceImpl implements ISampleNoticeService {
         if (sampleNotice.getSampleNo() == null || sampleNotice.getSampleNo().isEmpty()) {
             sampleNotice.setSampleNo(billNoGenerator.generate("SN"));
         }
+        if (sampleNotice.getStyleCode() == null || sampleNotice.getStyleCode().isEmpty()) {
+            sampleNotice.setStyleCode(billNoGenerator.generateStyleNo(null));
+        }
         sampleNotice.setCreateBy(SecurityUtils.getUserId().toString());
         sampleNotice.setCreateTime(DateUtils.getNowDate());
         return sampleNoticeMapper.insertSampleNotice(sampleNotice);
