@@ -192,14 +192,16 @@
     <select id="selectEmployeeMonthlyRank" resultType="com.ruoyi.erp.domain.vo.EmployeeRankVO">
         SELECT
             p.employee_id as employeeId,
-            e.employee_name as employeeName,
-            SUM(p.actual_qty) as monthlyQuantity,
-            SUM(p.actual_qty * p.process_price) as monthlyWage,
-            CEILING(SUM(p.actual_qty) / DATEDIFF(#{end}, #{start})) as dailyAverage
+            p.employee_name as employeeName,
+            SUM(p.out_qty) as monthlyQuantity,
+            IFNULL(SUM(p.out_qty * epp.unit_price), 0) as monthlyWage,
+            CEILING(SUM(p.out_qty) / NULLIF(DATEDIFF(#{end}, #{start}), 0)) as dailyAverage
         FROM t_erp_produce_job_process p
-        LEFT JOIN t_erp_employee e ON p.employee_id = e.id
+        LEFT JOIN t_erp_employee_process_price epp
+            ON p.employee_id = epp.employee_id AND p.process_id = epp.process_id
         WHERE p.finish_time &gt;= #{start} AND p.finish_time &lt;= #{end}
-        GROUP BY p.employee_id, e.employee_name
+          AND p.employee_id IS NOT NULL
+        GROUP BY p.employee_id, p.employee_name
         ORDER BY monthlyQuantity DESC
     </select>
 </mapper>
