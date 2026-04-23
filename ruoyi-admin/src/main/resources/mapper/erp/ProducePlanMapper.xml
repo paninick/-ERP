@@ -348,8 +348,8 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <where>
             <if test="start != null">AND complete_date &gt;= #{start}</if>
             <if test="end != null">AND complete_date &lt;= #{end}</if>
+            AND plan_status IN ('5','6','7','9')
         </where>
-        AND plan_status IN ('5','6','7','9')
     </select>
 
     <!-- 统计准时完成 -->
