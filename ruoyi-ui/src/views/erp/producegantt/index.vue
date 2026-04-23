@@ -14,7 +14,7 @@
       <el-form-item>
         <el-button type="primary" icon="el-icon-search" size="mini" @click="loadData">查询</el-button>
         <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-        <el-button type="warning" icon="el-icon-warning" size="mini" @click="detectConflicts">检测冲突</el-button>
+        <el-button type="warning" icon="el-icon-warning" size="mini" v-hasPermi="['erp:producegantt:detect']" @click="detectConflicts">检测冲突</el-button>
       </el-form-item>
     </el-form>
 
@@ -94,7 +94,7 @@
       </el-form>
       <div slot="footer">
         <el-button size="small" @click="rescheduleVisible = false">取消</el-button>
-        <el-button type="primary" size="small" @click="submitReschedule">确定</el-button>
+        <el-button type="primary" size="small" v-hasPermi="['erp:producegantt:edit']" @click="submitReschedule">确定</el-button>
       </div>
     </el-dialog>
   </div>
