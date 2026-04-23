@@ -6,13 +6,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <resultMap type="ProcessDef" id="ProcessDefResult">
         <result property="id"    column="id"    />
-        <result property="processCode"    column="process_code"    />
+        <result property="processCode"    column="process_no"    />
         <result property="processName"    column="process_name"    />
         <result property="processType"    column="process_type"    />
-        <result property="department"    column="department"    />
-        <result property="defaultPrice"    column="default_price"    />
-        <result property="enableOutsource"    column="enable_outsource"    />
-        <result property="needQualityCheck"    column="need_quality_check"    />
+        <result property="defaultPrice"    column="unit_price"    />
         <result property="sortOrder"    column="sort_order"    />
         <result property="status"    column="status"    />
         <result property="isSpliceProcess"        column="is_splice_process"       />
@@ -29,7 +26,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectProcessDefVo">
-        select a.id, a.process_code, a.process_name, a.process_type, a.department, a.default_price, a.enable_outsource, a.need_quality_check, a.sort_order, a.status,
+        select a.id, a.process_no, a.process_name, a.process_type, a.unit_price, a.sort_order, a.status,
                a.is_splice_process, a.shrinkage_baseline, a.elasticity_compensation, a.seam_width, a.splice_direction, a.fabric_compatibility,
                a.remark, a.create_by, a.create_time, a.update_by, a.update_time
         from t_erp_process_def a
@@ -38,10 +35,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <select id="selectProcessDefList" parameterType="ProcessDef" resultMap="ProcessDefResult">
         <include refid="selectProcessDefVo"/>
         <where>
-            <if test="processCode != null  and processCode != ''"> and a.process_code = #{processCode}</if>
+            <if test="processCode != null  and processCode != ''"> and a.process_no = #{processCode}</if>
             <if test="processName != null  and processName != ''"> and a.process_name like concat('%', #{processName}, '%')</if>
             <if test="processType != null  and processType != ''"> and a.process_type = #{processType}</if>
-            <if test="department != null  and department != ''"> and a.department = #{department}</if>
             <if test="status != null  and status != ''"> and a.status = #{status}</if>
         </where>
         order by a.sort_order asc
@@ -54,19 +50,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <select id="selectProcessDefByCode" parameterType="String" resultMap="ProcessDefResult">
         <include refid="selectProcessDefVo"/>
-        where a.process_code = #{processCode}
+        where a.process_no = #{processCode}
     </select>
 
     <insert id="insertProcessDef" parameterType="ProcessDef" useGeneratedKeys="true" keyProperty="id">
         insert into t_erp_process_def
         <trim prefix="(" suffix=")" suffixOverrides=",">
-            <if test="processCode != null">process_code,</if>
+            <if test="processCode != null">process_no,</if>
             <if test="processName != null">process_name,</if>
             <if test="processType != null">process_type,</if>
-            <if test="department != null">department,</if>
-            <if test="defaultPrice != null">default_price,</if>
-            <if test="enableOutsource != null">enable_outsource,</if>
-            <if test="needQualityCheck != null">need_quality_check,</if>
+            <if test="defaultPrice != null">unit_price,</if>
             <if test="sortOrder != null">sort_order,</if>
             <if test="status != null">status,</if>
             <if test="isSpliceProcess != null">is_splice_process,</if>
@@ -85,10 +78,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="processCode != null">#{processCode},</if>
             <if test="processName != null">#{processName},</if>
             <if test="processType != null">#{processType},</if>
-            <if test="department != null">#{department},</if>
             <if test="defaultPrice != null">#{defaultPrice},</if>
-            <if test="enableOutsource != null">#{enableOutsource},</if>
-            <if test="needQualityCheck != null">#{needQualityCheck},</if>
             <if test="sortOrder != null">#{sortOrder},</if>
             <if test="status != null">#{status},</if>
             <if test="isSpliceProcess != null">#{isSpliceProcess},</if>
@@ -108,13 +98,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <update id="updateProcessDef" parameterType="ProcessDef">
         update t_erp_process_def
         <trim prefix="SET" suffixOverrides=",">
-            <if test="processCode != null">process_code = #{processCode},</if>
+            <if test="processCode != null">process_no = #{processCode},</if>
             <if test="processName != null">process_name = #{processName},</if>
             <if test="processType != null">process_type = #{processType},</if>
-            <if test="department != null">department = #{department},</if>
-            <if test="defaultPrice != null">default_price = #{defaultPrice},</if>
-            <if test="enableOutsource != null">enable_outsource = #{enableOutsource},</if>
-            <if test="needQualityCheck != null">need_quality_check = #{needQualityCheck},</if>
+            <if test="defaultPrice != null">unit_price = #{defaultPrice},</if>
             <if test="sortOrder != null">sort_order = #{sortOrder},</if>
             <if test="status != null">status = #{status},</if>
             <if test="isSpliceProcess != null">is_splice_process = #{isSpliceProcess},</if>

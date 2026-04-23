@@ -197,7 +197,7 @@
             SUM(p.actual_qty * p.process_price) as monthlyWage,
             CEILING(SUM(p.actual_qty) / DATEDIFF(#{end}, #{start})) as dailyAverage
         FROM t_erp_produce_job_process p
-        LEFT JOIN t_erp_erp_employee e ON p.employee_id = e.id
+        LEFT JOIN t_erp_employee e ON p.employee_id = e.id
         WHERE p.finish_time &gt;= #{start} AND p.finish_time &lt;= #{end}
         GROUP BY p.employee_id, e.employee_name
         ORDER BY monthlyQuantity DESC

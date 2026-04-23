@@ -82,4 +82,14 @@ public interface IProducePlanService {
      * @return 结果
      */
     int updatePlanDates(Long id, java.util.Date startDate, java.util.Date dueDate);
+
+    /**
+     * 重新排期：更新 startDate/dueDate，重置 planStatus 为待生产
+     */
+    boolean reschedule(Long id, String newStartDate, String newDueDate);
+
+    /**
+     * 批量检测逾期冲突（dueDate < today 且未完成），返回冲突数
+     */
+    int batchDetectConflicts();
 }

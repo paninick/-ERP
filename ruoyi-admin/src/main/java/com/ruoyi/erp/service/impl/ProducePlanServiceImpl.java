@@ -1,5 +1,8 @@
 package com.ruoyi.erp.service.impl;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.List;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
@@ -115,5 +118,38 @@ public class ProducePlanServiceImpl implements IProducePlanService {
     @Override
     public int updatePlanDates(Long id, java.util.Date startDate, java.util.Date dueDate) {
         return producePlanMapper.updatePlanDates(id, startDate, dueDate);
+    }
+
+    @Override
+    public boolean reschedule(Long id, String newStartDate, String newDueDate) {
+        ProducePlan plan = producePlanMapper.selectProducePlanById(id);
+        if (plan == null) return false;
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        if (newStartDate != null && !newStartDate.isEmpty()) {
+            plan.setStartDate(java.sql.Date.valueOf(LocalDate.parse(newStartDate, fmt)));
+        }
+        if (newDueDate != null && !newDueDate.isEmpty()) {
+            plan.setDueDate(java.sql.Date.valueOf(LocalDate.parse(newDueDate, fmt)));
+        }
+        plan.setPlanStatus("1"); // 重置为待生产
+        plan.setUpdateBy(SecurityUtils.getUsername());
+        plan.setUpdateTime(DateUtils.getNowDate());
+        return producePlanMapper.updateProducePlan(plan) > 0;
+    }
+
+    @Override
+    public int batchDetectConflicts() {
+        List<ProducePlan> list = producePlanMapper.selectProducePlanList(new ProducePlan());
+        int count = 0;
+        Date today = DateUtils.parseDate(DateUtils.getDate());
+        for (ProducePlan plan : list) {
+            if ("9".equals(plan.getPlanStatus()) || "10".equals(plan.getPlanStatus())) {
+                continue;
+            }
+            if (plan.getDueDate() != null && plan.getDueDate().before(today)) {
+                count++;
+            }
+        }
+        return count;
     }
 }
