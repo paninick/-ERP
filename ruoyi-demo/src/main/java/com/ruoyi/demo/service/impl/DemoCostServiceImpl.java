@@ -27,9 +27,9 @@ public class DemoCostServiceImpl implements IDemoCostService {
     private DemoOrderMapper demoOrderMapper;
 
     @Override
-    public BigDecimal calculateFobPrice(String styleNo, Integer quantity, BigDecimal profitRate) {
+    public BigDecimal calculateFobPrice(String styleCode, Integer quantity, BigDecimal profitRate) {
         // 查询款式信息 - 使用list获取第一条，避免selectOne在多条时报错
-        List<DemoStyle> styles = demoStyleMapper.selectList(wrapper -> wrapper.eq("style_no", styleNo));
+        List<DemoStyle> styles = demoStyleMapper.selectList(wrapper -> wrapper.eq(DemoStyle::getStyleCode, styleCode));
         if (styles.isEmpty()) {
             return BigDecimal.ZERO;
         }

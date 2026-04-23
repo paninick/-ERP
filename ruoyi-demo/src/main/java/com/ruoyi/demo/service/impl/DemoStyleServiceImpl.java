@@ -27,8 +27,8 @@ public class DemoStyleServiceImpl extends ServiceImpl<DemoStyleMapper, DemoStyle
         LambdaQueryWrapper<DemoStyle> wrapper = new LambdaQueryWrapper<>();
         
         // 款号查询
-        if (demoStyle.getStyleNo() != null && !demoStyle.getStyleNo().isEmpty()) {
-            wrapper.like(DemoStyle::getStyleNo, demoStyle.getStyleNo());
+        if (demoStyle.getStyleCode() != null && !demoStyle.getStyleCode().isEmpty()) {
+            wrapper.like(DemoStyle::getStyleCode, demoStyle.getStyleCode());
         }
         
         // 款式名称查询
@@ -57,8 +57,8 @@ public class DemoStyleServiceImpl extends ServiceImpl<DemoStyleMapper, DemoStyle
         LambdaQueryWrapper<DemoStyle> wrapper = new LambdaQueryWrapper<>();
         
         // 款号查询
-        if (demoStyle.getStyleNo() != null && !demoStyle.getStyleNo().isEmpty()) {
-            wrapper.like(DemoStyle::getStyleNo, demoStyle.getStyleNo());
+        if (demoStyle.getStyleCode() != null && !demoStyle.getStyleCode().isEmpty()) {
+            wrapper.like(DemoStyle::getStyleCode, demoStyle.getStyleCode());
         }
         
         // 款式名称查询

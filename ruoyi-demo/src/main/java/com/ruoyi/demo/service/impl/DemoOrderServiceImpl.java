@@ -36,8 +36,8 @@ public class DemoOrderServiceImpl extends ServiceImpl<DemoOrderMapper, DemoOrder
         }
         
         // 款号查询
-        if (demoOrder.getStyleNo() != null && !demoOrder.getStyleNo().isEmpty()) {
-            wrapper.like(DemoOrder::getStyleNo, demoOrder.getStyleNo());
+        if (demoOrder.getStyleCode() != null && !demoOrder.getStyleCode().isEmpty()) {
+            wrapper.like(DemoOrder::getStyleCode, demoOrder.getStyleCode());
         }
         
         // 状态查询
@@ -66,8 +66,8 @@ public class DemoOrderServiceImpl extends ServiceImpl<DemoOrderMapper, DemoOrder
         }
         
         // 款号查询
-        if (demoOrder.getStyleNo() != null && !demoOrder.getStyleNo().isEmpty()) {
-            wrapper.like(DemoOrder::getStyleNo, demoOrder.getStyleNo());
+        if (demoOrder.getStyleCode() != null && !demoOrder.getStyleCode().isEmpty()) {
+            wrapper.like(DemoOrder::getStyleCode, demoOrder.getStyleCode());
         }
         
         // 状态查询

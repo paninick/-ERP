@@ -34,7 +34,8 @@ public class DemoOrder extends BaseEntity
     /** 款号 */
     @NotBlank(message = "款号不能为空")
     @Size(max = 50, message = "款号长度不能超过50个字符")
-    private String styleNo;
+    @TableField("style_no")
+    private String styleCode;
 
     /** 款式名称 */
     @NotBlank(message = "款式名称不能为空")

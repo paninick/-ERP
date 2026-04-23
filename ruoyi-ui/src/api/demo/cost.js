@@ -1,11 +1,11 @@
 import request from '@/utils/request'
 
 // 计算FOB价格
-export function calculateFobPrice(styleNo, quantity, profitRate) {
+export function calculateFobPrice(styleCode, quantity, profitRate) {
   return request({
     url: '/demo/cost/calculateFobPrice',
     method: 'get',
-    params: { styleNo, quantity, profitRate }
+    params: { styleCode, quantity, profitRate }
   })
 }
 

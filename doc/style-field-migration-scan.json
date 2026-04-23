@@ -1,11 +1,12 @@
 {
-  "generated_at": "2026-04-23T15:00:11",
+  "generated_at": "2026-04-23T15:19:18",
   "root": "D:\\erp\\RuoYi-Vue",
   "totals": {
     "files": 33,
-    "legacy_only": 3,
-    "target_only": 27,
-    "mixed": 3
+    "legacy_only": 0,
+    "target_only": 32,
+    "mixed": 0,
+    "expected_mixed": 1
   },
   "group_summary": {
     "backend-controller": {
@@ -13,6 +14,7 @@
       "legacy_only": 0,
       "target_only": 2,
       "mixed": 0,
+      "expected_mixed": 0,
       "style_no": 0,
       "styleNo": 0,
       "style_code": 0,
@@ -23,6 +25,7 @@
       "legacy_only": 0,
       "target_only": 7,
       "mixed": 0,
+      "expected_mixed": 0,
       "style_no": 0,
       "styleNo": 0,
       "style_code": 0,
@@ -33,6 +36,7 @@
       "legacy_only": 0,
       "target_only": 1,
       "mixed": 0,
+      "expected_mixed": 0,
       "style_no": 0,
       "styleNo": 0,
       "style_code": 1,
@@ -41,28 +45,31 @@
     "backend-mapper-xml": {
       "files": 7,
       "legacy_only": 0,
-      "target_only": 5,
-      "mixed": 2,
-      "style_no": 12,
+      "target_only": 7,
+      "mixed": 0,
+      "expected_mixed": 0,
+      "style_no": 0,
       "styleNo": 0,
       "style_code": 37,
       "styleCode": 64
     },
     "other": {
       "files": 3,
-      "legacy_only": 3,
-      "target_only": 0,
+      "legacy_only": 0,
+      "target_only": 3,
       "mixed": 0,
+      "expected_mixed": 0,
       "style_no": 0,
-      "styleNo": 16,
+      "styleNo": 0,
       "style_code": 0,
-      "styleCode": 0
+      "styleCode": 18
     },
     "frontend-view": {
       "files": 8,
       "legacy_only": 0,
       "target_only": 8,
       "mixed": 0,
+      "expected_mixed": 0,
       "style_no": 0,
       "styleNo": 0,
       "style_code": 0,
@@ -72,10 +79,11 @@
       "files": 5,
       "legacy_only": 0,
       "target_only": 4,
-      "mixed": 1,
-      "style_no": 16,
+      "mixed": 0,
+      "expected_mixed": 1,
+      "style_no": 15,
       "styleNo": 0,
-      "style_code": 76,
+      "style_code": 59,
       "styleCode": 0
     }
   },
@@ -216,12 +224,12 @@
       "path": "ruoyi-admin/src/main/resources/mapper/erp/ProducePlanMapper.xml",
       "group": "backend-mapper-xml",
       "counts": {
-        "style_no": 6,
+        "style_no": 0,
         "styleNo": 0,
         "style_code": 6,
         "styleCode": 10
       },
-      "status": "mixed"
+      "status": "target-only"
     },
     {
       "path": "ruoyi-admin/src/main/resources/mapper/erp/QcInspectionMapper.xml",
@@ -238,12 +246,12 @@
       "path": "ruoyi-admin/src/main/resources/mapper/erp/SalesOrderMapper.xml",
       "group": "backend-mapper-xml",
       "counts": {
-        "style_no": 6,
+        "style_no": 0,
         "styleNo": 0,
         "style_code": 6,
         "styleCode": 10
       },
-      "status": "mixed"
+      "status": "target-only"
     },
     {
       "path": "ruoyi-admin/src/main/resources/mapper/erp/SampleNoticeMapper.xml",
@@ -272,33 +280,33 @@
       "group": "other",
       "counts": {
         "style_no": 0,
-        "styleNo": 2,
+        "styleNo": 0,
         "style_code": 0,
-        "styleCode": 0
+        "styleCode": 2
       },
-      "status": "legacy-only"
+      "status": "target-only"
     },
     {
       "path": "ruoyi-ui/src/views/demo/order/index.vue",
       "group": "other",
       "counts": {
         "style_no": 0,
-        "styleNo": 7,
+        "styleNo": 0,
         "style_code": 0,
-        "styleCode": 0
+        "styleCode": 8
       },
-      "status": "legacy-only"
+      "status": "target-only"
     },
     {
       "path": "ruoyi-ui/src/views/demo/style/index.vue",
       "group": "other",
       "counts": {
         "style_no": 0,
-        "styleNo": 7,
+        "styleNo": 0,
         "style_code": 0,
-        "styleCode": 0
+        "styleCode": 8
       },
-      "status": "legacy-only"
+      "status": "target-only"
     },
     {
       "path": "ruoyi-ui/src/views/erp/bom/index.vue",
@@ -394,7 +402,7 @@
       "counts": {
         "style_no": 0,
         "styleNo": 0,
-        "style_code": 3,
+        "style_code": 2,
         "styleCode": 0
       },
       "status": "target-only"
@@ -416,7 +424,7 @@
       "counts": {
         "style_no": 0,
         "styleNo": 0,
-        "style_code": 15,
+        "style_code": 6,
         "styleCode": 0
       },
       "status": "target-only"
@@ -425,12 +433,12 @@
       "path": "sql/phase23_style_code_compat_migration.sql",
       "group": "sql",
       "counts": {
-        "style_no": 16,
+        "style_no": 15,
         "styleNo": 0,
-        "style_code": 45,
+        "style_code": 39,
         "styleCode": 0
       },
-      "status": "mixed"
+      "status": "expected-mixed"
     },
     {
       "path": "sql/sprint_d_quality_invoice.sql",
@@ -438,7 +446,7 @@
       "counts": {
         "style_no": 0,
         "styleNo": 0,
-        "style_code": 3,
+        "style_code": 2,
         "styleCode": 0
       },
       "status": "target-only"

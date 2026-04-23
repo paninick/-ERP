@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import json
+import re
 from collections import Counter
 from dataclasses import dataclass
 from datetime import datetime
@@ -37,6 +38,17 @@ KEYWORDS = {
     "styleNo": "java_or_vue_legacy_property",
     "style_code": "db_target_column",
     "styleCode": "java_or_vue_target_property",
+}
+
+KEYWORD_PATTERNS = {
+    "style_no": re.compile(r"(?<![A-Za-z0-9_])style_no(?![A-Za-z0-9_])"),
+    "styleNo": re.compile(r"(?<![A-Za-z0-9_])styleNo(?![A-Za-z0-9_])"),
+    "style_code": re.compile(r"(?<![A-Za-z0-9_])style_code(?![A-Za-z0-9_])"),
+    "styleCode": re.compile(r"(?<![A-Za-z0-9_])styleCode(?![A-Za-z0-9_])"),
+}
+
+EXPECTED_MIXED_PATHS = {
+    "sql/phase23_style_code_compat_migration.sql",
 }
 
 GROUP_RULES = [
@@ -78,10 +90,12 @@ def classify_group(relative_path: str) -> str:
     return "other"
 
 
-def classify_status(counts: Counter) -> str:
+def classify_status(relative_path: str, counts: Counter) -> str:
     has_legacy = counts["style_no"] > 0 or counts["styleNo"] > 0
     has_target = counts["style_code"] > 0 or counts["styleCode"] > 0
     if has_legacy and has_target:
+        if relative_path in EXPECTED_MIXED_PATHS:
+            return "expected-mixed"
         return "mixed"
     if has_legacy:
         return "legacy-only"
@@ -101,8 +115,8 @@ def scan_file(path: Path) -> FileHit | None:
         content = path.read_text(encoding="utf-8", errors="ignore")
 
     counts = Counter()
-    for needle in KEYWORDS:
-        counts[needle] = content.count(needle)
+    for needle, pattern in KEYWORD_PATTERNS.items():
+        counts[needle] = len(pattern.findall(content))
 
     if not any(counts.values()):
         return None
@@ -112,7 +126,7 @@ def scan_file(path: Path) -> FileHit | None:
         path=relative_path,
         group=classify_group(relative_path),
         counts=dict(counts),
-        status=classify_status(counts),
+        status=classify_status(relative_path, counts),
     )
 
 
@@ -126,6 +140,7 @@ def build_summary(hits: list[FileHit]) -> dict[str, object]:
                 "legacy_only": 0,
                 "target_only": 0,
                 "mixed": 0,
+                "expected_mixed": 0,
                 "style_no": 0,
                 "styleNo": 0,
                 "style_code": 0,
@@ -145,6 +160,7 @@ def build_summary(hits: list[FileHit]) -> dict[str, object]:
             "legacy_only": sum(1 for item in hits if item.status == "legacy-only"),
             "target_only": sum(1 for item in hits if item.status == "target-only"),
             "mixed": sum(1 for item in hits if item.status == "mixed"),
+            "expected_mixed": sum(1 for item in hits if item.status == "expected-mixed"),
         },
         "group_summary": group_summary,
         "files": [hit.__dict__ for hit in hits],
@@ -166,15 +182,16 @@ def render_markdown(summary: dict[str, object]) -> str:
     lines.append(f"- Legacy only: `{totals['legacy_only']}`")
     lines.append(f"- Target only: `{totals['target_only']}`")
     lines.append(f"- Mixed: `{totals['mixed']}`")
+    lines.append(f"- Expected mixed: `{totals['expected_mixed']}`")
     lines.append("")
 
     lines.append("## Group Summary")
     lines.append("")
-    lines.append("| Group | Files | Legacy Only | Target Only | Mixed | style_no | styleNo | style_code | styleCode |")
-    lines.append("| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |")
+    lines.append("| Group | Files | Legacy Only | Target Only | Mixed | Expected Mixed | style_no | styleNo | style_code | styleCode |")
+    lines.append("| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: | ---: |")
     for group, entry in sorted(summary["group_summary"].items()):
         lines.append(
-            "| {group} | {files} | {legacy_only} | {target_only} | {mixed} | {style_no} | {styleNo} | {style_code} | {styleCode} |".format(
+            "| {group} | {files} | {legacy_only} | {target_only} | {mixed} | {expected_mixed} | {style_no} | {styleNo} | {style_code} | {styleCode} |".format(
                 group=group,
                 **entry,
             )
@@ -196,8 +213,8 @@ def render_markdown(summary: dict[str, object]) -> str:
     lines.append("## Suggested Batch Order")
     lines.append("")
     lines.append("1. Migrate `legacy-only` files in low-conflict backend/frontend modules.")
-    lines.append("2. Add compatibility SQL for tables still using `style_no`.")
-    lines.append("3. Resolve `mixed` files last to avoid breaking in-flight parallel work.")
+    lines.append("2. Resolve actionable `mixed` files before declaring the migration complete.")
+    lines.append("3. Keep `expected-mixed` files only when they are intentional compatibility bridges.")
     lines.append("")
     return "\n".join(lines)
 

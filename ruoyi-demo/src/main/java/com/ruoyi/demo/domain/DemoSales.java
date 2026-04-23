@@ -43,7 +43,8 @@ public class DemoSales extends BaseEntity
 
     /** 款号 */
     @Size(max = 50, message = "款号长度不能超过50个字符")
-    private String styleNo;
+    @TableField("style_no")
+    private String styleCode;
 
     /** 款式名称 */
     @Size(max = 200, message = "款式名称长度不能超过200个字符")
