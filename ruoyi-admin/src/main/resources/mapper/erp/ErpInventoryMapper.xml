@@ -12,16 +12,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="invQty"    column="inv_qty"    />
         <result property="lockQty"    column="lock_qty"    />
         <result property="version"    column="version"    />
-        <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
-        <result property="updateBy"    column="update_by"    />
         <result property="updateTime"    column="update_time"    />
-        <result property="remark"    column="remark"    />
     </resultMap>
 
     <sql id="selectErpInventoryVo">
         select id, warehouse_id, sku_id, material_id, inv_qty, lock_qty, version,
-               create_by, create_time, update_by, update_time, remark
+               create_time, update_time
         from t_erp_inv_stock
     </sql>
 
@@ -48,10 +45,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertErpInventory" parameterType="ErpInventory" useGeneratedKeys="true" keyProperty="id">
         insert into t_erp_inv_stock (
             warehouse_id, sku_id, material_id, inv_qty, lock_qty, version,
-            create_by, create_time, update_by, update_time, remark
+            create_time, update_time
         ) values (
             #{warehouseId}, #{skuId}, #{materialId}, #{invQty}, #{lockQty}, #{version},
-            #{createBy}, #{createTime}, #{updateBy}, #{updateTime}, #{remark}
+            #{createTime}, #{updateTime}
         )
     </insert>
 
@@ -64,9 +61,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="invQty != null">inv_qty = #{invQty},</if>
             <if test="lockQty != null">lock_qty = #{lockQty},</if>
             <if test="version != null">version = #{version},</if>
-            <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
-            <if test="remark != null">remark = #{remark},</if>
         </trim>
         where id = #{id} and version = #{version}
     </update>

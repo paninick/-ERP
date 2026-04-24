@@ -102,6 +102,16 @@ public class CustomerController extends BaseController {
     @PreAuthorize("@ss.hasPermi('erp:customer:import')")
     @GetMapping("/importTemplate")
     public void importTemplate(HttpServletResponse response) {
+        writeImportTemplate(response);
+    }
+
+    @PreAuthorize("@ss.hasPermi('erp:customer:import')")
+    @PostMapping("/importTemplate")
+    public void importTemplatePost(HttpServletResponse response) {
+        writeImportTemplate(response);
+    }
+
+    private void writeImportTemplate(HttpServletResponse response) {
         ExcelUtil<Customer> util = new ExcelUtil<Customer>(Customer.class);
         util.importTemplateExcel(response, "客户数据");
     }
