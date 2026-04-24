@@ -29,7 +29,7 @@ import org.springframework.web.multipart.MultipartFile;
  * @date 2026-04-07
  */
 @RestController
-@RequestMapping("/erp/notice")
+@RequestMapping({"/erp/notice", "/erp/proofingNotice"})
 public class SampleNoticeController extends BaseController {
     @Autowired
     private ISampleNoticeService sampleNoticeService;
@@ -115,6 +115,7 @@ public class SampleNoticeController extends BaseController {
     /**
      * 下载打样通知导入模板
      */
+    @PreAuthorize("@ss.hasPermi('erp:notice:import')")
     @PostMapping("/importTemplate")
     public void importTemplate(HttpServletResponse response) {
         ExcelUtil<SampleNotice> util = new ExcelUtil<>(SampleNotice.class);

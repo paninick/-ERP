@@ -28,7 +28,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * @date 2026-04-07
  */
 @RestController
-@RequestMapping("/erp/customerTemplate/size")
+@RequestMapping({"/erp/customerTemplate/size", "/erp/customerTemplateSize"})
 public class CustomerTemplateSizeController extends BaseController {
     @Autowired
     private ICustomerTemplateSizeService customerTemplateSizeService;

@@ -29,7 +29,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * @date 2026-04-07
  */
 @RestController
-@RequestMapping("/erp/sales/order")
+@RequestMapping({"/erp/sales/order", "/erp/salesOrder", "/erp/salesorder", "/erp/sales"})
 public class SalesOrderController extends BaseController {
     @Autowired
     private ISalesOrderService salesOrderService;
@@ -140,6 +140,7 @@ public class SalesOrderController extends BaseController {
     /**
      * 下载模板
      */
+    @PreAuthorize("@ss.hasPermi('erp:sales:import')")
     @PostMapping("/importTemplate")
     public void importTemplate(HttpServletResponse response)
     {

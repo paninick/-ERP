@@ -28,7 +28,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * @date 2026-04-07
  */
 @RestController
-@RequestMapping("/erp/plan")
+@RequestMapping({"/erp/plan", "/erp/producePlan", "/erp/produceplan"})
 public class ProducePlanController extends BaseController {
     @Autowired
     private IProducePlanService producePlanService;

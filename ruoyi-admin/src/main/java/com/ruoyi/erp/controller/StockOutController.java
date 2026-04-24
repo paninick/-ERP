@@ -36,7 +36,7 @@ public class StockOutController extends BaseController {
     /**
      * 查询出库单列表
      */
-    @PreAuthorize("@ss.hasPermi('erp:stock:list')")
+    @PreAuthorize("@ss.hasPermi('erp:stockout:list')")
     @GetMapping("/list")
     public TableDataInfo list(StockOut stockOut) {
         startPage();
@@ -47,7 +47,7 @@ public class StockOutController extends BaseController {
     /**
      * 导出出库单列表
      */
-    @PreAuthorize("@ss.hasPermi('erp:stock:export')")
+    @PreAuthorize("@ss.hasPermi('erp:stockout:export')")
     @Log(title = "出库单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, StockOut stockOut) {
@@ -59,7 +59,7 @@ public class StockOutController extends BaseController {
     /**
      * 获取出库单详细信息
      */
-    @PreAuthorize("@ss.hasPermi('erp:stock:query')")
+    @PreAuthorize("@ss.hasPermi('erp:stockout:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id) {
         return success(stockOutService.selectStockOutById(id));
@@ -68,7 +68,7 @@ public class StockOutController extends BaseController {
     /**
      * 新增出库单
      */
-    @PreAuthorize("@ss.hasPermi('erp:stock:add')")
+    @PreAuthorize("@ss.hasPermi('erp:stockout:add')")
     @Log(title = "出库单", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody StockOut stockOut) {
@@ -78,7 +78,7 @@ public class StockOutController extends BaseController {
     /**
      * 修改出库单
      */
-    @PreAuthorize("@ss.hasPermi('erp:stock:edit')")
+    @PreAuthorize("@ss.hasPermi('erp:stockout:edit')")
     @Log(title = "出库单", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody StockOut stockOut) {
@@ -88,7 +88,7 @@ public class StockOutController extends BaseController {
     /**
      * 删除出库单
      */
-    @PreAuthorize("@ss.hasPermi('erp:stock:remove')")
+    @PreAuthorize("@ss.hasPermi('erp:stockout:remove')")
     @Log(title = "出库单", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {

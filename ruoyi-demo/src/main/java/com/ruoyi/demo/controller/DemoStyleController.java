@@ -1,12 +1,13 @@
 package com.ruoyi.demo.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.demo.domain.DemoStyle;
 import com.ruoyi.demo.service.IDemoStyleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/demo/style")
-public class DemoStyleController {
+public class DemoStyleController extends BaseController {
 
     @Autowired
     private IDemoStyleService demoStyleService;
@@ -26,16 +27,18 @@ public class DemoStyleController {
     /**
      * 查询款式列表（分页）
      */
+    @PreAuthorize("@ss.hasPermi('demo:style:list')")
     @GetMapping("/list")
     public TableDataInfo list(DemoStyle demoStyle) {
-        IPage<DemoStyle> page = demoStyleService.selectDemoStylePage(demoStyle,
-                demoStyle.getPageNum(), demoStyle.getPageSize());
-        return getDataTable(page);
+        startPage();
+        List<DemoStyle> list = demoStyleService.selectDemoStyleList(demoStyle);
+        return getDataTable(list);
     }
 
     /**
      * 查询款式列表（不分页）
      */
+    @PreAuthorize("@ss.hasPermi('demo:style:list')")
     @GetMapping("/all")
     public AjaxResult all(DemoStyle demoStyle) {
         List<DemoStyle> list = demoStyleService.selectDemoStyleList(demoStyle);
@@ -45,6 +48,7 @@ public class DemoStyleController {
     /**
      * 导出款式列表
      */
+    @PreAuthorize("@ss.hasPermi('demo:style:export')")
     @GetMapping("/export")
     public AjaxResult export(DemoStyle demoStyle) {
         List<DemoStyle> list = demoStyleService.selectDemoStyleList(demoStyle);
@@ -55,6 +59,7 @@ public class DemoStyleController {
     /**
      * 获取款式详情
      */
+    @PreAuthorize("@ss.hasPermi('demo:style:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id) {
         return AjaxResult.success(demoStyleService.selectDemoStyleById(id));
@@ -63,6 +68,7 @@ public class DemoStyleController {
     /**
      * 新增款式
      */
+    @PreAuthorize("@ss.hasPermi('demo:style:add')")
     @PostMapping
     public AjaxResult add(@RequestBody DemoStyle demoStyle) {
         return toAjax(demoStyleService.insertDemoStyle(demoStyle));
@@ -71,6 +77,7 @@ public class DemoStyleController {
     /**
      * 修改款式
      */
+    @PreAuthorize("@ss.hasPermi('demo:style:edit')")
     @PutMapping
     public AjaxResult edit(@RequestBody DemoStyle demoStyle) {
         return toAjax(demoStyleService.updateDemoStyle(demoStyle));
@@ -79,6 +86,7 @@ public class DemoStyleController {
     /**
      * 删除款式
      */
+    @PreAuthorize("@ss.hasPermi('demo:style:remove')")
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {
         return toAjax(demoStyleService.deleteDemoStyleByIds(ids));

@@ -2,6 +2,7 @@ package com.ruoyi.erp.controller;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -25,6 +26,7 @@ public class DataImportController extends BaseController
     @Autowired
     private IDataImportService dataImportService;
 
+    @PreAuthorize("@ss.hasPermi('erp:dataimport:list')")
     @GetMapping("/list")
     public TableDataInfo list(DataImport dataImport)
     {
@@ -33,12 +35,14 @@ public class DataImportController extends BaseController
         return getDataTable(list);
     }
 
+    @PreAuthorize("@ss.hasPermi('erp:dataimport:query')")
     @GetMapping("/{importId}")
     public AjaxResult getInfo(@PathVariable Long importId)
     {
         return success(dataImportService.selectDataImportByImportId(importId));
     }
 
+    @PreAuthorize("@ss.hasPermi('erp:dataimport:add')")
     @Log(title = "数据导入", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody DataImport dataImport)
@@ -47,6 +51,7 @@ public class DataImportController extends BaseController
         return toAjax(dataImportService.insertDataImport(dataImport));
     }
 
+    @PreAuthorize("@ss.hasPermi('erp:dataimport:edit')")
     @Log(title = "数据导入", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody DataImport dataImport)
@@ -55,6 +60,7 @@ public class DataImportController extends BaseController
         return toAjax(dataImportService.updateDataImport(dataImport));
     }
 
+    @PreAuthorize("@ss.hasPermi('erp:dataimport:remove')")
     @Log(title = "数据导入", businessType = BusinessType.DELETE)
     @DeleteMapping("/{importIds}")
     public AjaxResult remove(@PathVariable Long[] importIds)

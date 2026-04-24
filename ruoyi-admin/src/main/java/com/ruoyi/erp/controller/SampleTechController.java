@@ -143,6 +143,7 @@ public class SampleTechController extends BaseController {
     /**
      * 下载模板
      */
+    @PreAuthorize("@ss.hasPermi('erp:tech:import')")
     @PostMapping("/importTemplate")
     public void importTemplate(HttpServletResponse response)
     {

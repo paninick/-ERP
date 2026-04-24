@@ -91,6 +91,7 @@ public class BomController extends BaseController {
     /**
      * 下载样衣 BOM 导入模板
      */
+    @PreAuthorize("@ss.hasPermi('erp:bom:import')")
     @PostMapping("/importTemplate")
     public void importTemplate(HttpServletResponse response) {
         ExcelUtil<Bom> util = new ExcelUtil<>(Bom.class);

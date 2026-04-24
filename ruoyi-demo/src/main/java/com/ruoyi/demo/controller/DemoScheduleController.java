@@ -1,12 +1,13 @@
 package com.ruoyi.demo.controller;
 
-import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.demo.domain.DemoSchedule;
 import com.ruoyi.demo.service.IDemoScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -18,7 +19,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/demo/schedule")
-public class DemoScheduleController {
+public class DemoScheduleController extends BaseController {
 
     @Autowired
     private IDemoScheduleService demoScheduleService;
@@ -26,16 +27,18 @@ public class DemoScheduleController {
     /**
      * 查询生产排程列表（分页）
      */
+    @PreAuthorize("@ss.hasPermi('demo:schedule:list')")
     @GetMapping("/list")
     public TableDataInfo list(DemoSchedule demoSchedule) {
-        IPage<DemoSchedule> page = demoScheduleService.selectDemoSchedulePage(demoSchedule,
-                demoSchedule.getPageNum(), demoSchedule.getPageSize());
-        return getDataTable(page);
+        startPage();
+        List<DemoSchedule> list = demoScheduleService.selectDemoScheduleList(demoSchedule);
+        return getDataTable(list);
     }
 
     /**
      * 查询生产排程列表（不分页）
      */
+    @PreAuthorize("@ss.hasPermi('demo:schedule:list')")
     @GetMapping("/all")
     public AjaxResult all(DemoSchedule demoSchedule) {
         List<DemoSchedule> list = demoScheduleService.selectDemoScheduleList(demoSchedule);
@@ -45,6 +48,7 @@ public class DemoScheduleController {
     /**
      * 导出生产排程列表
      */
+    @PreAuthorize("@ss.hasPermi('demo:schedule:export')")
     @GetMapping("/export")
     public AjaxResult export(DemoSchedule demoSchedule) {
         List<DemoSchedule> list = demoScheduleService.selectDemoScheduleList(demoSchedule);
@@ -55,6 +59,7 @@ public class DemoScheduleController {
     /**
      * 获取生产排程详情
      */
+    @PreAuthorize("@ss.hasPermi('demo:schedule:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id) {
         return AjaxResult.success(demoScheduleService.selectDemoScheduleById(id));
@@ -63,6 +68,7 @@ public class DemoScheduleController {
     /**
      * 新增生产排程
      */
+    @PreAuthorize("@ss.hasPermi('demo:schedule:add')")
     @PostMapping
     public AjaxResult add(@RequestBody DemoSchedule demoSchedule) {
         return toAjax(demoScheduleService.insertDemoSchedule(demoSchedule));
@@ -71,6 +77,7 @@ public class DemoScheduleController {
     /**
      * 修改生产排程
      */
+    @PreAuthorize("@ss.hasPermi('demo:schedule:edit')")
     @PutMapping
     public AjaxResult edit(@RequestBody DemoSchedule demoSchedule) {
         return toAjax(demoScheduleService.updateDemoSchedule(demoSchedule));
@@ -79,6 +86,7 @@ public class DemoScheduleController {
     /**
      * 删除生产排程
      */
+    @PreAuthorize("@ss.hasPermi('demo:schedule:remove')")
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {
         return toAjax(demoScheduleService.deleteDemoScheduleByIds(ids));
@@ -87,6 +95,7 @@ public class DemoScheduleController {
     /**
      * 判断生产排程是否爆满
      */
+    @PreAuthorize("@ss.hasPermi('demo:schedule:query')")
     @GetMapping("/isFullLoad/{id}")
     public AjaxResult isFullLoad(@PathVariable("id") Long id) {
         DemoSchedule demoSchedule = demoScheduleService.selectDemoScheduleById(id);
@@ -101,6 +110,7 @@ public class DemoScheduleController {
     /**
      * 判断生产排程是否空闲
      */
+    @PreAuthorize("@ss.hasPermi('demo:schedule:query')")
     @GetMapping("/isIdleLoad/{id}")
     public AjaxResult isIdleLoad(@PathVariable("id") Long id) {
         DemoSchedule demoSchedule = demoScheduleService.selectDemoScheduleById(id);

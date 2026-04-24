@@ -159,6 +159,7 @@ public class CheckController extends BaseController
     /**
      * 下载模板
      */
+    @PreAuthorize("@ss.hasPermi('erp:check:import')")
     @PostMapping("/importTemplate")
     public void importTemplate(HttpServletResponse response)
     {

@@ -37,7 +37,7 @@ public class StockInController extends BaseController {
     /**
      * 查询入库单列表
      */
-    @PreAuthorize("@ss.hasPermi('erp:stock:list')")
+    @PreAuthorize("@ss.hasPermi('erp:stockin:list')")
     @GetMapping("/list")
     public TableDataInfo list(StockIn stockIn) {
         startPage();
@@ -48,7 +48,7 @@ public class StockInController extends BaseController {
     /**
      * 导出入库单列表
      */
-    @PreAuthorize("@ss.hasPermi('erp:stock:export')")
+    @PreAuthorize("@ss.hasPermi('erp:stockin:export')")
     @Log(title = "入库单", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, StockIn stockIn) {
@@ -60,7 +60,7 @@ public class StockInController extends BaseController {
     /**
      * 获取入库单详细信息
      */
-    @PreAuthorize("@ss.hasPermi('erp:stock:query')")
+    @PreAuthorize("@ss.hasPermi('erp:stockin:query')")
     @GetMapping(value = "/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id) {
         return success(stockInService.selectStockInById(id));
@@ -69,7 +69,7 @@ public class StockInController extends BaseController {
     /**
      * 新增入库单
      */
-    @PreAuthorize("@ss.hasPermi('erp:stock:add')")
+    @PreAuthorize("@ss.hasPermi('erp:stockin:add')")
     @Log(title = "入库单", businessType = BusinessType.INSERT)
     @PostMapping
     public AjaxResult add(@RequestBody StockIn stockIn) {
@@ -79,7 +79,7 @@ public class StockInController extends BaseController {
     /**
      * 修改入库单
      */
-    @PreAuthorize("@ss.hasPermi('erp:stock:edit')")
+    @PreAuthorize("@ss.hasPermi('erp:stockin:edit')")
     @Log(title = "入库单", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody StockIn stockIn) {
@@ -89,7 +89,7 @@ public class StockInController extends BaseController {
     /**
      * 删除入库单
      */
-    @PreAuthorize("@ss.hasPermi('erp:stock:remove')")
+    @PreAuthorize("@ss.hasPermi('erp:stockin:remove')")
     @Log(title = "入库单", businessType = BusinessType.DELETE)
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {
@@ -99,7 +99,7 @@ public class StockInController extends BaseController {
     /**
      * 导入入库单 Excel
      */
-    @PreAuthorize("@ss.hasPermi('erp:stock:import')")
+    @PreAuthorize("@ss.hasPermi('erp:stockin:import')")
     @Log(title = "入库单导入", businessType = BusinessType.IMPORT)
     @PostMapping("/importData")
     public AjaxResult importData(MultipartFile file, boolean updateSupport) throws Exception {
@@ -115,6 +115,7 @@ public class StockInController extends BaseController {
     /**
      * 下载入库单导入模板
      */
+    @PreAuthorize("@ss.hasPermi('erp:stockin:import')")
     @PostMapping("/importTemplate")
     public void importTemplate(HttpServletResponse response) {
         ExcelUtil<StockIn> util = new ExcelUtil<>(StockIn.class);

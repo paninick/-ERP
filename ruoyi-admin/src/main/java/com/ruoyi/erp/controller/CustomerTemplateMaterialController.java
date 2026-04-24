@@ -28,7 +28,7 @@ import com.ruoyi.common.core.page.TableDataInfo;
  * @date 2026-04-07
  */
 @RestController
-@RequestMapping("/erp/customerTemplate/material")
+@RequestMapping({"/erp/customerTemplate/material", "/erp/customerTemplateMaterial"})
 public class CustomerTemplateMaterialController extends BaseController {
     @Autowired
     private ICustomerTemplateMaterialService customerTemplateMaterialService;
