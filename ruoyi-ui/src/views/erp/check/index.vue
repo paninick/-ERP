@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
-      <el-form-item label="审批状态" prop="auditStatus">
-        <el-select v-model="queryParams.auditStatus" placeholder="请选择审批状态" clearable>
+      <el-form-item :label="$t('check.auditStatus')" prop="auditStatus">
+        <el-select v-model="queryParams.auditStatus" :placeholder="$t('validation.select', [$t('check.auditStatus')])" clearable>
           <el-option
             v-for="dict in dict.type.erp_sample_audit_status"
             :key="dict.value"
@@ -11,8 +11,8 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="进行状态" prop="progressStatus">
-        <el-select v-model="queryParams.progressStatus" placeholder="请选择进行状态" clearable>
+      <el-form-item :label="$t('check.progressStatus')" prop="progressStatus">
+        <el-select v-model="queryParams.progressStatus" :placeholder="$t('validation.select', [$t('check.progressStatus')])" clearable>
           <el-option
             v-for="dict in dict.type.erp_check_progress"
             :key="dict.value"
@@ -21,16 +21,16 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="客户名称" prop="customerName">
+      <el-form-item :label="$t('check.customerName')" prop="customerName">
         <el-input
           v-model="queryParams.customerName"
-          placeholder="请输入客户名称"
+          :placeholder="$t('validation.enter', [$t('check.customerName')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="打样类型" prop="sampleType">
-        <el-select v-model="queryParams.sampleType" placeholder="请选择打样类型" clearable>
+      <el-form-item :label="$t('check.sampleType')" prop="sampleType">
+        <el-select v-model="queryParams.sampleType" :placeholder="$t('validation.select', [$t('check.sampleType')])" clearable>
           <el-option
             v-for="dict in dict.type.erp_sample_type"
             :key="dict.value"
@@ -39,8 +39,8 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="样品款式" prop="styleType">
-        <el-select v-model="queryParams.styleType" placeholder="请选择样品款式" clearable>
+      <el-form-item :label="$t('check.styleType')" prop="styleType">
+        <el-select v-model="queryParams.styleType" :placeholder="$t('validation.select', [$t('check.styleType')])" clearable>
           <el-option
             v-for="dict in dict.type.erp_sample_style"
             :key="dict.value"
@@ -49,8 +49,8 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="样品种类" prop="sampleCategoryType">
-        <el-select v-model="queryParams.sampleCategoryType" placeholder="请选择样品种类" clearable>
+      <el-form-item :label="$t('check.sampleCategoryType')" prop="sampleCategoryType">
+        <el-select v-model="queryParams.sampleCategoryType" :placeholder="$t('validation.select', [$t('check.sampleCategoryType')])" clearable>
           <el-option
             v-for="dict in dict.type.erp_sample_category"
             :key="dict.value"
@@ -59,49 +59,49 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="款号" prop="styleCode">
+      <el-form-item :label="$t('check.styleCode')" prop="styleCode">
         <el-input
           v-model="queryParams.styleCode"
-          placeholder="请输入款号"
+          :placeholder="$t('validation.enter', [$t('check.styleCode')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="大货款号" prop="bulkOrderNo">
+      <el-form-item :label="$t('check.bulkOrderNo')" prop="bulkOrderNo">
         <el-input
           v-model="queryParams.bulkOrderNo"
-          placeholder="请输入大货款号"
+          :placeholder="$t('validation.enter', [$t('check.bulkOrderNo')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="业务员" prop="salesName">
+      <el-form-item :label="$t('check.salesName')" prop="salesName">
         <el-input
           v-model="queryParams.salesName"
-          placeholder="请输入业务员"
+          :placeholder="$t('validation.enter', [$t('check.salesName')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="工艺书编号" prop="techNo">
+      <el-form-item :label="$t('check.techNo')" prop="techNo">
         <el-input
           v-model="queryParams.techNo"
-          placeholder="请输入工艺书编号"
+          :placeholder="$t('validation.enter', [$t('check.techNo')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="打样编号" prop="sampleNo">
+      <el-form-item :label="$t('check.sampleNo')" prop="sampleNo">
         <el-input
           v-model="queryParams.sampleNo"
-          placeholder="请输入打样编号"
+          :placeholder="$t('validation.enter', [$t('check.sampleNo')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('btn.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('btn.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -114,7 +114,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['erp:check:add']"
-        >新增</el-button>
+        >{{ $t('btn.add') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -125,7 +125,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['erp:check:edit']"
-        >修改</el-button>
+        >{{ $t('btn.edit') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -136,7 +136,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['erp:check:remove']"
-        >删除</el-button>
+        >{{ $t('btn.delete') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -146,7 +146,7 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['erp:check:export']"
-        >导出</el-button>
+        >{{ $t('btn.export') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -156,50 +156,50 @@
           size="mini"
           @click="handleImport"
           v-hasPermi="['erp:check:import']"
-        >导入</el-button>
+        >{{ $t('btn.import') }}</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="checkList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="审批状态" align="center" prop="auditStatus" width="100">
+      <el-table-column :label="$t('check.auditStatus')" align="center" prop="auditStatus" width="100">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.erp_sample_audit_status" :value="scope.row.auditStatus"/>
         </template>
       </el-table-column>
-      <el-table-column label="进行状态" align="center" prop="progressStatus" width="100">
+      <el-table-column :label="$t('check.progressStatus')" align="center" prop="progressStatus" width="100">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.erp_check_progress" :value="scope.row.progressStatus"/>
         </template>
       </el-table-column>
-      <el-table-column label="客户" align="center" prop="customerName" />
-      <el-table-column label="打样类型" align="center" prop="sampleType" width="100">
+      <el-table-column :label="$t('check.customerName')" align="center" prop="customerName" />
+      <el-table-column :label="$t('check.sampleType')" align="center" prop="sampleType" width="100">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.erp_sample_type" :value="scope.row.sampleType"/>
         </template>
       </el-table-column>
-      <el-table-column label="样品款式" align="center" prop="styleType" width="100">
+      <el-table-column :label="$t('check.styleType')" align="center" prop="styleType" width="100">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.erp_sample_style" :value="scope.row.styleType"/>
         </template>
       </el-table-column>
-      <el-table-column label="样品类型" align="center" prop="sampleCategoryType" width="100">
+      <el-table-column :label="$t('check.sampleCategoryType')" align="center" prop="sampleCategoryType" width="100">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.erp_sample_category" :value="scope.row.sampleCategoryType"/>
         </template>
       </el-table-column>
-      <el-table-column label="款号" align="center" prop="styleCode" width="120" />
-      <el-table-column label="大货款号" align="center" prop="bulkOrderNo" width="120" />
-      <el-table-column label="业务员" align="center" prop="salesName" width="100" />
-      <el-table-column label="要求交期" align="center" prop="dueDate" width="120">
+      <el-table-column :label="$t('check.styleCode')" align="center" prop="styleCode" width="120" />
+      <el-table-column :label="$t('check.bulkOrderNo')" align="center" prop="bulkOrderNo" width="120" />
+      <el-table-column :label="$t('check.salesName')" align="center" prop="salesName" width="100" />
+      <el-table-column :label="$t('check.dueDate')" align="center" prop="dueDate" width="120">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.dueDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="工艺书编号" align="center" prop="techNo" width="140" />
-      <el-table-column label="打样编号" align="center" prop="sampleNo" width="140" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="200">
+      <el-table-column :label="$t('check.techNo')" align="center" prop="techNo" width="140" />
+      <el-table-column :label="$t('check.sampleNo')" align="center" prop="sampleNo" width="140" />
+      <el-table-column :label="$t('system.operation')" align="center" class-name="small-padding fixed-width" width="200">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -207,14 +207,14 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['erp:check:edit']"
-          >修改</el-button>
+          >{{ $t('btn.edit') }}</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['erp:check:remove']"
-          >删除</el-button>
+          >{{ $t('btn.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -232,8 +232,8 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="审批状态" prop="auditStatus">
-              <el-select v-model="form.auditStatus" placeholder="请选择审批状态">
+            <el-form-item :label="$t('check.auditStatus')" prop="auditStatus">
+              <el-select v-model="form.auditStatus" :placeholder="$t('validation.select', [$t('check.auditStatus')])">
                 <el-option
                   v-for="dict in dict.type.erp_sample_audit_status"
                   :key="dict.value"
@@ -244,8 +244,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="进行状态" prop="progressStatus">
-              <el-select v-model="form.progressStatus" placeholder="请选择进行状态">
+            <el-form-item :label="$t('check.progressStatus')" prop="progressStatus">
+              <el-select v-model="form.progressStatus" :placeholder="$t('validation.select', [$t('check.progressStatus')])">
                 <el-option
                   v-for="dict in dict.type.erp_check_progress"
                   :key="dict.value"
@@ -258,8 +258,8 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="打样类型" prop="sampleType">
-              <el-select v-model="form.sampleType" placeholder="请选择打样类型">
+            <el-form-item :label="$t('check.sampleType')" prop="sampleType">
+              <el-select v-model="form.sampleType" :placeholder="$t('validation.select', [$t('check.sampleType')])">
                 <el-option
                   v-for="dict in dict.type.erp_sample_type"
                   :key="dict.value"
@@ -270,15 +270,15 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="客户名称" prop="customerName">
-              <el-input v-model="form.customerName" placeholder="请输入客户名称" />
+            <el-form-item :label="$t('check.customerName')" prop="customerName">
+              <el-input v-model="form.customerName" :placeholder="$t('validation.enter', [$t('check.customerName')])" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="样品款式" prop="styleType">
-              <el-select v-model="form.styleType" placeholder="请选择样品款式">
+            <el-form-item :label="$t('check.styleType')" prop="styleType">
+              <el-select v-model="form.styleType" :placeholder="$t('validation.select', [$t('check.styleType')])">
                 <el-option
                   v-for="dict in dict.type.erp_sample_style"
                   :key="dict.value"
@@ -289,8 +289,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="样品种类" prop="sampleCategoryType">
-              <el-select v-model="form.sampleCategoryType" placeholder="请选择样品种类">
+            <el-form-item :label="$t('check.sampleCategoryType')" prop="sampleCategoryType">
+              <el-select v-model="form.sampleCategoryType" :placeholder="$t('validation.select', [$t('check.sampleCategoryType')])">
                 <el-option
                   v-for="dict in dict.type.erp_sample_category"
                   :key="dict.value"
@@ -303,55 +303,55 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="款号" prop="styleCode">
-              <el-input v-model="form.styleCode" placeholder="请输入款号" />
+            <el-form-item :label="$t('check.styleCode')" prop="styleCode">
+              <el-input v-model="form.styleCode" :placeholder="$t('validation.enter', [$t('check.styleCode')])" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="大货款号" prop="bulkOrderNo">
-              <el-input v-model="form.bulkOrderNo" placeholder="请输入大货款号" />
+            <el-form-item :label="$t('check.bulkOrderNo')" prop="bulkOrderNo">
+              <el-input v-model="form.bulkOrderNo" :placeholder="$t('validation.enter', [$t('check.bulkOrderNo')])" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="业务员" prop="salesName">
-              <el-input v-model="form.salesName" placeholder="请输入业务员" />
+            <el-form-item :label="$t('check.salesName')" prop="salesName">
+              <el-input v-model="form.salesName" :placeholder="$t('validation.enter', [$t('check.salesName')])" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="要求交期" prop="dueDate">
+            <el-form-item :label="$t('check.dueDate')" prop="dueDate">
               <el-date-picker clearable
                 v-model="form.dueDate"
                 type="date"
                 value-format="yyyy-MM-dd"
-                placeholder="请选择要求交期">
+                :placeholder="$t('validation.select', [$t('check.dueDate')])">
               </el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="工艺书编号" prop="techNo">
-              <el-input v-model="form.techNo" placeholder="请输入工艺书编号" />
+            <el-form-item :label="$t('check.techNo')" prop="techNo">
+              <el-input v-model="form.techNo" :placeholder="$t('validation.enter', [$t('check.techNo')])" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="打样编号" prop="sampleNo">
-              <el-input v-model="form.sampleNo" placeholder="请输入打样编号" />
+            <el-form-item :label="$t('check.sampleNo')" prop="sampleNo">
+              <el-input v-model="form.sampleNo" :placeholder="$t('validation.enter', [$t('check.sampleNo')])" />
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="核版说明" prop="checkDescription">
-          <el-input v-model="form.checkDescription" type="textarea" placeholder="请输入核版说明" />
+        <el-form-item :label="$t('check.checkDescription')" prop="checkDescription">
+          <el-input v-model="form.checkDescription" type="textarea" :placeholder="$t('validation.enter', [$t('check.checkDescription')])" />
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+        <el-form-item :label="$t('system.remark')" prop="remark">
+          <el-input v-model="form.remark" type="textarea" :placeholder="$t('validation.enter', [$t('system.remark')])" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">{{ $t('btn.confirm') }}</el-button>
+        <el-button @click="cancel">{{ $t('btn.cancel') }}</el-button>
       </div>
     </el-dialog>
 
@@ -371,17 +371,17 @@
       >
         <i class="el-icon-upload"></i>
         <div class="el-upload__text">
-          将文件拖到此处，或
-          <em>点击上传</em>
+          {{ $t('upload.dragText') }}，
+          <em>{{ $t('btn.upload') }}</em>
         </div>
         <div class="el-upload__tip" slot="tip">
-          <el-checkbox v-model="upload.updateSupport" /> 是否更新已经存在的数据
-          <el-link type="info" style="font-size:12px" @click="importTemplate">下载模板</el-link>
+          <el-checkbox v-model="upload.updateSupport" /> {{ $t('upload.updateExisting') }}
+          <el-link type="info" style="font-size:12px" @click="importTemplate">{{ $t('btn.downloadTemplate') }}</el-link>
         </div>
       </el-upload>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitFileForm">确 定</el-button>
-        <el-button @click="upload.open = false">取 消</el-button>
+        <el-button type="primary" @click="submitFileForm">{{ $t('btn.confirm') }}</el-button>
+        <el-button @click="upload.open = false">{{ $t('btn.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -414,6 +414,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      submitLoading: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -432,9 +433,6 @@ export default {
       },
       // 表单参数
       form: {},
-      // 表单校验
-      rules: {
-      },
       // 上传参数
       upload: {
         open: false,
@@ -443,6 +441,18 @@ export default {
         updateSupport: 0,
         headers: { Authorization: "Bearer " + getToken() },
         url: process.env.VUE_APP_BASE_API + "/erp/check/importData"
+      }
+    }
+  },
+  computed: {
+    rules() {
+      return {
+        sampleType: [
+          { required: true, message: this.$t('validation.required', [this.$t('check.sampleType')]), trigger: "change" }
+        ],
+        customerName: [
+          { required: true, message: this.$t('validation.required', [this.$t('check.customerName')]), trigger: "blur" }
+        ]
       }
     }
   },
@@ -518,7 +528,7 @@ export default {
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = "新增大货核版"
+      this.title = this.$t('check.addTitle')
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -527,25 +537,26 @@ export default {
       getCheck(checkId).then(response => {
         this.form = response.data
         this.open = true
-        this.title = "修改大货核版"
+        this.title = this.$t('check.editTitle')
       })
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.submitLoading = true
           if (this.form.checkId != null) {
             updateCheck(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功")
+              this.$modal.msgSuccess(this.$t('msg.editSuccess'))
               this.open = false
               this.getList()
-            })
+            }).finally(() => { this.submitLoading = false })
           } else {
             addCheck(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功")
+              this.$modal.msgSuccess(this.$t('msg.addSuccess'))
               this.open = false
               this.getList()
-            })
+            }).finally(() => { this.submitLoading = false })
           }
         }
       })
@@ -553,11 +564,11 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const checkIds = row.checkId || this.ids
-      this.$modal.confirm('是否确认删除大货核版编号为"' + checkIds + '"的数据项？').then(function() {
+      this.$modal.confirm(this.$t('msg.deleteConfirm', [checkIds])).then(function() {
         return delCheck(checkIds)
       }).then(() => {
         this.getList()
-        this.$modal.msgSuccess("删除成功")
+        this.$modal.msgSuccess(this.$t('msg.deleteSuccess'))
       }).catch(() => {})
     },
     /** 导出按钮操作 */
@@ -568,7 +579,7 @@ export default {
     },
     /** 导入按钮操作 */
     handleImport() {
-      this.upload.title = "大货核版导入"
+      this.upload.title = this.$t('check.importTitle')
       this.upload.open = true
     },
     /** 下载模板操作 */

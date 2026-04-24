@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
-      <el-form-item label="公司类型" prop="corpType">
-        <el-select v-model="queryParams.corpType" placeholder="请选择公司类型" clearable>
+      <el-form-item :label="$t('contacts.corpType')" prop="corpType">
+        <el-select v-model="queryParams.corpType" :placeholder="$t('validation.select', [$t('contacts.corpType')])" clearable>
           <el-option
             v-for="dict in dict.type.erp_corp_type"
             :key="dict.value"
@@ -11,32 +11,32 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="公司id" prop="corpId">
+      <el-form-item :label="$t('contacts.corpId')" prop="corpId">
         <el-input
           v-model="queryParams.corpId"
-          placeholder="请输入公司id"
+          :placeholder="$t('validation.enter', [$t('contacts.corpId')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="姓名" prop="name">
+      <el-form-item :label="$t('contacts.name')" prop="name">
         <el-input
           v-model="queryParams.name"
-          placeholder="请输入姓名"
+          :placeholder="$t('validation.enter', [$t('contacts.name')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="部门" prop="department">
+      <el-form-item :label="$t('contacts.department')" prop="department">
         <el-input
           v-model="queryParams.department"
-          placeholder="请输入部门"
+          :placeholder="$t('validation.enter', [$t('contacts.department')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="性别-字典" prop="sex">
-        <el-select v-model="queryParams.sex" placeholder="请选择性别-字典" clearable>
+      <el-form-item :label="$t('contacts.sex')" prop="sex">
+        <el-select v-model="queryParams.sex" :placeholder="$t('validation.select', [$t('contacts.sex')])" clearable>
           <el-option
             v-for="dict in dict.type.sys_user_sex"
             :key="dict.value"
@@ -45,25 +45,25 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="电话" prop="phone">
+      <el-form-item :label="$t('contacts.phone')" prop="phone">
         <el-input
           v-model="queryParams.phone"
-          placeholder="请输入电话"
+          :placeholder="$t('validation.enter', [$t('contacts.phone')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="邮箱" prop="mail">
+      <el-form-item :label="$t('contacts.mail')" prop="mail">
         <el-input
           v-model="queryParams.mail"
-          placeholder="请输入邮箱"
+          :placeholder="$t('validation.enter', [$t('contacts.mail')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('btn.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('btn.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -76,7 +76,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['erp:contacts:add']"
-        >新增</el-button>
+        >{{ $t('btn.add') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -87,7 +87,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['erp:contacts:edit']"
-        >修改</el-button>
+        >{{ $t('btn.edit') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -98,7 +98,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['erp:contacts:remove']"
-        >删除</el-button>
+        >{{ $t('btn.delete') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -108,7 +108,7 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['erp:contacts:export']"
-        >导出</el-button>
+        >{{ $t('btn.export') }}</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -116,23 +116,23 @@
     <el-table v-loading="loading" :data="contactsList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="联系人id" align="center" prop="id" />
-      <el-table-column label="公司类型" align="center" prop="corpType">
+      <el-table-column :label="$t('contacts.corpType')" align="center" prop="corpType">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.erp_corp_type" :value="scope.row.corpType"/>
         </template>
       </el-table-column>
-      <el-table-column label="公司id" align="center" prop="corpId" />
-      <el-table-column label="姓名" align="center" prop="name" />
-      <el-table-column label="部门" align="center" prop="department" />
-      <el-table-column label="性别-字典" align="center" prop="sex">
+      <el-table-column :label="$t('contacts.corpId')" align="center" prop="corpId" />
+      <el-table-column :label="$t('contacts.name')" align="center" prop="name" />
+      <el-table-column :label="$t('contacts.department')" align="center" prop="department" />
+      <el-table-column :label="$t('contacts.sex')" align="center" prop="sex">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_user_sex" :value="scope.row.sex"/>
         </template>
       </el-table-column>
-      <el-table-column label="电话" align="center" prop="phone" />
-      <el-table-column label="邮箱" align="center" prop="mail" />
-      <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('contacts.phone')" align="center" prop="phone" />
+      <el-table-column :label="$t('contacts.mail')" align="center" prop="mail" />
+      <el-table-column :label="$t('system.remark')" align="center" prop="remark" />
+      <el-table-column :label="$t('system.operation')" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -140,14 +140,14 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['erp:contacts:edit']"
-          >修改</el-button>
+          >{{ $t('btn.edit') }}</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['erp:contacts:remove']"
-          >删除</el-button>
+          >{{ $t('btn.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -163,8 +163,8 @@
     <!-- 添加或修改公司联系人对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="60%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="公司类型" prop="corpType">
-          <el-select v-model="form.corpType" placeholder="请选择公司类型">
+        <el-form-item :label="$t('contacts.corpType')" prop="corpType">
+          <el-select v-model="form.corpType" :placeholder="$t('validation.select', [$t('contacts.corpType')])">
             <el-option
               v-for="dict in dict.type.erp_corp_type"
               :key="dict.value"
@@ -173,17 +173,17 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="公司id" prop="corpId">
-          <el-input v-model="form.corpId" placeholder="请输入公司id" />
+        <el-form-item :label="$t('contacts.corpId')" prop="corpId">
+          <el-input v-model="form.corpId" :placeholder="$t('validation.enter', [$t('contacts.corpId')])" />
         </el-form-item>
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model="form.name" placeholder="请输入姓名" />
+        <el-form-item :label="$t('contacts.name')" prop="name">
+          <el-input v-model="form.name" :placeholder="$t('validation.enter', [$t('contacts.name')])" />
         </el-form-item>
-        <el-form-item label="部门" prop="department">
-          <el-input v-model="form.department" placeholder="请输入部门" />
+        <el-form-item :label="$t('contacts.department')" prop="department">
+          <el-input v-model="form.department" :placeholder="$t('validation.enter', [$t('contacts.department')])" />
         </el-form-item>
-        <el-form-item label="性别-字典" prop="sex">
-          <el-select v-model="form.sex" placeholder="请选择性别-字典">
+        <el-form-item :label="$t('contacts.sex')" prop="sex">
+          <el-select v-model="form.sex" :placeholder="$t('validation.select', [$t('contacts.sex')])">
             <el-option
               v-for="dict in dict.type.sys_user_sex"
               :key="dict.value"
@@ -192,19 +192,19 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="电话" prop="phone">
-          <el-input v-model="form.phone" placeholder="请输入电话" />
+        <el-form-item :label="$t('contacts.phone')" prop="phone">
+          <el-input v-model="form.phone" :placeholder="$t('validation.enter', [$t('contacts.phone')])" />
         </el-form-item>
-        <el-form-item label="邮箱" prop="mail">
-          <el-input v-model="form.mail" placeholder="请输入邮箱" />
+        <el-form-item :label="$t('contacts.mail')" prop="mail">
+          <el-input v-model="form.mail" :placeholder="$t('validation.enter', [$t('contacts.mail')])" />
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+        <el-form-item :label="$t('system.remark')" prop="remark">
+          <el-input v-model="form.remark" type="textarea" :placeholder="$t('validation.enter', [$t('system.remark')])" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">{{ $t('btn.confirm') }}</el-button>
+        <el-button @click="cancel">{{ $t('btn.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -236,6 +236,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      submitLoading: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -252,6 +253,9 @@ export default {
       form: {},
       // 表单校验
       rules: {
+        name: [
+          { required: true, message: this.$t('validation.required'), trigger: "blur" }
+        ]
       }
     }
   },
@@ -312,7 +316,7 @@ export default {
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = "添加公司联系人"
+      this.title = this.$t('contacts.addTitle')
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -321,25 +325,26 @@ export default {
       getContacts(id).then(response => {
         this.form = response.data
         this.open = true
-        this.title = "修改公司联系人"
+        this.title = this.$t('contacts.editTitle')
       })
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.submitLoading = true
           if (this.form.id != null) {
             updateContacts(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功")
+              this.$modal.msgSuccess(this.$t('msg.editSuccess'))
               this.open = false
               this.getList()
-            })
+            }).finally(() => { this.submitLoading = false })
           } else {
             addContacts(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功")
+              this.$modal.msgSuccess(this.$t('msg.addSuccess'))
               this.open = false
               this.getList()
-            })
+            }).finally(() => { this.submitLoading = false })
           }
         }
       })
@@ -347,11 +352,11 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids
-      this.$modal.confirm('是否确认删除公司联系人编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm(this.$t('msg.deleteConfirm', [ids])).then(function() {
         return delContacts(ids)
       }).then(() => {
         this.getList()
-        this.$modal.msgSuccess("删除成功")
+        this.$modal.msgSuccess(this.$t('msg.deleteSuccess'))
       }).catch(() => {})
     },
     /** 导出按钮操作 */

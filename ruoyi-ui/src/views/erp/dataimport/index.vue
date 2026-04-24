@@ -1,12 +1,12 @@
 <template>
   <div>
-    <el-form :model="queryParams" :inline="true" v-show="true">
+    <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="true">
       <el-form-item label="导入名称" prop="importName">
         <el-input v-model="queryParams.importName" placeholder="请输入导入名称" clearable />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="query">搜索</el-button>
-        <el-button @click="reset">重置</el-button>
+        <el-button type="primary" @click="handleQuery">搜索</el-button>
+        <el-button @click="resetQuery">重置</el-button>
       </el-form-item>
     </el-form>
 
@@ -41,9 +41,14 @@
       </el-table>
     </el-card>
 
-    <pagination v-show="total>0" :total="total" :page-num.sync="queryParams.pageNum" :page-row.sync="queryParams.pageSize" @pagination="getList" />
+    <pagination
+      v-show="total > 0"
+      :total="total"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
+      @pagination="getList"
+    />
 
-    <!-- 添加或修改对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="导入名称" prop="importName">
@@ -60,8 +65,8 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">确定</el-button>
+        <el-button @click="cancel">取消</el-button>
       </div>
     </el-dialog>
   </div>
@@ -74,19 +79,10 @@ export default {
   name: "DataImport",
   data() {
     return {
-      // 遮罩层
       loading: true,
-      // 选中数组
-      ids: [],
-      // 非单全选
-      multiple: true,
-      // 非单个删除
-      delFlag: true,
-      // 弹出层标题
       title: "",
-      // 是否显示弹出层
       open: false,
-      // 查询参数
+      submitLoading: false,
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -94,9 +90,7 @@ export default {
         tableName: null,
         status: null
       },
-      // 表单参数
       form: {},
-      // 表单校验
       rules: {
         importName: [
           { required: true, message: "导入名称不能为空", trigger: "blur" }
@@ -115,16 +109,15 @@ export default {
       listDataImport(this.queryParams).then(response => {
         this.dataImportList = response.rows;
         this.total = response.total;
+      }).finally(() => {
         this.loading = false;
       });
     },
-    // 取消按钮
     cancel() {
       this.open = false;
-      this.reset();
+      this.resetFormData();
     },
-    // 表单重置
-    reset() {
+    resetFormData() {
       this.form = {
         importId: null,
         importName: null,
@@ -133,28 +126,23 @@ export default {
         status: null,
         remark: null
       };
-      this.$refs["form"].clearValidate();
+      if (this.$refs.form) {
+        this.$refs.form.clearValidate();
+      }
     },
-    // 查询按钮
-    query() {
+    handleQuery() {
       this.queryParams.pageNum = 1;
       this.getList();
     },
-    // 重置按钮
-    reset() {
-      this.queryParams.pageNum = 1;
-      this.queryParams.importName = "";
-      this.queryParams.tableName = "";
-      this.queryParams.status = "";
-      this.getList();
+    resetQuery() {
+      this.resetForm("queryForm");
+      this.handleQuery();
     },
-    // 新增按钮
     handleAdd() {
-      this.reset();
+      this.resetFormData();
       this.open = true;
       this.title = "添加数据导入";
     },
-    // 修改按钮
     handleUpdate(row) {
       getDataImport(row.importId).then(response => {
         this.form = response.data;
@@ -162,33 +150,28 @@ export default {
         this.title = "修改数据导入";
       });
     },
-    // 提交按钮
     submitForm() {
-      this.$refs["form"].validate(valid => {
-        if (valid) {
-          if (this.form.importId !== undefined) {
-            updateDataImport(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
-              this.open = false;
-              this.getList();
-            });
-          } else {
-            addDataImport(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
-              this.open = false;
-              this.getList();
-            });
-          }
+      this.$refs.form.validate(valid => {
+        if (!valid) {
+          return;
         }
+        this.submitLoading = true;
+        const request = this.form.importId != null
+          ? updateDataImport(this.form)
+          : addDataImport(this.form);
+        request.then(() => {
+          this.$modal.msgSuccess(this.form.importId != null ? "修改成功" : "新增成功");
+          this.open = false;
+          this.getList();
+        }).finally(() => { this.submitLoading = false });
       });
     },
-    // 删除按钮
     handleDelete(row) {
-      this.$modal.confirm('是否确认删除数据导入编号为"' + row.importId + '"的数据项？').then(function() {
-        delDataImport([row.importId]).then(response => {
-          this.$modal.msgSuccess("删除成功");
-          this.getList();
-        });
+      this.$modal.confirm(`是否确认删除数据导入编号为"${row.importId}"的数据项？`).then(() => {
+        return delDataImport([row.importId]);
+      }).then(() => {
+        this.$modal.msgSuccess("删除成功");
+        this.getList();
       }).catch(() => {});
     }
   }

@@ -96,7 +96,7 @@
           </el-col>
           <el-col :span="12">
             <el-form-item label="生产计划ID" prop="producePlanId">
-              <el-input-number v-model="form.producePlanId" :min="1" placeholder="计划ID" style="width: 100%" />
+              <el-input-number v-model="form.producePlanId" placeholder="计划ID" style="width: 100%" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -115,12 +115,12 @@
         <el-row :gutter="24">
           <el-col :span="12">
             <el-form-item label="计划数量" prop="planQty">
-              <el-input-number v-model="form.planQty" :min="1" placeholder="数量" style="width: 100%" />
+              <el-input-number v-model="form.planQty" placeholder="数量" style="width: 100%" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="销售订单ID" prop="orderId">
-              <el-input-number v-model="form.orderId" :min="1" placeholder="订单ID" style="width: 100%" />
+              <el-input-number v-model="form.orderId" placeholder="订单ID" style="width: 100%" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -174,6 +174,13 @@ import { listProduceJobProcessByJob } from "@/api/erp/produceJobProcess";
 export default {
   name: "ProduceJob",
   data() {
+    const validatePositiveInteger = (message) => (rule, value, callback) => {
+      if (value === null || value === undefined || value === "" || !Number.isInteger(Number(value)) || Number(value) <= 0) {
+        callback(new Error(message));
+        return;
+      }
+      callback();
+    };
     return {
       loading: true,
       submitLoading: false,
@@ -199,9 +206,9 @@ export default {
       },
       form: {},
       rules: {
-        producePlanId: [{ required: true, message: "不能为空", trigger: "blur" }],
-        orderId: [{ required: true, message: "不能为空", trigger: "blur" }],
-        planQty: [{ required: true, message: "不能为空", trigger: "blur" }]
+        producePlanId: [{ validator: validatePositiveInteger("生产计划ID必须大于0"), trigger: "change" }],
+        orderId: [{ validator: validatePositiveInteger("销售订单ID必须大于0"), trigger: "change" }],
+        planQty: [{ validator: validatePositiveInteger("计划数量必须大于0"), trigger: "change" }]
       }
     };
   },
@@ -231,8 +238,12 @@ export default {
       this.multiple = !selection.length;
     },
     reset() {
-      this.form = { id: null, jobNo: null, producePlanId: null, orderId: null, colorCode: null, sizeCode: null, planQty: 0, actualQty: 0, defectQty: 0, status: "0" };
+      this.form = { id: null, jobNo: null, producePlanId: null, orderId: null, colorCode: null, sizeCode: null, planQty: null, actualQty: 0, defectQty: 0, status: "0" };
       this.resetForm("form");
+    },
+    cancel() {
+      this.open = false;
+      this.reset();
     },
     handleAdd() {
       this.reset();

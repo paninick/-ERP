@@ -1,32 +1,32 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
-      <el-form-item label="客户编码" prop="customerNo">
+      <el-form-item :label="$t('customer.no')" prop="customerNo">
         <el-input
           v-model="queryParams.customerNo"
-          placeholder="请输入客户编码"
+          :placeholder="$t('validation.enter', [$t('customer.no')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="客户名称" prop="customerName">
+      <el-form-item :label="$t('customer.name')" prop="customerName">
         <el-input
           v-model="queryParams.customerName"
-          placeholder="请输入客户名称"
+          :placeholder="$t('validation.enter', [$t('customer.name')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="客户简称" prop="customerBrief">
+      <el-form-item :label="$t('customer.brief')" prop="customerBrief">
         <el-input
           v-model="queryParams.customerBrief"
-          placeholder="请输入客户简称"
+          :placeholder="$t('validation.enter', [$t('customer.brief')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="贸易国别" prop="nationality">
-        <el-select v-model="queryParams.nationality" placeholder="请选择贸易国别" clearable>
+      <el-form-item :label="$t('customer.nationality')" prop="nationality">
+        <el-select v-model="queryParams.nationality" :placeholder="$t('validation.select', [$t('customer.nationality')])" clearable>
           <el-option
             v-for="dict in dict.type.sys_user_sex"
             :key="dict.value"
@@ -36,8 +36,8 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('btn.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('btn.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -50,7 +50,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['erp:customer:add']"
-        >新增</el-button>
+        >{{ $t('btn.add') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -61,7 +61,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['erp:customer:edit']"
-        >修改</el-button>
+        >{{ $t('btn.edit') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -72,7 +72,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['erp:customer:remove']"
-        >删除</el-button>
+        >{{ $t('btn.delete') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -82,7 +82,7 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['erp:customer:export']"
-        >导出</el-button>
+        >{{ $t('btn.export') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -92,35 +92,35 @@
           size="mini"
           @click="handleImport"
           v-hasPermi="['erp:customer:import']"
-        >导入</el-button>
+        >{{ $t('btn.import') }}</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="customerList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="客户编码" align="center" prop="customerNo" />
-      <el-table-column label="客户名称" align="center" prop="customerName" />
-      <el-table-column label="客户简称" align="center" prop="customerBrief" />
-      <el-table-column label="贸易国别" align="center" prop="nationality">
+      <el-table-column :label="$t('customer.no')" align="center" prop="customerNo" />
+      <el-table-column :label="$t('customer.name')" align="center" prop="customerName" />
+      <el-table-column :label="$t('customer.brief')" align="center" prop="customerBrief" />
+      <el-table-column :label="$t('customer.nationality')" align="center" prop="nationality">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_user_sex" :value="scope.row.nationality"/>
         </template>
       </el-table-column>
-      <el-table-column label="业务范围" align="center" prop="businessScope" />
-      <el-table-column label="业务员" align="center" prop="salesId" />
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+      <el-table-column :label="$t('customer.businessScope')" align="center" prop="businessScope" />
+      <el-table-column :label="$t('customer.sales')" align="center" prop="salesId" />
+      <el-table-column :label="$t('system.createTime')" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="更新时间" align="center" prop="updateTime" width="180">
+      <el-table-column :label="$t('system.updateTime')" align="center" prop="updateTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('system.remark')" align="center" prop="remark" />
+      <el-table-column :label="$t('system.operation')" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -128,14 +128,14 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['erp:customer:edit']"
-          >修改</el-button>
+          >{{ $t('btn.edit') }}</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['erp:customer:remove']"
-          >删除</el-button>
+          >{{ $t('btn.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -151,17 +151,17 @@
     <!-- 添加或修改业务系统-客户对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="60%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="客户编码" prop="customerNo">
-          <el-input v-model="form.customerNo" placeholder="请输入客户编码" />
+        <el-form-item :label="$t('customer.no')" prop="customerNo">
+          <el-input v-model="form.customerNo" :placeholder="$t('validation.enter', [$t('customer.no')])" />
         </el-form-item>
-        <el-form-item label="客户名称" prop="customerName">
-          <el-input v-model="form.customerName" placeholder="请输入客户名称" />
+        <el-form-item :label="$t('customer.name')" prop="customerName">
+          <el-input v-model="form.customerName" :placeholder="$t('validation.enter', [$t('customer.name')])" />
         </el-form-item>
-        <el-form-item label="客户简称" prop="customerBrief">
-          <el-input v-model="form.customerBrief" placeholder="请输入客户简称" />
+        <el-form-item :label="$t('customer.brief')" prop="customerBrief">
+          <el-input v-model="form.customerBrief" :placeholder="$t('validation.enter', [$t('customer.brief')])" />
         </el-form-item>
-        <el-form-item label="贸易国别" prop="nationality">
-          <el-select v-model="form.nationality" placeholder="请选择贸易国别">
+        <el-form-item :label="$t('customer.nationality')" prop="nationality">
+          <el-select v-model="form.nationality" :placeholder="$t('validation.select', [$t('customer.nationality')])">
             <el-option
               v-for="dict in dict.type.sys_user_sex"
               :key="dict.value"
@@ -170,19 +170,19 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="业务范围" prop="businessScope">
-          <el-input v-model="form.businessScope" placeholder="请输入业务范围" />
+        <el-form-item :label="$t('customer.businessScope')" prop="businessScope">
+          <el-input v-model="form.businessScope" :placeholder="$t('validation.enter', [$t('customer.businessScope')])" />
         </el-form-item>
-        <el-form-item label="业务员" prop="salesId">
-          <el-input v-model="form.salesId" placeholder="请输入业务员" />
+        <el-form-item :label="$t('customer.sales')" prop="salesId">
+          <el-input v-model="form.salesId" :placeholder="$t('validation.enter', [$t('customer.sales')])" />
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+        <el-form-item :label="$t('system.remark')" prop="remark">
+          <el-input v-model="form.remark" type="textarea" :placeholder="$t('validation.enter', [$t('system.remark')])" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">{{ $t('btn.confirm') }}</el-button>
+        <el-button @click="cancel">{{ $t('btn.cancel') }}</el-button>
       </div>
     </el-dialog>
 
@@ -190,18 +190,18 @@
     <el-dialog :title="upload.title" :visible.sync="upload.open" width="400px" append-to-body>
       <el-upload ref="upload" :limit="1" accept=".xlsx, .xls" :headers="upload.headers" :action="upload.url + '?updateSupport=' + upload.updateSupport" :disabled="upload.isUploading" :on-progress="handleFileUploadProgress" :on-success="handleFileSuccess" :auto-upload="false" drag>
         <i class="el-icon-upload"></i>
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        <div class="el-upload__text">{{ $t('upload.dragText') }}，或<em>{{ $t('upload.clickToUpload') }}</em></div>
         <div class="el-upload__tip text-center" slot="tip">
           <div class="el-upload__tip" slot="tip">
-            <el-checkbox v-model="upload.updateSupport" />是否更新已经存在的客户数据
+            <el-checkbox v-model="upload.updateSupport" />{{ $t('customer.updateExisting') }}
           </div>
-          <span>仅允许导入xls、xlsx格式文件。</span>
-          <el-link type="primary" :underline="false" style="font-size: 12px; vertical-align: baseline" @click="importTemplate">下载模板</el-link>
+          <span>{{ $t('upload.allowedExcel') }}</span>
+          <el-link type="primary" :underline="false" style="font-size: 12px; vertical-align: baseline" @click="importTemplate">{{ $t('btn.downloadTemplate') }}</el-link>
         </div>
       </el-upload>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitFileForm">确 定</el-button>
-        <el-button @click="upload.open = false">取 消</el-button>
+        <el-button type="primary" @click="submitFileForm">{{ $t('btn.confirm') }}</el-button>
+        <el-button @click="upload.open = false">{{ $t('btn.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -234,6 +234,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      submitLoading: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -245,9 +246,6 @@ export default {
       },
       // 表单参数
       form: {},
-      // 表单校验
-      rules: {
-      },
       // 客户导入参数
       upload: {
         // 是否显示弹出层（客户导入）
@@ -262,6 +260,15 @@ export default {
         headers: { Authorization: "Bearer " + getToken() },
         // 上传的地址
         url: process.env.VUE_APP_BASE_API + "/erp/customer/importData"
+      }
+    }
+  },
+  computed: {
+    rules() {
+      return {
+        customerName: [
+          { required: true, message: this.$t('validation.required'), trigger: "blur" }
+        ]
       }
     }
   },
@@ -321,7 +328,7 @@ export default {
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = "添加业务系统-客户"
+      this.title = this.$t('customer.addTitle')
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -330,25 +337,26 @@ export default {
       getCustomer(id).then(response => {
         this.form = response.data
         this.open = true
-        this.title = "修改业务系统-客户"
+        this.title = this.$t('customer.editTitle')
       })
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.submitLoading = true
           if (this.form.id != null) {
             updateCustomer(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功")
+              this.$modal.msgSuccess(this.$t('msg.editSuccess'))
               this.open = false
               this.getList()
-            })
+            }).finally(() => { this.submitLoading = false })
           } else {
             addCustomer(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功")
+              this.$modal.msgSuccess(this.$t('msg.addSuccess'))
               this.open = false
               this.getList()
-            })
+            }).finally(() => { this.submitLoading = false })
           }
         }
       })
@@ -356,11 +364,11 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids
-      this.$modal.confirm('是否确认删除业务系统-客户编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm(this.$t('msg.deleteConfirm', [ids])).then(function() {
         return delCustomer(ids)
       }).then(() => {
         this.getList()
-        this.$modal.msgSuccess("删除成功")
+        this.$modal.msgSuccess(this.$t('msg.deleteSuccess'))
       }).catch(() => {})
     },
     /** 导出按钮操作 */
@@ -371,7 +379,7 @@ export default {
     },
     /** 导入按钮操作 */
     handleImport() {
-      this.upload.title = "客户导入"
+      this.upload.title = this.$t('customer.importTitle')
       this.upload.open = true
     },
     /** 下载模板操作 */
@@ -388,14 +396,14 @@ export default {
       this.upload.open = false
       this.upload.isUploading = false
       this.$refs.upload.clearFiles()
-      this.$alert("<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" + response.msg + "</div>", "导入结果", { dangerouslyUseHTMLString: true })
+      this.$alert("<div style='overflow: auto;overflow-x: hidden;max-height: 70vh;padding: 10px 20px 0;'>" + response.msg + "</div>", this.$t('upload.importResult'), { dangerouslyUseHTMLString: true })
       this.getList()
     },
     // 提交上传文件
     submitFileForm() {
       const file = this.$refs.upload.uploadFiles
       if (!file || file.length === 0 || !file[0].name.toLowerCase().endsWith('.xls') && !file[0].name.toLowerCase().endsWith('.xlsx')) {
-        this.$modal.msgError('请选择后缀为 .xls 或 .xlsx 的文件。')
+        this.$modal.msgError(this.$t('upload.selectFile'))
         return
       }
       this.$refs.upload.submit()

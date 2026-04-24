@@ -47,7 +47,6 @@
           @keyup.enter="handleScan"
         />
       </div>
-<!-- PLACEHOLDER_TABLE -->
       <div class="record-table">
         <table>
           <thead>

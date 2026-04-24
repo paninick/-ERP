@@ -24,19 +24,14 @@
     </el-row>
 
     <el-table v-loading="loading" :data="myProcessList">
-      <el-table-column label="实例ID" align="center" prop="processInstanceId" width="200" :show-overflow-tooltip="true" />
+      <el-table-column label="任务ID" align="center" prop="taskId" width="160" :show-overflow-tooltip="true" />
       <el-table-column label="流程名称" align="center" prop="processName" :show-overflow-tooltip="true" />
-      <el-table-column label="流程KEY" align="center" prop="processKey" :show-overflow-tooltip="true" />
-      <el-table-column label="业务KEY" align="center" prop="businessKey" width="150" :show-overflow-tooltip="true" />
-      <el-table-column label="当前节点" align="center" prop="currentNode" :show-overflow-tooltip="true" />
-      <el-table-column label="状态" align="center" prop="processStatus" width="100">
+      <el-table-column label="任务名称" align="center" prop="taskName" :show-overflow-tooltip="true" />
+      <el-table-column label="当前节点" align="center" prop="nodeName" :show-overflow-tooltip="true" />
+      <el-table-column label="发起人" align="center" prop="initiatorName" width="100" />
+      <el-table-column label="状态" align="center" prop="status" width="100">
         <template slot-scope="scope">
-          <el-tag :type="getProcessStatusType(scope.row.processStatus)">{{ getProcessStatusLabel(scope.row.processStatus) }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="发起时间" align="center" prop="startTime" width="160">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.startTime) }}</span>
+          <el-tag :type="getProcessStatusType(scope.row.status)">{{ getProcessStatusLabel(scope.row.status) }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="完成时间" align="center" prop="endTime" width="160">
@@ -48,7 +43,7 @@
         <template slot-scope="scope">
           <el-button size="mini" type="text" icon="el-icon-view" @click="handleView(scope.row)">查看</el-button>
           <el-button size="mini" type="text" icon="el-icon-position" @click="handleTrack(scope.row)">追踪</el-button>
-          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleCancel(scope.row)" v-if="!scope.row.endTime">撤销</el-button>
+          <el-button size="mini" type="text" icon="el-icon-delete" @click="handleCancel(scope.row)" v-if="scope.row.status !== '已完成'">撤销</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -109,11 +104,11 @@ export default {
     },
     /** 查看详情 */
     handleView(row) {
-      this.$message.info("查看流程实例: " + row.processInstanceId)
+      this.$message.info("查看流程实例: " + row.taskId)
     },
     /** 流程追踪 */
     handleTrack(row) {
-      this.$message.info("追踪流程: " + row.processInstanceId)
+      this.$message.info("追踪流程: " + row.taskId)
     },
     /** 撤销流程 */
     handleCancel(row) {
@@ -131,10 +126,11 @@ export default {
     /** 获取流程状态类型 */
     getProcessStatusType(status) {
       const statusMap = {
-        'running': 'primary',
-        'completed': 'success',
-        'cancelled': 'info',
-        'terminated': 'danger'
+        '运行中': 'primary',
+        '审批中': 'warning',
+        '已完成': 'success',
+        '已取消': 'info',
+        '已终止': 'danger'
       }
       return statusMap[status] || ''
     },

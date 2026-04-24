@@ -96,12 +96,12 @@
         <el-row :gutter="24">
           <el-col :span="12">
             <el-form-item label="工票ID" prop="jobId">
-              <el-input-number v-model="form.jobId" :min="1" placeholder="工票ID" style="width: 100%" />
+              <el-input-number v-model="form.jobId" placeholder="工票ID" style="width: 100%" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
             <el-form-item label="工序ID" prop="processId">
-              <el-input-number v-model="form.processId" :min="1" placeholder="工序ID" style="width: 100%" />
+              <el-input-number v-model="form.processId" placeholder="工序ID" style="width: 100%" />
             </el-form-item>
           </el-col>
         </el-row>
@@ -120,7 +120,7 @@
         <el-row :gutter="24">
           <el-col :span="12">
             <el-form-item label="次品数量" prop="defectQty">
-              <el-input-number v-model="form.defectQty" :min="1" placeholder="数量" style="width: 100%" />
+              <el-input-number v-model="form.defectQty" placeholder="数量" style="width: 100%" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -211,6 +211,13 @@ import { listDefect, getDefect, addDefect, updateDefect, delDefect } from "@/api
 export default {
   name: "ProduceDefect",
   data() {
+    const validatePositiveInteger = (message) => (rule, value, callback) => {
+      if (value === null || value === undefined || value === "" || !Number.isInteger(Number(value)) || Number(value) <= 0) {
+        callback(new Error(message));
+        return;
+      }
+      callback();
+    };
     return {
       loading: true,
       submitLoading: false,
@@ -231,9 +238,9 @@ export default {
       },
       form: {},
       rules: {
-        jobId: [{ required: true, message: "不能为空", trigger: "blur" }],
-        processId: [{ required: true, message: "不能为空", trigger: "blur" }],
-        defectQty: [{ required: true, message: "不能为空", trigger: "blur" }]
+        jobId: [{ validator: validatePositiveInteger("工票ID必须大于0"), trigger: "change" }],
+        processId: [{ validator: validatePositiveInteger("工序ID必须大于0"), trigger: "change" }],
+        defectQty: [{ validator: validatePositiveInteger("数量必须大于0"), trigger: "change" }]
       }
     };
   },
@@ -263,8 +270,12 @@ export default {
       this.multiple = !selection.length;
     },
     reset() {
-      this.form = { id: null, jobId: null, processId: null, processName: null, employeeId: null, employeeName: null, defectQty: 1, defectReasonCode: null, defectReasonDesc: null, isScrap: "0", isRepair: "0", findTime: null, outsourceId: null, isOutsource: "0", defectCategory: null, defectLevel: null, handleType: null, handleResult: null, responsibility: null, isBrokenNeedle: "0", needleConfirmBy: null, needleConfirmTime: null, remark: null };
+      this.form = { id: null, jobId: null, processId: null, processName: null, employeeId: null, employeeName: null, defectQty: null, defectReasonCode: null, defectReasonDesc: null, isScrap: "0", isRepair: "0", findTime: null, outsourceId: null, isOutsource: "0", defectCategory: null, defectLevel: null, handleType: null, handleResult: null, responsibility: null, isBrokenNeedle: "0", needleConfirmBy: null, needleConfirmTime: null, remark: null };
       this.resetForm("form");
+    },
+    cancel() {
+      this.open = false;
+      this.reset();
     },
     handleAdd() {
       this.reset();

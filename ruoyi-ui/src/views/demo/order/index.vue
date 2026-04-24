@@ -14,17 +14,6 @@
       </el-col>
       <el-col :span="8">
         <el-input
-          v-model="queryParams.customerName"
-          placeholder="客户名称"
-          clearable
-          @keyup.enter.native="handleQuery"
-          style="margin-bottom: 10px"
-        >
-          <el-button slot="append" icon="el-icon-search" @click="handleQuery" />
-        </el-input>
-      </el-col>
-      <el-col :span="8">
-        <el-input
           v-model="queryParams.styleCode"
           placeholder="款号"
           clearable
@@ -34,11 +23,13 @@
           <el-button slot="append" icon="el-icon-search" @click="handleQuery" />
         </el-input>
       </el-col>
-    </el-row>
-
-    <el-row :gutter="20" style="margin-bottom: 10px">
-      <el-col :span="6">
-        <el-select v-model="queryParams.status" placeholder="订单状态" clearable style="width: 100%">
+      <el-col :span="8">
+        <el-select
+          v-model="queryParams.status"
+          placeholder="订单状态"
+          clearable
+          style="width: 100%; margin-bottom: 10px"
+        >
           <el-option label="待处理" value="0" />
           <el-option label="已确认" value="1" />
           <el-option label="已生产" value="2" />
@@ -46,6 +37,9 @@
           <el-option label="已完成" value="4" />
         </el-select>
       </el-col>
+    </el-row>
+
+    <el-row :gutter="20" style="margin-bottom: 10px">
       <el-col :span="6">
         <el-button type="primary" @click="handleQuery">查询</el-button>
         <el-button @click="handleReset">重置</el-button>
@@ -53,16 +47,11 @@
     </el-row>
 
     <el-table v-loading="loading" :data="orderList">
-      <el-table-column label="订单号" prop="orderNo" width="150" />
-      <el-table-column label="客户名称" prop="customerName" width="180" />
+      <el-table-column label="订单号" prop="orderNo" width="160" />
+      <el-table-column label="工厂ID" prop="factoryId" width="100" />
       <el-table-column label="款号" prop="styleCode" width="140" />
-      <el-table-column label="数量" prop="qty" width="100">
-        <template slot-scope="scope">
-          {{ scope.row.qty }} {{ scope.row.unit }}
-        </template>
-      </el-table-column>
-      <el-table-column label="单价" prop="price" width="100" />
-      <el-table-column label="总金额" prop="totalAmount" width="120" />
+      <el-table-column label="款式名称" prop="styleName" width="180" />
+      <el-table-column label="数量" prop="qty" width="100" />
       <el-table-column label="FOB价格" prop="fobPrice" width="120" />
       <el-table-column label="CIF价格" prop="cifPrice" width="120" />
       <el-table-column label="CNF价格" prop="cnfPrice" width="120" />
@@ -97,8 +86,8 @@
         <el-form-item label="订单号" prop="orderNo">
           <el-input v-model="form.orderNo" placeholder="请输入订单号" />
         </el-form-item>
-        <el-form-item label="客户名称" prop="customerName">
-          <el-input v-model="form.customerName" placeholder="请输入客户名称" />
+        <el-form-item label="工厂ID" prop="factoryId">
+          <el-input-number v-model="form.factoryId" :min="1" :step="1" style="width: 100%" />
         </el-form-item>
         <el-form-item label="款号" prop="styleCode">
           <el-input v-model="form.styleCode" placeholder="请输入款号" />
@@ -108,9 +97,6 @@
         </el-form-item>
         <el-form-item label="数量" prop="qty">
           <el-input-number v-model="form.qty" :min="1" :step="1" style="width: 100%" />
-        </el-form-item>
-        <el-form-item label="单价" prop="price">
-          <el-input-number v-model="form.price" :min="0" :step="0.01" style="width: 100%" />
         </el-form-item>
         <el-form-item label="FOB价格" prop="fobPrice">
           <el-input-number v-model="form.fobPrice" :min="0" :step="0.01" style="width: 100%" />
@@ -151,12 +137,11 @@ import { getList, getById, add, update, remove } from "@/api/demo/order";
 function createEmptyForm() {
   return {
     id: undefined,
+    factoryId: 1,
     orderNo: "",
-    customerName: "",
     styleCode: "",
     styleName: "",
     qty: 1,
-    price: 0,
     fobPrice: 0,
     cifPrice: 0,
     cnfPrice: 0,
@@ -177,7 +162,6 @@ export default {
         pageNum: 1,
         pageSize: 10,
         orderNo: "",
-        customerName: "",
         styleCode: "",
         status: undefined
       },
@@ -185,11 +169,13 @@ export default {
       dialogTitle: "",
       form: createEmptyForm(),
       rules: {
+        factoryId: [{ required: true, message: "请输入工厂ID", trigger: "blur" }],
         orderNo: [{ required: true, message: "请输入订单号", trigger: "blur" }],
-        customerName: [{ required: true, message: "请输入客户名称", trigger: "blur" }],
         styleCode: [{ required: true, message: "请输入款号", trigger: "blur" }],
+        styleName: [{ required: true, message: "请输入款式名称", trigger: "blur" }],
         qty: [{ required: true, message: "请输入数量", trigger: "blur" }],
-        price: [{ required: true, message: "请输入单价", trigger: "blur" }]
+        dueDays: [{ required: true, message: "请输入交期", trigger: "blur" }],
+        status: [{ required: true, message: "请选择订单状态", trigger: "change" }]
       }
     };
   },
@@ -199,12 +185,14 @@ export default {
   methods: {
     getList() {
       this.loading = true;
-      getList(this.queryParams).then(response => {
-        this.orderList = response.rows;
-        this.total = response.total;
-      }).finally(() => {
-        this.loading = false;
-      });
+      getList(this.queryParams)
+        .then(response => {
+          this.orderList = response.rows;
+          this.total = response.total;
+        })
+        .finally(() => {
+          this.loading = false;
+        });
     },
     handleQuery() {
       this.queryParams.pageNum = 1;
@@ -215,7 +203,6 @@ export default {
         pageNum: 1,
         pageSize: 10,
         orderNo: "",
-        customerName: "",
         styleCode: "",
         status: undefined
       };

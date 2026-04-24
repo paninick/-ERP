@@ -224,19 +224,32 @@ export default {
         getEmployeeRank(),
         getBottleneckWarnings()
       ]).then(([resStats, resWip, resRank, resBottle]) => {
-        this.stats = resStats.data;
-        this.wipStats = resWip.data;
-        this.employeeRank = resRank.data;
-        this.bottleneckWarnings = resBottle.data;
-        this.loading = false;
+        this.stats = {
+          ...this.stats,
+          ...(resStats.data || {})
+        };
+        this.wipStats = resWip.data || [];
+        this.employeeRank = resRank.data || [];
+        this.bottleneckWarnings = resBottle.data || [];
       }).catch(() => {
+        this.wipStats = [];
+        this.employeeRank = [];
+        this.bottleneckWarnings = [];
+        this.$modal.msgError("生产看板数据加载失败，请稍后重试");
+      }).finally(() => {
         this.loading = false;
       });
     },
     connectWs() {
+      // Dev proxy on localhost:80 is unstable for SockJS/STOMP and can crash vue-cli-service.
+      // Keep realtime push enabled in non-dev environments; local smoke relies on manual refresh.
+      if (process.env.NODE_ENV === 'development') {
+        this.wsConnected = false;
+        return;
+      }
       try {
-        const baseUrl = process.env.VUE_APP_BASE_API || '';
-        const wsUrl = baseUrl.replace(/^http/, 'http') + '/ws/erp';
+        const baseUrl = (process.env.VUE_APP_BASE_API || '').replace(/\/$/, '');
+        const wsUrl = `${window.location.origin}${baseUrl}/ws/erp`;
         const socket = new SockJS(wsUrl);
         const client = Stomp.over(socket);
         client.debug = () => {}; // 静默 STOMP debug 日志

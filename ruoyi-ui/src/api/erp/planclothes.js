@@ -42,3 +42,10 @@ export function delPlanClothes(id) {
     method: 'delete'
   })
 }
+
+// Backward-compatible aliases for older imports
+export const listPlanclothes = listPlanClothes
+export const getPlanclothes = getPlanClothes
+export const addPlanclothes = addPlanClothes
+export const updatePlanclothes = updatePlanClothes
+export const delPlanclothes = delPlanClothes

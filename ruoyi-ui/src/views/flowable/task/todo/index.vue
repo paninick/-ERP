@@ -37,8 +37,8 @@
       <el-table-column type="selection" width="50" align="center" />
       <el-table-column label="任务ID" align="center" prop="taskId" width="150" :show-overflow-tooltip="true" />
       <el-table-column label="流程名称" align="center" prop="processName" :show-overflow-tooltip="true" />
-      <el-table-column label="当前节点" align="center" prop="taskName" :show-overflow-tooltip="true" />
-      <el-table-column label="发起人" align="center" prop="startUserName" width="100" />
+      <el-table-column label="当前节点" align="center" prop="nodeName" :show-overflow-tooltip="true" />
+      <el-table-column label="发起人" align="center" prop="initiatorName" width="100" />
       <el-table-column label="优先级" align="center" prop="priority" width="80">
         <template slot-scope="scope">
           <el-tag :type="getPriorityType(scope.row.priority)" size="mini">{{ getPriorityLabel(scope.row.priority) }}</el-tag>
@@ -221,7 +221,10 @@ export default {
       const priorityMap = {
         'high': 'danger',
         'medium': 'warning',
-        'low': 'info'
+        'low': 'info',
+        '1': 'danger',
+        '2': 'warning',
+        '3': 'info'
       }
       return priorityMap[priority] || ''
     },
@@ -230,7 +233,10 @@ export default {
       const priorityMap = {
         'high': '高',
         'medium': '中',
-        'low': '低'
+        'low': '低',
+        '1': '高',
+        '2': '中',
+        '3': '低'
       }
       return priorityMap[priority] || priority
     }

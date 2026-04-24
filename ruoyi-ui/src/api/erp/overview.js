@@ -1,4 +1,3 @@
-
 import request from '@/utils/request'
 
 // 查询打样总览列表
@@ -10,7 +9,7 @@ export function listOverview(query) {
   })
 }
 
-// 查询打样总览详细
+// 查询打样总览详情
 export function getOverview(id) {
   return request({
     url: '/erp/overview/' + id,
@@ -53,12 +52,3 @@ export function exportOverview(query) {
     responseType: 'blob'
   })
 }
-
-// 获取打样总览统计信息
-export function getOverviewStatistics() {
-  return request({
-    url: '/erp/overview/statistics',
-    method: 'get'
-  })
-}
-

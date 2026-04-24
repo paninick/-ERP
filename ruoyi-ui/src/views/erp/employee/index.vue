@@ -1,33 +1,33 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
-      <el-form-item label="员工编号" prop="employeeCode">
+      <el-form-item :label="$t('employee.code')" prop="employeeCode">
         <el-input
           v-model="queryParams.employeeCode"
-          placeholder="请输入员工编号"
+          :placeholder="$t('validation.enter', [$t('employee.code')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="员工姓名" prop="employeeName">
+      <el-form-item :label="$t('employee.name')" prop="employeeName">
         <el-input
           v-model="queryParams.employeeName"
-          placeholder="请输入员工姓名"
+          :placeholder="$t('validation.enter', [$t('employee.name')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="所属部门" prop="department">
+      <el-form-item :label="$t('employee.department')" prop="department">
         <el-input
           v-model="queryParams.department"
-          placeholder="请输入所属部门"
+          :placeholder="$t('validation.enter', [$t('employee.department')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('btn.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('btn.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -40,7 +40,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['erp:employee:add']"
-        >新增</el-button>
+        >{{ $t('btn.add') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -51,7 +51,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['erp:employee:edit']"
-        >修改</el-button>
+        >{{ $t('btn.edit') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -62,7 +62,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['erp:employee:remove']"
-        >删除</el-button>
+        >{{ $t('btn.delete') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -72,34 +72,34 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['erp:employee:export']"
-        >导出</el-button>
+        >{{ $t('btn.export') }}</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="employeeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="员工编号" align="center" prop="employeeCode" />
-      <el-table-column label="员工姓名" align="center" prop="employeeName" />
-      <el-table-column label="联系电话" align="center" prop="phone" />
-      <el-table-column label="所属车间" align="center" prop="department" />
-      <el-table-column label="工位" align="center" prop="station" />
-      <el-table-column label="入职日期" align="center" prop="entryDate" width="120">
+      <el-table-column :label="$t('employee.code')" align="center" prop="employeeCode" />
+      <el-table-column :label="$t('employee.name')" align="center" prop="employeeName" />
+      <el-table-column :label="$t('employee.phone')" align="center" prop="phone" />
+      <el-table-column :label="$t('employee.department')" align="center" prop="department" />
+      <el-table-column :label="$t('employee.station')" align="center" prop="station" />
+      <el-table-column :label="$t('employee.entryDate')" align="center" prop="entryDate" width="120">
         <template slot-scope="scope">
           <span>{{ scope.row.entryDate }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="状态" align="center" prop="status">
+      <el-table-column :label="$t('employee.status')" align="center" prop="status">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_user_status" :value="scope.row.status"/>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+      <el-table-column :label="$t('system.createTime')" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('system.operation')" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -107,14 +107,14 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['erp:employee:edit']"
-          >修改</el-button>
+          >{{ $t('btn.edit') }}</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['erp:employee:remove']"
-          >删除</el-button>
+          >{{ $t('btn.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -127,58 +127,57 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改员工对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="60%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="员工编号" prop="employeeCode">
-          <el-input v-model="form.employeeCode" placeholder="请输入员工编号" />
+        <el-form-item :label="$t('employee.code')" prop="employeeCode">
+          <el-input v-model="form.employeeCode" :placeholder="$t('validation.enter', [$t('employee.code')])" />
         </el-form-item>
-        <el-form-item label="员工姓名" prop="employeeName">
-          <el-input v-model="form.employeeName" placeholder="请输入员工姓名" />
+        <el-form-item :label="$t('employee.name')" prop="employeeName">
+          <el-input v-model="form.employeeName" :placeholder="$t('validation.enter', [$t('employee.name')])" />
         </el-form-item>
-        <el-form-item label="联系电话" prop="phone">
-          <el-input v-model="form.phone" placeholder="请输入联系电话" />
+        <el-form-item :label="$t('employee.phone')" prop="phone">
+          <el-input v-model="form.phone" :placeholder="$t('validation.enter', [$t('employee.phone')])" />
         </el-form-item>
-        <el-form-item label="身份证号" prop="idCard">
-          <el-input v-model="form.idCard" placeholder="请输入身份证号" />
+        <el-form-item :label="$t('employee.idCard')" prop="idCard">
+          <el-input v-model="form.idCard" :placeholder="$t('validation.enter', [$t('employee.idCard')])" />
         </el-form-item>
-        <el-form-item label="所属车间" prop="department">
-          <el-input v-model="form.department" placeholder="请输入所属车间" />
+        <el-form-item :label="$t('employee.department')" prop="department">
+          <el-input v-model="form.department" :placeholder="$t('validation.enter', [$t('employee.department')])" />
         </el-form-item>
-        <el-form-item label="工位" prop="station">
-          <el-input v-model="form.station" placeholder="请输入工位" />
+        <el-form-item :label="$t('employee.station')" prop="station">
+          <el-input v-model="form.station" :placeholder="$t('validation.enter', [$t('employee.station')])" />
         </el-form-item>
-        <el-form-item label="入职日期" prop="entryDate">
+        <el-form-item :label="$t('employee.entryDate')" prop="entryDate">
           <el-date-picker
             v-model="form.entryDate"
             type="date"
-            placeholder="选择入职日期"
+            :placeholder="$t('employee.entryDate')"
             value-format="yyyy-MM-dd"
             align="right"
           />
         </el-form-item>
-        <el-form-item label="离职日期" prop="leaveDate">
+        <el-form-item :label="$t('employee.leaveDate')" prop="leaveDate">
           <el-date-picker
             v-model="form.leaveDate"
             type="date"
-            placeholder="选择离职日期"
+            :placeholder="$t('employee.leaveDate')"
             value-format="yyyy-MM-dd"
             align="right"
           />
         </el-form-item>
-        <el-form-item label="状态" prop="status">
+        <el-form-item :label="$t('employee.status')" prop="status">
           <el-radio-group v-model="form.status">
-            <el-radio label="0">在职</el-radio>
-            <el-radio label="1">离职</el-radio>
+            <el-radio label="0">{{ $t('employee.active') }}</el-radio>
+            <el-radio label="1">{{ $t('employee.inactive') }}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+        <el-form-item :label="$t('system.remark')" prop="remark">
+          <el-input v-model="form.remark" type="textarea" :placeholder="$t('validation.enter', [$t('system.remark')])" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">{{ $t('btn.confirm') }}</el-button>
+        <el-button @click="cancel">{{ $t('btn.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -192,25 +191,16 @@ export default {
   dicts: ['sys_user_status'],
   data() {
     return {
-      // 遮罩层
       loading: true,
-      // 选中数组
       ids: [],
-      // 非单个禁用
       single: true,
-      // 非多个禁用
       multiple: true,
-      // 显示搜索条件
       showSearch: true,
-      // 总条数
       total: 0,
-      // 员工表格数据
       employeeList: [],
-      // 弹出层标题
       title: "",
-      // 是否显示弹出层
       open: false,
-      // 查询参数
+      submitLoading: false,
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -219,10 +209,18 @@ export default {
         department: null,
         status: null
       },
-      // 表单参数
-      form: {},
-      // 表单校验
-      rules: {
+      form: {}
+    }
+  },
+  computed: {
+    rules() {
+      return {
+        employeeName: [
+          { required: true, message: this.$t('validation.required'), trigger: "blur" }
+        ],
+        employeeCode: [
+          { required: true, message: this.$t('validation.required'), trigger: "blur" }
+        ]
       }
     }
   },
@@ -230,7 +228,6 @@ export default {
     this.getList()
   },
   methods: {
-    /** 查询员工列表 */
     getList() {
       this.loading = true
       listEmployee(this.queryParams).then(response => {
@@ -239,12 +236,10 @@ export default {
         this.loading = false
       })
     },
-    // 取消按钮
     cancel() {
       this.open = false
       this.reset()
     },
-    // 表单重置
     reset() {
       this.form = {
         id: null,
@@ -261,69 +256,62 @@ export default {
       }
       this.resetForm("form")
     },
-    /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1
       this.getList()
     },
-    /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm")
       this.handleQuery()
     },
-    // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
-    /** 新增按钮操作 */
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = "添加员工"
+      this.title = this.$t('employee.addTitle')
     },
-    /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset()
       const id = row.id || this.ids
       getEmployee(id).then(response => {
         this.form = response.data
         this.open = true
-        this.title = "修改员工"
+        this.title = this.$t('employee.editTitle')
       })
     },
-    /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.submitLoading = true
           if (this.form.id != null) {
             updateEmployee(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功")
+              this.$modal.msgSuccess(this.$t('msg.updateSuccess'))
               this.open = false
               this.getList()
-            })
+            }).finally(() => { this.submitLoading = false })
           } else {
             addEmployee(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功")
+              this.$modal.msgSuccess(this.$t('msg.addSuccess'))
               this.open = false
               this.getList()
-            })
+            }).finally(() => { this.submitLoading = false })
           }
         }
       })
     },
-    /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids
-      this.$modal.confirm('是否确认删除员工编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm(this.$t('msg.deleteConfirm', [ids])).then(function() {
         return delEmployee(ids)
       }).then(() => {
         this.getList()
-        this.$modal.msgSuccess("删除成功")
+        this.$modal.msgSuccess(this.$t('msg.deleteSuccess'))
       }).catch(() => {})
     },
-    /** 导出按钮操作 */
     handleExport() {
       this.download('erp/employee/export', {
         ...this.queryParams

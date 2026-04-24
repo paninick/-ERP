@@ -164,6 +164,10 @@ export default {
       this.form = { id: null, corpType: null, corpId: null, socialNumber: null, corpName: null, corpAddress: null, corpPhone: null, corpBank: null, corpBankNo: null, remark: null };
       this.resetForm("form");
     },
+    cancel() {
+      this.open = false;
+      this.reset();
+    },
     handleAdd() {
       this.reset();
       this.open = true;

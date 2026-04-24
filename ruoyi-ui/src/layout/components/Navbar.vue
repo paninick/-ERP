@@ -160,12 +160,12 @@ export default {
         key: 'themeStyle',
         value: theme
       });
-      this.$message.success('界面风格切换成功');
+      this.$message.success(this.$t('system.switchThemeSuccess'));
     },
     handleSetLanguage(lang) {
       this.$i18n.locale = lang;
       this.$store.dispatch('app/setLanguage', lang);
-      this.$message.success(lang === 'zh-CN' ? '切换语言成功' : lang === 'en-US' ? 'Switch Language Success' : '言語切り替え成功');
+      this.$message.success(this.$t('system.switchLanguageSuccess'));
     }
   }
 }

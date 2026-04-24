@@ -126,7 +126,7 @@
       </el-form>
       <div slot="footer">
         <el-button size="small" @click="approveVisible = false">取消</el-button>
-        <el-button :type="approveForm.approved ? 'primary' : 'danger'" size="small" @click="submitApprove">确定</el-button>
+        <el-button :type="approveForm.approved ? 'primary' : 'danger'" size="small" :loading="submitLoading" @click="submitApprove">确定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -145,6 +145,7 @@ export default {
       total: 0,
       stats: {},
       queryParams: { pageNum: 1, pageSize: 20, materialCode: "", materialName: "", isOverLimit: "", approvalStatus: "" },
+      submitLoading: false,
       approveVisible: false,
       approveForm: { id: null, approved: true, remark: "" }
     };
@@ -175,12 +176,13 @@ export default {
     },
     submitApprove() {
       const { id, approved, remark } = this.approveForm;
+      this.submitLoading = true;
       approveLoss(id, approved, remark).then(() => {
         this.$modal.msgSuccess(approved ? "已批准" : "已拒绝");
         this.approveVisible = false;
         this.getList();
         this.getStats();
-      });
+      }).finally(() => { this.submitLoading = false; });
     },
     handleExport() {
       exportLossControl(this.queryParams).then(res => {

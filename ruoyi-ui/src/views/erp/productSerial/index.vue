@@ -179,7 +179,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -242,6 +242,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      submitLoading: false,
       // 是否显示扫码对话框
       scanOpen: false,
       // 扫码流水号
@@ -377,27 +378,32 @@ export default {
         return;
       }
       scanProductSerial(this.scanSerialNo).then(response => {
-        this.scanResult = response.data;
+        this.scanResult = response.data || null;
+        if (!this.scanResult) {
+          this.$modal.msgWarning("未查询到对应产品序列号");
+        }
       }).catch(() => {
         this.scanResult = null;
+        this.$modal.msgError("扫码查询失败，请检查后重试");
       });
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.submitLoading = true
           if (this.form.id != null) {
             updateProductSerial(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
-            });
+            }).finally(() => { this.submitLoading = false });
           } else {
             addProductSerial(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
-            });
+            }).finally(() => { this.submitLoading = false });
           }
         }
       });

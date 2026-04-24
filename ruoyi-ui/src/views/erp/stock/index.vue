@@ -1,25 +1,22 @@
 <template>
   <div class="app-container">
-    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
-      <el-form-item label="产品名称" prop="productName">
+    <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="90px">
+      <el-form-item :label="$t('stock.materialId')" prop="materialId">
         <el-input
-          v-model="queryParams.productName"
-          placeholder="请输入产品名称"
+          v-model="queryParams.materialId"
+          :placeholder="$t('validation.enter', [$t('stock.materialId')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="产品编号" prop="productNo">
-        <el-input
-          v-model="queryParams.productNo"
-          placeholder="产品编号"
-          clearable
-          @keyup.enter.native="handleQuery"
-        />
+      <el-form-item :label="$t('stock.warehouse')" prop="warehouseId">
+        <el-select v-model="queryParams.warehouseId" :placeholder="$t('stock.warehouse')" clearable filterable>
+          <el-option v-for="w in warehouseList" :key="w.id" :label="w.warehouseName" :value="w.id" />
+        </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('btn.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('btn.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -27,33 +24,34 @@
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
-    <el-table v-loading="loading" :data="stockList">
-      <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="类型" align="center" prop="type" />
-      <el-table-column label="产品名称" align="center" prop="productName" />
-      <el-table-column label="产品编号" align="center" prop="productNo" />
-      <el-table-column label="主料成分" align="center" prop="mainComposition" />
-      <el-table-column label="主料门幅" align="center" prop="mainWidth" />
-      <el-table-column label="主料克重" align="center" prop="mainWeight" />
-      <el-table-column label="辅料成分" align="center" prop="auxiliaryComposition" />
-      <el-table-column label="辅料规格" align="center" prop="auxiliarySpec" />
-      <el-table-column label="计量单位" align="center" prop="unit" />
-      <el-table-column label="颜色" align="center" prop="color" />
-      <el-table-column label="库存" align="center" prop="stock" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+    <el-table v-loading="loading" :data="stockList" border>
+      <el-table-column label="ID" align="center" prop="id" width="70" />
+      <el-table-column :label="$t('stock.materialId')" align="center" prop="materialId" width="90" />
+      <el-table-column label="SKU ID" align="center" prop="skuId" width="80" />
+      <el-table-column :label="$t('stock.warehouseId')" align="center" prop="warehouseId" width="90" />
+      <el-table-column :label="$t('stock.invQty')" align="center" prop="invQty" width="110">
         <template slot-scope="scope">
-          <el-button
-            size="mini"
-            type="text"
-            icon="el-icon-view"
-            @click="handleView(scope.row)"
-          >查看</el-button>
+          <span style="font-weight: 600; color: var(--app-primary-color)">{{ scope.row.invQty }}</span>
         </template>
       </el-table-column>
+      <el-table-column :label="$t('stock.lockQty')" align="center" prop="lockQty" width="110">
+        <template slot-scope="scope">
+          <span style="color: var(--app-warning-color)">{{ scope.row.lockQty || 0 }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('stock.available')" align="center" width="110">
+        <template slot-scope="scope">
+          <span style="font-weight: 700; color: var(--app-success-color)">
+            {{ (scope.row.invQty || 0) - (scope.row.lockQty || 0) }}
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('system.createTime')" align="center" prop="createTime" width="160" />
+      <el-table-column :label="$t('system.remark')" align="center" prop="remark" :show-overflow-tooltip="true" />
     </el-table>
 
     <pagination
-      v-show="total>0"
+      v-show="total > 0"
       :total="total"
       :page.sync="queryParams.pageNum"
       :limit.sync="queryParams.pageSize"
@@ -63,10 +61,11 @@
 </template>
 
 <script>
-import { listStock, getStock, delStock, addStock, updateStock } from "@/api/erp/stock"
+import { listStock } from '@/api/erp/stock'
+import { listWarehouse } from '@/api/erp/warehouse'
 
 export default {
-  name: "Stock",
+  name: 'Stock',
   dicts: [],
   data() {
     return {
@@ -74,133 +73,40 @@ export default {
       showSearch: true,
       total: 0,
       stockList: [],
+      warehouseList: [],
       queryParams: {
         pageNum: 1,
         pageSize: 10,
-        productName: null,
-        productNo: null,
+        materialId: undefined,
+        warehouseId: undefined
       }
     }
   },
   created() {
     this.getList()
+    this.getWarehouses()
   },
   methods: {
     getList() {
       this.loading = true
-      this.stockList = [
-        {
-          id: 1,
-          type: '面料',
-          productName: '摇粒绒',
-          productNo: '',
-          mainComposition: '',
-          mainWidth: '150 cm',
-          mainWeight: '300 g/m²',
-          auxiliaryComposition: '',
-          auxiliarySpec: '',
-          unit: '米',
-          color: '黑',
-          stock: '506.88'
-        },
-        {
-          id: 2,
-          type: '面料',
-          productName: '摇粒绒',
-          productNo: '',
-          mainComposition: '',
-          mainWidth: '150 cm',
-          mainWeight: '300 g/m²',
-          auxiliaryComposition: '',
-          auxiliarySpec: '',
-          unit: '米',
-          color: '米白',
-          stock: '394.24'
-        },
-        {
-          id: 3,
-          type: '面料',
-          productName: '摇粒绒',
-          productNo: '',
-          mainComposition: '',
-          mainWidth: '150 cm',
-          mainWeight: '300 g/m²',
-          auxiliaryComposition: '',
-          auxiliarySpec: '',
-          unit: '米',
-          color: '浅咖',
-          stock: '506.88'
-        },
-        {
-          id: 4,
-          type: '纱线',
-          productName: '全腈冰岛毛',
-          productNo: '',
-          mainComposition: '',
-          mainWidth: '',
-          mainWeight: '',
-          auxiliaryComposition: '',
-          auxiliarySpec: '',
-          unit: '千克',
-          color: '米',
-          stock: '50.6'
-        },
-        {
-          id: 5,
-          type: '纱线',
-          productName: '全腈冰岛毛',
-          productNo: '',
-          mainComposition: '',
-          mainWidth: '',
-          mainWeight: '',
-          auxiliaryComposition: '',
-          auxiliarySpec: '',
-          unit: '千克',
-          color: '摩卡',
-          stock: '40.04'
-        },
-        {
-          id: 6,
-          type: '纱线',
-          productName: '全腈冰岛毛',
-          productNo: '',
-          mainComposition: '',
-          mainWidth: '',
-          mainWeight: '',
-          auxiliaryComposition: '',
-          auxiliarySpec: '',
-          unit: '千克',
-          color: '蓝',
-          stock: '50.6'
-        },
-        {
-          id: 7,
-          type: '纱线',
-          productName: '全腈冰岛毛',
-          productNo: '',
-          mainComposition: '',
-          mainWidth: '',
-          mainWeight: '',
-          auxiliaryComposition: '',
-          auxiliarySpec: '',
-          unit: '千克',
-          color: '艾青',
-          stock: '40.04'
-        }
-      ]
-      this.total = 7
-      this.loading = false
+      listStock(this.queryParams).then(res => {
+        this.stockList = res.rows || []
+        this.total = res.total || 0
+        this.loading = false
+      }).catch(() => { this.loading = false })
+    },
+    getWarehouses() {
+      listWarehouse({ pageSize: 999 }).then(res => {
+        this.warehouseList = res.rows || []
+      }).catch(() => {})
     },
     handleQuery() {
       this.queryParams.pageNum = 1
       this.getList()
     },
     resetQuery() {
-      this.resetForm("queryForm")
+      this.resetForm('queryForm')
       this.handleQuery()
-    },
-    handleView(row) {
-      this.$message.info('查看功能待实现')
     }
   }
 }

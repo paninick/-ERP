@@ -189,7 +189,7 @@
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -239,6 +239,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      submitLoading: false,
       // 是否显示明细弹出层
       detailOpen: false,
       // 明细加载
@@ -347,7 +348,11 @@ export default {
       this.detailLoading = true;
       this.detailOpen = true;
       listPiecewagedetailByWage(id).then(response => {
-        this.detailList = response.data;
+        this.detailList = response.data || [];
+      }).catch(() => {
+        this.detailList = [];
+        this.$modal.msgError("工资明细加载失败，请稍后重试");
+      }).finally(() => {
         this.detailLoading = false;
       });
     },
@@ -355,18 +360,19 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.submitLoading = true
           if (this.form.id != null) {
             updatePiecewage(this.form).then(response => {
               this.$modal.msgSuccess("修改成功");
               this.open = false;
               this.getList();
-            });
+            }).finally(() => { this.submitLoading = false });
           } else {
             addPiecewage(this.form).then(response => {
               this.$modal.msgSuccess("新增成功");
               this.open = false;
               this.getList();
-            });
+            }).finally(() => { this.submitLoading = false });
           }
         }
       });

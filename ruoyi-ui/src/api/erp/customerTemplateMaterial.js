@@ -3,7 +3,7 @@ import request from '@/utils/request'
 // 查询客户模板材料列表
 export function listCustomerTemplateMaterial(query) {
   return request({
-    url: '/erp/customerTemplateMaterial/list',
+    url: '/erp/customerTemplate/material/list',
     method: 'get',
     params: query
   })
@@ -12,7 +12,7 @@ export function listCustomerTemplateMaterial(query) {
 // 查询客户模板材料详细
 export function getCustomerTemplateMaterial(id) {
   return request({
-    url: '/erp/customerTemplateMaterial/' + id,
+    url: '/erp/customerTemplate/material/' + id,
     method: 'get'
   })
 }
@@ -20,7 +20,7 @@ export function getCustomerTemplateMaterial(id) {
 // 新增客户模板材料
 export function addCustomerTemplateMaterial(data) {
   return request({
-    url: '/erp/customerTemplateMaterial',
+    url: '/erp/customerTemplate/material',
     method: 'post',
     data: data
   })
@@ -29,7 +29,7 @@ export function addCustomerTemplateMaterial(data) {
 // 修改客户模板材料
 export function updateCustomerTemplateMaterial(data) {
   return request({
-    url: '/erp/customerTemplateMaterial',
+    url: '/erp/customerTemplate/material',
     method: 'put',
     data: data
   })
@@ -38,7 +38,7 @@ export function updateCustomerTemplateMaterial(data) {
 // 删除客户模板材料
 export function delCustomerTemplateMaterial(id) {
   return request({
-    url: '/erp/customerTemplateMaterial/' + id,
+    url: '/erp/customerTemplate/material/' + id,
     method: 'delete'
   })
 }
@@ -46,7 +46,7 @@ export function delCustomerTemplateMaterial(id) {
 // 导出客户模板材料
 export function exportCustomerTemplateMaterial(query) {
   return request({
-    url: '/erp/customerTemplateMaterial/export',
+    url: '/erp/customerTemplate/material/export',
     method: 'get',
     params: query,
     responseType: 'blob'

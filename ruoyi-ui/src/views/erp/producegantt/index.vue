@@ -94,7 +94,7 @@
       </el-form>
       <div slot="footer">
         <el-button size="small" @click="rescheduleVisible = false">取消</el-button>
-        <el-button type="primary" size="small" v-hasPermi="['erp:producegantt:edit']" @click="submitReschedule">确定</el-button>
+        <el-button type="primary" size="small" :loading="submitLoading" v-hasPermi="['erp:producegantt:edit']" @click="submitReschedule">确定</el-button>
       </div>
     </el-dialog>
   </div>
@@ -112,6 +112,7 @@ export default {
       dateAxis: [],
       today: new Date().toISOString().slice(0, 10),
       queryParams: { startDate: "", endDate: "", process: "" },
+      submitLoading: false,
       rescheduleVisible: false,
       rescheduleForm: { id: null, process: "", newStartDate: "", newDueDate: "" }
     };
@@ -208,11 +209,12 @@ export default {
     },
     submitReschedule() {
       const { id, newStartDate, newDueDate } = this.rescheduleForm;
+      this.submitLoading = true;
       updatePlanDate(id, newStartDate, newDueDate).then(() => {
         this.$modal.msgSuccess("排期已更新");
         this.rescheduleVisible = false;
         this.loadData();
-      });
+      }).finally(() => { this.submitLoading = false; });
     }
   }
 };

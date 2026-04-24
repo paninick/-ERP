@@ -1,48 +1,48 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
-      <el-form-item label="打样id" prop="noticeId">
+      <el-form-item :label="$t('cost.noticeId')" prop="noticeId">
         <el-input
           v-model="queryParams.noticeId"
-          placeholder="请输入打样id"
+          :placeholder="$t('validation.enter', [$t('cost.noticeId')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="工艺书id" prop="techId">
+      <el-form-item :label="$t('cost.techId')" prop="techId">
         <el-input
           v-model="queryParams.techId"
-          placeholder="请输入工艺书id"
+          :placeholder="$t('validation.enter', [$t('cost.techId')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="主料id" prop="materialId">
+      <el-form-item :label="$t('cost.materialId')" prop="materialId">
         <el-input
           v-model="queryParams.materialId"
-          placeholder="请输入主料id"
+          :placeholder="$t('validation.enter', [$t('cost.materialId')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="颜色" prop="color">
+      <el-form-item :label="$t('cost.color')" prop="color">
         <el-input
           v-model="queryParams.color"
-          placeholder="请输入颜色"
+          :placeholder="$t('validation.enter', [$t('cost.color')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="单耗" prop="unitConsumption">
+      <el-form-item :label="$t('cost.unitConsumption')" prop="unitConsumption">
         <el-input
           v-model="queryParams.unitConsumption"
-          placeholder="请输入单耗"
+          :placeholder="$t('validation.enter', [$t('cost.unitConsumption')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="损耗方式" prop="lossType">
-        <el-select v-model="queryParams.lossType" placeholder="请选择损耗方式" clearable>
+      <el-form-item :label="$t('cost.lossType')" prop="lossType">
+        <el-select v-model="queryParams.lossType" :placeholder="$t('validation.select', [$t('cost.lossType')])" clearable>
           <el-option
             v-for="dict in dict.type.erp_loss_type"
             :key="dict.value"
@@ -51,17 +51,17 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="损耗" prop="wastage">
+      <el-form-item :label="$t('cost.wastage')" prop="wastage">
         <el-input
           v-model="queryParams.wastage"
-          placeholder="请输入损耗"
+          :placeholder="$t('validation.enter', [$t('cost.wastage')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('btn.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('btn.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -74,7 +74,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['erp:cost:add']"
-        >新增</el-button>
+        >{{ $t('btn.add') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -85,7 +85,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['erp:cost:edit']"
-        >修改</el-button>
+        >{{ $t('btn.edit') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -96,7 +96,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['erp:cost:remove']"
-        >删除</el-button>
+        >{{ $t('btn.delete') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -106,7 +106,7 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['erp:cost:export']"
-        >导出</el-button>
+        >{{ $t('btn.export') }}</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -114,20 +114,20 @@
     <el-table v-loading="loading" :data="costList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="主键" align="center" prop="id" />
-      <el-table-column label="打样id" align="center" prop="noticeId" />
-      <el-table-column label="工艺书id" align="center" prop="techId" />
-      <el-table-column label="材料类型" align="center" prop="materialType" />
-      <el-table-column label="主料id" align="center" prop="materialId" />
-      <el-table-column label="颜色" align="center" prop="color" />
-      <el-table-column label="单耗" align="center" prop="unitConsumption" />
-      <el-table-column label="损耗方式" align="center" prop="lossType">
+      <el-table-column :label="$t('cost.noticeId')" align="center" prop="noticeId" />
+      <el-table-column :label="$t('cost.techId')" align="center" prop="techId" />
+      <el-table-column :label="$t('cost.materialType')" align="center" prop="materialType" />
+      <el-table-column :label="$t('cost.materialId')" align="center" prop="materialId" />
+      <el-table-column :label="$t('cost.color')" align="center" prop="color" />
+      <el-table-column :label="$t('cost.unitConsumption')" align="center" prop="unitConsumption" />
+      <el-table-column :label="$t('cost.lossType')" align="center" prop="lossType">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.erp_loss_type" :value="scope.row.lossType"/>
         </template>
       </el-table-column>
-      <el-table-column label="损耗" align="center" prop="wastage" />
-      <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('cost.wastage')" align="center" prop="wastage" />
+      <el-table-column :label="$t('system.remark')" align="center" prop="remark" />
+      <el-table-column :label="$t('system.operation')" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -135,14 +135,14 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['erp:cost:edit']"
-          >修改</el-button>
+          >{{ $t('btn.edit') }}</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['erp:cost:remove']"
-          >删除</el-button>
+          >{{ $t('btn.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -158,23 +158,23 @@
     <!-- 添加或修改工艺书单耗对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="60%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="打样id" prop="noticeId">
-          <el-input v-model="form.noticeId" placeholder="请输入打样id" />
+        <el-form-item :label="$t('cost.noticeId')" prop="noticeId">
+          <el-input v-model="form.noticeId" :placeholder="$t('validation.enter', [$t('cost.noticeId')])" />
         </el-form-item>
-        <el-form-item label="工艺书id" prop="techId">
-          <el-input v-model="form.techId" placeholder="请输入工艺书id" />
+        <el-form-item :label="$t('cost.techId')" prop="techId">
+          <el-input v-model="form.techId" :placeholder="$t('validation.enter', [$t('cost.techId')])" />
         </el-form-item>
-        <el-form-item label="主料id" prop="materialId">
-          <el-input v-model="form.materialId" placeholder="请输入主料id" />
+        <el-form-item :label="$t('cost.materialId')" prop="materialId">
+          <el-input v-model="form.materialId" :placeholder="$t('validation.enter', [$t('cost.materialId')])" />
         </el-form-item>
-        <el-form-item label="颜色" prop="color">
-          <el-input v-model="form.color" placeholder="请输入颜色" />
+        <el-form-item :label="$t('cost.color')" prop="color">
+          <el-input v-model="form.color" :placeholder="$t('validation.enter', [$t('cost.color')])" />
         </el-form-item>
-        <el-form-item label="单耗" prop="unitConsumption">
-          <el-input v-model="form.unitConsumption" placeholder="请输入单耗" />
+        <el-form-item :label="$t('cost.unitConsumption')" prop="unitConsumption">
+          <el-input v-model="form.unitConsumption" :placeholder="$t('validation.enter', [$t('cost.unitConsumption')])" />
         </el-form-item>
-        <el-form-item label="损耗方式" prop="lossType">
-          <el-select v-model="form.lossType" placeholder="请选择损耗方式">
+        <el-form-item :label="$t('cost.lossType')" prop="lossType">
+          <el-select v-model="form.lossType" :placeholder="$t('validation.select', [$t('cost.lossType')])">
             <el-option
               v-for="dict in dict.type.erp_loss_type"
               :key="dict.value"
@@ -183,16 +183,16 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="损耗" prop="wastage">
-          <el-input v-model="form.wastage" placeholder="请输入损耗" />
+        <el-form-item :label="$t('cost.wastage')" prop="wastage">
+          <el-input v-model="form.wastage" :placeholder="$t('validation.enter', [$t('cost.wastage')])" />
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
+        <el-form-item :label="$t('system.remark')" prop="remark">
           <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">{{ $t('btn.confirm') }}</el-button>
+        <el-button @click="cancel">{{ $t('btn.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -224,6 +224,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      submitLoading: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -239,8 +240,21 @@ export default {
       },
       // 表单参数
       form: {},
-      // 表单校验
-      rules: {
+    }
+  },
+  computed: {
+    // 表单校验
+    rules() {
+      return {
+        noticeId: [
+          { required: true, message: () => this.$t('validation.required'), trigger: "blur" }
+        ],
+        materialId: [
+          { required: true, message: () => this.$t('validation.required'), trigger: "blur" }
+        ],
+        unitConsumption: [
+          { required: true, message: () => this.$t('validation.required'), trigger: "blur" }
+        ]
       }
     }
   },
@@ -302,7 +316,7 @@ export default {
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = "添加工艺书单耗"
+      this.title = this.$t('cost.addTitle')
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -311,25 +325,26 @@ export default {
       getCost(id).then(response => {
         this.form = response.data
         this.open = true
-        this.title = "修改工艺书单耗"
+        this.title = this.$t('cost.editTitle')
       })
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.submitLoading = true
           if (this.form.id != null) {
             updateCost(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功")
+              this.$modal.msgSuccess(this.$t('msg.editSuccess'))
               this.open = false
               this.getList()
-            })
+            }).finally(() => { this.submitLoading = false })
           } else {
             addCost(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功")
+              this.$modal.msgSuccess(this.$t('msg.addSuccess'))
               this.open = false
               this.getList()
-            })
+            }).finally(() => { this.submitLoading = false })
           }
         }
       })
@@ -337,11 +352,11 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids
-      this.$modal.confirm('是否确认删除工艺书单耗编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm(this.$t('msg.deleteConfirm', [ids])).then(function() {
         return delCost(ids)
       }).then(() => {
         this.getList()
-        this.$modal.msgSuccess("删除成功")
+        this.$modal.msgSuccess(this.$t('msg.deleteSuccess'))
       }).catch(() => {})
     },
     /** 导出按钮操作 */

@@ -97,7 +97,7 @@
           icon="el-icon-plus"
           size="mini"
           @click="handleAdd"
-          v-hasPermi="['erp:sampleTech:add']"
+          v-hasPermi="['erp:tech:add']"
         >新增</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -108,7 +108,7 @@
           size="mini"
           :disabled="single"
           @click="handleUpdate"
-          v-hasPermi="['erp:sampleTech:edit']"
+          v-hasPermi="['erp:tech:edit']"
         >修改</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -119,7 +119,7 @@
           size="mini"
           :disabled="multiple"
           @click="handleDelete"
-          v-hasPermi="['erp:sampleTech:remove']"
+          v-hasPermi="['erp:tech:remove']"
         >删除</el-button>
       </el-col>
       <el-col :span="1.5">
@@ -129,7 +129,7 @@
           icon="el-icon-download"
           size="mini"
           @click="handleExport"
-          v-hasPermi="['erp:sampleTech:export']"
+          v-hasPermi="['erp:tech:export']"
         >导出</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
@@ -192,14 +192,14 @@
             type="text"
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
-            v-hasPermi="['erp:sampleTech:edit']"
+            v-hasPermi="['erp:tech:edit']"
           >修改</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
-            v-hasPermi="['erp:sampleTech:remove']"
+            v-hasPermi="['erp:tech:remove']"
           >删除</el-button>
         </template>
       </el-table-column>
@@ -375,7 +375,7 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -408,6 +408,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      submitLoading: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -534,18 +535,19 @@ export default {
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.submitLoading = true
           if (this.form.id != null) {
             updateTech(this.form).then(response => {
               this.$modal.msgSuccess("修改成功")
               this.open = false
               this.getList()
-            })
+            }).finally(() => { this.submitLoading = false })
           } else {
             addTech(this.form).then(response => {
               this.$modal.msgSuccess("新增成功")
               this.open = false
               this.getList()
-            })
+            }).finally(() => { this.submitLoading = false })
           }
         }
       })
@@ -562,9 +564,9 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('erp/sampleTech/export', {
+      this.download('erp/tech/export', {
         ...this.queryParams
-      }, `sampleTech_${new Date().getTime()}.xlsx`)
+      }, `tech_${new Date().getTime()}.xlsx`)
     }
   }
 }

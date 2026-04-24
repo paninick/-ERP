@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function listProofingNotice(query) {
   return request({
-    url: '/erp/proofingNotice/list',
+    url: '/erp/notice/list',
     method: 'get',
     params: query
   })
@@ -10,14 +10,14 @@ export function listProofingNotice(query) {
 
 export function getProofingNotice(noticeId) {
   return request({
-    url: '/erp/proofingNotice/' + noticeId,
+    url: '/erp/notice/' + noticeId,
     method: 'get'
   })
 }
 
 export function addProofingNotice(data) {
   return request({
-    url: '/erp/proofingNotice',
+    url: '/erp/notice',
     method: 'post',
     data: data
   })
@@ -25,7 +25,7 @@ export function addProofingNotice(data) {
 
 export function updateProofingNotice(data) {
   return request({
-    url: '/erp/proofingNotice',
+    url: '/erp/notice',
     method: 'put',
     data: data
   })
@@ -33,7 +33,7 @@ export function updateProofingNotice(data) {
 
 export function delProofingNotice(noticeId) {
   return request({
-    url: '/erp/proofingNotice/' + noticeId,
+    url: '/erp/notice/' + noticeId,
     method: 'delete'
   })
 }

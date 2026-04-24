@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
-      <el-form-item label="供应商类型" prop="supplierType">
-        <el-select v-model="queryParams.supplierType" placeholder="请选择供应商类型" clearable>
+      <el-form-item :label="$t('supplier.type')" prop="supplierType">
+        <el-select v-model="queryParams.supplierType" :placeholder="$t('validation.select', [$t('supplier.type')])" clearable>
           <el-option
             v-for="dict in dict.type.erp_supplier_type"
             :key="dict.value"
@@ -11,33 +11,33 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="供应商编号" prop="supplierNo">
+      <el-form-item :label="$t('supplier.no')" prop="supplierNo">
         <el-input
           v-model="queryParams.supplierNo"
-          placeholder="请输入供应商编号"
+          :placeholder="$t('validation.enter', [$t('supplier.no')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="供应商名称" prop="supplierName">
+      <el-form-item :label="$t('supplier.name')" prop="supplierName">
         <el-input
           v-model="queryParams.supplierName"
-          placeholder="请输入供应商名称"
+          :placeholder="$t('validation.enter', [$t('supplier.name')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="供应商简称" prop="supplierBrief">
+      <el-form-item :label="$t('supplier.brief')" prop="supplierBrief">
         <el-input
           v-model="queryParams.supplierBrief"
-          placeholder="请输入供应商简称"
+          :placeholder="$t('validation.enter', [$t('supplier.brief')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('btn.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('btn.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -50,7 +50,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['erp:supplier:add']"
-        >新增</el-button>
+        >{{ $t('btn.add') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -61,7 +61,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['erp:supplier:edit']"
-        >修改</el-button>
+        >{{ $t('btn.edit') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -72,7 +72,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['erp:supplier:remove']"
-        >删除</el-button>
+        >{{ $t('btn.delete') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -82,7 +82,7 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['erp:supplier:export']"
-        >导出</el-button>
+        >{{ $t('btn.export') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -92,32 +92,32 @@
           size="mini"
           @click="handleImport"
           v-hasPermi="['erp:supplier:import']"
-        >导入</el-button>
+        >{{ $t('btn.import') }}</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="supplierList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="供应商类型" align="center" prop="supplierType">
+      <el-table-column :label="$t('supplier.type')" align="center" prop="supplierType">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.erp_supplier_type" :value="scope.row.supplierType"/>
         </template>
       </el-table-column>
-      <el-table-column label="供应商编号" align="center" prop="supplierNo" />
-      <el-table-column label="供应商名称" align="center" prop="supplierName" />
-      <el-table-column label="供应商简称" align="center" prop="supplierBrief" />
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+      <el-table-column :label="$t('supplier.no')" align="center" prop="supplierNo" />
+      <el-table-column :label="$t('supplier.name')" align="center" prop="supplierName" />
+      <el-table-column :label="$t('supplier.brief')" align="center" prop="supplierBrief" />
+      <el-table-column :label="$t('system.createTime')" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="更新时间" align="center" prop="updateTime" width="180">
+      <el-table-column :label="$t('system.updateTime')" align="center" prop="updateTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('system.operation')" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -125,14 +125,14 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['erp:supplier:edit']"
-          >修改</el-button>
+          >{{ $t('btn.edit') }}</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['erp:supplier:remove']"
-          >删除</el-button>
+          >{{ $t('btn.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -148,8 +148,8 @@
     <!-- 添加或修改供应商对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="60%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="供应商类型" prop="supplierType">
-          <el-select v-model="form.supplierType" placeholder="请选择供应商类型">
+        <el-form-item :label="$t('supplier.type')" prop="supplierType">
+          <el-select v-model="form.supplierType" :placeholder="$t('validation.select', [$t('supplier.type')])">
             <el-option
               v-for="dict in dict.type.erp_supplier_type"
               :key="dict.value"
@@ -158,25 +158,25 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="供应商编号" prop="supplierNo">
-          <el-input v-model="form.supplierNo" placeholder="请输入供应商编号" />
+        <el-form-item :label="$t('supplier.no')" prop="supplierNo">
+          <el-input v-model="form.supplierNo" :placeholder="$t('validation.enter', [$t('supplier.no')])" />
         </el-form-item>
-        <el-form-item label="供应商名称" prop="supplierName">
-          <el-input v-model="form.supplierName" placeholder="请输入供应商名称" />
+        <el-form-item :label="$t('supplier.name')" prop="supplierName">
+          <el-input v-model="form.supplierName" :placeholder="$t('validation.enter', [$t('supplier.name')])" />
         </el-form-item>
-        <el-form-item label="供应商简称" prop="supplierBrief">
-          <el-input v-model="form.supplierBrief" placeholder="请输入供应商简称" />
+        <el-form-item :label="$t('supplier.brief')" prop="supplierBrief">
+          <el-input v-model="form.supplierBrief" :placeholder="$t('validation.enter', [$t('supplier.brief')])" />
         </el-form-item>
-        <el-form-item label="业务范围" prop="businessScope">
-          <el-input v-model="form.businessScope" placeholder="请输入业务范围" />
+        <el-form-item :label="$t('supplier.businessScope')" prop="businessScope">
+          <el-input v-model="form.businessScope" :placeholder="$t('validation.enter', [$t('supplier.businessScope')])" />
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+        <el-form-item :label="$t('system.remark')" prop="remark">
+          <el-input v-model="form.remark" type="textarea" :placeholder="$t('validation.enter', [$t('system.remark')])" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">{{ $t('btn.confirm') }}</el-button>
+        <el-button @click="cancel">{{ $t('btn.cancel') }}</el-button>
       </div>
     </el-dialog>
 
@@ -196,8 +196,8 @@
         auto-upload
       >
         <i class="el-icon-upload"></i>
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        <div class="el-upload__tip" slot="tip">只能上传Excel文件，且不超过10MB</div>
+        <div class="el-upload__text">{{ $t('upload.dragText') }}<em>{{ $t('upload.clickToUpload') }}</em></div>
+        <div class="el-upload__tip" slot="tip">{{ $t('upload.allowedExcelShort') }}</div>
       </el-upload>
     </el-dialog>
   </div>
@@ -230,6 +230,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      submitLoading: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -241,18 +242,24 @@ export default {
       },
       // 表单参数
       form: {},
-      // 表单校验
-      rules: {
-      },
       // 上传参数
       upload: {
         open: false,
-        title: "导入供应商数据",
+        title: "",
         url: process.env.VUE_APP_BASE_API + "/erp/supplier/importData",
         headers: { Authorization: "Bearer " + getToken() },
         data: {
           updateSupport: false
         }
+      }
+    }
+  },
+  computed: {
+    rules() {
+      return {
+        supplierName: [
+          { required: true, message: this.$t('validation.required'), trigger: "blur" }
+        ]
       }
     }
   },
@@ -311,7 +318,7 @@ export default {
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = "添加供应商"
+      this.title = this.$t('supplier.addTitle')
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -320,25 +327,26 @@ export default {
       getSupplier(id).then(response => {
         this.form = response.data
         this.open = true
-        this.title = "修改供应商"
+        this.title = this.$t('supplier.editTitle')
       })
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.submitLoading = true
           if (this.form.id != null) {
             updateSupplier(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功")
+              this.$modal.msgSuccess(this.$t('msg.updateSuccess'))
               this.open = false
               this.getList()
-            })
+            }).finally(() => { this.submitLoading = false })
           } else {
             addSupplier(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功")
+              this.$modal.msgSuccess(this.$t('msg.addSuccess'))
               this.open = false
               this.getList()
-            })
+            }).finally(() => { this.submitLoading = false })
           }
         }
       })
@@ -346,11 +354,11 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids
-      this.$modal.confirm('是否确认删除供应商编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm(this.$t('msg.deleteConfirm', [ids])).then(function() {
         return delSupplier(ids)
       }).then(() => {
         this.getList()
-        this.$modal.msgSuccess("删除成功")
+        this.$modal.msgSuccess(this.$t('msg.deleteSuccess'))
       }).catch(() => {})
     },
     /** 导出按钮操作 */
@@ -361,6 +369,7 @@ export default {
     },
     /** 导入按钮操作 */
     handleImport() {
+      this.upload.title = this.$t('supplier.importTitle')
       this.upload.open = true
     },
     /** 上传成功回调 */
@@ -375,18 +384,18 @@ export default {
     },
     /** 上传失败回调 */
     'upload.onError'(err, file, fileList) {
-      this.$modal.msgError("上传失败")
+      this.$modal.msgError(this.$t('upload.uploadFailed'))
     },
     /** 上传前校验 */
     'upload.beforeUpload'(file) {
       const isExcel = /\.(xlsx|xls)$/i.test(file.name)
       if (!isExcel) {
-        this.$modal.msgError("只能上传Excel文件!")
+        this.$modal.msgError(this.$t('upload.onlyExcel'))
         return false
       }
       const isLt10M = file.size / 1024 / 1024 < 10
       if (!isLt10M) {
-        this.$modal.msgError("上传文件大小不能超过 10MB!")
+        this.$modal.msgError(this.$t('upload.sizeLimit'))
         return false
       }
       return true

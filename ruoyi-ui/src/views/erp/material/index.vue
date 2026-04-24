@@ -14,8 +14,8 @@
       </el-col>
       <el-col :span="20">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
-      <el-form-item label="主料类型 " prop="mainMaterialType">
-        <el-select v-model="queryParams.mainMaterialType" placeholder="请选择主料类型 " clearable>
+      <el-form-item :label="$t('material.type')" prop="mainMaterialType">
+        <el-select v-model="queryParams.mainMaterialType" :placeholder="$t('validation.select', [$t('material.type')])" clearable>
           <el-option
             v-for="dict in dict.type.erp_main_material_type"
             :key="dict.value"
@@ -24,16 +24,16 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="主料编号" prop="mainMaterialNo">
+      <el-form-item :label="$t('material.no')" prop="mainMaterialNo">
         <el-input
           v-model="queryParams.mainMaterialNo"
-          placeholder="请输入主料编号"
+          :placeholder="$t('validation.enter', [$t('material.no')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="供货方式" prop="supplyMethod">
-        <el-select v-model="queryParams.supplyMethod" placeholder="请选择供货方式" clearable>
+      <el-form-item :label="$t('material.supplyMethod')" prop="supplyMethod">
+        <el-select v-model="queryParams.supplyMethod" :placeholder="$t('validation.select', [$t('material.supplyMethod')])" clearable>
           <el-option
             v-for="dict in dict.type.erp_supply_method"
             :key="dict.value"
@@ -42,8 +42,8 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="供应商" prop="supplierId">
-        <el-select v-model="queryParams.supplierId" placeholder="请选择供应商" clearable>
+      <el-form-item :label="$t('material.supplier')" prop="supplierId">
+        <el-select v-model="queryParams.supplierId" :placeholder="$t('validation.select', [$t('material.supplier')])" clearable>
           <el-option
             v-for="dict in dict.type.erp_supplier_type"
             :key="dict.value"
@@ -52,17 +52,17 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="主料品名" prop="name">
+      <el-form-item :label="$t('material.name')" prop="name">
         <el-input
           v-model="queryParams.name"
-          placeholder="请输入主料品名"
+          :placeholder="$t('validation.enter', [$t('material.name')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('btn.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('btn.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -75,7 +75,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['erp:material:add']"
-        >新增</el-button>
+        >{{ $t('btn.add') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -86,7 +86,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['erp:material:edit']"
-        >修改</el-button>
+        >{{ $t('btn.edit') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -97,7 +97,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['erp:material:remove']"
-        >删除</el-button>
+        >{{ $t('btn.delete') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -107,7 +107,7 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['erp:material:export']"
-        >导出</el-button>
+        >{{ $t('btn.export') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -117,55 +117,55 @@
           size="mini"
           @click="handleImport"
           v-hasPermi="['erp:material:import']"
-        >导入</el-button>
+        >{{ $t('btn.import') }}</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="materialList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="主料类型 " align="center" prop="mainMaterialType">
+      <el-table-column :label="$t('material.type')" align="center" prop="mainMaterialType">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.erp_main_material_type" :value="scope.row.mainMaterialType"/>
         </template>
       </el-table-column>
-      <el-table-column label="主料编号" align="center" prop="mainMaterialNo" />
-      <el-table-column label="供货方式" align="center" prop="supplyMethod">
+      <el-table-column :label="$t('material.no')" align="center" prop="mainMaterialNo" />
+      <el-table-column :label="$t('material.supplyMethod')" align="center" prop="supplyMethod">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.erp_supply_method" :value="scope.row.supplyMethod"/>
         </template>
       </el-table-column>
-      <el-table-column label="供应商" align="center" prop="supplierId">
+      <el-table-column :label="$t('material.supplier')" align="center" prop="supplierId">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.erp_supplier_type" :value="scope.row.supplierId"/>
         </template>
       </el-table-column>
-      <el-table-column label="主料品名" align="center" prop="name" />
-      <el-table-column label="主料成分" align="center" prop="composition" />
-      <el-table-column label="主料门幅" align="center" prop="width" />
-      <el-table-column label="主料克重" align="center" prop="weight" />
-      <el-table-column label="主料纱支" align="center" prop="yarnCount" />
-      <el-table-column label="计量单位" align="center" prop="unit">
+      <el-table-column :label="$t('material.name')" align="center" prop="name" />
+      <el-table-column :label="$t('material.composition')" align="center" prop="composition" />
+      <el-table-column :label="$t('material.width')" align="center" prop="width" />
+      <el-table-column :label="$t('material.weight')" align="center" prop="weight" />
+      <el-table-column :label="$t('material.yarnCount')" align="center" prop="yarnCount" />
+      <el-table-column :label="$t('material.unit')" align="center" prop="unit">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.erp_unit" :value="scope.row.unit"/>
         </template>
       </el-table-column>
-      <el-table-column label="图片" align="center" prop="pictrueUrl" width="100">
+      <el-table-column :label="$t('material.picture')" align="center" prop="pictrueUrl" width="100">
         <template slot-scope="scope">
           <image-preview :src="scope.row.pictrueUrl" :width="50" :height="50"/>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+      <el-table-column :label="$t('system.createTime')" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="更新时间" align="center" prop="updateTime" width="180">
+      <el-table-column :label="$t('system.updateTime')" align="center" prop="updateTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.updateTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('system.operation')" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -173,14 +173,14 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['erp:material:edit']"
-          >修改</el-button>
+          >{{ $t('btn.edit') }}</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['erp:material:remove']"
-          >删除</el-button>
+          >{{ $t('btn.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -196,8 +196,8 @@
     <!-- 添加或修改主料对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="60%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="主料类型 " prop="mainMaterialType">
-          <el-select v-model="form.mainMaterialType" placeholder="请选择主料类型 ">
+        <el-form-item :label="$t('material.type')" prop="mainMaterialType">
+          <el-select v-model="form.mainMaterialType" :placeholder="$t('validation.select', [$t('material.type')])">
             <el-option
               v-for="dict in dict.type.erp_main_material_type"
               :key="dict.value"
@@ -206,11 +206,11 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="主料编号" prop="mainMaterialNo">
-          <el-input v-model="form.mainMaterialNo" placeholder="请输入主料编号" />
+        <el-form-item :label="$t('material.no')" prop="mainMaterialNo">
+          <el-input v-model="form.mainMaterialNo" :placeholder="$t('validation.enter', [$t('material.no')])" />
         </el-form-item>
-        <el-form-item label="供货方式" prop="supplyMethod">
-          <el-select v-model="form.supplyMethod" placeholder="请选择供货方式">
+        <el-form-item :label="$t('material.supplyMethod')" prop="supplyMethod">
+          <el-select v-model="form.supplyMethod" :placeholder="$t('validation.select', [$t('material.supplyMethod')])">
             <el-option
               v-for="dict in dict.type.erp_supply_method"
               :key="dict.value"
@@ -219,8 +219,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="供应商" prop="supplierId">
-          <el-select v-model="form.supplierId" placeholder="请选择供应商">
+        <el-form-item :label="$t('material.supplier')" prop="supplierId">
+          <el-select v-model="form.supplierId" :placeholder="$t('validation.select', [$t('material.supplier')])">
             <el-option
               v-for="dict in dict.type.erp_supplier_type"
               :key="dict.value"
@@ -229,23 +229,23 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="主料品名" prop="name">
-          <el-input v-model="form.name" placeholder="请输入主料品名" />
+        <el-form-item :label="$t('material.name')" prop="name">
+          <el-input v-model="form.name" :placeholder="$t('validation.enter', [$t('material.name')])" />
         </el-form-item>
-        <el-form-item label="主料成分" prop="composition">
-          <el-input v-model="form.composition" placeholder="请输入主料成分" />
+        <el-form-item :label="$t('material.composition')" prop="composition">
+          <el-input v-model="form.composition" :placeholder="$t('validation.enter', [$t('material.composition')])" />
         </el-form-item>
-        <el-form-item label="主料门幅" prop="width">
-          <el-input v-model="form.width" placeholder="请输入主料门幅" />
+        <el-form-item :label="$t('material.width')" prop="width">
+          <el-input v-model="form.width" :placeholder="$t('validation.enter', [$t('material.width')])" />
         </el-form-item>
-        <el-form-item label="主料克重" prop="weight">
-          <el-input v-model="form.weight" placeholder="请输入主料克重" />
+        <el-form-item :label="$t('material.weight')" prop="weight">
+          <el-input v-model="form.weight" :placeholder="$t('validation.enter', [$t('material.weight')])" />
         </el-form-item>
-        <el-form-item label="主料纱支" prop="yarnCount">
-          <el-input v-model="form.yarnCount" placeholder="请输入主料纱支" />
+        <el-form-item :label="$t('material.yarnCount')" prop="yarnCount">
+          <el-input v-model="form.yarnCount" :placeholder="$t('validation.enter', [$t('material.yarnCount')])" />
         </el-form-item>
-        <el-form-item label="计量单位" prop="unit">
-          <el-select v-model="form.unit" placeholder="请选择计量单位">
+        <el-form-item :label="$t('material.unit')" prop="unit">
+          <el-select v-model="form.unit" :placeholder="$t('validation.select', [$t('material.unit')])">
             <el-option
               v-for="dict in dict.type.erp_unit"
               :key="dict.value"
@@ -254,16 +254,16 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="图片" prop="pictrueUrl">
+        <el-form-item :label="$t('material.picture')" prop="pictrueUrl">
           <image-upload v-model="form.pictrueUrl"/>
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+        <el-form-item :label="$t('system.remark')" prop="remark">
+          <el-input v-model="form.remark" type="textarea" :placeholder="$t('validation.enter', [$t('system.remark')])" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">{{ $t('btn.confirm') }}</el-button>
+        <el-button @click="cancel">{{ $t('btn.cancel') }}</el-button>
       </div>
     </el-dialog>
 
@@ -283,8 +283,8 @@
         auto-upload
       >
         <i class="el-icon-upload"></i>
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        <div class="el-upload__tip" slot="tip">只能上传Excel文件，且不超过10MB</div>
+        <div class="el-upload__text" v-html="$t('upload.dragText')"></div>
+        <div class="el-upload__tip" slot="tip">{{ $t('upload.allowedExcelShort') }}</div>
       </el-upload>
     </el-dialog>
       </el-col>
@@ -325,6 +325,7 @@ export default {
       title: "",
       // 是否显示弹出层
       open: false,
+      submitLoading: false,
       // 查询参数
       queryParams: {
         pageNum: 1,
@@ -343,7 +344,7 @@ export default {
       // 上传参数
       upload: {
         open: false,
-        title: "导入主料数据",
+        title: '',
         url: process.env.VUE_APP_BASE_API + "/erp/material/main/importData",
         headers: { Authorization: "Bearer " + getToken() },
         data: {
@@ -353,6 +354,7 @@ export default {
     }
   },
   created() {
+    this.upload.title = this.$t('material.importTitle')
     this.initTree()
     this.getList()
   },
@@ -362,12 +364,12 @@ export default {
       this.materialTree = [
         {
           id: 1,
-          label: '厂供',
+          label: this.$t('material.factorySupply'),
           children: []
         },
         {
           id: 2,
-          label: '客供',
+          label: this.$t('material.customerSupply'),
           children: []
         }
       ]
@@ -429,7 +431,7 @@ export default {
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = "添加主料"
+      this.title = this.$t('material.addTitle')
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -438,25 +440,26 @@ export default {
       getMaterial(id).then(response => {
         this.form = response.data
         this.open = true
-        this.title = "修改主料"
+        this.title = this.$t('material.editTitle')
       })
     },
     /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
+          this.submitLoading = true
           if (this.form.id != null) {
             updateMaterial(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功")
+              this.$modal.msgSuccess(this.$t('msg.editSuccess'))
               this.open = false
               this.getList()
-            })
+            }).finally(() => { this.submitLoading = false })
           } else {
             addMaterial(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功")
+              this.$modal.msgSuccess(this.$t('msg.addSuccess'))
               this.open = false
               this.getList()
-            })
+            }).finally(() => { this.submitLoading = false })
           }
         }
       })
@@ -464,11 +467,11 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids
-      this.$modal.confirm('是否确认删除主料编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm(this.$t('msg.deleteConfirm', [ids])).then(function() {
         return delMaterial(ids)
       }).then(() => {
         this.getList()
-        this.$modal.msgSuccess("删除成功")
+        this.$modal.msgSuccess(this.$t('msg.deleteSuccess'))
       }).catch(() => {})
     },
     /** 导出按钮操作 */
@@ -479,6 +482,7 @@ export default {
     },
     /** 导入按钮操作 */
     handleImport() {
+      this.upload.title = this.$t('material.importTitle')
       this.upload.open = true
     },
     /** 上传成功回调 */
@@ -493,18 +497,18 @@ export default {
     },
     /** 上传失败回调 */
     onError(err, file, fileList) {
-      this.$modal.msgError("上传失败")
+      this.$modal.msgError(this.$t('upload.uploadFailed'))
     },
     /** 上传前校验 */
     beforeUpload(file) {
       const isExcel = /\.(xlsx|xls)$/i.test(file.name)
       if (!isExcel) {
-        this.$modal.msgError("只能上传Excel文件!")
+        this.$modal.msgError(this.$t('upload.onlyExcel'))
         return false
       }
       const isLt10M = file.size / 1024 / 1024 < 10
       if (!isLt10M) {
-        this.$modal.msgError("上传文件大小不能超过 10MB!")
+        this.$modal.msgError(this.$t('upload.sizeLimit'))
         return false
       }
       return true

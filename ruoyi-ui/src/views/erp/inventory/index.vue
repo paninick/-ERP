@@ -254,7 +254,7 @@
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" @click="submitForm">确 定</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">确 定</el-button>
         <el-button @click="cancel">取 消</el-button>
       </div>
     </el-dialog>
@@ -287,6 +287,7 @@ export default {
       skuLabelMap: {},
       title: "",
       open: false,
+      submitLoading: false,
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -498,6 +499,7 @@ export default {
         if (!valid) {
           return
         }
+        this.submitLoading = true
         const payload = {
           ...this.form,
           warehouseId: Number(this.form.warehouseId),
@@ -509,7 +511,7 @@ export default {
           this.$modal.msgSuccess(payload.id ? "修改成功" : "新增成功")
           this.open = false
           this.getList()
-        })
+        }).finally(() => { this.submitLoading = false })
       })
     },
     handleDelete(row) {

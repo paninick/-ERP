@@ -42,3 +42,10 @@ export function delTechMaterial(id) {
     method: 'delete'
   })
 }
+
+// Backward-compatible aliases for older imports
+export const listTechmaterial = listTechMaterial
+export const getTechmaterial = getTechMaterial
+export const addTechmaterial = addTechMaterial
+export const updateTechmaterial = updateTechMaterial
+export const delTechmaterial = delTechMaterial

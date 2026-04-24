@@ -33,11 +33,11 @@
 
       <!-- 右侧固定功能按钮区 -->
       <div class="biz-action-btn-group" style="display: flex; gap: 8px; flex-shrink: 0;">
-        <el-button type="primary" size="small" @click="handleAdd" v-hasPermi="['erp:stock:add']">新添入库</el-button>
-        <el-button type="default" size="small" :disabled="single" @click="handleUpdate" v-hasPermi="['erp:stock:edit']">编辑</el-button>
-        <el-button type="danger" plain size="small" :disabled="multiple" @click="handleDelete" v-hasPermi="['erp:stock:remove']">删除</el-button>
-        <el-button type="default" size="small" @click="handleExport" v-hasPermi="['erp:stock:export']">导出</el-button>
-        <el-button type="success" plain size="small" icon="el-icon-upload" @click="handleImport" v-hasPermi="['erp:stock:import']">导入</el-button>
+        <el-button type="primary" size="small" @click="handleAdd" v-hasPermi="['erp:stockin:add']">新添入库</el-button>
+        <el-button type="default" size="small" :disabled="single" @click="handleUpdate" v-hasPermi="['erp:stockin:edit']">编辑</el-button>
+        <el-button type="danger" plain size="small" :disabled="multiple" @click="handleDelete" v-hasPermi="['erp:stockin:remove']">删除</el-button>
+        <el-button type="default" size="small" @click="handleExport" v-hasPermi="['erp:stockin:export']">导出</el-button>
+        <el-button type="success" plain size="small" icon="el-icon-upload" @click="handleImport" v-hasPermi="['erp:stockin:import']">导入</el-button>
         <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" style="margin-left: 8px;"></right-toolbar>
       </div>
     </div>
@@ -76,8 +76,8 @@
 
           <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="150">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="handleUpdate(scope.row)" v-hasPermi="['erp:stock:edit']">详情</el-button>
-              <el-button v-if="scope.row.confirmStatus === '0'" size="mini" type="text" @click="handleConfirm(scope.row)" v-hasPermi="['erp:stock:edit']">确认入库</el-button>
+              <el-button size="mini" type="text" @click="handleUpdate(scope.row)" v-hasPermi="['erp:stockin:edit']">详情</el-button>
+              <el-button v-if="scope.row.confirmStatus === '0'" size="mini" type="text" @click="handleConfirm(scope.row)" v-hasPermi="['erp:stockin:edit']">确认入库</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -173,6 +173,7 @@
 <script>
 import { listStockin, getStockin, delStockin, addStockin, updateStockin } from "@/api/erp/stockin"
 import { listPurchase } from "@/api/erp/purchase"
+import { listUser } from "@/api/system/user"
 import { getToken } from "@/utils/auth"
 
 export default {
@@ -234,9 +235,15 @@ export default {
     filterUser(query) {
       if (!query) { this.userOptions = []; return; }
       this.userLoading = true;
-      const users = this.$store.getters.userList.filter(u => u.nickName.includes(query) || u.userName.includes(query));
-      this.userOptions = users.map(u => ({ value: u.userId, label: u.nickName + '(' + u.userName + ')' }));
-      this.userLoading = false;
+      listUser({ pageNum: 1, pageSize: 50 }).then(res => {
+        const users = (res.rows || []).filter(u =>
+          (u.nickName && u.nickName.includes(query)) ||
+          (u.userName && u.userName.includes(query))
+        );
+        this.userOptions = users.map(u => ({ value: u.userId, label: u.nickName + '(' + u.userName + ')' }));
+      }).finally(() => {
+        this.userLoading = false;
+      });
     },
     getInTypeLabel(value) {
       const typeMap = {'1': '面料', '2': '纱线', '3': '辅料'}
@@ -266,6 +273,10 @@ export default {
     reset() {
       this.form = { id: null, sn: null, inDate: null, inType: null, chargeUserId: null, totalPrice: null, confirmStatus: null, purchaseId: null, bulkOrderNo: null };
       this.resetForm("form");
+    },
+    cancel() {
+      this.open = false;
+      this.reset();
     },
     handleAdd() {
       this.reset();

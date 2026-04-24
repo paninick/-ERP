@@ -95,8 +95,8 @@
     <pagination
       v-show="total>0"
       :total="total"
-      :page-num.sync="queryParams.pageNum"
-      :page-limit.sync="queryParams.pageSize"
+      :page.sync="queryParams.pageNum"
+      :limit.sync="queryParams.pageSize"
       @pagination="getList"
     />
   </div>
@@ -225,7 +225,7 @@ export default {
     },
     /** 重置按钮操作 */
     resetQuery() {
-      this.resetForm("queryParams")
+      this.resetForm("queryForm")
       this.handleQuery()
     },
     // 多选框选中数据

@@ -30,16 +30,11 @@
       <el-table-column label="任务ID" align="center" prop="taskId" width="150" :show-overflow-tooltip="true" />
       <el-table-column label="流程名称" align="center" prop="processName" :show-overflow-tooltip="true" />
       <el-table-column label="任务名称" align="center" prop="taskName" :show-overflow-tooltip="true" />
-      <el-table-column label="发起人" align="center" prop="startUserName" width="100" />
-      <el-table-column label="处理结果" align="center" prop="result" width="100">
+      <el-table-column label="当前节点" align="center" prop="nodeName" :show-overflow-tooltip="true" />
+      <el-table-column label="发起人" align="center" prop="initiatorName" width="100" />
+      <el-table-column label="状态" align="center" prop="status" width="100">
         <template slot-scope="scope">
-          <el-tag :type="scope.row.result === 'approved' ? 'success' : 'danger'" size="mini">{{ scope.row.result === 'approved' ? '通过' : '驳回' }}</el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column label="处理意见" align="center" prop="comment" :show-overflow-tooltip="true" />
-      <el-table-column label="开始时间" align="center" prop="startTime" width="160">
-        <template slot-scope="scope">
-          <span>{{ parseTime(scope.row.startTime) }}</span>
+          <el-tag type="success" size="mini">{{ scope.row.status || '已完成' }}</el-tag>
         </template>
       </el-table-column>
       <el-table-column label="完成时间" align="center" prop="endTime" width="160">
