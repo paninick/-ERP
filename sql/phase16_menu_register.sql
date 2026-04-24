@@ -5,6 +5,8 @@
 --       menu_id 从 2000 开始，避免与若依框架（1-1999）冲突
 --       ERP 顶级目录 menu_id=2000，parent_id=0
 
+SET NAMES utf8mb4;
+
 -- ============================================================
 -- 1. ERP 顶级目录
 -- ============================================================
@@ -95,6 +97,11 @@ VALUES
 (2073, '库存盘点',   2005, 4, 'inventory',        'erp/inventory/index',        '', 1, 0, 'C', '0', '0', 'erp:inventory:list',        'ep-checked',    'admin', NOW(), '', NULL, ''),
 (2074, '仓库区域',   2005, 5, 'warehousearea',    'erp/warehousearea/index',    '', 1, 0, 'C', '0', '0', 'erp:warehousearea:list',    'ep-map-location','admin', NOW(), '', NULL, ''),
 (2075, '库位管理',   2005, 6, 'warehouselocation','erp/warehouselocation/index','', 1, 0, 'C', '0', '0', 'erp:warehouselocation:list','ep-location',   'admin', NOW(), '', NULL, '');
+
+-- 避免与父级目录 inventory 生成重复路由名 Inventory
+UPDATE sys_menu
+SET route_name = 'InventoryCheck', update_by = 'codex', update_time = NOW()
+WHERE menu_id = 2073;
 
 -- ============================================================
 -- 8. 财务管理（parent=2006）
@@ -196,9 +203,209 @@ VALUES
 (2543, '新增', 2081, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:piecewagedetail:add', '#', 'admin', NOW(), '', NULL, ''),
 (2544, '修改', 2081, 3, '#', '', '', 1, 0, 'F', '0', '0', 'erp:piecewagedetail:edit', '#', 'admin', NOW(), '', NULL, ''),
 (2545, '删除', 2081, 4, '#', '', '', 1, 0, 'F', '0', '0', 'erp:piecewagedetail:remove', '#', 'admin', NOW(), '', NULL, ''),
-(2546, '导出', 2081, 5, '#', '', '', 1, 0, 'F', '0', '0', 'erp:piecewagedetail:export', '#', 'admin', NOW(), '', NULL, '');
+(2546, '导出', 2081, 5, '#', '', '', 1, 0, 'F', '0', '0', 'erp:piecewagedetail:export', '#', 'admin', NOW(), '', NULL, ''),
+(2547, '查询', 2073, 1, '#', '', '', 1, 0, 'F', '0', '0', 'erp:inventory:query', '#', 'admin', NOW(), '', NULL, ''),
+(2548, '新增', 2073, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:inventory:add', '#', 'admin', NOW(), '', NULL, ''),
+(2549, '修改', 2073, 3, '#', '', '', 1, 0, 'F', '0', '0', 'erp:inventory:edit', '#', 'admin', NOW(), '', NULL, ''),
+(2550, '删除', 2073, 4, '#', '', '', 1, 0, 'F', '0', '0', 'erp:inventory:remove', '#', 'admin', NOW(), '', NULL, '');
+
+INSERT IGNORE INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component, query, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+VALUES
+(2555, '鏌ヨ', 2032, 1, '#', '', '', 1, 0, 'F', '0', '0', 'erp:tech:query', '#', 'admin', NOW(), '', NULL, ''),
+(2556, '鏂板', 2032, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:tech:add', '#', 'admin', NOW(), '', NULL, ''),
+(2557, '淇敼', 2032, 3, '#', '', '', 1, 0, 'F', '0', '0', 'erp:tech:edit', '#', 'admin', NOW(), '', NULL, ''),
+(2558, '鍒犻櫎', 2032, 4, '#', '', '', 1, 0, 'F', '0', '0', 'erp:tech:remove', '#', 'admin', NOW(), '', NULL, ''),
+(2559, '瀵煎嚭', 2032, 5, '#', '', '', 1, 0, 'F', '0', '0', 'erp:tech:export', '#', 'admin', NOW(), '', NULL, ''),
+(2560, '瀵煎叆', 2032, 6, '#', '', '', 1, 0, 'F', '0', '0', 'erp:tech:import', '#', 'admin', NOW(), '', NULL, ''),
+(2561, '鏌ヨ', 2071, 1, '#', '', '', 1, 0, 'F', '0', '0', 'erp:stockin:query', '#', 'admin', NOW(), '', NULL, ''),
+(2562, '鏂板', 2071, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:stockin:add', '#', 'admin', NOW(), '', NULL, ''),
+(2563, '淇敼', 2071, 3, '#', '', '', 1, 0, 'F', '0', '0', 'erp:stockin:edit', '#', 'admin', NOW(), '', NULL, ''),
+(2564, '鍒犻櫎', 2071, 4, '#', '', '', 1, 0, 'F', '0', '0', 'erp:stockin:remove', '#', 'admin', NOW(), '', NULL, ''),
+(2565, '瀵煎嚭', 2071, 5, '#', '', '', 1, 0, 'F', '0', '0', 'erp:stockin:export', '#', 'admin', NOW(), '', NULL, ''),
+(2566, '瀵煎叆', 2071, 6, '#', '', '', 1, 0, 'F', '0', '0', 'erp:stockin:import', '#', 'admin', NOW(), '', NULL, ''),
+(2567, '鏌ヨ', 2072, 1, '#', '', '', 1, 0, 'F', '0', '0', 'erp:stockout:query', '#', 'admin', NOW(), '', NULL, ''),
+(2568, '鏂板', 2072, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:stockout:add', '#', 'admin', NOW(), '', NULL, ''),
+(2569, '淇敼', 2072, 3, '#', '', '', 1, 0, 'F', '0', '0', 'erp:stockout:edit', '#', 'admin', NOW(), '', NULL, ''),
+(2570, '鍒犻櫎', 2072, 4, '#', '', '', 1, 0, 'F', '0', '0', 'erp:stockout:remove', '#', 'admin', NOW(), '', NULL, ''),
+(2571, '瀵煎嚭', 2072, 5, '#', '', '', 1, 0, 'F', '0', '0', 'erp:stockout:export', '#', 'admin', NOW(), '', NULL, '');
 
 INSERT IGNORE INTO sys_role_menu (role_id, menu_id)
 SELECT 1, menu_id
 FROM sys_menu
-WHERE menu_id BETWEEN 2512 AND 2546;
+WHERE menu_id BETWEEN 2512 AND 2571;
+
+INSERT IGNORE INTO sys_role_menu (role_id, menu_id)
+SELECT 201, menu_id FROM sys_menu
+WHERE perms IN ('erp:tech:list', 'erp:tech:query', 'erp:tech:add', 'erp:tech:edit', 'erp:tech:remove', 'erp:tech:export', 'erp:tech:import');
+
+INSERT IGNORE INTO sys_role_menu (role_id, menu_id)
+SELECT 202, menu_id FROM sys_menu
+WHERE perms IN ('erp:tech:list', 'erp:tech:query');
+
+INSERT IGNORE INTO sys_role_menu (role_id, menu_id)
+SELECT 204, menu_id FROM sys_menu
+WHERE perms IN (
+  'erp:stockin:list', 'erp:stockin:query', 'erp:stockin:add', 'erp:stockin:edit', 'erp:stockin:remove', 'erp:stockin:export', 'erp:stockin:import',
+  'erp:stockout:list', 'erp:stockout:query', 'erp:stockout:add', 'erp:stockout:edit', 'erp:stockout:remove', 'erp:stockout:export'
+);
+
+-- ============================================================
+-- 15. 新增缺失菜单（打样总览、质检工作台、工序工价、数据导入）
+-- ============================================================
+INSERT IGNORE INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component, query, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+VALUES
+(2551, '打样总览',   2002, 6,  'overview',       'erp/overview/index',       '', 1, 0, 'C', '0', '0', 'erp:overview:list',       'ep-view',            'admin', NOW(), '', NULL, ''),
+(2552, '质检工作台', 2004, 3,  'quality',        'erp/quality/index',        '', 1, 0, 'C', '0', '0', 'erp:qc:list',             'ep-finished',        'admin', NOW(), '', NULL, ''),
+(2553, '工序工价',   2006, 5,  'processPrice',   'erp/processPrice/index',   '', 1, 0, 'C', '0', '0', 'erp:processPrice:list',   'ep-coin',            'admin', NOW(), '', NULL, ''),
+(2554, '数据导入',   2001, 13, 'dataimport',     'erp/dataimport/index',     '', 1, 0, 'C', '0', '0', 'erp:dataimport:list',     'ep-upload',          'admin', NOW(), '', NULL, '');
+INSERT IGNORE INTO sys_role_menu (role_id, menu_id)
+SELECT 1, menu_id
+FROM sys_menu
+WHERE menu_id IN (2551, 2552, 2553, 2554);
+
+-- ============================================================
+-- 16. 2026-04-24 backfill: missing ERP button perms and route alignment
+-- ============================================================
+INSERT IGNORE INTO sys_menu (menu_id, menu_name, parent_id, order_num, path, component, query, is_frame, is_cache, menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+VALUES
+(2572, '导入', 2014, 6, '#', '', '', 1, 0, 'F', '0', '0', 'erp:auxiliary:import', '#', 'admin', NOW(), '', NULL, ''),
+(2573, '新增', 2049, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:bizabnormal:add', '#', 'admin', NOW(), '', NULL, ''),
+(2574, '修改', 2049, 3, '#', '', '', 1, 0, 'F', '0', '0', 'erp:bizabnormal:edit', '#', 'admin', NOW(), '', NULL, ''),
+(2575, '删除', 2049, 4, '#', '', '', 1, 0, 'F', '0', '0', 'erp:bizabnormal:remove', '#', 'admin', NOW(), '', NULL, ''),
+(2576, '导出', 2049, 5, '#', '', '', 1, 0, 'F', '0', '0', 'erp:bizabnormal:export', '#', 'admin', NOW(), '', NULL, ''),
+(2577, '新增', 2018, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:bom:add', '#', 'admin', NOW(), '', NULL, ''),
+(2578, '修改', 2018, 3, '#', '', '', 1, 0, 'F', '0', '0', 'erp:bom:edit', '#', 'admin', NOW(), '', NULL, ''),
+(2579, '删除', 2018, 4, '#', '', '', 1, 0, 'F', '0', '0', 'erp:bom:remove', '#', 'admin', NOW(), '', NULL, ''),
+(2580, '导出', 2018, 5, '#', '', '', 1, 0, 'F', '0', '0', 'erp:bom:export', '#', 'admin', NOW(), '', NULL, ''),
+(2581, '导入', 2018, 6, '#', '', '', 1, 0, 'F', '0', '0', 'erp:bom:import', '#', 'admin', NOW(), '', NULL, ''),
+(2582, '导入', 2010, 6, '#', '', '', 1, 0, 'F', '0', '0', 'erp:customer:import', '#', 'admin', NOW(), '', NULL, ''),
+(2583, '新增', 2061, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:defect:add', '#', 'admin', NOW(), '', NULL, ''),
+(2584, '修改', 2061, 3, '#', '', '', 1, 0, 'F', '0', '0', 'erp:defect:edit', '#', 'admin', NOW(), '', NULL, ''),
+(2585, '删除', 2061, 4, '#', '', '', 1, 0, 'F', '0', '0', 'erp:defect:remove', '#', 'admin', NOW(), '', NULL, ''),
+(2586, '导出', 2061, 5, '#', '', '', 1, 0, 'F', '0', '0', 'erp:defect:export', '#', 'admin', NOW(), '', NULL, ''),
+(2587, '导入', 2013, 6, '#', '', '', 1, 0, 'F', '0', '0', 'erp:material:import', '#', 'admin', NOW(), '', NULL, ''),
+(2588, '导入', 2031, 6, '#', '', '', 1, 0, 'F', '0', '0', 'erp:notice:import', '#', 'admin', NOW(), '', NULL, ''),
+(2589, '新增', 2043, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:outsource:add', '#', 'admin', NOW(), '', NULL, ''),
+(2590, '修改', 2043, 3, '#', '', '', 1, 0, 'F', '0', '0', 'erp:outsource:edit', '#', 'admin', NOW(), '', NULL, ''),
+(2591, '删除', 2043, 4, '#', '', '', 1, 0, 'F', '0', '0', 'erp:outsource:remove', '#', 'admin', NOW(), '', NULL, ''),
+(2592, '导出', 2043, 5, '#', '', '', 1, 0, 'F', '0', '0', 'erp:outsource:export', '#', 'admin', NOW(), '', NULL, ''),
+(2593, '查询', 2553, 1, '#', '', '', 1, 0, 'F', '0', '0', 'erp:processPrice:query', '#', 'admin', NOW(), '', NULL, ''),
+(2594, '新增', 2553, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:processPrice:add', '#', 'admin', NOW(), '', NULL, ''),
+(2595, '修改', 2553, 3, '#', '', '', 1, 0, 'F', '0', '0', 'erp:processPrice:edit', '#', 'admin', NOW(), '', NULL, ''),
+(2596, '删除', 2553, 4, '#', '', '', 1, 0, 'F', '0', '0', 'erp:processPrice:remove', '#', 'admin', NOW(), '', NULL, ''),
+(2597, '导出', 2553, 5, '#', '', '', 1, 0, 'F', '0', '0', 'erp:processPrice:export', '#', 'admin', NOW(), '', NULL, ''),
+(2598, '新增', 2017, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:processRoute:add', '#', 'admin', NOW(), '', NULL, ''),
+(2599, '修改', 2017, 3, '#', '', '', 1, 0, 'F', '0', '0', 'erp:processRoute:edit', '#', 'admin', NOW(), '', NULL, ''),
+(2600, '删除', 2017, 4, '#', '', '', 1, 0, 'F', '0', '0', 'erp:processRoute:remove', '#', 'admin', NOW(), '', NULL, ''),
+(2601, '导出', 2017, 5, '#', '', '', 1, 0, 'F', '0', '0', 'erp:processRoute:export', '#', 'admin', NOW(), '', NULL, ''),
+(2602, '新增', 2041, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:produceJob:add', '#', 'admin', NOW(), '', NULL, ''),
+(2603, '修改', 2041, 3, '#', '', '', 1, 0, 'F', '0', '0', 'erp:produceJob:edit', '#', 'admin', NOW(), '', NULL, ''),
+(2604, '删除', 2041, 4, '#', '', '', 1, 0, 'F', '0', '0', 'erp:produceJob:remove', '#', 'admin', NOW(), '', NULL, ''),
+(2605, '导出', 2041, 5, '#', '', '', 1, 0, 'F', '0', '0', 'erp:produceJob:export', '#', 'admin', NOW(), '', NULL, ''),
+(2606, '新增', 2042, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:produceJobProcess:add', '#', 'admin', NOW(), '', NULL, ''),
+(2607, '修改', 2042, 3, '#', '', '', 1, 0, 'F', '0', '0', 'erp:produceJobProcess:edit', '#', 'admin', NOW(), '', NULL, ''),
+(2608, '删除', 2042, 4, '#', '', '', 1, 0, 'F', '0', '0', 'erp:produceJobProcess:remove', '#', 'admin', NOW(), '', NULL, ''),
+(2609, '导出', 2042, 5, '#', '', '', 1, 0, 'F', '0', '0', 'erp:produceJobProcess:export', '#', 'admin', NOW(), '', NULL, ''),
+(2610, '导入', 2011, 6, '#', '', '', 1, 0, 'F', '0', '0', 'erp:supplier:import', '#', 'admin', NOW(), '', NULL, ''),
+(2611, '新增', 2020, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:unitConversion:add', '#', 'admin', NOW(), '', NULL, ''),
+(2612, '修改', 2020, 3, '#', '', '', 1, 0, 'F', '0', '0', 'erp:unitConversion:edit', '#', 'admin', NOW(), '', NULL, ''),
+(2613, '删除', 2020, 4, '#', '', '', 1, 0, 'F', '0', '0', 'erp:unitConversion:remove', '#', 'admin', NOW(), '', NULL, ''),
+(2614, '导出', 2020, 5, '#', '', '', 1, 0, 'F', '0', '0', 'erp:unitConversion:export', '#', 'admin', NOW(), '', NULL, ''),
+(2615, '导入', 2015, 6, '#', '', '', 1, 0, 'F', '0', '0', 'erp:warehouse:import', '#', 'admin', NOW(), '', NULL, ''),
+(2616, '查询', 2552, 1, '#', '', '', 1, 0, 'F', '0', '0', 'erp:qc:query', '#', 'admin', NOW(), '', NULL, ''),
+(2617, '修改', 2552, 2, '#', '', '', 1, 0, 'F', '0', '0', 'erp:qc:edit', '#', 'admin', NOW(), '', NULL, '');
+
+UPDATE sys_menu
+SET menu_name = '打样总览',
+    parent_id = 2002,
+    order_num = 6,
+    path = 'overview',
+    component = 'erp/overview/index',
+    menu_type = 'C',
+    visible = '0',
+    status = '0',
+    perms = 'erp:overview:list',
+    icon = 'ep-view',
+    update_by = 'codex',
+    update_time = NOW()
+WHERE menu_id = 2551;
+
+UPDATE sys_menu
+SET menu_name = '质检工作台',
+    parent_id = 2004,
+    order_num = 3,
+    path = 'quality',
+    component = 'erp/quality/index',
+    route_name = 'QualityWorkbench',
+    menu_type = 'C',
+    visible = '0',
+    status = '0',
+    perms = 'erp:qc:list',
+    icon = 'ep-finished',
+    update_by = 'codex',
+    update_time = NOW()
+WHERE menu_id = 2552;
+
+UPDATE sys_menu
+SET menu_name = '工序工价',
+    parent_id = 2006,
+    order_num = 5,
+    path = 'processPrice',
+    component = 'erp/processPrice/index',
+    menu_type = 'C',
+    visible = '0',
+    status = '0',
+    perms = 'erp:processPrice:list',
+    icon = 'ep-coin',
+    update_by = 'codex',
+    update_time = NOW()
+WHERE menu_id = 2553;
+
+UPDATE sys_menu
+SET menu_name = '数据导入',
+    parent_id = 2001,
+    order_num = 13,
+    path = 'dataimport',
+    component = 'erp/dataimport/index',
+    menu_type = 'C',
+    visible = '0',
+    status = '0',
+    perms = 'erp:dataimport:list',
+    icon = 'ep-upload',
+    update_by = 'codex',
+    update_time = NOW()
+WHERE menu_id = 2554;
+
+UPDATE sys_menu
+SET visible = '1',
+    status = '1',
+    update_by = 'codex',
+    update_time = NOW()
+WHERE menu_id = 4449;
+
+DELETE FROM sys_role_menu WHERE menu_id = 4449;
+
+INSERT IGNORE INTO sys_role_menu (role_id, menu_id)
+SELECT 1, menu_id
+FROM sys_menu
+WHERE menu_id BETWEEN 2551 AND 2617;
+
+INSERT IGNORE INTO sys_role_menu (role_id, menu_id)
+SELECT DISTINCT role_id, 2551
+FROM sys_role_menu
+WHERE menu_id = 2031;
+
+INSERT IGNORE INTO sys_role_menu (role_id, menu_id)
+SELECT DISTINCT role_id, 2552
+FROM sys_role_menu
+WHERE menu_id = 2060;
+
+INSERT IGNORE INTO sys_role_menu (role_id, menu_id)
+SELECT DISTINCT role_id, 2616
+FROM sys_role_menu
+WHERE menu_id = 2060;
+
+INSERT IGNORE INTO sys_role_menu (role_id, menu_id)
+SELECT DISTINCT role_id, 2617
+FROM sys_role_menu
+WHERE menu_id = 2060;

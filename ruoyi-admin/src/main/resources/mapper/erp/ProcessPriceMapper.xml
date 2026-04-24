@@ -44,7 +44,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where a.process_id = #{processId}
         <if test="employeeId != null"> and a.employee_id = #{employeeId}</if>
         and a.status = '0'
-        and (a.expireDate is null or a.expireDate >= current_date)
+        and (a.expire_date is null or a.expire_date >= current_date)
         order by a.effective_date desc
         limit 1
     </select>

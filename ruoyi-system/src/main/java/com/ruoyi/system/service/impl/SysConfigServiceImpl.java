@@ -85,12 +85,8 @@ public class SysConfigServiceImpl implements ISysConfigService
     @Override
     public boolean selectCaptchaEnabled()
     {
-        String captchaEnabled = selectConfigByKey("sys.account.captchaEnabled");
-        if (StringUtils.isEmpty(captchaEnabled))
-        {
-            return true;
-        }
-        return Convert.toBool(captchaEnabled);
+        // 综合管理系统已移除登录/注册验证码，避免环境差异或缓存回填导致验证码反弹。
+        return false;
     }
 
     /**

@@ -8,6 +8,7 @@ import com.ruoyi.erp.mapper.ProduceJobProcessMapper;
 import com.ruoyi.erp.mapper.ProcessRouteItemMapper;
 import com.ruoyi.erp.service.IProduceJobService;
 import com.ruoyi.erp.utils.BillNoGenerator;
+import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,6 +66,7 @@ public class ProduceJobServiceImpl implements IProduceJobService {
      */
     @Override
     public int insertProduceJob(ProduceJob produceJob) {
+        validateRequiredFields(produceJob);
         if (produceJob.getJobNo() == null || produceJob.getJobNo().isEmpty()) {
             produceJob.setJobNo(billNoGenerator.generate("PJ"));
         }
@@ -88,6 +90,18 @@ public class ProduceJobServiceImpl implements IProduceJobService {
             }
         }
         return result;
+    }
+
+    private void validateRequiredFields(ProduceJob produceJob) {
+        if (produceJob.getProducePlanId() == null || produceJob.getProducePlanId() <= 0) {
+            throw new ServiceException("生产计划ID不能为空");
+        }
+        if (produceJob.getOrderId() == null || produceJob.getOrderId() <= 0) {
+            throw new ServiceException("销售订单ID不能为空");
+        }
+        if (produceJob.getPlanQty() == null || produceJob.getPlanQty() <= 0) {
+            throw new ServiceException("计划数量必须大于0");
+        }
     }
 
     /**

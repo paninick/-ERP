@@ -22,10 +22,11 @@
 | 16 | `phase14_rbac_role_permission.sql` | P1：RBAC岗位权限矩阵（5个ERP岗位角色） |
 | 17 | `phase15_flexible_schedule.sql` | P2：柔性排单字段（priority/start_date/due_date/schedule_status/conflict_flag） |
 | 18 | `phase16_menu_register.sql` | P2：ERP 菜单全量注册（顶级目录+7个二级目录+所有功能页+losscontrol+producegantt） |
-| 19 | `sprint2_inventory_pushdown.sql` | 库存下推 |
-| 20 | `sys_automation.sql` | 系统自动化配置 |
-| 21 | `init_inventory_data.sql` | 初始库存数据（可选） |
-| 22 | `ops_panel_init.sql` | 运维面板（可选） |
+| 19 | `hotfix_20260424_erp_menu_perm_backfill.sql` | 2026-04-24 ERP 缺失菜单与按钮权限回填 |
+| 20 | `sprint2_inventory_pushdown.sql` | 库存下推 |
+| 21 | `sys_automation.sql` | 系统自动化配置 |
+| 22 | `init_inventory_data.sql` | 初始库存数据（可选） |
+| 23 | `ops_panel_init.sql` | 运维面板（可选） |
 
 ## 其他脚本
 

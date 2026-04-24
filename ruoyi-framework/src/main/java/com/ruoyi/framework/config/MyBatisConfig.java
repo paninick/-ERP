@@ -4,7 +4,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import javax.sql.DataSource;
 import org.apache.ibatis.io.VFS;
 import org.apache.ibatis.session.SqlSessionFactory;
@@ -94,7 +96,7 @@ public class MyBatisConfig
     public Resource[] resolveMapperLocations(String[] mapperLocations)
     {
         ResourcePatternResolver resourceResolver = new PathMatchingResourcePatternResolver();
-        List<Resource> resources = new ArrayList<Resource>();
+        Map<String, Resource> resources = new LinkedHashMap<String, Resource>();
         if (mapperLocations != null)
         {
             for (String mapperLocation : mapperLocations)
@@ -102,7 +104,10 @@ public class MyBatisConfig
                 try
                 {
                     Resource[] mappers = resourceResolver.getResources(mapperLocation);
-                    resources.addAll(Arrays.asList(mappers));
+                    for (Resource mapper : Arrays.asList(mappers))
+                    {
+                        resources.putIfAbsent(buildMapperKey(mapper), mapper);
+                    }
                 }
                 catch (IOException e)
                 {
@@ -110,7 +115,30 @@ public class MyBatisConfig
                 }
             }
         }
-        return resources.toArray(new Resource[resources.size()]);
+        return resources.values().toArray(new Resource[resources.size()]);
+    }
+
+    private String buildMapperKey(Resource resource)
+    {
+        try
+        {
+            String location = resource.getURL().toString().replace("\\", "/");
+            int mapperIndex = location.indexOf("/mapper/");
+            if (mapperIndex >= 0)
+            {
+                return location.substring(mapperIndex + 1);
+            }
+            mapperIndex = location.indexOf("mapper/");
+            if (mapperIndex >= 0)
+            {
+                return location.substring(mapperIndex);
+            }
+        }
+        catch (IOException e)
+        {
+            // fall through and use resource description
+        }
+        return resource.getDescription();
     }
 
     @Bean

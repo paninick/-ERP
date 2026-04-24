@@ -113,11 +113,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertSampleTechCostBatch" parameterType="java.util.List">
 
         REPLACE INTO t_erp_sample_tech_cost
-        (id,notice_id,tech_id,material_type,material_id,color,unit_consumption,loss_type,wastage,create_by,create_time,update_by,update_time,remark,)
+        (id,notice_id,tech_id,material_type,material_id,color,unit_consumption,loss_type,wastage,create_by,create_time,update_by,update_time,remark)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
 
-            (#{item.id},#{item.noticeId},#{item.techId},#{item.materialType},#{item.materialId},#{item.color},#{item.unitConsumption},#{item.lossType},#{item.wastage},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark},)
+            (#{item.id},#{item.noticeId},#{item.techId},#{item.materialType},#{item.materialId},#{item.color},#{item.unitConsumption},#{item.lossType},#{item.wastage},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark})
 
         </foreach>
     </insert>

@@ -8,3 +8,19 @@ export function listTodo(query) {
     params: query
   })
 }
+
+export function approveTask(data) {
+  return request({
+    url: '/flowable/task/todo/approve',
+    method: 'post',
+    data: data
+  })
+}
+
+export function rejectTask(data) {
+  return request({
+    url: '/flowable/task/todo/reject',
+    method: 'post',
+    data: data
+  })
+}

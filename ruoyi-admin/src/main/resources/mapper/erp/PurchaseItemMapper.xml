@@ -49,6 +49,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="materialId != null">material_id,</if>
             <if test="materialType != null">material_type,</if>
             <if test="purchaseCount != null">purchase_count,</if>
+            <if test="executeQty != null">execute_qty,</if>
             <if test="purchasePrice != null">purchase_price,</if>
             <if test="status != null">status,</if>
             <if test="createBy != null">create_by,</if>
@@ -63,6 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="materialId != null">#{materialId},</if>
             <if test="materialType != null">#{materialType},</if>
             <if test="purchaseCount != null">#{purchaseCount},</if>
+            <if test="executeQty != null">#{executeQty},</if>
             <if test="purchasePrice != null">#{purchasePrice},</if>
             <if test="status != null">#{status},</if>
             <if test="createBy != null">#{createBy},</if>
@@ -81,6 +83,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="materialId != null">material_id = #{materialId},</if>
             <if test="materialType != null">material_type = #{materialType},</if>
             <if test="purchaseCount != null">purchase_count = #{purchaseCount},</if>
+            <if test="executeQty != null">execute_qty = #{executeQty},</if>
             <if test="purchasePrice != null">purchase_price = #{purchasePrice},</if>
             <if test="status != null">status = #{status},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
@@ -106,11 +109,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertPurchaseItemBatch" parameterType="java.util.List">
 
         REPLACE INTO t_erp_purchase_item
-        (id,purchase_id,sn,material_id,material_type,purchase_count,purchase_price,status,create_by,create_time,update_by,update_time,remark,)
+        (id,purchase_id,sn,material_id,material_type,purchase_count,execute_qty,purchase_price,status,create_by,create_time,update_by,update_time,remark)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
 
-            (#{item.id},#{item.purchaseId},#{item.sn},#{item.materialId},#{item.materialType},#{item.purchaseCount},#{item.purchasePrice},#{item.status},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark},)
+            (#{item.id},#{item.purchaseId},#{item.sn},#{item.materialId},#{item.materialType},#{item.purchaseCount},#{item.executeQty},#{item.purchasePrice},#{item.status},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark})
 
         </foreach>
     </insert>

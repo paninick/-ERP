@@ -1,0 +1,1060 @@
+﻿{
+    "msg":  "æä½æå",
+    "code":  200,
+    "data":  [
+                 {
+                     "alwaysShow":  true,
+                     "children":  [
+                                      {
+                                          "component":  "system/user/index",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "user",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "ç¨æ·ç®¡ç"
+                                                   },
+                                          "name":  "User",
+                                          "path":  "user"
+                                      },
+                                      {
+                                          "component":  "system/role/index",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "peoples",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "è§è²ç®¡ç"
+                                                   },
+                                          "name":  "Role",
+                                          "path":  "role"
+                                      },
+                                      {
+                                          "component":  "system/menu/index",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "tree-table",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "èåç®¡ç"
+                                                   },
+                                          "name":  "Menu",
+                                          "path":  "menu"
+                                      },
+                                      {
+                                          "component":  "system/dept/index",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "tree",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "é¨é¨ç®¡ç"
+                                                   },
+                                          "name":  "Dept",
+                                          "path":  "dept"
+                                      },
+                                      {
+                                          "component":  "system/post/index",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "post",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "å²ä½ç®¡ç"
+                                                   },
+                                          "name":  "Post",
+                                          "path":  "post"
+                                      },
+                                      {
+                                          "component":  "system/dict/index",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "dict",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "å­å\u0085¸ç®¡ç"
+                                                   },
+                                          "name":  "Dict",
+                                          "path":  "dict"
+                                      },
+                                      {
+                                          "component":  "system/config/index",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "edit",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "åæ°è®¾ç½®"
+                                                   },
+                                          "name":  "Config",
+                                          "path":  "config"
+                                      },
+                                      {
+                                          "component":  "system/notice/index",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "message",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "éç¥å\u0085¬å"
+                                                   },
+                                          "name":  "SystemNotice",
+                                          "path":  "systemNotice"
+                                      },
+                                      {
+                                          "alwaysShow":  true,
+                                          "children":  [
+                                                           {
+                                                               "component":  "monitor/operlog/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "form",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "æä½æ¥å¿"
+                                                                        },
+                                                               "name":  "Operlog",
+                                                               "path":  "operlog"
+                                                           },
+                                                           {
+                                                               "component":  "monitor/logininfor/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "logininfor",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "ç»å½æ¥å¿"
+                                                                        },
+                                                               "name":  "Logininfor",
+                                                               "path":  "logininfor"
+                                                           },
+                                                           {
+                                                               "component":  "system/treedict/index",
+                                                               "hidden":  true,
+                                                               "meta":  {
+                                                                            "icon":  "dict",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "çº§èå­å\u0085¸ç®¡ç"
+                                                                        },
+                                                               "name":  "Treedict",
+                                                               "path":  "treedict"
+                                                           }
+                                                       ],
+                                          "component":  "ParentView",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "log",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "æ¥å¿ç®¡ç"
+                                                   },
+                                          "name":  "Log",
+                                          "path":  "log",
+                                          "redirect":  "noRedirect"
+                                      }
+                                  ],
+                     "component":  "Layout",
+                     "hidden":  false,
+                     "meta":  {
+                                  "icon":  "system",
+                                  "link":  null,
+                                  "noCache":  false,
+                                  "title":  "ç³»ç»ç®¡ç"
+                              },
+                     "name":  "System",
+                     "path":  "/system",
+                     "redirect":  "noRedirect"
+                 },
+                 {
+                     "alwaysShow":  true,
+                     "children":  [
+                                      {
+                                          "component":  "monitor/online/index",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "online",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "å¨çº¿ç¨æ·"
+                                                   },
+                                          "name":  "Online",
+                                          "path":  "online"
+                                      },
+                                      {
+                                          "component":  "monitor/job/index",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "job",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "å®æ¶ä»»å¡"
+                                                   },
+                                          "name":  "Job",
+                                          "path":  "job"
+                                      },
+                                      {
+                                          "component":  "monitor/druid/index",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "druid",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "æ°æ®çæ§"
+                                                   },
+                                          "name":  "Druid",
+                                          "path":  "druid"
+                                      },
+                                      {
+                                          "component":  "monitor/server/index",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "server",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "æå¡çæ§"
+                                                   },
+                                          "name":  "Server",
+                                          "path":  "server"
+                                      },
+                                      {
+                                          "component":  "monitor/cache/index",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "redis",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "ç¼å­çæ§"
+                                                   },
+                                          "name":  "Cache",
+                                          "path":  "cache"
+                                      },
+                                      {
+                                          "component":  "monitor/cache/list",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "redis-list",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "ç¼å­åè¡¨"
+                                                   },
+                                          "name":  "CacheList",
+                                          "path":  "cacheList"
+                                      }
+                                  ],
+                     "component":  "Layout",
+                     "hidden":  false,
+                     "meta":  {
+                                  "icon":  "monitor",
+                                  "link":  null,
+                                  "noCache":  false,
+                                  "title":  "ç³»ç»çæ§"
+                              },
+                     "name":  "Monitor",
+                     "path":  "/monitor",
+                     "redirect":  "noRedirect"
+                 },
+                 {
+                     "alwaysShow":  true,
+                     "children":  [
+                                      {
+                                          "component":  "tool/build/index",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "build",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "è¡¨åæå»º"
+                                                   },
+                                          "name":  "Build",
+                                          "path":  "build"
+                                      },
+                                      {
+                                          "component":  "tool/gen/index",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "code",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "ä»£ç çæ"
+                                                   },
+                                          "name":  "Gen",
+                                          "path":  "gen"
+                                      },
+                                      {
+                                          "component":  "tool/swagger/index",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "swagger",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "ç³»ç»æ¥å£"
+                                                   },
+                                          "name":  "Swagger",
+                                          "path":  "swagger"
+                                      }
+                                  ],
+                     "component":  "Layout",
+                     "hidden":  false,
+                     "meta":  {
+                                  "icon":  "tool",
+                                  "link":  null,
+                                  "noCache":  false,
+                                  "title":  "ç³»ç»å·¥å\u0085·"
+                              },
+                     "name":  "Tool",
+                     "path":  "/tool",
+                     "redirect":  "noRedirect"
+                 },
+                 {
+                     "alwaysShow":  true,
+                     "children":  [
+                                      {
+                                          "alwaysShow":  true,
+                                          "children":  [
+                                                           {
+                                                               "component":  "erp/customer/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-user",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "å®¢æ·ç®¡ç"
+                                                                        },
+                                                               "name":  "Customer",
+                                                               "path":  "customer"
+                                                           },
+                                                           {
+                                                               "component":  "erp/supplier/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-office-building",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "ä¾åºåç®¡ç"
+                                                                        },
+                                                               "name":  "Supplier",
+                                                               "path":  "supplier"
+                                                           },
+                                                           {
+                                                               "component":  "erp/employee/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-avatar",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "åå·¥æ¡£æ¡"
+                                                                        },
+                                                               "name":  "Employee",
+                                                               "path":  "employee"
+                                                           },
+                                                           {
+                                                               "component":  "erp/material/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-files",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "ç©æç®¡ç"
+                                                                        },
+                                                               "name":  "Material",
+                                                               "path":  "material"
+                                                           },
+                                                           {
+                                                               "component":  "erp/auxiliary/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-paperclip",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "è¾\u0085æç®¡ç"
+                                                                        },
+                                                               "name":  "Auxiliary",
+                                                               "path":  "auxiliary"
+                                                           },
+                                                           {
+                                                               "component":  "erp/warehouse/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-house",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "ä»åºç®¡ç"
+                                                                        },
+                                                               "name":  "Warehouse",
+                                                               "path":  "warehouse"
+                                                           },
+                                                           {
+                                                               "component":  "erp/processDef/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-list",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "å·¥åºå®ä¹"
+                                                                        },
+                                                               "name":  "ProcessDef",
+                                                               "path":  "processDef"
+                                                           },
+                                                           {
+                                                               "component":  "erp/processRoute/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-connection",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "å·¥èºè·¯çº¿"
+                                                                        },
+                                                               "name":  "ProcessRoute",
+                                                               "path":  "processRoute"
+                                                           },
+                                                           {
+                                                               "component":  "erp/bom/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-document",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "BOMç®¡ç"
+                                                                        },
+                                                               "name":  "Bom",
+                                                               "path":  "bom"
+                                                           },
+                                                           {
+                                                               "component":  "erp/standardColor/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-brush",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "æ åè²ç®¡ç"
+                                                                        },
+                                                               "name":  "StandardColor",
+                                                               "path":  "standardColor"
+                                                           },
+                                                           {
+                                                               "component":  "erp/unitConversion/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-scale",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "åä½æ¢ç®"
+                                                                        },
+                                                               "name":  "UnitConversion",
+                                                               "path":  "unitConversion"
+                                                           },
+                                                           {
+                                                               "component":  "erp/processLossMatrix/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-grid",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "æèç©éµ"
+                                                                        },
+                                                               "name":  "ProcessLossMatrix",
+                                                               "path":  "processLossMatrix"
+                                                           }
+                                                       ],
+                                          "component":  "ParentView",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "ep-setting",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "åºç¡æ°æ®"
+                                                   },
+                                          "name":  "Base",
+                                          "path":  "base",
+                                          "redirect":  "noRedirect"
+                                      },
+                                      {
+                                          "alwaysShow":  true,
+                                          "children":  [
+                                                           {
+                                                               "component":  "erp/sales/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-document-checked",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "éå®è®¢å"
+                                                                        },
+                                                               "name":  "Sales",
+                                                               "path":  "sales"
+                                                           },
+                                                           {
+                                                               "component":  "erp/notice/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-bell",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "ææ ·éç¥"
+                                                                        },
+                                                               "name":  "Notice",
+                                                               "path":  "notice"
+                                                           },
+                                                           {
+                                                               "component":  "erp/tech/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-reading",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "å·¥èºæç¤ºä¹¦"
+                                                                        },
+                                                               "name":  "Tech",
+                                                               "path":  "tech"
+                                                           },
+                                                           {
+                                                               "component":  "erp/contacts/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-phone",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "èç³»äººç®¡ç"
+                                                                        },
+                                                               "name":  "Contacts",
+                                                               "path":  "contacts"
+                                                           },
+                                                           {
+                                                               "component":  "erp/invoice/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-tickets",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "åç¥¨ç®¡ç"
+                                                                        },
+                                                               "name":  "Invoice",
+                                                               "path":  "invoice"
+                                                           }
+                                                       ],
+                                          "component":  "ParentView",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "ep-shopping-cart",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "éå®ç®¡ç"
+                                                   },
+                                          "name":  "Sale",
+                                          "path":  "sale",
+                                          "redirect":  "noRedirect"
+                                      },
+                                      {
+                                          "alwaysShow":  true,
+                                          "children":  [
+                                                           {
+                                                               "component":  "erp/plan/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-calendar",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "çäº§è®¡å"
+                                                                        },
+                                                               "name":  "Plan",
+                                                               "path":  "plan"
+                                                           },
+                                                           {
+                                                               "component":  "erp/produceJob/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-tickets",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "çäº§å·¥å"
+                                                                        },
+                                                               "name":  "ProduceJob",
+                                                               "path":  "produceJob"
+                                                           },
+                                                           {
+                                                               "component":  "erp/produceJobProcess/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-sort",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "å·¥åºæµè½¬"
+                                                                        },
+                                                               "name":  "ProduceJobProcess",
+                                                               "path":  "produceJobProcess"
+                                                           },
+                                                           {
+                                                               "component":  "erp/outsource/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-share",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "å¤åç®¡ç"
+                                                                        },
+                                                               "name":  "Outsource",
+                                                               "path":  "outsource"
+                                                           },
+                                                           {
+                                                               "component":  "erp/materialconsume/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-data-board",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "ç©ææ¶è"
+                                                                        },
+                                                               "name":  "Materialconsume",
+                                                               "path":  "materialconsume"
+                                                           },
+                                                           {
+                                                               "component":  "erp/losscontrol/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-warning",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "æèç®¡æ§"
+                                                                        },
+                                                               "name":  "Losscontrol",
+                                                               "path":  "losscontrol"
+                                                           },
+                                                           {
+                                                               "component":  "erp/producegantt/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-grid",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "ææ§æå"
+                                                                        },
+                                                               "name":  "Producegantt",
+                                                               "path":  "producegantt"
+                                                           },
+                                                           {
+                                                               "component":  "erp/produceboard/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-monitor",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "çäº§çæ¿"
+                                                                        },
+                                                               "name":  "Produceboard",
+                                                               "path":  "produceboard"
+                                                           },
+                                                           {
+                                                               "component":  "erp/productSerial/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-barcode",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "äº§ååºåå·"
+                                                                        },
+                                                               "name":  "ProductSerial",
+                                                               "path":  "productSerial"
+                                                           },
+                                                           {
+                                                               "component":  "erp/bizabnormal/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-warning-filled",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "ä¸å¡å¼å¸¸æ± "
+                                                                        },
+                                                               "name":  "Bizabnormal",
+                                                               "path":  "bizabnormal"
+                                                           }
+                                                       ],
+                                          "component":  "ParentView",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "ep-cpu",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "çäº§ç®¡ç"
+                                                   },
+                                          "name":  "Produce",
+                                          "path":  "produce",
+                                          "redirect":  "noRedirect"
+                                      },
+                                      {
+                                          "alwaysShow":  true,
+                                          "children":  [
+                                                           {
+                                                               "component":  "erp/check/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-finished",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "è´¨æ£ç®¡ç"
+                                                                        },
+                                                               "name":  "Check",
+                                                               "path":  "check"
+                                                           },
+                                                           {
+                                                               "component":  "erp/defect/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-close-bold",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "æ¬¡åç®¡ç"
+                                                                        },
+                                                               "name":  "Defect",
+                                                               "path":  "defect"
+                                                           }
+                                                       ],
+                                          "component":  "ParentView",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "ep-finished",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "è´¨éç®¡ç"
+                                                   },
+                                          "name":  "Quality",
+                                          "path":  "quality",
+                                          "redirect":  "noRedirect"
+                                      },
+                                      {
+                                          "alwaysShow":  true,
+                                          "children":  [
+                                                           {
+                                                               "component":  "erp/stock/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-box",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "åºå­æ¥è¯¢"
+                                                                        },
+                                                               "name":  "Stock",
+                                                               "path":  "stock"
+                                                           },
+                                                           {
+                                                               "component":  "erp/stockin/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-download",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "å\u0085¥åºç®¡ç"
+                                                                        },
+                                                               "name":  "Stockin",
+                                                               "path":  "stockin"
+                                                           },
+                                                           {
+                                                               "component":  "erp/stockout/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-upload",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "åºåºç®¡ç"
+                                                                        },
+                                                               "name":  "Stockout",
+                                                               "path":  "stockout"
+                                                           },
+                                                           {
+                                                               "component":  "erp/inventory/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-checked",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "åºå­çç¹"
+                                                                        },
+                                                               "name":  "Inventory",
+                                                               "path":  "inventory"
+                                                           },
+                                                           {
+                                                               "component":  "erp/warehousearea/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-map-location",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "ä»åºåºå"
+                                                                        },
+                                                               "name":  "Warehousearea",
+                                                               "path":  "warehousearea"
+                                                           },
+                                                           {
+                                                               "component":  "erp/warehouselocation/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-location",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "åºä½ç®¡ç"
+                                                                        },
+                                                               "name":  "Warehouselocation",
+                                                               "path":  "warehouselocation"
+                                                           }
+                                                       ],
+                                          "component":  "ParentView",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "ep-box",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "åºå­ç®¡ç"
+                                                   },
+                                          "name":  "Inventory",
+                                          "path":  "inventory",
+                                          "redirect":  "noRedirect"
+                                      },
+                                      {
+                                          "alwaysShow":  true,
+                                          "children":  [
+                                                           {
+                                                               "component":  "erp/piecewage/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-coin",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "è®¡ä»¶å·¥èµ"
+                                                                        },
+                                                               "name":  "Piecewage",
+                                                               "path":  "piecewage"
+                                                           },
+                                                           {
+                                                               "component":  "erp/piecewagedetail/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-document",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "å·¥èµæç»"
+                                                                        },
+                                                               "name":  "Piecewagedetail",
+                                                               "path":  "piecewagedetail"
+                                                           },
+                                                           {
+                                                               "component":  "erp/cost/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-data-analysis",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "ææ¬æ ¸ç®"
+                                                                        },
+                                                               "name":  "Cost",
+                                                               "path":  "cost"
+                                                           },
+                                                           {
+                                                               "component":  "erp/purchase/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-shopping-bag",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "éè´­ç®¡ç"
+                                                                        },
+                                                               "name":  "Purchase",
+                                                               "path":  "purchase"
+                                                           }
+                                                       ],
+                                          "component":  "ParentView",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "ep-money",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "è´¢å¡ç®¡ç"
+                                                   },
+                                          "name":  "Finance",
+                                          "path":  "finance",
+                                          "redirect":  "noRedirect"
+                                      },
+                                      {
+                                          "alwaysShow":  true,
+                                          "children":  [
+                                                           {
+                                                               "component":  "erp/report/index",
+                                                               "hidden":  false,
+                                                               "meta":  {
+                                                                            "icon":  "ep-data-analysis",
+                                                                            "link":  null,
+                                                                            "noCache":  false,
+                                                                            "title":  "æ¥è¡¨æ»è§"
+                                                                        },
+                                                               "name":  "ReportHub",
+                                                               "path":  "reportHub"
+                                                           }
+                                                       ],
+                                          "component":  "ParentView",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "ep-data-line",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "æ¥è¡¨ä¸­å¿"
+                                                   },
+                                          "name":  "Report",
+                                          "path":  "report",
+                                          "redirect":  "noRedirect"
+                                      }
+                                  ],
+                     "component":  "Layout",
+                     "hidden":  false,
+                     "meta":  {
+                                  "icon":  "ep-goods",
+                                  "link":  null,
+                                  "noCache":  false,
+                                  "title":  "æè£\u0085ERP"
+                              },
+                     "name":  "Erp",
+                     "path":  "/erp",
+                     "redirect":  "noRedirect"
+                 },
+                 {
+                     "alwaysShow":  true,
+                     "children":  [
+                                      {
+                                          "component":  "flowable/definition/index",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "job",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "æµç¨å®ä¹"
+                                                   },
+                                          "name":  "Definition",
+                                          "path":  "definition"
+                                      },
+                                      {
+                                          "component":  "flowable/form/list",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "form",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "è¡¨åé\u0085ç½®"
+                                                   },
+                                          "name":  "Form",
+                                          "path":  "form"
+                                      },
+                                      {
+                                          "component":  "flowable/expression/index",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "list",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "æµç¨è¡¨è¾¾å¼"
+                                                   },
+                                          "name":  "Expression",
+                                          "path":  "expression"
+                                      },
+                                      {
+                                          "component":  "flowable/listener/index",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "monitor",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "æµç¨çå¬"
+                                                   },
+                                          "name":  "Listener",
+                                          "path":  "listener"
+                                      }
+                                  ],
+                     "component":  "Layout",
+                     "hidden":  false,
+                     "meta":  {
+                                  "icon":  "documentation",
+                                  "link":  null,
+                                  "noCache":  false,
+                                  "title":  "æµç¨ç®¡ç"
+                              },
+                     "name":  "Flowable",
+                     "path":  "/flowable",
+                     "redirect":  "noRedirect"
+                 },
+                 {
+                     "alwaysShow":  true,
+                     "children":  [
+                                      {
+                                          "component":  "flowable/task/myProcess/index",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "guide",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "å·²åä»»å¡"
+                                                   },
+                                          "name":  "Process",
+                                          "path":  "process"
+                                      },
+                                      {
+                                          "component":  "flowable/task/todo/index",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "å¾\u0085åä»»å¡"
+                                                   },
+                                          "name":  "Todo",
+                                          "path":  "todo"
+                                      },
+                                      {
+                                          "component":  "flowable/task/finished/index",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "",
+                                                       "link":  null,
+                                                       "noCache":  false,
+                                                       "title":  "å·²åä»»å¡"
+                                                   },
+                                          "name":  "Finished",
+                                          "path":  "finished"
+                                      }
+                                  ],
+                     "component":  "Layout",
+                     "hidden":  false,
+                     "meta":  {
+                                  "icon":  "dict",
+                                  "link":  null,
+                                  "noCache":  false,
+                                  "title":  "ä»»å¡ç®¡ç"
+                              },
+                     "name":  "Task",
+                     "path":  "/task",
+                     "redirect":  "noRedirect"
+                 },
+                 {
+                     "children":  [
+                                      {
+                                          "component":  "InnerLink",
+                                          "hidden":  false,
+                                          "meta":  {
+                                                       "icon":  "guide",
+                                                       "link":  "https://www.fusennt.com/",
+                                                       "noCache":  false,
+                                                       "title":  "å¯æ³å®ç½"
+                                                   },
+                                          "name":  "Fusennt/com/",
+                                          "path":  "fusennt/com/"
+                                      }
+                                  ],
+                     "component":  "Layout",
+                     "hidden":  false,
+                     "meta":  {
+                                  "icon":  "guide",
+                                  "link":  null,
+                                  "noCache":  false,
+                                  "title":  "å¯æ³å®ç½"
+                              },
+                     "name":  "Https://www.fusennt.com/",
+                     "path":  "/"
+                 }
+             ]
+}

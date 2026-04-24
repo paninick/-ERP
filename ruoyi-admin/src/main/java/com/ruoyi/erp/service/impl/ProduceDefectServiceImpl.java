@@ -3,6 +3,7 @@ package com.ruoyi.erp.service.impl;
 import com.ruoyi.erp.domain.ProduceDefect;
 import com.ruoyi.erp.mapper.ProduceDefectMapper;
 import com.ruoyi.erp.service.IProduceDefectService;
+import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,11 +52,24 @@ public class ProduceDefectServiceImpl implements IProduceDefectService {
      */
     @Override
     public int insertProduceDefect(ProduceDefect produceDefect) {
+        validateRequiredFields(produceDefect);
         produceDefect.setCreateBy(SecurityUtils.getUsername());
         produceDefect.setCreateTime(DateUtils.getNowDate());
         produceDefect.setUpdateBy(SecurityUtils.getUsername());
         produceDefect.setUpdateTime(DateUtils.getNowDate());
         return produceDefectMapper.insertProduceDefect(produceDefect);
+    }
+
+    private void validateRequiredFields(ProduceDefect produceDefect) {
+        if (produceDefect.getJobId() == null || produceDefect.getJobId() <= 0) {
+            throw new ServiceException("工票ID不能为空");
+        }
+        if (produceDefect.getProcessId() == null || produceDefect.getProcessId() <= 0) {
+            throw new ServiceException("工序ID不能为空");
+        }
+        if (produceDefect.getDefectQty() == null || produceDefect.getDefectQty() <= 0) {
+            throw new ServiceException("数量必须大于0");
+        }
     }
 
     /**

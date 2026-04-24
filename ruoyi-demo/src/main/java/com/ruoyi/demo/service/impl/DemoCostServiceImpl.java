@@ -1,5 +1,6 @@
 package com.ruoyi.demo.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.ruoyi.demo.domain.DemoOrder;
 import com.ruoyi.demo.domain.DemoStyle;
 import com.ruoyi.demo.mapper.DemoOrderMapper;
@@ -29,7 +30,9 @@ public class DemoCostServiceImpl implements IDemoCostService {
     @Override
     public BigDecimal calculateFobPrice(String styleCode, Integer quantity, BigDecimal profitRate) {
         // 查询款式信息 - 使用list获取第一条，避免selectOne在多条时报错
-        List<DemoStyle> styles = demoStyleMapper.selectList(wrapper -> wrapper.eq(DemoStyle::getStyleCode, styleCode));
+        LambdaQueryWrapper<DemoStyle> wrapper = new LambdaQueryWrapper<>();
+        wrapper.eq(DemoStyle::getStyleCode, styleCode);
+        List<DemoStyle> styles = demoStyleMapper.selectList(wrapper);
         if (styles.isEmpty()) {
             return BigDecimal.ZERO;
         }

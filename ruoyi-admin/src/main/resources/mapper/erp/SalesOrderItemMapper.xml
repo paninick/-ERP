@@ -48,6 +48,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="size != null">size,</if>
             <if test="orderQuantity != null">order_quantity,</if>
             <if test="planQuantity != null">plan_quantity,</if>
+            <if test="executeQty != null">execute_qty,</if>
             <if test="inboundAmount != null">inbound_amount,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
@@ -63,6 +64,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="size != null">#{size},</if>
             <if test="orderQuantity != null">#{orderQuantity},</if>
             <if test="planQuantity != null">#{planQuantity},</if>
+            <if test="executeQty != null">#{executeQty},</if>
             <if test="inboundAmount != null">#{inboundAmount},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
@@ -82,6 +84,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="size != null">size = #{size},</if>
             <if test="orderQuantity != null">order_quantity = #{orderQuantity},</if>
             <if test="planQuantity != null">plan_quantity = #{planQuantity},</if>
+            <if test="executeQty != null">execute_qty = #{executeQty},</if>
             <if test="inboundAmount != null">inbound_amount = #{inboundAmount},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
@@ -106,11 +109,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <insert id="insertSalesOrderItemBatch" parameterType="java.util.List">
 
         REPLACE INTO t_erp_sales_order_item
-        (id,sales_order_id,notice_id,tech_id,color,size,order_quantity,plan_quantity,inbound_amount,create_by,create_time,update_by,update_time,remark,)
+        (id,sales_order_id,notice_id,tech_id,color,size,order_quantity,plan_quantity,execute_qty,inbound_amount,create_by,create_time,update_by,update_time,remark)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
 
-            (#{item.id},#{item.salesOrderId},#{item.noticeId},#{item.techId},#{item.color},#{item.size},#{item.orderQuantity},#{item.planQuantity},#{item.inboundAmount},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark},)
+            (#{item.id},#{item.salesOrderId},#{item.noticeId},#{item.techId},#{item.color},#{item.size},#{item.orderQuantity},#{item.planQuantity},#{item.executeQty},#{item.inboundAmount},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark})
 
         </foreach>
     </insert>

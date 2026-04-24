@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.ruoyi.flowable.mapper.FlowExpressionMapper">
     
-    <resultMap type="FlowExpression" id="FlowExpressionResult">
+    <resultMap type="com.ruoyi.flowable.domain.FlowExpression" id="FlowExpressionResult">
         <result property="id"    column="id"    />
         <result property="expressionName"    column="expression_name"    />
         <result property="expressionKey"    column="expression_key"    />
@@ -21,7 +21,7 @@
         select id, expression_name, expression_key, expression_type, expression_text, process_def_id, status, remark, create_by, create_time, update_by, update_time from flowable_expression
     </sql>
 
-    <select id="selectFlowExpressionList" parameterType="FlowExpression" resultMap="FlowExpressionResult">
+    <select id="selectFlowExpressionList" parameterType="com.ruoyi.flowable.domain.FlowExpression" resultMap="FlowExpressionResult">
         <include refid="selectFlowExpressionVo"/>
         <where>  
             <if test="expressionName != null  and expressionName != ''"> and expression_name like concat('%', #{expressionName}, '%')</if>
@@ -36,7 +36,7 @@
         where id = #{id}
     </select>
         
-    <insert id="insertFlowExpression" parameterType="FlowExpression" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insertFlowExpression" parameterType="com.ruoyi.flowable.domain.FlowExpression" useGeneratedKeys="true" keyProperty="id">
         insert into flowable_expression
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="expressionName != null and expressionName != ''">expression_name,</if>
@@ -62,7 +62,7 @@
          </trim>
     </insert>
 
-    <update id="updateFlowExpression" parameterType="FlowExpression">
+    <update id="updateFlowExpression" parameterType="com.ruoyi.flowable.domain.FlowExpression">
         update flowable_expression
         <trim prefix="SET" suffixOverrides=",">
             <if test="expressionName != null and expressionName != ''">expression_name = #{expressionName},</if>

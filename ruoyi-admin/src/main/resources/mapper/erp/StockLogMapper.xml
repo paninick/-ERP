@@ -13,7 +13,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="srcBillNo"    column="src_bill_no"    />
         <result property="skuId"    column="sku_id"    />
         <result property="materialId"    column="material_id"    />
-        <result property="materialId"    column="material_id"    />
         <result property="materialType"    column="material_type"    />
         <result property="materialNo"    column="material_no"    />
         <result property="name"    column="name"    />

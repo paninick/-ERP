@@ -8,77 +8,41 @@ import com.ruoyi.demo.domain.DemoOrder;
 import com.ruoyi.demo.mapper.DemoOrderMapper;
 import com.ruoyi.demo.service.IDemoOrderService;
 import org.springframework.stereotype.Service;
+
 import java.math.BigDecimal;
 import java.util.List;
 
-/**
- * 订单管理Service实现类
- * 
- * @author ruoyi
- * @date 2026-04-01
- */
 @Service
 public class DemoOrderServiceImpl extends ServiceImpl<DemoOrderMapper, DemoOrder> implements IDemoOrderService {
 
     @Override
     public IPage<DemoOrder> selectDemoOrderPage(DemoOrder demoOrder, Integer page, Integer size) {
         Page<DemoOrder> pageParam = new Page<>(page, size);
-        LambdaQueryWrapper<DemoOrder> wrapper = new LambdaQueryWrapper<>();
-        
-        // 订单号查询
-        if (demoOrder.getOrderNo() != null && !demoOrder.getOrderNo().isEmpty()) {
-            wrapper.like(DemoOrder::getOrderNo, demoOrder.getOrderNo());
-        }
-        
-        // 客户名称查询
-        if (demoOrder.getCustomerName() != null && !demoOrder.getCustomerName().isEmpty()) {
-            wrapper.like(DemoOrder::getCustomerName, demoOrder.getCustomerName());
-        }
-        
-        // 款号查询
-        if (demoOrder.getStyleCode() != null && !demoOrder.getStyleCode().isEmpty()) {
-            wrapper.like(DemoOrder::getStyleCode, demoOrder.getStyleCode());
-        }
-        
-        // 状态查询
-        if (demoOrder.getStatus() != null && !demoOrder.getStatus().isEmpty()) {
-            wrapper.eq(DemoOrder::getStatus, demoOrder.getStatus());
-        }
-        
-        // 按创建时间倒序排序
-        wrapper.orderByDesc(DemoOrder::getCreateTime);
-        
+        LambdaQueryWrapper<DemoOrder> wrapper = buildQueryWrapper(demoOrder);
         return this.page(pageParam, wrapper);
     }
 
     @Override
     public List<DemoOrder> selectDemoOrderList(DemoOrder demoOrder) {
+        return this.list(buildQueryWrapper(demoOrder));
+    }
+
+    private LambdaQueryWrapper<DemoOrder> buildQueryWrapper(DemoOrder demoOrder) {
         LambdaQueryWrapper<DemoOrder> wrapper = new LambdaQueryWrapper<>();
-        
-        // 订单号查询
+        if (demoOrder == null) {
+            return wrapper.orderByDesc(DemoOrder::getCreateTime);
+        }
+
         if (demoOrder.getOrderNo() != null && !demoOrder.getOrderNo().isEmpty()) {
             wrapper.like(DemoOrder::getOrderNo, demoOrder.getOrderNo());
         }
-        
-        // 客户名称查询
-        if (demoOrder.getCustomerName() != null && !demoOrder.getCustomerName().isEmpty()) {
-            wrapper.like(DemoOrder::getCustomerName, demoOrder.getCustomerName());
-        }
-        
-        // 款号查询
         if (demoOrder.getStyleCode() != null && !demoOrder.getStyleCode().isEmpty()) {
             wrapper.like(DemoOrder::getStyleCode, demoOrder.getStyleCode());
         }
-        
-        // 状态查询
         if (demoOrder.getStatus() != null && !demoOrder.getStatus().isEmpty()) {
             wrapper.eq(DemoOrder::getStatus, demoOrder.getStatus());
         }
-        
-        // 按创建时间倒序排序
-        wrapper.orderByDesc(DemoOrder::getCreateTime);
-        
-        return this.list(wrapper);
+        return wrapper.orderByDesc(DemoOrder::getCreateTime);
     }
 
     @Override
@@ -106,7 +70,6 @@ public class DemoOrderServiceImpl extends ServiceImpl<DemoOrderMapper, DemoOrder
         if (ids == null || ids.length == 0) {
             return false;
         }
-        
         return this.removeBatchByIds(List.of(ids));
     }
 
@@ -115,7 +78,6 @@ public class DemoOrderServiceImpl extends ServiceImpl<DemoOrderMapper, DemoOrder
         if (revenue == null || cost == null) {
             return BigDecimal.ZERO;
         }
-        
         return revenue.subtract(cost);
     }
 
@@ -124,7 +86,6 @@ public class DemoOrderServiceImpl extends ServiceImpl<DemoOrderMapper, DemoOrder
         if (revenue == null || cost == null || revenue.compareTo(BigDecimal.ZERO) == 0) {
             return BigDecimal.ZERO;
         }
-        
         BigDecimal profit = calculateProfit(revenue, cost);
         return profit.divide(revenue, 4, BigDecimal.ROUND_HALF_UP).multiply(BigDecimal.valueOf(100));
     }

@@ -37,10 +37,23 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <sql id="selectBomVo">
         select a.id, a.sample_no, a.sample_type, a.customer_id, a.customer_name, a.style_category, a.style_sub_category,
-               a.style_type, a.sample_category_type, a.style_code, a.due_date, a.emergency_type, 
-               a.picture_url, a.audit_status, a.audit_by, a.audit_by_nick_name, a.audit_time, a.process_instance_id, 
-               a.bulk_order_no, a.sales_id, a.sales_name, a.progress_status, a.tech_no, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
-        from t_erp_bom a
+               a.style_type, a.sample_category_type, a.style_code, a.due_date, a.emergency_type,
+               a.picture_url, a.audit_status, a.audit_by, a.audit_by_nick_name, a.audit_time, a.process_instance_id,
+               a.bulk_order_no, a.sales_id, a.sales_name,
+               coalesce(st.progress_status, a.audit_status) as progress_status,
+               null as tech_no,
+               a.create_by, a.create_time, a.update_by, a.update_time, a.remark
+        from t_erp_sample_notice a
+        left join (
+            select t.style_code, t.progress_status
+            from t_erp_sample_tech t
+            inner join (
+                select style_code, max(id) as max_id
+                from t_erp_sample_tech
+                where style_code is not null and style_code != ''
+                group by style_code
+            ) latest on latest.max_id = t.id
+        ) st on st.style_code = a.style_code
     </sql>
 
     <select id="selectBomList" parameterType="Bom" resultMap="BomResult">
@@ -53,8 +66,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="styleCode != null  and styleCode != ''"> and a.style_code = #{styleCode}</if>
             <if test="emergencyType != null  and emergencyType != ''"> and a.emergency_type = #{emergencyType}</if>
             <if test="auditStatus != null  and auditStatus != ''"> and a.audit_status = #{auditStatus}</if>
-            <if test="progressStatus != null  and progressStatus != ''"> and a.progress_status = #{progressStatus}</if>
-            <if test="techNo != null  and techNo != ''"> and a.tech_no = #{techNo}</if>
+            <if test="progressStatus != null  and progressStatus != ''"> and coalesce(st.progress_status, a.audit_status) = #{progressStatus}</if>
         </where>
     </select>
 
@@ -64,11 +76,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </select>
 
     <insert id="insertBom" parameterType="Bom" useGeneratedKeys="true" keyProperty="id">
-        insert into t_erp_bom
+        insert into t_erp_sample_notice
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="sampleNo != null">sample_no,</if>
             <if test="sampleType != null">sample_type,</if>
             <if test="customerId != null">customer_id,</if>
+            <if test="customerName != null">customer_name,</if>
             <if test="styleCategory != null">style_category,</if>
             <if test="styleSubCategory != null">style_sub_category,</if>
             <if test="styleType != null">style_type,</if>
@@ -84,8 +97,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="bulkOrderNo != null">bulk_order_no,</if>
             <if test="salesId != null">sales_id,</if>
             <if test="salesName != null">sales_name,</if>
-            <if test="progressStatus != null">progress_status,</if>
-            <if test="techNo != null">tech_no,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
@@ -96,6 +107,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="sampleNo != null">#{sampleNo},</if>
             <if test="sampleType != null">#{sampleType},</if>
             <if test="customerId != null">#{customerId},</if>
+            <if test="customerName != null">#{customerName},</if>
             <if test="styleCategory != null">#{styleCategory},</if>
             <if test="styleSubCategory != null">#{styleSubCategory},</if>
             <if test="styleType != null">#{styleType},</if>
@@ -111,8 +123,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="bulkOrderNo != null">#{bulkOrderNo},</if>
             <if test="salesId != null">#{salesId},</if>
             <if test="salesName != null">#{salesName},</if>
-            <if test="progressStatus != null">#{progressStatus},</if>
-            <if test="techNo != null">#{techNo},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
@@ -122,11 +132,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </insert>
 
     <update id="updateBom" parameterType="Bom">
-        update t_erp_bom
+        update t_erp_sample_notice
         <trim prefix="SET" suffixOverrides=",">
             <if test="sampleNo != null">sample_no = #{sampleNo},</if>
             <if test="sampleType != null">sample_type = #{sampleType},</if>
             <if test="customerId != null">customer_id = #{customerId},</if>
+            <if test="customerName != null">customer_name = #{customerName},</if>
             <if test="styleCategory != null">style_category = #{styleCategory},</if>
             <if test="styleSubCategory != null">style_sub_category = #{styleSubCategory},</if>
             <if test="styleType != null">style_type = #{styleType},</if>
@@ -142,8 +153,6 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="bulkOrderNo != null">bulk_order_no = #{bulkOrderNo},</if>
             <if test="salesId != null">sales_id = #{salesId},</if>
             <if test="salesName != null">sales_name = #{salesName},</if>
-            <if test="progressStatus != null">progress_status = #{progressStatus},</if>
-            <if test="techNo != null">tech_no = #{techNo},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
@@ -154,22 +163,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </update>
 
     <delete id="deleteBomById" parameterType="Long">
-        delete from t_erp_bom where id = #{id}
+        delete from t_erp_sample_notice where id = #{id}
     </delete>
 
     <delete id="deleteBomByIds" parameterType="String">
-        delete from t_erp_bom where id in
+        delete from t_erp_sample_notice where id in
         <foreach item="id" collection="array" open="(" separator="," close=")">
             #{id}
         </foreach>
     </delete>
 
     <insert id="insertBomBatch" parameterType="java.util.List">
-        REPLACE INTO t_erp_bom
-        (id,sample_no,sample_type,customer_id,style_category,style_sub_category,style_type,sample_category_type,style_code,due_date,emergency_type,picture_url,audit_status,audit_by,audit_time,process_instance_id,bulk_order_no,sales_id,sales_name,progress_status,tech_no,create_by,create_time,update_by,update_time,remark)
+        REPLACE INTO t_erp_sample_notice
+        (id,sample_no,sample_type,customer_id,customer_name,style_category,style_sub_category,style_type,sample_category_type,style_code,due_date,emergency_type,picture_url,audit_status,audit_by,audit_time,process_instance_id,bulk_order_no,sales_id,sales_name,create_by,create_time,update_by,update_time,remark)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.id},#{item.sampleNo},#{item.sampleType},#{item.customerId},#{item.styleCategory},#{item.styleSubCategory},#{item.styleType},#{item.sampleCategoryType},#{item.styleCode},#{item.dueDate},#{item.emergencyType},#{item.pictureUrl},#{item.auditStatus},#{item.auditBy},#{item.auditTime},#{item.processInstanceId},#{item.bulkOrderNo},#{item.salesId},#{item.salesName},#{item.progressStatus},#{item.techNo},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark})
+            (#{item.id},#{item.sampleNo},#{item.sampleType},#{item.customerId},#{item.customerName},#{item.styleCategory},#{item.styleSubCategory},#{item.styleType},#{item.sampleCategoryType},#{item.styleCode},#{item.dueDate},#{item.emergencyType},#{item.pictureUrl},#{item.auditStatus},#{item.auditBy},#{item.auditTime},#{item.processInstanceId},#{item.bulkOrderNo},#{item.salesId},#{item.salesName},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark})
         </foreach>
     </insert>
 
