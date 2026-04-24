@@ -69,6 +69,42 @@ public class MainMaterial extends BaseEntity {
     @Excel(name = "单价")
     private Double price;
 
+    /** 最低库存预警 */
+    @Excel(name = "最低库存预警")
+    private java.math.BigDecimal minStockQty;
+
+    /** 最高库存预警 */
+    @Excel(name = "最高库存预警")
+    private java.math.BigDecimal maxStockQty;
+
+    /** 安全库存 */
+    @Excel(name = "安全库存")
+    private java.math.BigDecimal safeStockQty;
+
+    /** 最小订货量 */
+    @Excel(name = "最小订货量")
+    private java.math.BigDecimal minOrderQty;
+
+    /** 采购价 */
+    @Excel(name = "采购价")
+    private java.math.BigDecimal purchasePrice;
+
+    /** 委外价 */
+    @Excel(name = "委外价")
+    private java.math.BigDecimal outsourcePrice;
+
+    /** 标准成本 */
+    @Excel(name = "标准成本")
+    private java.math.BigDecimal standardCost;
+
+    /** 零售价 */
+    @Excel(name = "零售价")
+    private java.math.BigDecimal retailPrice;
+
+    /** 批发价 */
+    @Excel(name = "批发价")
+    private java.math.BigDecimal wholesalePrice;
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -171,6 +207,78 @@ public class MainMaterial extends BaseEntity {
         this.price = price;
     }
 
+    public java.math.BigDecimal getMinStockQty() {
+        return minStockQty;
+    }
+
+    public void setMinStockQty(java.math.BigDecimal minStockQty) {
+        this.minStockQty = minStockQty;
+    }
+
+    public java.math.BigDecimal getMaxStockQty() {
+        return maxStockQty;
+    }
+
+    public void setMaxStockQty(java.math.BigDecimal maxStockQty) {
+        this.maxStockQty = maxStockQty;
+    }
+
+    public java.math.BigDecimal getSafeStockQty() {
+        return safeStockQty;
+    }
+
+    public void setSafeStockQty(java.math.BigDecimal safeStockQty) {
+        this.safeStockQty = safeStockQty;
+    }
+
+    public java.math.BigDecimal getMinOrderQty() {
+        return minOrderQty;
+    }
+
+    public void setMinOrderQty(java.math.BigDecimal minOrderQty) {
+        this.minOrderQty = minOrderQty;
+    }
+
+    public java.math.BigDecimal getPurchasePrice() {
+        return purchasePrice;
+    }
+
+    public void setPurchasePrice(java.math.BigDecimal purchasePrice) {
+        this.purchasePrice = purchasePrice;
+    }
+
+    public java.math.BigDecimal getOutsourcePrice() {
+        return outsourcePrice;
+    }
+
+    public void setOutsourcePrice(java.math.BigDecimal outsourcePrice) {
+        this.outsourcePrice = outsourcePrice;
+    }
+
+    public java.math.BigDecimal getStandardCost() {
+        return standardCost;
+    }
+
+    public void setStandardCost(java.math.BigDecimal standardCost) {
+        this.standardCost = standardCost;
+    }
+
+    public java.math.BigDecimal getRetailPrice() {
+        return retailPrice;
+    }
+
+    public void setRetailPrice(java.math.BigDecimal retailPrice) {
+        this.retailPrice = retailPrice;
+    }
+
+    public java.math.BigDecimal getWholesalePrice() {
+        return wholesalePrice;
+    }
+
+    public void setWholesalePrice(java.math.BigDecimal wholesalePrice) {
+        this.wholesalePrice = wholesalePrice;
+    }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -188,6 +296,15 @@ public class MainMaterial extends BaseEntity {
             .append("unit", getUnit())
             .append("pictrueUrl", getPictrueUrl())
             .append("price", getPrice())
+            .append("minStockQty", getMinStockQty())
+            .append("maxStockQty", getMaxStockQty())
+            .append("safeStockQty", getSafeStockQty())
+            .append("minOrderQty", getMinOrderQty())
+            .append("purchasePrice", getPurchasePrice())
+            .append("outsourcePrice", getOutsourcePrice())
+            .append("standardCost", getStandardCost())
+            .append("retailPrice", getRetailPrice())
+            .append("wholesalePrice", getWholesalePrice())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())

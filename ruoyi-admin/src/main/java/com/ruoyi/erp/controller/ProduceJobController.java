@@ -122,4 +122,15 @@ public class ProduceJobController extends BaseController {
     public AjaxResult remove(@PathVariable Long[] ids) {
         return toAjax(produceJobService.deleteProduceJobByIds(ids));
     }
+
+    /**
+     * 初始化工单工序队列（根据工艺路线自动生成工序流转）
+     */
+    @PreAuthorize("@ss.hasPermi('erp:produceJob:init')")
+    @Log(title = "生产工票", businessType = BusinessType.INSERT)
+    @PostMapping("/initProcesses/{jobId}/{routeId}")
+    public AjaxResult initProcesses(@PathVariable Long jobId, @PathVariable Long routeId) {
+        produceJobService.initJobProcesses(jobId, routeId);
+        return AjaxResult.success("工序初始化成功");
+    }
 }

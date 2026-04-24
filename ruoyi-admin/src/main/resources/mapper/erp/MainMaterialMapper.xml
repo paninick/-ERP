@@ -18,6 +18,17 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="yarnCount"    column="yarn_count"    />
         <result property="unit"    column="unit"    />
         <result property="pictrueUrl"    column="pictrue_url"    />
+        <result property="price"    column="price"    />
+        <result property="minStockQty"    column="min_stock_qty"    />
+        <result property="maxStockQty"    column="max_stock_qty"    />
+        <result property="safeStockQty"    column="safe_stock_qty"    />
+        <result property="minOrderQty"    column="min_order_qty"    />
+        <result property="purchasePrice"    column="purchase_price"    />
+        <result property="outsourcePrice"    column="outsource_price"    />
+        <result property="standardCost"    column="standard_cost"    />
+        <result property="retailPrice"    column="retail_price"    />
+        <result property="wholesalePrice"    column="wholesale_price"    />
+        <result property="currentStockQty"    column="current_stock_qty"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
@@ -26,8 +37,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectMainMaterialVo">
-        select a.id, a.main_material_type, a.main_material_no, a.supply_method, a.factory_no, a.supplier_id, a.name, a.composition, a.width, a.weight, a.yarn_count, a.unit, a.pictrue_url, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
+        select a.id, a.main_material_type, a.main_material_no, a.supply_method, a.factory_no, a.supplier_id, a.name, a.composition, a.width, a.weight, a.yarn_count, a.unit, a.pictrue_url, a.price,
+               a.min_stock_qty, a.max_stock_qty, a.safe_stock_qty, a.min_order_qty,
+               a.purchase_price, a.outsource_price, a.standard_cost, a.retail_price, a.wholesale_price,
+               COALESCE(SUM(s.inv_qty), 0) as current_stock_qty,
+               a.create_by, a.create_time, a.update_by, a.update_time, a.remark
         from t_erp_main_material a
+        left join t_erp_inv_stock s on a.id = s.material_id
     </sql>
 
     <select id="selectMainMaterialList" parameterType="MainMaterial" resultMap="MainMaterialResult">
@@ -39,11 +55,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="supplierId != null "> and a.supplier_id = #{supplierId}</if>
             <if test="name != null  and name != ''"> and a.name like concat('%', #{name}, '%')</if>
         </where>
+        GROUP BY a.id
     </select>
 
     <select id="selectMainMaterialById" parameterType="Long" resultMap="MainMaterialResult">
         <include refid="selectMainMaterialVo"/>
         where a.id = #{id}
+        GROUP BY a.id
     </select>
 
     <select id="selectMainMaterialByNo" parameterType="String" resultMap="MainMaterialResult">
@@ -66,6 +84,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="yarnCount != null">yarn_count,</if>
             <if test="unit != null">unit,</if>
             <if test="pictrueUrl != null">pictrue_url,</if>
+            <if test="price != null">price,</if>
+            <if test="minStockQty != null">min_stock_qty,</if>
+            <if test="maxStockQty != null">max_stock_qty,</if>
+            <if test="safeStockQty != null">safe_stock_qty,</if>
+            <if test="minOrderQty != null">min_order_qty,</if>
+            <if test="purchasePrice != null">purchase_price,</if>
+            <if test="outsourcePrice != null">outsource_price,</if>
+            <if test="standardCost != null">standard_cost,</if>
+            <if test="retailPrice != null">retail_price,</if>
+            <if test="wholesalePrice != null">wholesale_price,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
@@ -85,6 +113,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="yarnCount != null">#{yarnCount},</if>
             <if test="unit != null">#{unit},</if>
             <if test="pictrueUrl != null">#{pictrueUrl},</if>
+            <if test="price != null">#{price},</if>
+            <if test="minStockQty != null">#{minStockQty},</if>
+            <if test="maxStockQty != null">#{maxStockQty},</if>
+            <if test="safeStockQty != null">#{safeStockQty},</if>
+            <if test="minOrderQty != null">#{minOrderQty},</if>
+            <if test="purchasePrice != null">#{purchasePrice},</if>
+            <if test="outsourcePrice != null">#{outsourcePrice},</if>
+            <if test="standardCost != null">#{standardCost},</if>
+            <if test="retailPrice != null">#{retailPrice},</if>
+            <if test="wholesalePrice != null">#{wholesalePrice},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
@@ -108,6 +146,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="yarnCount != null">yarn_count = #{yarnCount},</if>
             <if test="unit != null">unit = #{unit},</if>
             <if test="pictrueUrl != null">pictrue_url = #{pictrueUrl},</if>
+            <if test="price != null">price = #{price},</if>
+            <if test="minStockQty != null">min_stock_qty = #{minStockQty},</if>
+            <if test="maxStockQty != null">max_stock_qty = #{maxStockQty},</if>
+            <if test="safeStockQty != null">safe_stock_qty = #{safeStockQty},</if>
+            <if test="minOrderQty != null">min_order_qty = #{minOrderQty},</if>
+            <if test="purchasePrice != null">purchase_price = #{purchasePrice},</if>
+            <if test="outsourcePrice != null">outsource_price = #{outsourcePrice},</if>
+            <if test="standardCost != null">standard_cost = #{standardCost},</if>
+            <if test="retailPrice != null">retail_price = #{retailPrice},</if>
+            <if test="wholesalePrice != null">wholesale_price = #{wholesalePrice},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
@@ -130,10 +178,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
     <insert id="insertMainMaterialBatch" parameterType="java.util.List">
         REPLACE INTO t_erp_main_material
-        (id,main_material_type,main_material_no,supply_method,factory_no,supplier_id,name,composition,width,weight,yarn_count,unit,pictrue_url,create_by,create_time,update_by,update_time,remark,price)
+        (id,main_material_type,main_material_no,supply_method,factory_no,supplier_id,name,composition,width,weight,yarn_count,unit,pictrue_url,price,min_stock_qty,max_stock_qty,safe_stock_qty,min_order_qty,purchase_price,outsource_price,standard_cost,retail_price,wholesale_price,create_by,create_time,update_by,update_time,remark)
         VALUES
         <foreach collection="list" item="item" index="index" separator=",">
-            (#{item.id},#{item.mainMaterialType},#{item.mainMaterialNo},#{item.supplyMethod},#{item.factoryNo},#{item.supplierId},#{item.name},#{item.composition},#{item.width},#{item.weight},#{item.yarnCount},#{item.unit},#{item.pictrueUrl},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark},#{item.price})
+            (#{item.id},#{item.mainMaterialType},#{item.mainMaterialNo},#{item.supplyMethod},#{item.factoryNo},#{item.supplierId},#{item.name},#{item.composition},#{item.width},#{item.weight},#{item.yarnCount},#{item.unit},#{item.pictrueUrl},#{item.price},#{item.minStockQty},#{item.maxStockQty},#{item.safeStockQty},#{item.minOrderQty},#{item.purchasePrice},#{item.outsourcePrice},#{item.standardCost},#{item.retailPrice},#{item.wholesalePrice},#{item.createBy},#{item.createTime},#{item.updateBy},#{item.updateTime},#{item.remark})
         </foreach>
     </insert>
 
@@ -153,6 +201,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="unit != null">unit,</if>
             <if test="pictrueUrl != null">pictrue_url,</if>
             <if test="price != null">price,</if>
+            <if test="minStockQty != null">min_stock_qty,</if>
+            <if test="maxStockQty != null">max_stock_qty,</if>
+            <if test="safeStockQty != null">safe_stock_qty,</if>
+            <if test="minOrderQty != null">min_order_qty,</if>
+            <if test="purchasePrice != null">purchase_price,</if>
+            <if test="outsourcePrice != null">outsource_price,</if>
+            <if test="standardCost != null">standard_cost,</if>
+            <if test="retailPrice != null">retail_price,</if>
+            <if test="wholesalePrice != null">wholesale_price,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
@@ -173,6 +230,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="unit != null">#{unit},</if>
             <if test="pictrueUrl != null">#{pictrueUrl},</if>
             <if test="price != null">#{price},</if>
+            <if test="minStockQty != null">#{minStockQty},</if>
+            <if test="maxStockQty != null">#{maxStockQty},</if>
+            <if test="safeStockQty != null">#{safeStockQty},</if>
+            <if test="minOrderQty != null">#{minOrderQty},</if>
+            <if test="purchasePrice != null">#{purchasePrice},</if>
+            <if test="outsourcePrice != null">#{outsourcePrice},</if>
+            <if test="standardCost != null">#{standardCost},</if>
+            <if test="retailPrice != null">#{retailPrice},</if>
+            <if test="wholesalePrice != null">#{wholesalePrice},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>

@@ -92,6 +92,14 @@ public class ProducePlanServiceImpl implements IProducePlanService {
         return producePlanMapper.updateProducePlan(producePlan);
     }
 
+    @Override
+    public int approveProducePlan(ProducePlan producePlan) {
+        producePlan.setAuditBy(SecurityUtils.getUsername());
+        producePlan.setAuditTime(DateUtils.getNowDate());
+        producePlan.setUpdateTime(DateUtils.getNowDate());
+        return producePlanMapper.updateProducePlan(producePlan);
+    }
+
     /**
      * 批量删除生产计划
      *

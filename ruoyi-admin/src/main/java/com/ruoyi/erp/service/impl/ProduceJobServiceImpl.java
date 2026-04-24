@@ -173,4 +173,10 @@ public class ProduceJobServiceImpl implements IProduceJobService {
     public Integer sumActualQtyByProducePlanId(Long producePlanId) {
         return produceJobMapper.sumActualQtyByProducePlanId(producePlanId);
     }
+
+    @Override
+    public int initJobProcesses(Long jobId, Long routeId) {
+        produceJobMapper.callInitJobProcesses(jobId, routeId);
+        return 1;
+    }
 }

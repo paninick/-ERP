@@ -77,6 +77,14 @@ public class SalesOrderServiceImpl implements ISalesOrderService {
         return salesOrderMapper.updateSalesOrder(salesOrder);
     }
 
+    @Override
+    public int approveSalesOrder(SalesOrder salesOrder) {
+        salesOrder.setAuditBy(SecurityUtils.getUsername());
+        salesOrder.setAuditTime(DateUtils.getNowDate());
+        salesOrder.setUpdateTime(DateUtils.getNowDate());
+        return salesOrderMapper.updateSalesOrder(salesOrder);
+    }
+
     /**
      * 批量删除销售订单
      *

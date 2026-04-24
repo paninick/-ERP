@@ -67,6 +67,14 @@ public interface IProducePlanService {
     int insertProducePlanBatch(List<ProducePlan> list);
 
     /**
+     * 审批生产计划
+     *
+     * @param producePlan 生产计划（含 auditStatus）
+     * @return 结果
+     */
+    int approveProducePlan(ProducePlan producePlan);
+
+    /**
      * 查询甘特图任务列表
      *
      * @return 甘特图任务列表

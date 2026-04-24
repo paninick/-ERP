@@ -67,6 +67,14 @@ public interface ISalesOrderService {
     int insertSalesOrderBatch(List<SalesOrder> list);
 
     /**
+     * 审批销售订单
+     *
+     * @param salesOrder 销售订单（含 auditStatus）
+     * @return 结果
+     */
+    int approveSalesOrder(SalesOrder salesOrder);
+
+    /**
      * 导入销售订单数据
      *
      * @param salesOrderList 销售订单数据列表

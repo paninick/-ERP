@@ -89,4 +89,13 @@ public interface IProduceJobService {
      * @return 已完成数量
      */
     public Integer sumActualQtyByProducePlanId(Long producePlanId);
+
+    /**
+     * 初始化工单工序队列
+     *
+     * @param jobId 工单ID
+     * @param routeId 工艺路线ID
+     * @return 结果
+     */
+    public int initJobProcesses(Long jobId, Long routeId);
 }

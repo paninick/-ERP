@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.ProductTraceMapper">
+
+    <resultMap id="BaseResultMap" type="com.ruoyi.erp.domain.vo.ProductTraceVO">
+        <result property="salesOrderId" column="sales_order_id"/>
+        <result property="salesNo" column="sales_no"/>
+        <result property="styleCode" column="style_code"/>
+        <result property="bulkOrderNo" column="bulk_order_no"/>
+        <result property="customerName" column="customer_name"/>
+        <result property="producePlanId" column="produce_plan_id"/>
+        <result property="planNo" column="plan_no"/>
+        <result property="produceJobId" column="produce_job_id"/>
+        <result property="jobNo" column="job_no"/>
+        <result property="colorCode" column="color_code"/>
+        <result property="sizeCode" column="size_code"/>
+        <result property="planQty" column="plan_qty"/>
+        <result property="actualQty" column="actual_qty"/>
+        <result property="serialId" column="serial_id"/>
+        <result property="serialNo" column="serial_no"/>
+        <result property="serialStatus" column="serial_status"/>
+        <result property="serialStatusName" column="serial_status_name"/>
+        <result property="currentProcessName" column="current_process_name"/>
+        <result property="serialCreateTime" column="serial_create_time"/>
+        <result property="finishTime" column="finish_time"/>
+        <result property="warehouseTime" column="warehouse_time"/>
+        <result property="shipTime" column="ship_time"/>
+    </resultMap>
+
+    <select id="selectProductTraceList" parameterType="com.ruoyi.erp.domain.vo.ProductTraceVO" resultMap="BaseResultMap">
+        SELECT * FROM v_erp_product_trace
+        <where>
+            <if test="salesNo != null and salesNo != ''">
+                AND sales_no LIKE CONCAT('%', #{salesNo}, '%')
+            </if>
+            <if test="styleCode != null and styleCode != ''">
+                AND style_code LIKE CONCAT('%', #{styleCode}, '%')
+            </if>
+            <if test="jobNo != null and jobNo != ''">
+                AND job_no LIKE CONCAT('%', #{jobNo}, '%')
+            </if>
+            <if test="serialNo != null and serialNo != ''">
+                AND serial_no LIKE CONCAT('%', #{serialNo}, '%')
+            </if>
+            <if test="serialStatus != null and serialStatus != ''">
+                AND serial_status = #{serialStatus}
+            </if>
+        </where>
+        ORDER BY serial_create_time DESC
+    </select>
+</mapper>

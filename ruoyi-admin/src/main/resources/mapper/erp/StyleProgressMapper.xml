@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.StyleProgressMapper">
+
+    <resultMap id="BaseResultMap" type="com.ruoyi.erp.domain.vo.StyleProgressVO">
+        <result property="styleCode" column="style_code"/>
+        <result property="bulkOrderNo" column="bulk_order_no"/>
+        <result property="customerName" column="customer_name"/>
+        <result property="salesNo" column="sales_no"/>
+        <result property="totalJobs" column="total_jobs"/>
+        <result property="totalPlanQty" column="total_plan_qty"/>
+        <result property="totalActualQty" column="total_actual_qty"/>
+        <result property="completeRatePct" column="complete_rate_pct"/>
+        <result property="shippedQty" column="shipped_qty"/>
+        <result property="dueDate" column="due_date"/>
+    </resultMap>
+
+    <select id="selectStyleProgressList" parameterType="com.ruoyi.erp.domain.vo.StyleProgressVO" resultMap="BaseResultMap">
+        SELECT * FROM v_erp_style_progress
+        <where>
+            <if test="styleCode != null and styleCode != ''">
+                AND style_code LIKE CONCAT('%', #{styleCode}, '%')
+            </if>
+            <if test="customerName != null and customerName != ''">
+                AND customer_name LIKE CONCAT('%', #{customerName}, '%')
+            </if>
+            <if test="salesNo != null and salesNo != ''">
+                AND sales_no LIKE CONCAT('%', #{salesNo}, '%')
+            </if>
+        </where>
+        ORDER BY due_date ASC
+    </select>
+
+    <select id="selectByStyleCode" parameterType="String" resultMap="BaseResultMap">
+        SELECT * FROM v_erp_style_progress WHERE style_code = #{styleCode}
+    </select>
+</mapper>

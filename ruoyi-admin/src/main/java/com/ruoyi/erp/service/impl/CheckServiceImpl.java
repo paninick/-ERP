@@ -105,6 +105,9 @@ public class CheckServiceImpl implements ICheckService
     @Override
     public int approveCheck(Check check)
     {
+        check.setAuditBy(SecurityUtils.getUserId());
+        check.setAuditByName(SecurityUtils.getUsername());
+        check.setAuditTime(DateUtils.getNowDate());
         check.setUpdateTime(DateUtils.getNowDate());
         return checkMapper.updateCheck(check);
     }

@@ -147,4 +147,12 @@ public interface ProduceJobMapper {
     public List<com.ruoyi.erp.domain.vo.EmployeeRankVO> selectEmployeeMonthlyRank(
             @Param("start") java.util.Date start,
             @Param("end") java.util.Date end);
+
+    /**
+     * 调用存储过程初始化工单工序队列
+     *
+     * @param jobId 工单ID
+     * @param routeId 工艺路线ID
+     */
+    public void callInitJobProcesses(@Param("jobId") Long jobId, @Param("routeId") Long routeId);
 }
