@@ -4,34 +4,34 @@
     <div class="kpi-strip">
       <div class="kpi-card">
         <div class="kpi-value">{{ stats.pendingCount || 0 }}</div>
-        <div class="kpi-label">待检批次</div>
+        <div class="kpi-label">{{ $t('quality.pendingCount') }}</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-value" style="color: var(--app-primary-color)">
           <count-to :startVal="0" :endVal="stats.todayChecked || 0" :duration="1200" />
         </div>
-        <div class="kpi-label">今日已检</div>
+        <div class="kpi-label">{{ $t('quality.todayChecked') }}</div>
       </div>
       <div class="kpi-card">
         <div class="kpi-value" style="color: var(--app-success-color)">
           <count-to :startVal="0" :endVal="stats.passRate || 0" :duration="1600" :decimals="1" suffix="%" />
         </div>
-        <div class="kpi-label">合格率</div>
+        <div class="kpi-label">{{ $t('quality.passRate') }}</div>
       </div>
       <div class="kpi-card" :class="{ 'kpi-card--pulse': stats.criticalCount > 0 }">
         <div class="kpi-value" style="color: var(--app-danger-color)">{{ stats.criticalCount || 0 }}</div>
-        <div class="kpi-label">致命缺陷</div>
+        <div class="kpi-label">{{ $t('quality.criticalCount') }}</div>
       </div>
     </div>
 
     <!-- 图表双栏 -->
     <div class="chart-row">
       <div class="chart-panel">
-        <div class="panel-title">AQL 合格率</div>
+        <div class="panel-title">{{ $t('quality.aqlPassRate') }}</div>
         <div ref="ringChart" class="chart-canvas" />
       </div>
       <div class="chart-panel">
-        <div class="panel-title">不合格原因 TOP 5</div>
+        <div class="panel-title">{{ $t('quality.topDefectReasons') }}</div>
         <div ref="barChart" class="chart-canvas" />
       </div>
     </div>
@@ -43,7 +43,7 @@
           ref="scanInput"
           v-model="barcode"
           class="scan-input"
-          placeholder="扫码或输入批次号，回车查询..."
+          :placeholder="$t('quality.scanPlaceholder')"
           @keyup.enter="handleScan"
         />
       </div>
@@ -52,12 +52,12 @@
           <thead>
             <tr>
               <th style="width: 4px; padding: 0"></th>
-              <th>批次号</th>
-              <th>款号</th>
-              <th>检验结果</th>
-              <th>检验员</th>
-              <th>时间</th>
-              <th style="width: 80px">操作</th>
+              <th>{{ $t('quality.batchNo') }}</th>
+              <th>{{ $t('quality.styleCode') }}</th>
+              <th>{{ $t('quality.checkResult') }}</th>
+              <th>{{ $t('quality.inspector') }}</th>
+              <th>{{ $t('quality.time') }}</th>
+              <th style="width: 80px">{{ $t('system.operation') }}</th>
             </tr>
           </thead>
           <tbody>
@@ -68,17 +68,17 @@
               <td>{{ item.styleCode }}</td>
               <td>
                 <span class="result-tag" :class="'result-' + (item.resultLevel || 'PASS').toLowerCase()">
-                  {{ item.resultLevel === 'CRITICAL' ? '致命' : item.resultLevel === 'MAJOR' ? '严重' : item.resultLevel === 'MINOR' ? '轻微' : '合格' }}
+                  {{ item.resultLevel === 'CRITICAL' ? $t('quality.resultCritical') : item.resultLevel === 'MAJOR' ? $t('quality.resultMajor') : item.resultLevel === 'MINOR' ? $t('quality.resultMinor') : $t('quality.resultPass') }}
                 </span>
               </td>
               <td>{{ item.createBy }}</td>
               <td>{{ item.createTime }}</td>
               <td>
-                <button v-if="item.resultLevel === 'CRITICAL'" class="action-reject" @click="openReject(item)">打回</button>
+                <button v-if="item.resultLevel === 'CRITICAL'" class="action-reject" @click="openReject(item)">{{ $t('quality.reject') }}</button>
               </td>
             </tr>
             <tr v-if="records.length === 0">
-              <td colspan="7" style="text-align: center; color: var(--app-text-tip); padding: 40px 0">暂无检验记录</td>
+              <td colspan="7" style="text-align: center; color: var(--app-text-tip); padding: 40px 0">{{ $t('quality.noRecords') }}</td>
             </tr>
           </tbody>
         </table>
@@ -88,16 +88,16 @@
     <!-- 打回抽屉 -->
     <el-drawer :visible.sync="drawerVisible" direction="rtl" size="380px" :show-close="false">
       <template #title>
-        <span style="font-size: 16px; font-weight: 600; color: var(--app-text-title)">确认打回</span>
+        <span style="font-size: 16px; font-weight: 600; color: var(--app-text-title)">{{ $t('quality.confirmReject') }}</span>
       </template>
       <div class="drawer-body">
         <div class="drawer-info">
-          <div class="drawer-info-row"><span class="drawer-info-label">批次号</span><span>{{ rejectItem.batchNo }}</span></div>
-          <div class="drawer-info-row"><span class="drawer-info-label">款号</span><span>{{ rejectItem.styleCode }}</span></div>
-          <div class="drawer-info-row"><span class="drawer-info-label">缺陷类型</span><el-tag type="danger" size="small">致命缺陷</el-tag></div>
+          <div class="drawer-info-row"><span class="drawer-info-label">{{ $t('quality.batchNo') }}</span><span>{{ rejectItem.batchNo }}</span></div>
+          <div class="drawer-info-row"><span class="drawer-info-label">{{ $t('quality.styleCode') }}</span><span>{{ rejectItem.styleCode }}</span></div>
+          <div class="drawer-info-row"><span class="drawer-info-label">{{ $t('quality.defectType') }}</span><el-tag type="danger" size="small">{{ $t('quality.criticalDefect') }}</el-tag></div>
         </div>
-        <el-input v-model="rejectReason" type="textarea" :rows="3" placeholder="打回原因（选填）" style="margin-top: 20px" />
-        <button class="reject-confirm-btn" @click="confirmReject">确认打回</button>
+        <el-input v-model="rejectReason" type="textarea" :rows="3" :placeholder="$t('quality.rejectReason')" style="margin-top: 20px" />
+        <button class="reject-confirm-btn" @click="confirmReject">{{ $t('quality.confirmRejectBtn') }}</button>
       </div>
     </el-drawer>
   </div>
@@ -121,6 +121,17 @@ export default {
       rejectReason: '',
       ringChart: null,
       barChartInst: null
+    }
+  },
+  computed: {
+    chartReasons() {
+      return [
+        this.$t('quality.reasonColorDeviation'),
+        this.$t('quality.reasonSizeDeviation'),
+        this.$t('quality.reasonWeaveDefect'),
+        this.$t('quality.reasonSewingDefect'),
+        this.$t('quality.reasonStain')
+      ]
     }
   },
   mounted() {
@@ -162,8 +173,8 @@ export default {
           this.$set(this.records[idx], '_flash', true)
           setTimeout(() => { this.records.splice(idx, 1) }, 600)
         }
-        this.$message.success('已打回')
-      }).catch(() => { this.$message.error('打回失败') })
+        this.$message.success(this.$t('quality.rejectSuccess'))
+      }).catch(() => { this.$message.error(this.$t('quality.rejectFailed')) })
     },
     initRingChart() {
       this.ringChart = echarts.init(this.$refs.ringChart)
@@ -182,13 +193,13 @@ export default {
           style: { text: rate.toFixed(1) + '%', fontSize: 32, fontWeight: 700, fill: '#1D1D1F', textAlign: 'center' }
         }, {
           type: 'text', left: 'center', top: '58%',
-          style: { text: 'AQL 合格率', fontSize: 13, fill: '#86868B', textAlign: 'center' }
+          style: { text: this.$t('quality.aqlPassRate'), fontSize: 13, fill: '#86868B', textAlign: 'center' }
         }]
       })
     },
     initBarChart() {
       this.barChartInst = echarts.init(this.$refs.barChart)
-      const reasons = ['色差超标', '尺寸偏差', '织疵', '缝制不良', '污渍']
+      const reasons = this.chartReasons
       const values = [18, 12, 9, 7, 3]
       this.barChartInst.setOption({
         grid: { left: 90, right: 30, top: 10, bottom: 10 },

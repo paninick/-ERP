@@ -1,41 +1,41 @@
 <template>
   <div>
     <el-form :model="queryParams" ref="queryForm" :inline="true" v-show="true">
-      <el-form-item label="导入名称" prop="importName">
-        <el-input v-model="queryParams.importName" placeholder="请输入导入名称" clearable />
+      <el-form-item :label="$t('dataImport.importName')" prop="importName">
+        <el-input v-model="queryParams.importName" :placeholder="$t('validation.enter', [$t('dataImport.importName')])" clearable />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="handleQuery">搜索</el-button>
-        <el-button @click="resetQuery">重置</el-button>
+        <el-button type="primary" @click="handleQuery">{{ $t('btn.search') }}</el-button>
+        <el-button @click="resetQuery">{{ $t('btn.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
     <el-card>
       <el-table v-loading="loading" :data="dataImportList">
         <el-table-column type="selection" width="55" align="center" />
-        <el-table-column property="importId" label="导入ID" width="80" />
-        <el-table-column property="importName" label="导入名称" width="150" />
-        <el-table-column property="tableName" label="表名" width="150" />
-        <el-table-column property="fileName" label="文件名" width="200" />
-        <el-table-column property="totalCount" label="总记录数" width="100" />
-        <el-table-column property="successCount" label="成功" width="80">
+        <el-table-column property="importId" :label="$t('dataImport.importId')" width="80" />
+        <el-table-column property="importName" :label="$t('dataImport.importName')" width="150" />
+        <el-table-column property="tableName" :label="$t('dataImport.tableName')" width="150" />
+        <el-table-column property="fileName" :label="$t('dataImport.fileName')" width="200" />
+        <el-table-column property="totalCount" :label="$t('dataImport.totalCount')" width="100" />
+        <el-table-column property="successCount" :label="$t('dataImport.success')" width="80">
           <template slot-scope="scope">
             <span>{{ scope.row.successCount }} / {{ scope.row.totalCount }}</span>
           </template>
         </el-table-column>
-        <el-table-column property="failCount" label="失败" width="80" />
-        <el-table-column property="status" label="状态" width="80">
+        <el-table-column property="failCount" :label="$t('dataImport.fail')" width="80" />
+        <el-table-column property="status" :label="$t('dataImport.status')" width="80">
           <template slot-scope="scope">
             <el-tag :type="scope.row.status === '1' ? 'success' : scope.row.status === '2' ? 'danger' : 'warning'">
-              {{ scope.row.status === '0' ? '处理中' : scope.row.status === '1' ? '成功' : '失败' }}
+              {{ scope.row.status === '0' ? $t('dataImport.processing') : scope.row.status === '1' ? $t('dataImport.successStatus') : $t('dataImport.failStatus') }}
             </el-tag>
           </template>
         </el-table-column>
-        <el-table-column property="createTime" label="创建时间" width="180" />
-        <el-table-column label="操作" class="padding-left-0">
+        <el-table-column property="createTime" :label="$t('system.createTime')" width="180" />
+        <el-table-column :label="$t('system.operation')" class="padding-left-0">
           <template slot-scope="scope">
-            <el-button link type="primary" icon="el-icon-edit" size="mini" @click="handleUpdate(scope.row)">编辑</el-button>
-            <el-button link type="danger" icon="el-icon-delete" size="mini" @click="handleDelete(scope.row)">删除</el-button>
+            <el-button link type="primary" icon="el-icon-edit" size="mini" @click="handleUpdate(scope.row)">{{ $t('btn.edit') }}</el-button>
+            <el-button link type="danger" icon="el-icon-delete" size="mini" @click="handleDelete(scope.row)">{{ $t('btn.delete') }}</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -51,22 +51,22 @@
 
     <el-dialog :title="title" :visible.sync="open" width="500px" append-to-body>
       <el-form ref="form" :model="form" :rules="rules" label-width="80px">
-        <el-form-item label="导入名称" prop="importName">
-          <el-input v-model="form.importName" placeholder="请输入导入名称" />
+        <el-form-item :label="$t('dataImport.importName')" prop="importName">
+          <el-input v-model="form.importName" :placeholder="$t('validation.enter', [$t('dataImport.importName')])" />
         </el-form-item>
-        <el-form-item label="表名" prop="tableName">
-          <el-input v-model="form.tableName" placeholder="请输入表名" />
+        <el-form-item :label="$t('dataImport.tableName')" prop="tableName">
+          <el-input v-model="form.tableName" :placeholder="$t('validation.enter', [$t('dataImport.tableName')])" />
         </el-form-item>
-        <el-form-item label="文件名" prop="fileName">
-          <el-input v-model="form.fileName" placeholder="请输入文件名" />
+        <el-form-item :label="$t('dataImport.fileName')" prop="fileName">
+          <el-input v-model="form.fileName" :placeholder="$t('validation.enter', [$t('dataImport.fileName')])" />
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入备注" />
+        <el-form-item :label="$t('system.remark')" prop="remark">
+          <el-input v-model="form.remark" type="textarea" :placeholder="$t('validation.enter', [$t('system.remark')])" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" :loading="submitLoading" @click="submitForm">确定</el-button>
-        <el-button @click="cancel">取消</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">{{ $t('btn.confirm') }}</el-button>
+        <el-button @click="cancel">{{ $t('btn.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -91,14 +91,18 @@ export default {
         status: null
       },
       form: {},
-      rules: {
-        importName: [
-          { required: true, message: "导入名称不能为空", trigger: "blur" }
-        ]
-      },
       dataImportList: [],
       total: 0
     };
+  },
+  computed: {
+    rules() {
+      return {
+        importName: [
+          { required: true, message: this.$t('validation.required'), trigger: "blur" }
+        ]
+      };
+    }
   },
   created() {
     this.getList();
@@ -141,13 +145,13 @@ export default {
     handleAdd() {
       this.resetFormData();
       this.open = true;
-      this.title = "添加数据导入";
+      this.title = this.$t('dataImport.addTitle');
     },
     handleUpdate(row) {
       getDataImport(row.importId).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改数据导入";
+        this.title = this.$t('dataImport.editTitle');
       });
     },
     submitForm() {
@@ -160,17 +164,17 @@ export default {
           ? updateDataImport(this.form)
           : addDataImport(this.form);
         request.then(() => {
-          this.$modal.msgSuccess(this.form.importId != null ? "修改成功" : "新增成功");
+          this.$modal.msgSuccess(this.form.importId != null ? this.$t('msg.editSuccess') : this.$t('msg.addSuccess'));
           this.open = false;
           this.getList();
         }).finally(() => { this.submitLoading = false });
       });
     },
     handleDelete(row) {
-      this.$modal.confirm(`是否确认删除数据导入编号为"${row.importId}"的数据项？`).then(() => {
+      this.$modal.confirm(this.$t('msg.deleteConfirm', [row.importId])).then(() => {
         return delDataImport([row.importId]);
       }).then(() => {
-        this.$modal.msgSuccess("删除成功");
+        this.$modal.msgSuccess(this.$t('msg.deleteSuccess'));
         this.getList();
       }).catch(() => {});
     }

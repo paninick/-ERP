@@ -1,33 +1,33 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
-      <el-form-item label="工序编码" prop="processCode">
+      <el-form-item :label="$t('processDef.processCode')" prop="processCode">
         <el-input
           v-model="queryParams.processCode"
-          placeholder="请输入工序编码"
+          :placeholder="$t('validation.enter', [$t('processDef.processCode')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="工序名称" prop="processName">
+      <el-form-item :label="$t('processDef.processName')" prop="processName">
         <el-input
           v-model="queryParams.processName"
-          placeholder="请输入工序名称"
+          :placeholder="$t('validation.enter', [$t('processDef.processName')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="工序类型" prop="processType">
+      <el-form-item :label="$t('processDef.processType')" prop="processType">
         <el-input
           v-model="queryParams.processType"
-          placeholder="请输入工序类型"
+          :placeholder="$t('validation.enter', [$t('processDef.processType')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('btn.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('btn.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -40,7 +40,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['erp:processDef:add']"
-        >新增</el-button>
+        >{{ $t('btn.add') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -51,7 +51,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['erp:processDef:edit']"
-        >修改</el-button>
+        >{{ $t('btn.edit') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -62,7 +62,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['erp:processDef:remove']"
-        >删除</el-button>
+        >{{ $t('btn.delete') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -72,42 +72,42 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['erp:processDef:export']"
-        >导出</el-button>
+        >{{ $t('btn.export') }}</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="processDefList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="工序编码" align="center" prop="processCode" />
-      <el-table-column label="工序名称" align="center" prop="processName" />
-      <el-table-column label="工序类型" align="center" prop="processType" />
-      <el-table-column label="所属部门" align="center" prop="department" />
-      <el-table-column label="默认工价" align="center" prop="defaultPrice" />
-      <el-table-column label="支持外协" align="center" prop="enableOutsource">
+      <el-table-column :label="$t('processDef.processCode')" align="center" prop="processCode" />
+      <el-table-column :label="$t('processDef.processName')" align="center" prop="processName" />
+      <el-table-column :label="$t('processDef.processType')" align="center" prop="processType" />
+      <el-table-column :label="$t('processDef.department')" align="center" prop="department" />
+      <el-table-column :label="$t('processDef.defaultPrice')" align="center" prop="defaultPrice" />
+      <el-table-column :label="$t('processDef.enableOutsource')" align="center" prop="enableOutsource">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.enableOutsource"/>
         </template>
       </el-table-column>
-      <el-table-column label="状态" align="center" prop="status">
+      <el-table-column :label="$t('processDef.status')" align="center" prop="status">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_normal_disable" :value="scope.row.status"/>
         </template>
       </el-table-column>
-      <el-table-column label="排序" align="center" prop="sortOrder" />
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+      <el-table-column :label="$t('processDef.sortOrder')" align="center" prop="sortOrder" />
+      <el-table-column :label="$t('system.createTime')" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="拼接工序" align="center" prop="isSpliceProcess" width="80">
+      <el-table-column :label="$t('system.remark')" align="center" prop="remark" />
+      <el-table-column :label="$t('processDef.isSpliceProcess')" align="center" prop="isSpliceProcess" width="80">
         <template slot-scope="scope">
-          <el-tag v-if="scope.row.isSpliceProcess === '1'" type="warning" size="mini">拼接</el-tag>
+          <el-tag v-if="scope.row.isSpliceProcess === '1'" type="warning" size="mini">{{ $t('processDef.splice') }}</el-tag>
           <span v-else style="color:#C0C4CC">—</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('system.operation')" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -115,14 +115,14 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['erp:processDef:edit']"
-          >修改</el-button>
+          >{{ $t('btn.edit') }}</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['erp:processDef:remove']"
-          >删除</el-button>
+          >{{ $t('btn.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -138,78 +138,78 @@
     <!-- 添加或修改工序定义对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="60%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="工序编码" prop="processCode">
-          <el-input v-model="form.processCode" placeholder="请输入工序编码" />
+        <el-form-item :label="$t('processDef.processCode')" prop="processCode">
+          <el-input v-model="form.processCode" :placeholder="$t('validation.enter', [$t('processDef.processCode')])" />
         </el-form-item>
-        <el-form-item label="工序名称" prop="processName">
-          <el-input v-model="form.processName" placeholder="请输入工序名称" />
+        <el-form-item :label="$t('processDef.processName')" prop="processName">
+          <el-input v-model="form.processName" :placeholder="$t('validation.enter', [$t('processDef.processName')])" />
         </el-form-item>
-        <el-form-item label="工序类型" prop="processType">
-          <el-input v-model="form.processType" placeholder="请输入工序类型" />
+        <el-form-item :label="$t('processDef.processType')" prop="processType">
+          <el-input v-model="form.processType" :placeholder="$t('validation.enter', [$t('processDef.processType')])" />
         </el-form-item>
-        <el-form-item label="所属部门" prop="department">
-          <el-input v-model="form.department" placeholder="请输入所属部门" />
+        <el-form-item :label="$t('processDef.department')" prop="department">
+          <el-input v-model="form.department" :placeholder="$t('validation.enter', [$t('processDef.department')])" />
         </el-form-item>
-        <el-form-item label="默认工价" prop="defaultPrice">
-          <el-input-number v-model="form.defaultPrice" :precision="2" :min="0" placeholder="请输入默认工价" />
+        <el-form-item :label="$t('processDef.defaultPrice')" prop="defaultPrice">
+          <el-input-number v-model="form.defaultPrice" :precision="2" :min="0" :placeholder="$t('validation.enter', [$t('processDef.defaultPrice')])" />
         </el-form-item>
-        <el-form-item label="是否支持外协" prop="enableOutsource">
+        <el-form-item :label="$t('processDef.enableOutsource')" prop="enableOutsource">
           <el-radio-group v-model="form.enableOutsource">
-            <el-radio :label="0">否</el-radio>
-            <el-radio :label="1">是</el-radio>
+            <el-radio :label="0">{{ $t('status.no') }}</el-radio>
+            <el-radio :label="1">{{ $t('status.yes') }}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="是否需要质检" prop="needQualityCheck">
+        <el-form-item :label="$t('processDef.needQualityCheck')" prop="needQualityCheck">
           <el-radio-group v-model="form.needQualityCheck">
-            <el-radio :label="0">否</el-radio>
-            <el-radio :label="1">是</el-radio>
+            <el-radio :label="0">{{ $t('status.no') }}</el-radio>
+            <el-radio :label="1">{{ $t('status.yes') }}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="排序" prop="sortOrder">
-          <el-input-number v-model="form.sortOrder" :min="0" placeholder="排序" />
+        <el-form-item :label="$t('processDef.sortOrder')" prop="sortOrder">
+          <el-input-number v-model="form.sortOrder" :min="0" :placeholder="$t('processDef.sortOrder')" />
         </el-form-item>
-        <el-form-item label="状态" prop="status">
+        <el-form-item :label="$t('processDef.status')" prop="status">
           <el-radio-group v-model="form.status">
-            <el-radio label="0">正常</el-radio>
-            <el-radio label="1">停用</el-radio>
+            <el-radio label="0">{{ $t('processDef.normal') }}</el-radio>
+            <el-radio label="1">{{ $t('processDef.disabled') }}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+        <el-form-item :label="$t('system.remark')" prop="remark">
+          <el-input v-model="form.remark" type="textarea" :placeholder="$t('processDef.enterContent')" />
         </el-form-item>
-        <el-divider content-position="left">拼接工艺SOP</el-divider>
-        <el-form-item label="是否拼接工序" prop="isSpliceProcess">
+        <el-divider content-position="left">{{ $t('processDef.spliceSop') }}</el-divider>
+        <el-form-item :label="$t('processDef.isSpliceProcess')" prop="isSpliceProcess">
           <el-radio-group v-model="form.isSpliceProcess">
-            <el-radio label="0">否</el-radio>
-            <el-radio label="1">是</el-radio>
+            <el-radio label="0">{{ $t('status.no') }}</el-radio>
+            <el-radio label="1">{{ $t('status.yes') }}</el-radio>
           </el-radio-group>
         </el-form-item>
         <template v-if="form.isSpliceProcess === '1'">
-          <el-form-item label="缩水基线(%)" prop="shrinkageBaseline">
-            <el-input-number v-model="form.shrinkageBaseline" :precision="2" :min="0" :max="30" placeholder="拼接前预缩处理基准值" style="width:200px" />
+          <el-form-item :label="$t('processDef.shrinkageBaseline')" prop="shrinkageBaseline">
+            <el-input-number v-model="form.shrinkageBaseline" :precision="2" :min="0" :max="30" :placeholder="$t('processDef.shrinkageBaselinePlaceholder')" style="width:200px" />
           </el-form-item>
-          <el-form-item label="弹力补偿(%)" prop="elasticityCompensation">
-            <el-input-number v-model="form.elasticityCompensation" :precision="2" :min="0" :max="50" placeholder="弹力损耗补偿量" style="width:200px" />
+          <el-form-item :label="$t('processDef.elasticityCompensation')" prop="elasticityCompensation">
+            <el-input-number v-model="form.elasticityCompensation" :precision="2" :min="0" :max="50" :placeholder="$t('processDef.elasticityCompensationPlaceholder')" style="width:200px" />
           </el-form-item>
-          <el-form-item label="拼缝规格(mm)" prop="seamWidth">
-            <el-input-number v-model="form.seamWidth" :precision="1" :min="0" :max="30" placeholder="拼缝宽度标准" style="width:200px" />
+          <el-form-item :label="$t('processDef.seamWidth')" prop="seamWidth">
+            <el-input-number v-model="form.seamWidth" :precision="1" :min="0" :max="30" :placeholder="$t('processDef.seamWidthPlaceholder')" style="width:200px" />
           </el-form-item>
-          <el-form-item label="拼接方向" prop="spliceDirection">
-            <el-select v-model="form.spliceDirection" placeholder="请选择" clearable>
-              <el-option label="经向" value="WARP" />
-              <el-option label="纬向" value="WEFT" />
-              <el-option label="斜向" value="BIAS" />
-              <el-option label="不限" value="ANY" />
+          <el-form-item :label="$t('processDef.spliceDirection')" prop="spliceDirection">
+            <el-select v-model="form.spliceDirection" :placeholder="$t('validation.select', [$t('processDef.spliceDirection')])" clearable>
+              <el-option :label="$t('processDef.warp')" value="WARP" />
+              <el-option :label="$t('processDef.weft')" value="WEFT" />
+              <el-option :label="$t('processDef.bias')" value="BIAS" />
+              <el-option :label="$t('processDef.any')" value="ANY" />
             </el-select>
           </el-form-item>
-          <el-form-item label="面料兼容性" prop="fabricCompatibility">
-            <el-input v-model="form.fabricCompatibility" type="textarea" :rows="2" placeholder="拼接面料兼容性说明" />
+          <el-form-item :label="$t('processDef.fabricCompatibility')" prop="fabricCompatibility">
+            <el-input v-model="form.fabricCompatibility" type="textarea" :rows="2" :placeholder="$t('processDef.fabricCompatibilityPlaceholder')" />
           </el-form-item>
         </template>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" :loading="submitLoading" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">{{ $t('btn.confirm') }}</el-button>
+        <el-button @click="cancel">{{ $t('btn.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -252,10 +252,12 @@ export default {
         status: null
       },
       // 表单参数
-      form: {},
-      // 表单校验
-      rules: {
-      }
+      form: {}
+    }
+  },
+  computed: {
+    rules() {
+      return {}
     }
   },
   created() {
@@ -319,7 +321,7 @@ export default {
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = "添加工序定义"
+      this.title = this.$t('processDef.addTitle')
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -328,7 +330,7 @@ export default {
       getProcessDef(id).then(response => {
         this.form = response.data
         this.open = true
-        this.title = "修改工序定义"
+        this.title = this.$t('processDef.editTitle')
       })
     },
     /** 提交按钮 */
@@ -338,13 +340,13 @@ export default {
           this.submitLoading = true
           if (this.form.id != null) {
             updateProcessDef(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功")
+              this.$modal.msgSuccess(this.$t('msg.editSuccess'))
               this.open = false
               this.getList()
             }).finally(() => { this.submitLoading = false })
           } else {
             addProcessDef(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功")
+              this.$modal.msgSuccess(this.$t('msg.addSuccess'))
               this.open = false
               this.getList()
             }).finally(() => { this.submitLoading = false })
@@ -355,11 +357,11 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids
-      this.$modal.confirm('是否确认删除工序定义编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm(this.$t('processDef.deleteConfirm', [ids])).then(function() {
         return delProcessDef(ids)
       }).then(() => {
         this.getList()
-        this.$modal.msgSuccess("删除成功")
+        this.$modal.msgSuccess(this.$t('msg.deleteSuccess'))
       }).catch(() => {})
     },
     /** 导出按钮操作 */

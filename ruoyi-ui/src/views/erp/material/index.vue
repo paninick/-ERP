@@ -476,7 +476,7 @@ export default {
     },
     /** 导出按钮操作 */
     handleExport() {
-      this.download('erp/material/export', {
+      this.download('erp/material/main/export', {
         ...this.queryParams
       }, `material_${new Date().getTime()}.xlsx`)
     },

@@ -1,25 +1,25 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
-      <el-form-item label="颜色编码" prop="colorCode">
+      <el-form-item :label="$t('standardColor.colorCode')" prop="colorCode">
         <el-input
           v-model="queryParams.colorCode"
-          placeholder="请输入颜色编码"
+          :placeholder="$t('standardColor.enterColorCode')"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="颜色名称" prop="colorName">
+      <el-form-item :label="$t('standardColor.colorName')" prop="colorName">
         <el-input
           v-model="queryParams.colorName"
-          placeholder="请输入颜色名称"
+          :placeholder="$t('standardColor.enterColorName')"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('btn.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('btn.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -32,7 +32,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['erp:standardColor:add']"
-        >新增</el-button>
+        >{{ $t('btn.add') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -43,7 +43,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['erp:standardColor:edit']"
-        >修改</el-button>
+        >{{ $t('btn.edit') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -54,7 +54,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['erp:standardColor:remove']"
-        >删除</el-button>
+        >{{ $t('btn.delete') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -64,23 +64,23 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['erp:standardColor:export']"
-        >导出</el-button>
+        >{{ $t('btn.export') }}</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="standardColorList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="颜色编码" align="center" prop="colorCode" />
-      <el-table-column label="颜色名称" align="center" prop="colorName" />
-      <el-table-column label="默认ΔE允差" align="center" prop="defaultDeltaE" />
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+      <el-table-column :label="$t('standardColor.colorCode')" align="center" prop="colorCode" />
+      <el-table-column :label="$t('standardColor.colorName')" align="center" prop="colorName" />
+      <el-table-column :label="$t('standardColor.defaultDeltaE')" align="center" prop="defaultDeltaE" />
+      <el-table-column :label="$t('system.createTime')" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('system.remark')" align="center" prop="remark" />
+      <el-table-column :label="$t('system.operation')" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -88,14 +88,14 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['erp:standardColor:edit']"
-          >修改</el-button>
+          >{{ $t('btn.edit') }}</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['erp:standardColor:remove']"
-          >删除</el-button>
+          >{{ $t('btn.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -111,29 +111,29 @@
     <!-- 添加或修改标准色卡对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="60%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="颜色编码" prop="colorCode">
-          <el-input v-model="form.colorCode" placeholder="请输入颜色编码" />
+        <el-form-item :label="$t('standardColor.colorCode')" prop="colorCode">
+          <el-input v-model="form.colorCode" :placeholder="$t('standardColor.enterColorCode')" />
         </el-form-item>
-        <el-form-item label="颜色名称" prop="colorName">
-          <el-input v-model="form.colorName" placeholder="请输入颜色名称" />
+        <el-form-item :label="$t('standardColor.colorName')" prop="colorName">
+          <el-input v-model="form.colorName" :placeholder="$t('standardColor.enterColorName')" />
         </el-form-item>
-        <el-form-item label="LAB值" prop="colorLab">
-          <el-input v-model="form.colorLab" placeholder="L,a,b格式" />
+        <el-form-item :label="$t('standardColor.colorLab')" prop="colorLab">
+          <el-input v-model="form.colorLab" :placeholder="$t('standardColor.colorLabHint')" />
         </el-form-item>
-        <el-form-item label="默认ΔE允差" prop="defaultDeltaE">
-          <el-input-number v-model="form.defaultDeltaE" :precision="2" :min="0" :max="100" placeholder="默认色差允差" />
-          <span class="el-form-item__label-hint">一般建议 2.0-3.0</span>
+        <el-form-item :label="$t('standardColor.defaultDeltaE')" prop="defaultDeltaE">
+          <el-input-number v-model="form.defaultDeltaE" :precision="2" :min="0" :max="100" :placeholder="$t('standardColor.defaultDeltaEHint')" />
+          <span class="el-form-item__label-hint">{{ $t('standardColor.deltaERecommend') }}</span>
         </el-form-item>
-        <el-form-item label="色卡图片" prop="colorImage">
-          <el-input v-model="form.colorImage" placeholder="图片路径" />
+        <el-form-item :label="$t('standardColor.colorImage')" prop="colorImage">
+          <el-input v-model="form.colorImage" :placeholder="$t('standardColor.colorImageHint')" />
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+        <el-form-item :label="$t('system.remark')" prop="remark">
+          <el-input v-model="form.remark" type="textarea" :placeholder="$t('validation.enter', [$t('system.remark')])" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" :loading="submitLoading" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">{{ $t('btn.confirm') }}</el-button>
+        <el-button @click="cancel">{{ $t('btn.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -173,10 +173,12 @@ export default {
         colorName: null
       },
       // 表单参数
-      form: {},
-      // 表单校验
-      rules: {
-      }
+      form: {}
+    }
+  },
+  computed: {
+    rules() {
+      return {}
     }
   },
   created() {
@@ -230,7 +232,7 @@ export default {
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = "添加标准色卡"
+      this.title = this.$t('standardColor.addTitle')
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -239,7 +241,7 @@ export default {
       getStandardColor(id).then(response => {
         this.form = response.data
         this.open = true
-        this.title = "修改标准色卡"
+        this.title = this.$t('standardColor.editTitle')
       })
     },
     /** 提交按钮 */
@@ -249,13 +251,13 @@ export default {
           this.submitLoading = true
           if (this.form.id != null) {
             updateStandardColor(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功")
+              this.$modal.msgSuccess(this.$t('msg.editSuccess'))
               this.open = false
               this.getList()
             }).finally(() => { this.submitLoading = false })
           } else {
             addStandardColor(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功")
+              this.$modal.msgSuccess(this.$t('msg.addSuccess'))
               this.open = false
               this.getList()
             }).finally(() => { this.submitLoading = false })
@@ -266,11 +268,11 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids
-      this.$modal.confirm('是否确认删除标准色卡编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm(this.$t('msg.deleteConfirm', [ids])).then(function() {
         return delStandardColor(ids)
       }).then(() => {
         this.getList()
-        this.$modal.msgSuccess("删除成功")
+        this.$modal.msgSuccess(this.$t('msg.deleteSuccess'))
       }).catch(() => {})
     },
     /** 导出按钮操作 */

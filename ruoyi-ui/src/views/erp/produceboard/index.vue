@@ -5,45 +5,45 @@
       <el-col :span="4">
         <el-card class="stats-card" :body-style="{ padding: '20px' }">
           <div class="stats-number">{{ stats.totalPlans }}</div>
-          <div class="stats-label">总生产计划</div>
+          <div class="stats-label">{{ $t('produceboard.totalPlans') }}</div>
         </el-card>
       </el-col>
       <el-col :span="4">
         <el-card class="stats-card" :body-style="{ padding: '20px' }">
           <div class="stats-number text-warning">{{ stats.inProgressPlans }}</div>
-          <div class="stats-label">进行中</div>
+          <div class="stats-label">{{ $t('produceboard.inProgress') }}</div>
         </el-card>
       </el-col>
       <el-col :span="4">
         <el-card class="stats-card" :body-style="{ padding: '20px' }">
           <div class="stats-number text-success">{{ stats.completedPlans }}</div>
-          <div class="stats-label">已完成</div>
+          <div class="stats-label">{{ $t('produceboard.completed') }}</div>
         </el-card>
       </el-col>
       <el-col :span="4">
         <el-card class="stats-card" :body-style="{ padding: '20px' }">
           <div class="stats-number text-primary">{{ stats.totalWipJobs }}</div>
-          <div class="stats-label">WIP工票数</div>
+          <div class="stats-label">{{ $t('produceboard.wipJobs') }}</div>
         </el-card>
       </el-col>
       <el-col :span="4">
         <el-card class="stats-card" :body-style="{ padding: '20px' }" v-if="stats.pendingApprovalCount > 0">
           <div class="stats-number text-danger">{{ stats.pendingApprovalCount }}</div>
-          <div class="stats-label">待审批超领</div>
+          <div class="stats-label">{{ $t('produceboard.pendingApproval') }}</div>
         </el-card>
         <el-card class="stats-card" :body-style="{ padding: '20px' }" v-else>
           <div class="stats-number text-success">{{ stats.pendingApprovalCount }}</div>
-          <div class="stats-label">待审批超领</div>
+          <div class="stats-label">{{ $t('produceboard.pendingApproval') }}</div>
         </el-card>
       </el-col>
       <el-col :span="4">
         <el-card class="stats-card" :body-style="{ padding: '20px' }" v-if="stats.unhandledAbnormalCount > 0">
           <div class="stats-number text-danger">{{ stats.unhandledAbnormalCount }}</div>
-          <div class="stats-label">未处理异常</div>
+          <div class="stats-label">{{ $t('produceboard.unhandledAbnormal') }}</div>
         </el-card>
         <el-card class="stats-card" :body-style="{ padding: '20px' }" v-else>
           <div class="stats-number text-success">{{ stats.unhandledAbnormalCount }}</div>
-          <div class="stats-label">未处理异常</div>
+          <div class="stats-label">{{ $t('produceboard.unhandledAbnormal') }}</div>
         </el-card>
       </el-col>
     </el-row>
@@ -53,17 +53,17 @@
       <el-col :span="12">
         <el-card>
           <div slot="header">
-            <span>效率指标</span>
+            <span>{{ $t('produceboard.efficiency') }}</span>
           </div>
           <div class="rate-row">
             <div class="rate-item">
-              <div class="rate-label">准时交付率</div>
+              <div class="rate-label">{{ $t('produceboard.onTimeDeliveryRate') }}</div>
               <div class="rate-value">
                 <el-progress :percentage="stats.onTimeDeliveryRate || 0" :color="getProgressColor(stats.onTimeDeliveryRate)"></el-progress>
               </div>
             </div>
             <div class="rate-item">
-              <div class="rate-label">平均产能利用率</div>
+              <div class="rate-label">{{ $t('produceboard.capacityUtilization') }}</div>
               <div class="rate-value">
                 <el-progress :percentage="stats.capacityUtilization || 0" :color="getProgressColor(stats.capacityUtilization)"></el-progress>
               </div>
@@ -74,19 +74,19 @@
       <el-col :span="12">
         <el-card>
           <div slot="header">
-            <span>今日/本周完成</span>
+            <span>{{ $t('produceboard.todayWeekCompleted') }}</span>
           </div>
           <div class="rate-row">
             <div class="rate-item">
-              <div class="rate-label">今日完工</div>
+              <div class="rate-label">{{ $t('produceboard.todayCompleted') }}</div>
               <div class="daily-number">{{ stats.todayCompleted }}</div>
             </div>
             <div class="rate-item">
-              <div class="rate-label">本周完工</div>
+              <div class="rate-label">{{ $t('produceboard.weekCompleted') }}</div>
               <div class="daily-number">{{ stats.weekCompleted }}</div>
             </div>
             <div class="rate-item">
-              <div class="rate-label">今日新增工票</div>
+              <div class="rate-label">{{ $t('produceboard.todayNewJobs') }}</div>
               <div class="daily-number">{{ stats.todayNewJobs }}</div>
             </div>
           </div>
@@ -98,21 +98,21 @@
     <el-row :gutter="20" style="margin-top: 20px;" v-if="bottleneckWarnings.length > 0">
       <el-col :span="24">
         <el-alert
-          title="瓶颈工序预警"
+          :title="$t('produceboard.bottleneckWarning')"
           type="danger"
-          description="以下工序WIP积压超过3天预计完成时间，需要关注产能调配"
+          :description="$t('produceboard.bottleneckDesc')"
           show-icon
           :closable="false">
         </el-alert>
       </el-col>
       <el-col :span="24" style="margin-top: 10px;">
         <el-table :data="bottleneckWarnings" border style="width: 100%">
-          <el-table-column prop="processName" label="工序名称" width="150" />
-          <el-table-column prop="wipJobCount" label="WIP扎数" width="100" align="center" />
-          <el-table-column prop="wipQuantity" label="WIP总件数" width="100" align="center" />
-          <el-table-column prop="dailyCapacity" label="日均产能" width="100" align="center" />
-          <el-table-column prop="estimatedDays" label="预计完成天数" width="120" align="center" />
-          <el-table-column prop="utilizationRate" label="利用率%" width="120" align="center">
+          <el-table-column prop="processName" :label="$t('produceboard.column.processName')" width="150" />
+          <el-table-column prop="wipJobCount" :label="$t('produceboard.column.wipJobCount')" width="100" align="center" />
+          <el-table-column prop="wipQuantity" :label="$t('produceboard.column.wipQuantity')" width="100" align="center" />
+          <el-table-column prop="dailyCapacity" :label="$t('produceboard.column.dailyCapacity')" width="100" align="center" />
+          <el-table-column prop="estimatedDays" :label="$t('produceboard.column.estimatedDays')" width="120" align="center" />
+          <el-table-column prop="utilizationRate" :label="$t('produceboard.column.utilizationRate')" width="120" align="center">
             <template slot-scope="scope">
               <el-tag :type="scope.row.utilizationRate > 100 ? 'danger' : scope.row.utilizationRate > 80 ? 'warning' : 'success'">
                 {{ scope.row.utilizationRate.toFixed(1) }}%
@@ -128,21 +128,21 @@
       <el-col :span="24">
         <el-card>
           <div slot="header">
-            <span>工序WIP统计</span>
+            <span>{{ $t('produceboard.wipStats') }}</span>
           </div>
           <el-table :data="wipStats" v-loading="loading" border style="width: 100%">
-            <el-table-column prop="processName" label="工序名称" width="150" />
-            <el-table-column prop="wipJobCount" label="WIP扎数" width="100" align="center" />
-            <el-table-column prop="wipQuantity" label="WIP总件数" width="100" align="center" />
-            <el-table-column prop="dailyCapacity" label="日均产能" width="100" align="center" />
-            <el-table-column prop="estimatedDays" label="预计完成天数" width="120" align="center">
+            <el-table-column prop="processName" :label="$t('produceboard.column.processName')" width="150" />
+            <el-table-column prop="wipJobCount" :label="$t('produceboard.column.wipJobCount')" width="100" align="center" />
+            <el-table-column prop="wipQuantity" :label="$t('produceboard.column.wipQuantity')" width="100" align="center" />
+            <el-table-column prop="dailyCapacity" :label="$t('produceboard.column.dailyCapacity')" width="100" align="center" />
+            <el-table-column prop="estimatedDays" :label="$t('produceboard.column.estimatedDays')" width="120" align="center">
               <template slot-scope="scope">
                 <el-tag :type="scope.row.isBottleneck ? 'danger' : 'info'">
                   {{ scope.row.estimatedDays.toFixed(1) }}
                 </el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="utilizationRate" label="利用率%" width="120" align="center">
+            <el-table-column prop="utilizationRate" :label="$t('produceboard.column.utilizationRate')" width="120" align="center">
               <template slot-scope="scope">
                 <el-progress :percentage="Math.min(scope.row.utilizationRate, 100)" :color="getProgressColor(scope.row.utilizationRate)"></el-progress>
               </template>
@@ -157,20 +157,20 @@
       <el-col :span="24">
         <el-card>
           <div slot="header">
-            <span>本月员工产量排名（Top 10）</span>
+            <span>{{ $t('produceboard.employeeRank') }}（Top 10）</span>
           </div>
           <el-table :data="employeeRank" v-loading="loading" border style="width: 100%">
-            <el-table-column prop="rank" label="排名" width="60" align="center">
+            <el-table-column prop="rank" :label="$t('produceboard.column.rank')" width="60" align="center">
               <template slot-scope="scope">
                 <el-tag :type="scope.row.rank === 1 ? 'danger' : scope.row.rank === 2 ? 'warning' : scope.row.rank === 3 ? 'primary' : 'info'">
                   {{ scope.row.rank }}
                 </el-tag>
               </template>
             </el-table-column>
-            <el-table-column prop="employeeName" label="员工姓名" width="120" />
-            <el-table-column prop="monthlyQuantity" label="本月产量（件）" width="120" align="center" />
-            <el-table-column prop="dailyAverage" label="日均产量" width="100" align="center" />
-            <el-table-column prop="monthlyWage" label="预计计件工资" width="120" align="center" />
+            <el-table-column prop="employeeName" :label="$t('produceboard.column.employeeName')" width="120" />
+            <el-table-column prop="monthlyQuantity" :label="$t('produceboard.column.monthlyQuantity')" width="120" align="center" />
+            <el-table-column prop="dailyAverage" :label="$t('produceboard.column.dailyAverage')" width="100" align="center" />
+            <el-table-column prop="monthlyWage" :label="$t('produceboard.column.monthlyWage')" width="120" align="center" />
           </el-table>
         </el-card>
       </el-col>
@@ -235,7 +235,7 @@ export default {
         this.wipStats = [];
         this.employeeRank = [];
         this.bottleneckWarnings = [];
-        this.$modal.msgError("生产看板数据加载失败，请稍后重试");
+        this.$modal.msgError(this.$t('produceboard.boardLoadFailed'));
       }).finally(() => {
         this.loading = false;
       });
@@ -265,7 +265,7 @@ export default {
           // 订阅报警
           client.subscribe('/topic/erp/alert', (msg) => {
             const data = JSON.parse(msg.body);
-            this.$notify({ type: data.level === 'ERROR' ? 'error' : 'warning', title: '生产报警', message: data.message });
+            this.$notify({ type: data.level === 'ERROR' ? 'error' : 'warning', title: this.$t('produceboard.alertTitle'), message: data.message });
           });
         }, () => { this.wsConnected = false; });
         this.wsClient = client;

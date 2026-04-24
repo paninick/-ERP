@@ -1,25 +1,25 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
-      <el-form-item label="路线名称" prop="routeName">
+      <el-form-item :label="$t('processRoute.routeName')" prop="routeName">
         <el-input
           v-model="queryParams.routeName"
-          placeholder="请输入路线名称"
+          :placeholder="$t('processRoute.enterRouteName')"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="产品类型" prop="productType">
+      <el-form-item :label="$t('processRoute.productType')" prop="productType">
         <el-input
           v-model="queryParams.productType"
-          placeholder="请输入产品类型"
+          :placeholder="$t('processRoute.enterProductType')"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('btn.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('btn.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -32,7 +32,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['erp:processRoute:add']"
-        >新增</el-button>
+        >{{ $t('btn.add') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -43,7 +43,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['erp:processRoute:edit']"
-        >修改</el-button>
+        >{{ $t('btn.edit') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -54,7 +54,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['erp:processRoute:remove']"
-        >删除</el-button>
+        >{{ $t('btn.delete') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -64,33 +64,33 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['erp:processRoute:export']"
-        >导出</el-button>
+        >{{ $t('btn.export') }}</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="processRouteList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="路线名称" align="center" prop="routeName" />
-      <el-table-column label="产品类型" align="center" prop="productType" />
-      <el-table-column label="产品编码" align="center" prop="productCode" />
-      <el-table-column label="默认" align="center" prop="isDefault">
+      <el-table-column :label="$t('processRoute.routeName')" align="center" prop="routeName" />
+      <el-table-column :label="$t('processRoute.productType')" align="center" prop="productType" />
+      <el-table-column :label="$t('processRoute.productCode')" align="center" prop="productCode" />
+      <el-table-column :label="$t('processRoute.isDefault')" align="center" prop="isDefault">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_yes_no" :value="scope.row.isDefault"/>
         </template>
       </el-table-column>
-      <el-table-column label="状态" align="center" prop="status">
+      <el-table-column :label="$t('processRoute.status')" align="center" prop="status">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.sys_normal_disable" :value="scope.row.status"/>
         </template>
       </el-table-column>
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+      <el-table-column :label="$t('system.createTime')" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('system.remark')" align="center" prop="remark" />
+      <el-table-column :label="$t('system.operation')" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -98,14 +98,14 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['erp:processRoute:edit']"
-          >修改</el-button>
+          >{{ $t('btn.edit') }}</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['erp:processRoute:remove']"
-          >删除</el-button>
+          >{{ $t('btn.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -121,34 +121,34 @@
     <!-- 添加或修改工艺路线对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="70%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="路线名称" prop="routeName">
-          <el-input v-model="form.routeName" placeholder="请输入路线名称" />
+        <el-form-item :label="$t('processRoute.routeName')" prop="routeName">
+          <el-input v-model="form.routeName" :placeholder="$t('processRoute.enterRouteName')" />
         </el-form-item>
-        <el-form-item label="产品类型" prop="productType">
-          <el-input v-model="form.productType" placeholder="请输入产品类型" />
+        <el-form-item :label="$t('processRoute.productType')" prop="productType">
+          <el-input v-model="form.productType" :placeholder="$t('processRoute.enterProductType')" />
         </el-form-item>
-        <el-form-item label="产品编码" prop="productCode">
-          <el-input v-model="form.productCode" placeholder="请输入产品编码（通用路由可为空）" />
+        <el-form-item :label="$t('processRoute.productCode')" prop="productCode">
+          <el-input v-model="form.productCode" :placeholder="$t('processRoute.enterProductCode')" />
         </el-form-item>
-        <el-form-item label="是否默认" prop="isDefault">
+        <el-form-item :label="$t('processRoute.isDefault')" prop="isDefault">
           <el-radio-group v-model="form.isDefault">
-            <el-radio :label="0">否</el-radio>
-            <el-radio :label="1">是</el-radio>
+            <el-radio :label="0">{{ $t('status.no') }}</el-radio>
+            <el-radio :label="1">{{ $t('status.yes') }}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="状态" prop="status">
+        <el-form-item :label="$t('processRoute.status')" prop="status">
           <el-radio-group v-model="form.status">
-            <el-radio label="0">正常</el-radio>
-            <el-radio label="1">停用</el-radio>
+            <el-radio label="0">{{ $t('processRoute.normal') }}</el-radio>
+            <el-radio label="1">{{ $t('processRoute.disabled') }}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+        <el-form-item :label="$t('system.remark')" prop="remark">
+          <el-input v-model="form.remark" type="textarea" :placeholder="$t('processRoute.enterContent')" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" :loading="submitLoading" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">{{ $t('btn.confirm') }}</el-button>
+        <el-button @click="cancel">{{ $t('btn.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -162,26 +162,16 @@ export default {
   dicts: ['sys_yes_no', 'sys_normal_disable'],
   data() {
     return {
-      // 遮罩层
       loading: true,
-      // 选中数组
       ids: [],
-      // 非单个禁用
       single: true,
-      // 非多个禁用
       multiple: true,
-      // 显示搜索条件
       showSearch: true,
-      // 总条数
       total: 0,
-      // 工艺路线表格数据
       processRouteList: [],
-      // 弹出层标题
       title: "",
-      // 是否显示弹出层
       open: false,
       submitLoading: false,
-      // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -190,18 +180,18 @@ export default {
         productCode: null,
         status: null
       },
-      // 表单参数
-      form: {},
-      // 表单校验
-      rules: {
-      }
+      form: {}
+    }
+  },
+  computed: {
+    rules() {
+      return {}
     }
   },
   created() {
     this.getList()
   },
   methods: {
-    /** 查询工艺路线列表 */
     getList() {
       this.loading = true
       listProcessRoute(this.queryParams).then(response => {
@@ -210,12 +200,10 @@ export default {
         this.loading = false
       })
     },
-    // 取消按钮
     cancel() {
       this.open = false
       this.reset()
     },
-    // 表单重置
     reset() {
       this.form = {
         id: null,
@@ -228,52 +216,46 @@ export default {
       }
       this.resetForm("form")
     },
-    /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1
       this.getList()
     },
-    /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm")
       this.handleQuery()
     },
-    // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
-    /** 新增按钮操作 */
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = "添加工艺路线"
+      this.title = this.$t('processRoute.addTitle')
     },
-    /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset()
       const id = row.id || this.ids
       getProcessRoute(id).then(response => {
         this.form = response.data
         this.open = true
-        this.title = "修改工艺路线"
+        this.title = this.$t('processRoute.editTitle')
       })
     },
-    /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
           this.submitLoading = true
           if (this.form.id != null) {
             updateProcessRoute({ route: this.form, items: routeItems }).then(response => {
-              this.$modal.msgSuccess("修改成功")
+              this.$modal.msgSuccess(this.$t('msg.editSuccess'))
               this.open = false
               this.getList()
             }).finally(() => { this.submitLoading = false })
           } else {
             addProcessRoute({ route: this.form, items: routeItems }).then(response => {
-              this.$modal.msgSuccess("新增成功")
+              this.$modal.msgSuccess(this.$t('msg.addSuccess'))
               this.open = false
               this.getList()
             }).finally(() => { this.submitLoading = false })
@@ -281,17 +263,15 @@ export default {
         }
       })
     },
-    /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids
-      this.$modal.confirm('是否确认删除工艺路线编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm(this.$t('processRoute.deleteConfirm', [ids])).then(function() {
         return delProcessRoute(ids)
       }).then(() => {
         this.getList()
-        this.$modal.msgSuccess("删除成功")
+        this.$modal.msgSuccess(this.$t('msg.deleteSuccess'))
       }).catch(() => {})
     },
-    /** 导出按钮操作 */
     handleExport() {
       this.download('erp/processRoute/export', {
         ...this.queryParams

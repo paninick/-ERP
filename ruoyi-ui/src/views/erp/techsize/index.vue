@@ -1,129 +1,129 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
-      <el-form-item label="工艺书id" prop="techId">
+      <el-form-item :label="$t('techSize.techId')" prop="techId">
         <el-input
           v-model="queryParams.techId"
-          placeholder="请输入工艺书id"
+          :placeholder="$t('validation.enter', [$t('techSize.techId')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="打样通知d" prop="noticeId">
+      <el-form-item :label="$t('techSize.noticeId')" prop="noticeId">
         <el-input
           v-model="queryParams.noticeId"
-          placeholder="请输入打样通知d"
+          :placeholder="$t('validation.enter', [$t('techSize.noticeId')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="属性名称" prop="propertyName">
+      <el-form-item :label="$t('techSize.propertyName')" prop="propertyName">
         <el-input
           v-model="queryParams.propertyName"
-          placeholder="请输入属性名称"
+          :placeholder="$t('validation.enter', [$t('techSize.propertyName')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="属性值1" prop="propertyValueA">
+      <el-form-item :label="$t('techSize.propertyValueA')" prop="propertyValueA">
         <el-input
           v-model="queryParams.propertyValueA"
-          placeholder="请输入属性值1"
+          :placeholder="$t('validation.enter', [$t('techSize.propertyValueA')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="属性值2" prop="propertyValueB">
+      <el-form-item :label="$t('techSize.propertyValueB')" prop="propertyValueB">
         <el-input
           v-model="queryParams.propertyValueB"
-          placeholder="请输入属性值2"
+          :placeholder="$t('validation.enter', [$t('techSize.propertyValueB')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="属性值3" prop="propertyValueC">
+      <el-form-item :label="$t('techSize.propertyValueC')" prop="propertyValueC">
         <el-input
           v-model="queryParams.propertyValueC"
-          placeholder="请输入属性值3"
+          :placeholder="$t('validation.enter', [$t('techSize.propertyValueC')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="属性值4" prop="propertyValueD">
+      <el-form-item :label="$t('techSize.propertyValueD')" prop="propertyValueD">
         <el-input
           v-model="queryParams.propertyValueD"
-          placeholder="请输入属性值4"
+          :placeholder="$t('validation.enter', [$t('techSize.propertyValueD')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="属性值5" prop="propertyValueE">
+      <el-form-item :label="$t('techSize.propertyValueE')" prop="propertyValueE">
         <el-input
           v-model="queryParams.propertyValueE"
-          placeholder="请输入属性值5"
+          :placeholder="$t('validation.enter', [$t('techSize.propertyValueE')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="属性值6" prop="propertyValueF">
+      <el-form-item :label="$t('techSize.propertyValueF')" prop="propertyValueF">
         <el-input
           v-model="queryParams.propertyValueF"
-          placeholder="请输入属性值6"
+          :placeholder="$t('validation.enter', [$t('techSize.propertyValueF')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="属性值7" prop="propertyValueG">
+      <el-form-item :label="$t('techSize.propertyValueG')" prop="propertyValueG">
         <el-input
           v-model="queryParams.propertyValueG"
-          placeholder="请输入属性值7"
+          :placeholder="$t('validation.enter', [$t('techSize.propertyValueG')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="属性值8" prop="propertyValueH">
+      <el-form-item :label="$t('techSize.propertyValueH')" prop="propertyValueH">
         <el-input
           v-model="queryParams.propertyValueH"
-          placeholder="请输入属性值8"
+          :placeholder="$t('validation.enter', [$t('techSize.propertyValueH')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="属性值9" prop="propertyValueI">
+      <el-form-item :label="$t('techSize.propertyValueI')" prop="propertyValueI">
         <el-input
           v-model="queryParams.propertyValueI"
-          placeholder="请输入属性值9"
+          :placeholder="$t('validation.enter', [$t('techSize.propertyValueI')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="属性值10" prop="propertyValueJ">
+      <el-form-item :label="$t('techSize.propertyValueJ')" prop="propertyValueJ">
         <el-input
           v-model="queryParams.propertyValueJ"
-          placeholder="请输入属性值10"
+          :placeholder="$t('validation.enter', [$t('techSize.propertyValueJ')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="属性值11" prop="propertyValueK">
+      <el-form-item :label="$t('techSize.propertyValueK')" prop="propertyValueK">
         <el-input
           v-model="queryParams.propertyValueK"
-          placeholder="请输入属性值11"
+          :placeholder="$t('validation.enter', [$t('techSize.propertyValueK')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="属性顺序" prop="propertyOrder">
+      <el-form-item :label="$t('techSize.propertyOrder')" prop="propertyOrder">
         <el-input
           v-model="queryParams.propertyOrder"
-          placeholder="请输入属性顺序"
+          :placeholder="$t('validation.enter', [$t('techSize.propertyOrder')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('btn.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('btn.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -136,7 +136,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['erp:techsize:add']"
-        >新增</el-button>
+        >{{ $t('btn.add') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -147,7 +147,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['erp:techsize:edit']"
-        >修改</el-button>
+        >{{ $t('btn.edit') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -158,7 +158,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['erp:techsize:remove']"
-        >删除</el-button>
+        >{{ $t('btn.delete') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -168,31 +168,31 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['erp:techsize:export']"
-        >导出</el-button>
+        >{{ $t('btn.export') }}</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="techsizeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="id" align="center" prop="id" />
-      <el-table-column label="工艺书id" align="center" prop="techId" />
-      <el-table-column label="打样通知d" align="center" prop="noticeId" />
-      <el-table-column label="属性名称" align="center" prop="propertyName" />
-      <el-table-column label="属性值1" align="center" prop="propertyValueA" />
-      <el-table-column label="属性值2" align="center" prop="propertyValueB" />
-      <el-table-column label="属性值3" align="center" prop="propertyValueC" />
-      <el-table-column label="属性值4" align="center" prop="propertyValueD" />
-      <el-table-column label="属性值5" align="center" prop="propertyValueE" />
-      <el-table-column label="属性值6" align="center" prop="propertyValueF" />
-      <el-table-column label="属性值7" align="center" prop="propertyValueG" />
-      <el-table-column label="属性值8" align="center" prop="propertyValueH" />
-      <el-table-column label="属性值9" align="center" prop="propertyValueI" />
-      <el-table-column label="属性值10" align="center" prop="propertyValueJ" />
-      <el-table-column label="属性值11" align="center" prop="propertyValueK" />
-      <el-table-column label="属性顺序" align="center" prop="propertyOrder" />
-      <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column label="ID" align="center" prop="id" />
+      <el-table-column :label="$t('techSize.techId')" align="center" prop="techId" />
+      <el-table-column :label="$t('techSize.noticeId')" align="center" prop="noticeId" />
+      <el-table-column :label="$t('techSize.propertyName')" align="center" prop="propertyName" />
+      <el-table-column :label="$t('techSize.propertyValueA')" align="center" prop="propertyValueA" />
+      <el-table-column :label="$t('techSize.propertyValueB')" align="center" prop="propertyValueB" />
+      <el-table-column :label="$t('techSize.propertyValueC')" align="center" prop="propertyValueC" />
+      <el-table-column :label="$t('techSize.propertyValueD')" align="center" prop="propertyValueD" />
+      <el-table-column :label="$t('techSize.propertyValueE')" align="center" prop="propertyValueE" />
+      <el-table-column :label="$t('techSize.propertyValueF')" align="center" prop="propertyValueF" />
+      <el-table-column :label="$t('techSize.propertyValueG')" align="center" prop="propertyValueG" />
+      <el-table-column :label="$t('techSize.propertyValueH')" align="center" prop="propertyValueH" />
+      <el-table-column :label="$t('techSize.propertyValueI')" align="center" prop="propertyValueI" />
+      <el-table-column :label="$t('techSize.propertyValueJ')" align="center" prop="propertyValueJ" />
+      <el-table-column :label="$t('techSize.propertyValueK')" align="center" prop="propertyValueK" />
+      <el-table-column :label="$t('techSize.propertyOrder')" align="center" prop="propertyOrder" />
+      <el-table-column :label="$t('system.remark')" align="center" prop="remark" />
+      <el-table-column :label="$t('system.operation')" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -200,14 +200,14 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['erp:techsize:edit']"
-          >修改</el-button>
+          >{{ $t('btn.edit') }}</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['erp:techsize:remove']"
-          >删除</el-button>
+          >{{ $t('btn.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -223,58 +223,58 @@
     <!-- 添加或修改工艺书尺寸细节对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="60%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="工艺书id" prop="techId">
-          <el-input v-model="form.techId" placeholder="请输入工艺书id" />
+        <el-form-item :label="$t('techSize.techId')" prop="techId">
+          <el-input v-model="form.techId" :placeholder="$t('validation.enter', [$t('techSize.techId')])" />
         </el-form-item>
-        <el-form-item label="打样通知d" prop="noticeId">
-          <el-input v-model="form.noticeId" placeholder="请输入打样通知d" />
+        <el-form-item :label="$t('techSize.noticeId')" prop="noticeId">
+          <el-input v-model="form.noticeId" :placeholder="$t('validation.enter', [$t('techSize.noticeId')])" />
         </el-form-item>
-        <el-form-item label="属性名称" prop="propertyName">
-          <el-input v-model="form.propertyName" placeholder="请输入属性名称" />
+        <el-form-item :label="$t('techSize.propertyName')" prop="propertyName">
+          <el-input v-model="form.propertyName" :placeholder="$t('validation.enter', [$t('techSize.propertyName')])" />
         </el-form-item>
-        <el-form-item label="属性值1" prop="propertyValueA">
-          <el-input v-model="form.propertyValueA" placeholder="请输入属性值1" />
+        <el-form-item :label="$t('techSize.propertyValueA')" prop="propertyValueA">
+          <el-input v-model="form.propertyValueA" :placeholder="$t('validation.enter', [$t('techSize.propertyValueA')])" />
         </el-form-item>
-        <el-form-item label="属性值2" prop="propertyValueB">
-          <el-input v-model="form.propertyValueB" placeholder="请输入属性值2" />
+        <el-form-item :label="$t('techSize.propertyValueB')" prop="propertyValueB">
+          <el-input v-model="form.propertyValueB" :placeholder="$t('validation.enter', [$t('techSize.propertyValueB')])" />
         </el-form-item>
-        <el-form-item label="属性值3" prop="propertyValueC">
-          <el-input v-model="form.propertyValueC" placeholder="请输入属性值3" />
+        <el-form-item :label="$t('techSize.propertyValueC')" prop="propertyValueC">
+          <el-input v-model="form.propertyValueC" :placeholder="$t('validation.enter', [$t('techSize.propertyValueC')])" />
         </el-form-item>
-        <el-form-item label="属性值4" prop="propertyValueD">
-          <el-input v-model="form.propertyValueD" placeholder="请输入属性值4" />
+        <el-form-item :label="$t('techSize.propertyValueD')" prop="propertyValueD">
+          <el-input v-model="form.propertyValueD" :placeholder="$t('validation.enter', [$t('techSize.propertyValueD')])" />
         </el-form-item>
-        <el-form-item label="属性值5" prop="propertyValueE">
-          <el-input v-model="form.propertyValueE" placeholder="请输入属性值5" />
+        <el-form-item :label="$t('techSize.propertyValueE')" prop="propertyValueE">
+          <el-input v-model="form.propertyValueE" :placeholder="$t('validation.enter', [$t('techSize.propertyValueE')])" />
         </el-form-item>
-        <el-form-item label="属性值6" prop="propertyValueF">
-          <el-input v-model="form.propertyValueF" placeholder="请输入属性值6" />
+        <el-form-item :label="$t('techSize.propertyValueF')" prop="propertyValueF">
+          <el-input v-model="form.propertyValueF" :placeholder="$t('validation.enter', [$t('techSize.propertyValueF')])" />
         </el-form-item>
-        <el-form-item label="属性值7" prop="propertyValueG">
-          <el-input v-model="form.propertyValueG" placeholder="请输入属性值7" />
+        <el-form-item :label="$t('techSize.propertyValueG')" prop="propertyValueG">
+          <el-input v-model="form.propertyValueG" :placeholder="$t('validation.enter', [$t('techSize.propertyValueG')])" />
         </el-form-item>
-        <el-form-item label="属性值8" prop="propertyValueH">
-          <el-input v-model="form.propertyValueH" placeholder="请输入属性值8" />
+        <el-form-item :label="$t('techSize.propertyValueH')" prop="propertyValueH">
+          <el-input v-model="form.propertyValueH" :placeholder="$t('validation.enter', [$t('techSize.propertyValueH')])" />
         </el-form-item>
-        <el-form-item label="属性值9" prop="propertyValueI">
-          <el-input v-model="form.propertyValueI" placeholder="请输入属性值9" />
+        <el-form-item :label="$t('techSize.propertyValueI')" prop="propertyValueI">
+          <el-input v-model="form.propertyValueI" :placeholder="$t('validation.enter', [$t('techSize.propertyValueI')])" />
         </el-form-item>
-        <el-form-item label="属性值10" prop="propertyValueJ">
-          <el-input v-model="form.propertyValueJ" placeholder="请输入属性值10" />
+        <el-form-item :label="$t('techSize.propertyValueJ')" prop="propertyValueJ">
+          <el-input v-model="form.propertyValueJ" :placeholder="$t('validation.enter', [$t('techSize.propertyValueJ')])" />
         </el-form-item>
-        <el-form-item label="属性值11" prop="propertyValueK">
-          <el-input v-model="form.propertyValueK" placeholder="请输入属性值11" />
+        <el-form-item :label="$t('techSize.propertyValueK')" prop="propertyValueK">
+          <el-input v-model="form.propertyValueK" :placeholder="$t('validation.enter', [$t('techSize.propertyValueK')])" />
         </el-form-item>
-        <el-form-item label="属性顺序" prop="propertyOrder">
-          <el-input v-model="form.propertyOrder" placeholder="请输入属性顺序" />
+        <el-form-item :label="$t('techSize.propertyOrder')" prop="propertyOrder">
+          <el-input v-model="form.propertyOrder" :placeholder="$t('validation.enter', [$t('techSize.propertyOrder')])" />
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+        <el-form-item :label="$t('system.remark')" prop="remark">
+          <el-input v-model="form.remark" type="textarea" :placeholder="$t('validation.enter', [$t('system.remark')])" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" :loading="submitLoading" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">{{ $t('btn.confirm') }}</el-button>
+        <el-button @click="cancel">{{ $t('btn.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -328,13 +328,16 @@ export default {
       },
       // 表单参数
       form: {},
-      // 表单校验
-      rules: {
+    }
+  },
+  computed: {
+    rules() {
+      return {
         techId: [
-          { required: true, message: "工艺书id不能为空", trigger: "blur" }
+          { required: true, message: this.$t('techSize.techIdRequired'), trigger: "blur" }
         ],
         noticeId: [
-          { required: true, message: "打样通知d不能为空", trigger: "blur" }
+          { required: true, message: this.$t('techSize.noticeIdRequired'), trigger: "blur" }
         ],
       }
     }
@@ -404,7 +407,7 @@ export default {
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = "添加工艺书尺寸细节"
+      this.title = this.$t('techSize.addTitle')
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -413,7 +416,7 @@ export default {
       getTechsize(id).then(response => {
         this.form = response.data
         this.open = true
-        this.title = "修改工艺书尺寸细节"
+        this.title = this.$t('techSize.editTitle')
       })
     },
     /** 提交按钮 */
@@ -423,13 +426,13 @@ export default {
           this.submitLoading = true
           if (this.form.id != null) {
             updateTechsize(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功")
+              this.$modal.msgSuccess(this.$t('msg.editSuccess'))
               this.open = false
               this.getList()
             }).finally(() => { this.submitLoading = false })
           } else {
             addTechsize(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功")
+              this.$modal.msgSuccess(this.$t('msg.addSuccess'))
               this.open = false
               this.getList()
             }).finally(() => { this.submitLoading = false })
@@ -440,11 +443,11 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids
-      this.$modal.confirm('是否确认删除工艺书尺寸细节编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm(this.$t('techSize.deleteConfirm', [ids])).then(function() {
         return delTechsize(ids)
       }).then(() => {
         this.getList()
-        this.$modal.msgSuccess("删除成功")
+        this.$modal.msgSuccess(this.$t('msg.deleteSuccess'))
       }).catch(() => {})
     },
     /** 导出按钮操作 */

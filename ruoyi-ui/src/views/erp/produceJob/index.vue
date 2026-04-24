@@ -2,37 +2,37 @@
   <div class="app-container">
     <!-- 1. 全局顶部操作与筛选区 -->
     <div class="biz-top-bar" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px;">
-      
+
       <!-- 左侧极简筛选 -->
       <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" class="biz-search-form" style="margin-bottom: 0;">
         <el-form-item prop="jobNo" style="margin-bottom: 0; margin-right: 16px;">
-          <el-input v-model="queryParams.jobNo" placeholder="工票编号" clearable @keyup.enter.native="handleQuery" style="width: 160px;" />
+          <el-input v-model="queryParams.jobNo" :placeholder="$t('produceJob.jobNo')" clearable @keyup.enter.native="handleQuery" style="width: 160px;" />
         </el-form-item>
         <el-form-item prop="producePlanId" style="margin-bottom: 0; margin-right: 16px;">
-          <el-input v-model="queryParams.producePlanId" placeholder="生产计划ID" clearable @keyup.enter.native="handleQuery" style="width: 140px;" />
+          <el-input v-model="queryParams.producePlanId" :placeholder="$t('produceJob.producePlanId')" clearable @keyup.enter.native="handleQuery" style="width: 140px;" />
         </el-form-item>
         <el-form-item prop="colorCode" style="margin-bottom: 0; margin-right: 16px;">
-          <el-input v-model="queryParams.colorCode" placeholder="颜色" clearable @keyup.enter.native="handleQuery" style="width: 120px;" />
+          <el-input v-model="queryParams.colorCode" :placeholder="$t('produceJob.colorCode')" clearable @keyup.enter.native="handleQuery" style="width: 120px;" />
         </el-form-item>
         <el-form-item prop="status" style="margin-bottom: 0; margin-right: 16px;">
-          <el-select v-model="queryParams.status" placeholder="状态" clearable style="width: 120px;">
-            <el-option label="待生产" value="0" />
-            <el-option label="生产中" value="1" />
-            <el-option label="已完成" value="2" />
+          <el-select v-model="queryParams.status" :placeholder="$t('produceJob.status')" clearable style="width: 120px;">
+            <el-option :label="$t('produceJob.pending')" value="0" />
+            <el-option :label="$t('produceJob.inProgress')" value="1" />
+            <el-option :label="$t('produceJob.completed')" value="2" />
           </el-select>
         </el-form-item>
         <el-form-item style="margin-bottom: 0;">
-          <el-button type="primary" icon="el-icon-search" size="small" @click="handleQuery">查询</el-button>
-          <el-button icon="el-icon-refresh" size="small" @click="resetQuery">重置</el-button>
+          <el-button type="primary" icon="el-icon-search" size="small" @click="handleQuery">{{ $t('btn.query') }}</el-button>
+          <el-button icon="el-icon-refresh" size="small" @click="resetQuery">{{ $t('btn.reset') }}</el-button>
         </el-form-item>
       </el-form>
 
       <!-- 右侧固定功能按钮区 -->
       <div class="biz-action-btn-group" style="display: flex; gap: 8px; flex-shrink: 0;">
-        <el-button type="primary" size="small" @click="handleAdd" v-hasPermi="['erp:produceJob:add']">开立工票</el-button>
-        <el-button type="default" size="small" :disabled="single" @click="handleUpdate" v-hasPermi="['erp:produceJob:edit']">编辑</el-button>
-        <el-button type="danger" plain size="small" :disabled="multiple" @click="handleDelete" v-hasPermi="['erp:produceJob:remove']">作废</el-button>
-        <el-button type="default" size="small" @click="handleExport" v-hasPermi="['erp:produceJob:export']">导出</el-button>
+        <el-button type="primary" size="small" @click="handleAdd" v-hasPermi="['erp:produceJob:add']">{{ $t('produceJob.addTitle') }}</el-button>
+        <el-button type="default" size="small" :disabled="single" @click="handleUpdate" v-hasPermi="['erp:produceJob:edit']">{{ $t('btn.edit') }}</el-button>
+        <el-button type="danger" plain size="small" :disabled="multiple" @click="handleDelete" v-hasPermi="['erp:produceJob:remove']">{{ $t('produceJob.void') }}</el-button>
+        <el-button type="default" size="small" @click="handleExport" v-hasPermi="['erp:produceJob:export']">{{ $t('btn.export') }}</el-button>
         <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" style="margin-left: 8px;"></right-toolbar>
       </div>
     </div>
@@ -43,40 +43,40 @@
         <!-- 移除边框，双击唤起极速编辑 -->
         <el-table class="biz-table" :data="produceJobList" @selection-change="handleSelectionChange" @row-dblclick="handleRowDblclick">
           <el-table-column type="selection" width="55" align="center" />
-          <el-table-column label="工票编号" align="center" prop="jobNo" width="140" />
-          <el-table-column label="计划ID" align="center" prop="producePlanId" width="80" />
-          <el-table-column label="颜色" align="center" prop="colorCode" width="80" />
-          <el-table-column label="尺码" align="center" prop="sizeCode" width="80" />
-          <el-table-column label="计划数量" align="center" prop="planQty" width="80" />
-          <el-table-column label="完成数量" align="center" prop="actualQty" width="80" />
-          <el-table-column label="次品数量" align="center" prop="defectQty" width="80" />
-          
-          <el-table-column label="工票状态" align="center" prop="status">
+          <el-table-column :label="$t('produceJob.jobNo')" align="center" prop="jobNo" width="140" />
+          <el-table-column :label="$t('produceJob.producePlanId')" align="center" prop="producePlanId" width="80" />
+          <el-table-column :label="$t('produceJob.colorCode')" align="center" prop="colorCode" width="80" />
+          <el-table-column :label="$t('produceJob.sizeCode')" align="center" prop="sizeCode" width="80" />
+          <el-table-column :label="$t('produceJob.planQty')" align="center" prop="planQty" width="80" />
+          <el-table-column :label="$t('produceJob.actualQty')" align="center" prop="actualQty" width="80" />
+          <el-table-column :label="$t('produceJob.defectQty')" align="center" prop="defectQty" width="80" />
+
+          <el-table-column :label="$t('produceJob.status')" align="center" prop="status">
             <template slot-scope="scope">
               <!-- 双击状态时内联编辑 -->
               <div v-if="scope.row.isEditing">
                 <el-select v-model="scope.row.status" size="mini" @change="saveInline(scope.row)">
-                  <el-option label="待生产" value="0" />
-                  <el-option label="生产中" value="1" />
-                  <el-option label="已完成" value="2" />
+                  <el-option :label="$t('produceJob.pending')" value="0" />
+                  <el-option :label="$t('produceJob.inProgress')" value="1" />
+                  <el-option :label="$t('produceJob.completed')" value="2" />
                 </el-select>
               </div>
               <span v-else :style="{color: scope.row.status === '2' ? 'var(--app-success-color)' : (scope.row.status === '1' ? 'var(--app-warning-color)' : 'var(--app-text-tip)')}">
-                {{ scope.row.status === '0' ? '○ 待生产' : scope.row.status === '1' ? '● 生产中' : '● 已完成' }}
+                {{ scope.row.status === '0' ? '○ ' + $t('produceJob.pending') : scope.row.status === '1' ? '● ' + $t('produceJob.inProgress') : '● ' + $t('produceJob.completed') }}
               </span>
             </template>
           </el-table-column>
 
-          <el-table-column label="创建时间" align="center" prop="createTime" width="160">
+          <el-table-column :label="$t('produceJob.createTime')" align="center" prop="createTime" width="160">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.createTime, '{y}-{m}-{d} {h}:{i}') }}</span>
             </template>
           </el-table-column>
 
-          <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+          <el-table-column :label="$t('system.operation')" align="center" class-name="small-padding fixed-width">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="handleUpdate(scope.row)" v-hasPermi="['erp:produceJob:edit']">详情</el-button>
-              <el-button size="mini" type="text" @click="handleViewProcess(scope.row)" v-hasPermi="['erp:produceJobProcess:list']">流转记录</el-button>
+              <el-button size="mini" type="text" @click="handleUpdate(scope.row)" v-hasPermi="['erp:produceJob:edit']">{{ $t('btn.detail') }}</el-button>
+              <el-button size="mini" type="text" @click="handleViewProcess(scope.row)" v-hasPermi="['erp:produceJobProcess:list']">{{ $t('produceJob.flowRecord') }}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -90,72 +90,72 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="100px" class="biz-form">
         <el-row :gutter="24">
           <el-col :span="12">
-            <el-form-item label="工票编号" prop="jobNo">
-              <el-input v-model="form.jobNo" placeholder="保存时自动生成（PJ-yyyyMMdd-序号）" disabled />
+            <el-form-item :label="$t('produceJob.jobNo')" prop="jobNo">
+              <el-input v-model="form.jobNo" :placeholder="$t('produceJob.jobNoPlaceholder')" disabled />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="生产计划ID" prop="producePlanId">
-              <el-input-number v-model="form.producePlanId" placeholder="计划ID" style="width: 100%" />
+            <el-form-item :label="$t('produceJob.producePlanId')" prop="producePlanId">
+              <el-input-number v-model="form.producePlanId" :placeholder="$t('produceJob.producePlanId')" style="width: 100%" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="24">
           <el-col :span="12">
-            <el-form-item label="颜色编码" prop="colorCode">
-              <el-input v-model="form.colorCode" placeholder="请输入" />
+            <el-form-item :label="$t('produceJob.colorCode')" prop="colorCode">
+              <el-input v-model="form.colorCode" :placeholder="$t('validation.enter', [$t('produceJob.colorCode')])" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="尺码编码" prop="sizeCode">
-              <el-input v-model="form.sizeCode" placeholder="请输入" />
+            <el-form-item :label="$t('produceJob.sizeCode')" prop="sizeCode">
+              <el-input v-model="form.sizeCode" :placeholder="$t('validation.enter', [$t('produceJob.sizeCode')])" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="24">
           <el-col :span="12">
-            <el-form-item label="计划数量" prop="planQty">
-              <el-input-number v-model="form.planQty" placeholder="数量" style="width: 100%" />
+            <el-form-item :label="$t('produceJob.planQty')" prop="planQty">
+              <el-input-number v-model="form.planQty" :placeholder="$t('produceJob.planQty')" style="width: 100%" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="销售订单ID" prop="orderId">
-              <el-input-number v-model="form.orderId" placeholder="订单ID" style="width: 100%" />
+            <el-form-item :label="$t('produceJob.orderId')" prop="orderId">
+              <el-input-number v-model="form.orderId" :placeholder="$t('produceJob.orderId')" style="width: 100%" />
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="当前状态" prop="status">
+        <el-form-item :label="$t('produceJob.status')" prop="status">
           <el-radio-group v-model="form.status">
-            <el-radio label="0">待生产</el-radio>
-            <el-radio label="1">生产中</el-radio>
-            <el-radio label="2">已完成</el-radio>
+            <el-radio label="0">{{ $t('produceJob.pending') }}</el-radio>
+            <el-radio label="1">{{ $t('produceJob.inProgress') }}</el-radio>
+            <el-radio label="2">{{ $t('produceJob.completed') }}</el-radio>
           </el-radio-group>
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+        <el-form-item :label="$t('system.remark')" prop="remark">
+          <el-input v-model="form.remark" type="textarea" :placeholder="$t('validation.enter', [$t('system.remark')])" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" :loading="submitLoading" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">{{ $t('btn.confirm') }}</el-button>
+        <el-button @click="cancel">{{ $t('btn.cancel') }}</el-button>
       </div>
     </el-dialog>
 
     <!-- 工序记录抽屉 (替代笨重全屏 Dialog) -->
-    <el-drawer title="工序流转记录" :visible.sync="processOpen" size="50%" append-to-body custom-class="biz-drawer">
+    <el-drawer :title="$t('produceJob.flowRecord')" :visible.sync="processOpen" size="50%" append-to-body custom-class="biz-drawer">
       <div style="padding: 0 20px;">
         <el-table v-loading="processLoading" :data="processList" class="biz-table">
-          <el-table-column label="顺序" align="center" prop="processSeq" width="60" />
-          <el-table-column label="操作工" align="center" prop="employeeName" width="100" />
-          <el-table-column label="接收数量" align="center" prop="inQty" width="80" />
-          <el-table-column label="转出数量" align="center" prop="outQty" width="80" />
-          <el-table-column label="次品数量" align="center" prop="defectQty" width="80" />
-          <el-table-column label="是否外协" align="center" prop="isOutsource" width="80">
+          <el-table-column :label="$t('produceJobProcess.processSeq')" align="center" prop="processSeq" width="60" />
+          <el-table-column :label="$t('produceJobProcess.employeeName')" align="center" prop="employeeName" width="100" />
+          <el-table-column :label="$t('produceJobProcess.inQty')" align="center" prop="inQty" width="80" />
+          <el-table-column :label="$t('produceJobProcess.outQty')" align="center" prop="outQty" width="80" />
+          <el-table-column :label="$t('produceJobProcess.defectQty')" align="center" prop="defectQty" width="80" />
+          <el-table-column :label="$t('produceJobProcess.isOutsource')" align="center" prop="isOutsource" width="80">
             <template slot-scope="scope">
-              {{ scope.row.isOutsource === '0' ? '自产' : '外协' }}
+              {{ scope.row.isOutsource === '0' ? $t('produceJob.selfProduction') : $t('produceJob.outsourced') }}
             </template>
           </el-table-column>
-          <el-table-column label="完成时间" align="center" prop="finishTime" width="160">
+          <el-table-column :label="$t('produceJobProcess.finishTime')" align="center" prop="finishTime" width="160">
             <template slot-scope="scope">
               <span v-if="scope.row.finishTime">{{ parseTime(scope.row.finishTime, '{y}-{m}-{d} {h}:{i}') }}</span>
               <span v-else>-</span>
@@ -174,13 +174,6 @@ import { listProduceJobProcessByJob } from "@/api/erp/produceJobProcess";
 export default {
   name: "ProduceJob",
   data() {
-    const validatePositiveInteger = (message) => (rule, value, callback) => {
-      if (value === null || value === undefined || value === "" || !Number.isInteger(Number(value)) || Number(value) <= 0) {
-        callback(new Error(message));
-        return;
-      }
-      callback();
-    };
     return {
       loading: true,
       submitLoading: false,
@@ -204,13 +197,25 @@ export default {
         sizeCode: null,
         status: null
       },
-      form: {},
-      rules: {
-        producePlanId: [{ validator: validatePositiveInteger("生产计划ID必须大于0"), trigger: "change" }],
-        orderId: [{ validator: validatePositiveInteger("销售订单ID必须大于0"), trigger: "change" }],
-        planQty: [{ validator: validatePositiveInteger("计划数量必须大于0"), trigger: "change" }]
-      }
+      form: {}
     };
+  },
+  computed: {
+    rules() {
+      const t = this.$t;
+      const validatePositiveInteger = (message) => (rule, value, callback) => {
+        if (value === null || value === undefined || value === "" || !Number.isInteger(Number(value)) || Number(value) <= 0) {
+          callback(new Error(message));
+          return;
+        }
+        callback();
+      };
+      return {
+        producePlanId: [{ validator: validatePositiveInteger(t('produceJob.producePlanId') + t('validation.required')), trigger: "change" }],
+        orderId: [{ validator: validatePositiveInteger(t('produceJob.orderId') + t('validation.required')), trigger: "change" }],
+        planQty: [{ validator: validatePositiveInteger(t('produceJob.planQty') + t('validation.required')), trigger: "change" }]
+      };
+    }
   },
   created() {
     this.getList();
@@ -248,7 +253,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "开立工票";
+      this.title = this.$t('produceJob.addTitle');
     },
     handleUpdate(row) {
       this.reset();
@@ -256,7 +261,7 @@ export default {
       getProduceJob(id).then(res => {
         this.form = res.data;
         this.open = true;
-        this.title = "工票详情";
+        this.title = this.$t('produceJob.editTitle');
       });
     },
     handleViewProcess(row) {
@@ -273,7 +278,7 @@ export default {
           this.submitLoading = true;
           const req = this.form.id != null ? updateProduceJob(this.form) : addProduceJob(this.form);
           req.then(() => {
-            this.$message.success("保存成功");
+            this.$message.success(this.$t('msg.editSuccess'));
             this.open = false;
             this.getList();
           }).finally(() => {
@@ -284,11 +289,11 @@ export default {
     },
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$confirm(`确定作废工票 [${ids}] 吗？`, "危险操作", { type: 'warning' })
+      this.$confirm(this.$t('produceJob.voidConfirm', [ids]), this.$t('msg.deleteWarning'), { type: 'warning' })
         .then(() => delProduceJob(ids))
         .then(() => {
           this.getList();
-          this.$message.success("工票已作废");
+          this.$message.success(this.$t('produceJob.voidSuccess'));
         }).catch(() => {});
     },
     handleExport() {
@@ -304,7 +309,7 @@ export default {
     saveInline(row) {
       row.isEditing = false;
       updateProduceJob(row).then(() => {
-        this.$message.success('流转状态已更新');
+        this.$message.success(this.$t('msg.editSuccess'));
       }).catch(() => {
         row.isEditing = true;
       });

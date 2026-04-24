@@ -1,16 +1,16 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
-      <el-form-item label="销售订单id" prop="salesOrderId">
+      <el-form-item :label="$t('salesMaterial.salesOrderId')" prop="salesOrderId">
         <el-input
           v-model="queryParams.salesOrderId"
-          placeholder="请输入销售订单id"
+          :placeholder="$t('validation.enter', [$t('salesMaterial.salesOrderId')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="材料类型" prop="materialType">
-        <el-select v-model="queryParams.materialType" placeholder="请选择材料类型" clearable>
+      <el-form-item :label="$t('salesMaterial.materialType')" prop="materialType">
+        <el-select v-model="queryParams.materialType" :placeholder="$t('validation.select', [$t('salesMaterial.materialType')])" clearable>
           <el-option
             v-for="dict in dict.type.erp_material_type"
             :key="dict.value"
@@ -19,32 +19,32 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="主料id" prop="materialId">
+      <el-form-item :label="$t('salesMaterial.materialId')" prop="materialId">
         <el-input
           v-model="queryParams.materialId"
-          placeholder="请输入主料id"
+          :placeholder="$t('validation.enter', [$t('salesMaterial.materialId')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="颜色" prop="color">
+      <el-form-item :label="$t('salesMaterial.color')" prop="color">
         <el-input
           v-model="queryParams.color"
-          placeholder="请输入颜色"
+          :placeholder="$t('validation.enter', [$t('salesMaterial.color')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="单耗" prop="unitConsumption">
+      <el-form-item :label="$t('salesMaterial.unitConsumption')" prop="unitConsumption">
         <el-input
           v-model="queryParams.unitConsumption"
-          placeholder="请输入单耗"
+          :placeholder="$t('validation.enter', [$t('salesMaterial.unitConsumption')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="损耗方式" prop="lossType">
-        <el-select v-model="queryParams.lossType" placeholder="请选择损耗方式" clearable>
+      <el-form-item :label="$t('salesMaterial.lossType')" prop="lossType">
+        <el-select v-model="queryParams.lossType" :placeholder="$t('validation.select', [$t('salesMaterial.lossType')])" clearable>
           <el-option
             v-for="dict in dict.type.erp_loss_type"
             :key="dict.value"
@@ -53,49 +53,49 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="损耗" prop="wastage">
+      <el-form-item :label="$t('salesMaterial.wastage')" prop="wastage">
         <el-input
           v-model="queryParams.wastage"
-          placeholder="请输入损耗"
+          :placeholder="$t('validation.enter', [$t('salesMaterial.wastage')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="排产数量" prop="planQuantity">
+      <el-form-item :label="$t('salesMaterial.planQuantity')" prop="planQuantity">
         <el-input
           v-model="queryParams.planQuantity"
-          placeholder="请输入排产数量"
+          :placeholder="$t('validation.enter', [$t('salesMaterial.planQuantity')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="需求总量" prop="totalQuantity">
+      <el-form-item :label="$t('salesMaterial.totalQuantity')" prop="totalQuantity">
         <el-input
           v-model="queryParams.totalQuantity"
-          placeholder="请输入需求总量"
+          :placeholder="$t('validation.enter', [$t('salesMaterial.totalQuantity')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="计算公式" prop="totalDesc">
+      <el-form-item :label="$t('salesMaterial.totalDesc')" prop="totalDesc">
         <el-input
           v-model="queryParams.totalDesc"
-          placeholder="请输入计算公式"
+          :placeholder="$t('validation.enter', [$t('salesMaterial.totalDesc')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="入库数量" prop="inboundQuantity">
+      <el-form-item :label="$t('salesMaterial.inboundQuantity')" prop="inboundQuantity">
         <el-input
           v-model="queryParams.inboundQuantity"
-          placeholder="请输入入库数量"
+          :placeholder="$t('validation.enter', [$t('salesMaterial.inboundQuantity')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('btn.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('btn.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -108,7 +108,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['erp:salesmaterial:add']"
-        >新增</el-button>
+        >{{ $t('btn.add') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -119,7 +119,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['erp:salesmaterial:edit']"
-        >修改</el-button>
+        >{{ $t('btn.edit') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -130,7 +130,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['erp:salesmaterial:remove']"
-        >删除</el-button>
+        >{{ $t('btn.delete') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -140,7 +140,7 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['erp:salesmaterial:export']"
-        >导出</el-button>
+        >{{ $t('btn.export') }}</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -148,29 +148,29 @@
     <el-table v-loading="loading" :data="salesmaterialList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="id" align="center" prop="id" />
-      <el-table-column label="销售订单id" align="center" prop="salesOrderId" />
-      <el-table-column label="材料类型" align="center" prop="materialType">
+      <el-table-column :label="$t('salesMaterial.salesOrderId')" align="center" prop="salesOrderId" />
+      <el-table-column :label="$t('salesMaterial.materialType')" align="center" prop="materialType">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.erp_material_type" :value="scope.row.materialType"/>
         </template>
       </el-table-column>
-      <el-table-column label="主料id" align="center" prop="materialId" />
-      <el-table-column label="颜色" align="center" prop="color" />
-      <el-table-column label="单耗" align="center" prop="unitConsumption" />
-      <el-table-column label="损耗方式" align="center" prop="lossType">
+      <el-table-column :label="$t('salesMaterial.materialId')" align="center" prop="materialId" />
+      <el-table-column :label="$t('salesMaterial.color')" align="center" prop="color" />
+      <el-table-column :label="$t('salesMaterial.unitConsumption')" align="center" prop="unitConsumption" />
+      <el-table-column :label="$t('salesMaterial.lossType')" align="center" prop="lossType">
         <template slot-scope="scope">
           <dict-tag :options="dict.type.erp_loss_type" :value="scope.row.lossType"/>
         </template>
       </el-table-column>
-      <el-table-column label="损耗" align="center" prop="wastage" />
-      <el-table-column label="排产数量" align="center" prop="planQuantity" />
-      <el-table-column label="需求总量" align="center" prop="totalQuantity" />
-      <el-table-column label="计算公式" align="center" prop="totalDesc" />
-      <el-table-column label="入库数量" align="center" prop="inboundQuantity" />
-      <el-table-column label="状态" align="center" prop="materialStatus" />
-      <el-table-column label="库存状态" align="center" prop="inventoryStatus" />
-      <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('salesMaterial.wastage')" align="center" prop="wastage" />
+      <el-table-column :label="$t('salesMaterial.planQuantity')" align="center" prop="planQuantity" />
+      <el-table-column :label="$t('salesMaterial.totalQuantity')" align="center" prop="totalQuantity" />
+      <el-table-column :label="$t('salesMaterial.totalDesc')" align="center" prop="totalDesc" />
+      <el-table-column :label="$t('salesMaterial.inboundQuantity')" align="center" prop="inboundQuantity" />
+      <el-table-column :label="$t('salesMaterial.materialStatus')" align="center" prop="materialStatus" />
+      <el-table-column :label="$t('salesMaterial.inventoryStatus')" align="center" prop="inventoryStatus" />
+      <el-table-column :label="$t('system.remark')" align="center" prop="remark" />
+      <el-table-column :label="$t('system.operation')" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -178,14 +178,14 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['erp:salesmaterial:edit']"
-          >修改</el-button>
+          >{{ $t('btn.edit') }}</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['erp:salesmaterial:remove']"
-          >删除</el-button>
+          >{{ $t('btn.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -198,11 +198,10 @@
       @pagination="getList"
     />
 
-    <!-- 添加或修改大货订单物料明细对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="700px" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="销售订单" prop="salesOrderId" required>
-          <el-select v-model="form.salesOrderId" placeholder="请选择销售订单" clearable
+        <el-form-item :label="$t('salesMaterial.salesOrder')" prop="salesOrderId" required>
+          <el-select v-model="form.salesOrderId" :placeholder="$t('salesMaterial.selectSalesOrder')" clearable
             filterable clearable remote :remote-method="filterSalesOrder" loading="salesOrderLoading">
             <el-option
               v-for="item in salesOrderOptions"
@@ -214,8 +213,8 @@
         </el-form-item>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="材料类型" prop="materialType" required>
-              <el-select v-model="form.materialType" placeholder="请选择材料类型">
+            <el-form-item :label="$t('salesMaterial.materialType')" prop="materialType" required>
+              <el-select v-model="form.materialType" :placeholder="$t('salesMaterial.selectMaterialType')">
                 <el-option
                   v-for="dict in dict.type.erp_material_type"
                   :key="dict.value"
@@ -226,8 +225,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="主料" prop="materialId" required>
-              <el-select v-model="form.materialId" placeholder="请选择主料" clearable
+            <el-form-item :label="$t('salesMaterial.material')" prop="materialId" required>
+              <el-select v-model="form.materialId" :placeholder="$t('salesMaterial.selectMaterial')" clearable
                 filterable clearable remote :remote-method="filterMaterial" loading="materialLoading">
                 <el-option
                   v-for="item in materialOptions"
@@ -241,20 +240,20 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="颜色" prop="color" required>
-              <el-input v-model="form.color" placeholder="请输入颜色" />
+            <el-form-item :label="$t('salesMaterial.color')" prop="color" required>
+              <el-input v-model="form.color" :placeholder="$t('validation.enter', [$t('salesMaterial.color')])" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="单耗" prop="unitConsumption" required>
-              <el-input-number v-model="form.unitConsumption" :precision="4" :min="0" placeholder="请输入单耗" />
+            <el-form-item :label="$t('salesMaterial.unitConsumption')" prop="unitConsumption" required>
+              <el-input-number v-model="form.unitConsumption" :precision="4" :min="0" :placeholder="$t('validation.enter', [$t('salesMaterial.unitConsumption')])" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="损耗方式" prop="lossType" required>
-              <el-select v-model="form.lossType" placeholder="请选择损耗方式">
+            <el-form-item :label="$t('salesMaterial.lossType')" prop="lossType" required>
+              <el-select v-model="form.lossType" :placeholder="$t('salesMaterial.selectLossType')">
                 <el-option
                   v-for="dict in dict.type.erp_loss_type"
                   :key="dict.value"
@@ -265,40 +264,40 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="损耗" prop="wastage">
-              <el-input-number v-model="form.wastage" :precision="4" :min="0" placeholder="请输入损耗" />
+            <el-form-item :label="$t('salesMaterial.wastage')" prop="wastage">
+              <el-input-number v-model="form.wastage" :precision="4" :min="0" :placeholder="$t('validation.enter', [$t('salesMaterial.wastage')])" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="排产数量" prop="planQuantity" required>
-              <el-input-number v-model="form.planQuantity" :precision="2" :min="0" placeholder="请输入排产数量" />
+            <el-form-item :label="$t('salesMaterial.planQuantity')" prop="planQuantity" required>
+              <el-input-number v-model="form.planQuantity" :precision="2" :min="0" :placeholder="$t('validation.enter', [$t('salesMaterial.planQuantity')])" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="需求总量" prop="totalQuantity">
-              <el-input-number v-model="form.totalQuantity" :precision="2" :min="0" placeholder="请输入需求总量" />
+            <el-form-item :label="$t('salesMaterial.totalQuantity')" prop="totalQuantity">
+              <el-input-number v-model="form.totalQuantity" :precision="2" :min="0" :placeholder="$t('validation.enter', [$t('salesMaterial.totalQuantity')])" />
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="计算公式" prop="totalDesc">
-          <el-input v-model="form.totalDesc" placeholder="请输入计算公式" />
+        <el-form-item :label="$t('salesMaterial.totalDesc')" prop="totalDesc">
+          <el-input v-model="form.totalDesc" :placeholder="$t('validation.enter', [$t('salesMaterial.totalDesc')])" />
         </el-form-item>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="入库数量" prop="inboundQuantity">
-              <el-input-number v-model="form.inboundQuantity" :precision="2" :min="0" placeholder="请输入入库数量" />
+            <el-form-item :label="$t('salesMaterial.inboundQuantity')" prop="inboundQuantity">
+              <el-input-number v-model="form.inboundQuantity" :precision="2" :min="0" :placeholder="$t('validation.enter', [$t('salesMaterial.inboundQuantity')])" />
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入备注" />
+        <el-form-item :label="$t('system.remark')" prop="remark">
+          <el-input v-model="form.remark" type="textarea" :placeholder="$t('validation.enter', [$t('system.remark')])" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" :loading="submitLoading" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">{{ $t('btn.confirm') }}</el-button>
+        <el-button @click="cancel">{{ $t('btn.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -314,26 +313,16 @@ export default {
   dicts: ['erp_loss_type', 'erp_material_type'],
   data() {
     return {
-      // 遮罩层
       loading: true,
-      // 选中数组
       ids: [],
-      // 非单个禁用
       single: true,
-      // 非多个禁用
       multiple: true,
-      // 显示搜索条件
       showSearch: true,
-      // 总条数
       total: 0,
-      // 大货订单物料明细表格数据
       salesmaterialList: [],
-      // 弹出层标题
       title: "",
-      // 是否显示弹出层
       open: false,
       submitLoading: false,
-      // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -351,33 +340,33 @@ export default {
         materialStatus: null,
         inventoryStatus: null,
       },
-      // 销售订单选项
       salesOrderOptions: [],
       salesOrderLoading: false,
-      // 主料选项
       materialOptions: [],
       materialLoading: false,
-      // 表单参数
-      form: {},
-      // 表单校验
-      rules: {
+      form: {}
+    }
+  },
+  computed: {
+    rules() {
+      return {
         salesOrderId: [
-          { required: true, message: "销售订单不能为空", trigger: "change" }
+          { required: true, message: () => this.$t('validation.enter', [this.$t('salesMaterial.salesOrder')]), trigger: "change" }
         ],
         materialType: [
-          { required: true, message: "材料类型不能为空", trigger: "change" }
+          { required: true, message: () => this.$t('validation.select', [this.$t('salesMaterial.materialType')]), trigger: "change" }
         ],
         materialId: [
-          { required: true, message: "主料不能为空", trigger: "change" }
+          { required: true, message: () => this.$t('validation.select', [this.$t('salesMaterial.material')]), trigger: "change" }
         ],
         unitConsumption: [
-          { required: true, message: "单耗不能为空", trigger: "blur" }
+          { required: true, message: () => this.$t('validation.enter', [this.$t('salesMaterial.unitConsumption')]), trigger: "blur" }
         ],
         lossType: [
-          { required: true, message: "损耗方式不能为空", trigger: "change" }
+          { required: true, message: () => this.$t('validation.select', [this.$t('salesMaterial.lossType')]), trigger: "change" }
         ],
         planQuantity: [
-          { required: true, message: "排产数量不能为空", trigger: "blur" }
+          { required: true, message: () => this.$t('validation.enter', [this.$t('salesMaterial.planQuantity')]), trigger: "blur" }
         ]
       }
     }
@@ -386,7 +375,6 @@ export default {
     this.getList()
   },
   methods: {
-    /** 过滤销售订单 */
     filterSalesOrder(query) {
       if (!query) {
         this.salesOrderOptions = []
@@ -403,7 +391,6 @@ export default {
         this.salesOrderLoading = false
       })
     },
-    /** 过滤主料 */
     filterMaterial(query) {
       if (!query) {
         this.materialOptions = []
@@ -420,7 +407,6 @@ export default {
         this.materialLoading = false
       })
     },
-    /** 查询大货订单物料明细列表 */
     getList() {
       this.loading = true
       listSalesmaterial(this.queryParams).then(response => {
@@ -429,12 +415,10 @@ export default {
         this.loading = false
       })
     },
-    // 取消按钮
     cancel() {
       this.open = false
       this.reset()
     },
-    // 表单重置
     reset() {
       this.form = {
         id: null,
@@ -459,52 +443,46 @@ export default {
       }
       this.resetForm("form")
     },
-    /** 搜索按钮操作 */
     handleQuery() {
       this.queryParams.pageNum = 1
       this.getList()
     },
-    /** 重置按钮操作 */
     resetQuery() {
       this.resetForm("queryForm")
       this.handleQuery()
     },
-    // 多选框选中数据
     handleSelectionChange(selection) {
       this.ids = selection.map(item => item.id)
       this.single = selection.length!==1
       this.multiple = !selection.length
     },
-    /** 新增按钮操作 */
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = "添加大货订单物料明细"
+      this.title = this.$t('salesMaterial.addTitle')
     },
-    /** 修改按钮操作 */
     handleUpdate(row) {
       this.reset()
       const id = row.id || this.ids
       getSalesmaterial(id).then(response => {
         this.form = response.data
         this.open = true
-        this.title = "修改大货订单物料明细"
+        this.title = this.$t('salesMaterial.editTitle')
       })
     },
-    /** 提交按钮 */
     submitForm() {
       this.$refs["form"].validate(valid => {
         if (valid) {
           this.submitLoading = true
           if (this.form.id != null) {
             updateSalesmaterial(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功")
+              this.$modal.msgSuccess(this.$t('msg.editSuccess'))
               this.open = false
               this.getList()
             }).finally(() => { this.submitLoading = false })
           } else {
             addSalesmaterial(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功")
+              this.$modal.msgSuccess(this.$t('msg.addSuccess'))
               this.open = false
               this.getList()
             }).finally(() => { this.submitLoading = false })
@@ -512,17 +490,15 @@ export default {
         }
       })
     },
-    /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids
-      this.$modal.confirm('是否确认删除大货订单物料明细编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm(this.$t('msg.deleteConfirm', [ids])).then(function() {
         return delSalesmaterial(ids)
       }).then(() => {
         this.getList()
-        this.$modal.msgSuccess("删除成功")
+        this.$modal.msgSuccess(this.$t('msg.deleteSuccess'))
       }).catch(() => {})
     },
-    /** 导出按钮操作 */
     handleExport() {
       this.download('erp/salesmaterial/export', {
         ...this.queryParams

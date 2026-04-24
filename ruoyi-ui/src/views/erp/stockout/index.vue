@@ -2,37 +2,37 @@
   <div class="app-container">
     <!-- 1. 全局顶部操作与筛选区 -->
     <div class="biz-top-bar" style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 24px;">
-      
+
       <!-- 左侧极简筛选 -->
       <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" class="biz-search-form" style="margin-bottom: 0;">
         <el-form-item prop="purchaseId" style="margin-bottom: 0; margin-right: 16px;">
-          <el-select v-model="queryParams.purchaseId" placeholder="关联采购单" clearable filterable remote :remote-method="filterPurchase" :loading="purchaseLoading" style="width: 160px;">
+          <el-select v-model="queryParams.purchaseId" :placeholder="$t('stockout.purchasePlaceholder')" clearable filterable remote :remote-method="filterPurchase" :loading="purchaseLoading" style="width: 160px;">
             <el-option v-for="item in purchaseOptions" :key="item.value" :label="item.label" :value="item.value" />
           </el-select>
         </el-form-item>
         <el-form-item prop="bulkOrderNo" style="margin-bottom: 0; margin-right: 16px;">
-          <el-input v-model="queryParams.bulkOrderNo" placeholder="大货款号" clearable @keyup.enter.native="handleQuery" style="width: 140px;" />
+          <el-input v-model="queryParams.bulkOrderNo" :placeholder="$t('stockout.bulkOrderNo')" clearable @keyup.enter.native="handleQuery" style="width: 140px;" />
         </el-form-item>
         <el-form-item prop="sn" style="margin-bottom: 0; margin-right: 16px;">
-          <el-input v-model="queryParams.sn" placeholder="出库单号" clearable @keyup.enter.native="handleQuery" style="width: 140px;" />
+          <el-input v-model="queryParams.sn" :placeholder="$t('stockout.sn')" clearable @keyup.enter.native="handleQuery" style="width: 140px;" />
         </el-form-item>
         <el-form-item prop="confirmStatus" style="margin-bottom: 0; margin-right: 16px;">
-          <el-select v-model="queryParams.confirmStatus" placeholder="出库状态" clearable style="width: 120px;">
+          <el-select v-model="queryParams.confirmStatus" :placeholder="$t('stockout.confirmStatusPlaceholder')" clearable style="width: 120px;">
             <el-option v-for="dict in dict.type.erp_confirm_status" :key="dict.value" :label="dict.label" :value="dict.value" />
           </el-select>
         </el-form-item>
         <el-form-item style="margin-bottom: 0;">
-          <el-button type="primary" icon="el-icon-search" size="small" @click="handleQuery">查询</el-button>
-          <el-button icon="el-icon-refresh" size="small" @click="resetQuery">重置</el-button>
+          <el-button type="primary" icon="el-icon-search" size="small" @click="handleQuery">{{ $t('btn.query') }}</el-button>
+          <el-button icon="el-icon-refresh" size="small" @click="resetQuery">{{ $t('btn.reset') }}</el-button>
         </el-form-item>
       </el-form>
 
       <!-- 右侧固定功能按钮区 -->
       <div class="biz-action-btn-group" style="display: flex; gap: 8px; flex-shrink: 0;">
-        <el-button type="primary" size="small" @click="handleAdd" v-hasPermi="['erp:stockout:add']">新添出库</el-button>
-        <el-button type="default" size="small" :disabled="single" @click="handleUpdate" v-hasPermi="['erp:stockout:edit']">编辑</el-button>
-        <el-button type="danger" plain size="small" :disabled="multiple" @click="handleDelete" v-hasPermi="['erp:stockout:remove']">删除</el-button>
-        <el-button type="default" size="small" @click="handleExport" v-hasPermi="['erp:stockout:export']">导出</el-button>
+        <el-button type="primary" size="small" @click="handleAdd" v-hasPermi="['erp:stockout:add']">{{ $t('stockout.addTitle') }}</el-button>
+        <el-button type="default" size="small" :disabled="single" @click="handleUpdate" v-hasPermi="['erp:stockout:edit']">{{ $t('btn.edit') }}</el-button>
+        <el-button type="danger" plain size="small" :disabled="multiple" @click="handleDelete" v-hasPermi="['erp:stockout:remove']">{{ $t('btn.delete') }}</el-button>
+        <el-button type="default" size="small" @click="handleExport" v-hasPermi="['erp:stockout:export']">{{ $t('btn.export') }}</el-button>
         <right-toolbar :showSearch.sync="showSearch" @queryTable="getList" style="margin-left: 8px;"></right-toolbar>
       </div>
     </div>
@@ -43,35 +43,35 @@
         <!-- 双击表格行进行快速状态确认 -->
         <el-table class="biz-table" :data="stockoutList" @selection-change="handleSelectionChange" @row-dblclick="handleRowDblclick">
           <el-table-column type="selection" width="55" align="center" />
-          <el-table-column label="出库单号" align="center" prop="sn" width="140" />
-          <el-table-column label="大货款号" align="center" prop="bulkOrderNo" width="160" :show-overflow-tooltip="true" />
-          <el-table-column label="类型" align="center" prop="outType" width="80">
+          <el-table-column :label="$t('stockout.sn')" align="center" prop="sn" width="140" />
+          <el-table-column :label="$t('stockout.bulkOrderNo')" align="center" prop="bulkOrderNo" width="160" :show-overflow-tooltip="true" />
+          <el-table-column :label="$t('stockout.type')" align="center" prop="outType" width="80">
             <template slot-scope="scope">
               <span>{{ getOutTypeLabel(scope.row.outType) }}</span>
             </template>
           </el-table-column>
-          
-          <el-table-column label="出库状态" align="center" prop="confirmStatus" width="120">
+
+          <el-table-column :label="$t('stockout.confirmStatus')" align="center" prop="confirmStatus" width="120">
             <template slot-scope="scope">
               <!-- 极简圆点指示器 -->
-              <span :style="{color: scope.row.confirmStatus === '1' ? 'var(--app-success-color)' : 'var(--app-warning-color)', cursor: scope.row.confirmStatus === '0' ? 'pointer' : 'default'}" title="双击可快速出库">
-                {{ scope.row.confirmStatus === '1' ? '● 已出库' : '○ 待出库' }}
+              <span :style="{color: scope.row.confirmStatus === '1' ? 'var(--app-success-color)' : 'var(--app-warning-color)', cursor: scope.row.confirmStatus === '0' ? 'pointer' : 'default'}" :title="$t('stockout.dblClickConfirm')">
+                {{ scope.row.confirmStatus === '1' ? '● ' + $t('stockout.confirmed') : '○ ' + $t('stockout.pending') }}
               </span>
             </template>
           </el-table-column>
 
-          <el-table-column label="申请人" align="center" prop="applicant" width="100" />
-          
-          <el-table-column label="申请日期" align="center" prop="applyDate" width="120">
+          <el-table-column :label="$t('stockout.applicant')" align="center" prop="applicant" width="100" />
+
+          <el-table-column :label="$t('stockout.applyDate')" align="center" prop="applyDate" width="120">
             <template slot-scope="scope">
               <span>{{ parseTime(scope.row.applyDate, '{y}-{m}-{d}') }}</span>
             </template>
           </el-table-column>
 
-          <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="150">
+          <el-table-column :label="$t('system.operation')" align="center" class-name="small-padding fixed-width" width="150">
             <template slot-scope="scope">
-              <el-button size="mini" type="text" @click="handleUpdate(scope.row)" v-hasPermi="['erp:stockout:edit']">详情</el-button>
-              <el-button v-if="scope.row.confirmStatus === '0'" size="mini" type="text" @click="handleConfirm(scope.row)" v-hasPermi="['erp:stockout:edit']">确认发料</el-button>
+              <el-button size="mini" type="text" @click="handleUpdate(scope.row)" v-hasPermi="['erp:stockout:edit']">{{ $t('btn.detail') }}</el-button>
+              <el-button v-if="scope.row.confirmStatus === '0'" size="mini" type="text" @click="handleConfirm(scope.row)" v-hasPermi="['erp:stockout:edit']">{{ $t('stockout.confirmBtn') }}</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -85,13 +85,13 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="100px" class="biz-form">
         <el-row :gutter="24">
           <el-col :span="12">
-            <el-form-item label="出库单号" prop="sn">
-              <el-input v-model="form.sn" placeholder="保存时自动生成（SOUT-yyyyMMdd-序号）" disabled />
+            <el-form-item :label="$t('stockout.sn')" prop="sn">
+              <el-input v-model="form.sn" :placeholder="$t('stockout.snAuto')" disabled />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="关联采购单" prop="purchaseId">
-              <el-select v-model="form.purchaseId" placeholder="搜索采购单" clearable filterable remote :remote-method="filterPurchase" :loading="purchaseLoading" style="width: 100%">
+            <el-form-item :label="$t('stockout.purchaseSn')" prop="purchaseId">
+              <el-select v-model="form.purchaseId" :placeholder="$t('stockout.searchPurchase')" clearable filterable remote :remote-method="filterPurchase" :loading="purchaseLoading" style="width: 100%">
                 <el-option v-for="item in purchaseOptions" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
@@ -99,44 +99,44 @@
         </el-row>
         <el-row :gutter="24">
           <el-col :span="12">
-            <el-form-item label="类型" prop="outType" required>
-              <el-select v-model="form.outType" placeholder="请选择" style="width: 100%">
-                <el-option label="面料" :value="1" />
-                <el-option label="纱线" :value="2" />
-                <el-option label="辅料" :value="3" />
+            <el-form-item :label="$t('stockout.type')" prop="outType" required>
+              <el-select v-model="form.outType" :placeholder="$t('stockout.selectType')" style="width: 100%">
+                <el-option :label="$t('stockout.fabric')" :value="1" />
+                <el-option :label="$t('stockout.yarn')" :value="2" />
+                <el-option :label="$t('stockout.auxiliary')" :value="3" />
               </el-select>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="申请日期" prop="applyDate" required>
-              <el-date-picker clearable v-model="form.applyDate" type="date" value-format="yyyy-MM-dd" placeholder="选择日期" style="width: 100%" />
+            <el-form-item :label="$t('stockout.applyDate')" prop="applyDate" required>
+              <el-date-picker clearable v-model="form.applyDate" type="date" value-format="yyyy-MM-dd" :placeholder="$t('stockout.selectDate')" style="width: 100%" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row :gutter="24">
           <el-col :span="12">
-            <el-form-item label="大货款号" prop="bulkOrderNo">
-              <el-input v-model="form.bulkOrderNo" placeholder="请输入" />
+            <el-form-item :label="$t('stockout.bulkOrderNo')" prop="bulkOrderNo">
+              <el-input v-model="form.bulkOrderNo" :placeholder="$t('stockout.enterBulkNo')" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="负责人" prop="chargeUserId">
-              <el-select v-model="form.chargeUserId" placeholder="请选择负责人" clearable filterable remote :remote-method="filterUser" :loading="userLoading" style="width: 100%">
+            <el-form-item :label="$t('stockout.chargeUser')" prop="chargeUserId">
+              <el-select v-model="form.chargeUserId" :placeholder="$t('stockout.selectChargeUser')" clearable filterable remote :remote-method="filterUser" :loading="userLoading" style="width: 100%">
                 <el-option v-for="item in userOptions" :key="item.value" :label="item.label" :value="item.value" />
               </el-select>
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="出库简介" prop="outDescription">
-          <el-input v-model="form.outDescription" type="textarea" placeholder="简要描述" />
+        <el-form-item :label="$t('stockout.description')" prop="outDescription">
+          <el-input v-model="form.outDescription" type="textarea" :placeholder="$t('stockout.descriptionPlaceholder')" />
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="备注" />
+        <el-form-item :label="$t('system.remark')" prop="remark">
+          <el-input v-model="form.remark" type="textarea" :placeholder="$t('system.remark')" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" :loading="submitLoading" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">{{ $t('btn.confirm') }}</el-button>
+        <el-button @click="cancel">{{ $t('btn.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -174,10 +174,14 @@ export default {
         bulkOrderNo: null,
         confirmStatus: null
       },
-      form: {},
-      rules: {
-        outType: [{ required: true, message: "不能为空", trigger: "change" }],
-        applyDate: [{ required: true, message: "不能为空", trigger: "change" }]
+      form: {}
+    }
+  },
+  computed: {
+    rules() {
+      return {
+        outType: [{ required: true, message: this.$t('validation.required'), trigger: "change" }],
+        applyDate: [{ required: true, message: this.$t('validation.required'), trigger: "change" }]
       }
     }
   },
@@ -207,7 +211,11 @@ export default {
       });
     },
     getOutTypeLabel(value) {
-      const typeMap = {'1': '面料', '2': '纱线', '3': '辅料'}
+      const typeMap = {
+        '1': this.$t('stockout.fabric'),
+        '2': this.$t('stockout.yarn'),
+        '3': this.$t('stockout.auxiliary')
+      }
       return typeMap[value] || value
     },
     getList() {
@@ -242,7 +250,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "新添出库单";
+      this.title = this.$t('stockout.addTitle');
     },
     handleUpdate(row) {
       this.reset();
@@ -250,7 +258,7 @@ export default {
       getStockout(id).then(res => {
         this.form = res.data;
         this.open = true;
-        this.title = "出库单详情";
+        this.title = this.$t('stockout.editTitle');
       });
     },
     // 双击快速确认交互
@@ -260,10 +268,10 @@ export default {
       }
     },
     handleConfirm(row) {
-      this.$confirm(`确认对出库单 [${row.sn}] 执行发料动作？`, "快速发料", { type: 'warning' }).then(() => {
+      this.$confirm(this.$t('stockout.confirmMsg', [row.sn]), this.$t('stockout.quickConfirm'), { type: 'warning' }).then(() => {
         row.confirmStatus = '1';
         updateStockout(row).then(() => {
-          this.$message.success("出库单已确认发料");
+          this.$message.success(this.$t('stockout.confirmedMsg'));
           this.getList();
         });
       }).catch(() => {});
@@ -274,7 +282,7 @@ export default {
           this.submitLoading = true;
           const req = this.form.id != null ? updateStockout(this.form) : addStockout(this.form);
           req.then(() => {
-            this.$message.success("保存成功");
+            this.$message.success(this.$t('msg.operationSuccess'));
             this.open = false;
             this.getList();
           }).finally(() => {
@@ -285,11 +293,11 @@ export default {
     },
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$confirm(`确定彻底删除出库单 [${ids}] 吗？`, "危险操作", { type: 'warning' })
+      this.$confirm(this.$t('stockout.deleteConfirm', [ids]), this.$t('msg.deleteWarning'), { type: 'warning' })
         .then(() => delStockout(ids))
         .then(() => {
           this.getList();
-          this.$message.success("数据已删除");
+          this.$message.success(this.$t('msg.deleteSuccess'));
         }).catch(() => {});
     },
     handleExport() {

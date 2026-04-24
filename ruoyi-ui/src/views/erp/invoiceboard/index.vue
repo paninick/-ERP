@@ -6,35 +6,35 @@
         <div class="stat-value">
           <count-to :startVal="0" :endVal="boardStats.invoicedAmount || 0" :duration="1400" prefix="¥" separator="," />
         </div>
-        <div class="stat-label">已开票总额</div>
+        <div class="stat-label">{{ $t('invoiceBoard.invoicedAmount') }}</div>
       </div>
       <div class="stat-card">
         <div class="stat-value" style="color: var(--app-warning-color)">
           <count-to :startVal="0" :endVal="boardStats.pendingAmount || 0" :duration="1400" prefix="¥" separator="," />
         </div>
-        <div class="stat-label">待开票总额</div>
+        <div class="stat-label">{{ $t('invoiceBoard.pendingAmount') }}</div>
       </div>
       <div class="stat-card">
         <div class="stat-value" style="color: var(--app-success-color)">
           <count-to :startVal="0" :endVal="boardStats.reconcileRate || 0" :duration="1600" :decimals="1" suffix="%" />
         </div>
-        <div class="stat-label">对账完成率</div>
+        <div class="stat-label">{{ $t('invoiceBoard.reconcileRate') }}</div>
       </div>
     </div>
 
     <!-- 筛选栏 -->
     <div class="filter-bar">
       <el-date-picker v-model="dateRange" type="daterange" range-separator="—"
-        start-placeholder="开始日期" end-placeholder="结束日期" value-format="yyyy-MM-dd"
+        :start-placeholder="$t('invoiceBoard.startDate')" :end-placeholder="$t('invoiceBoard.endDate')" value-format="yyyy-MM-dd"
         size="small" style="width: 260px" @change="loadCards" />
-      <el-select v-model="statusFilter" placeholder="发票状态" clearable size="small"
+      <el-select v-model="statusFilter" :placeholder="$t('invoiceBoard.invoiceStatus')" clearable size="small"
         style="width: 140px; margin-left: 12px" @change="loadCards">
-        <el-option label="已核销" value="verified" />
-        <el-option label="部分核销" value="partial" />
-        <el-option label="待核销" value="pending" />
-        <el-option label="红冲" value="reversed" />
+        <el-option :label="$t('invoiceBoard.statusVerified')" value="verified" />
+        <el-option :label="$t('invoiceBoard.statusPartial')" value="partial" />
+        <el-option :label="$t('invoiceBoard.statusPending')" value="pending" />
+        <el-option :label="$t('invoiceBoard.statusReversed')" value="reversed" />
       </el-select>
-      <el-input v-model="customerSearch" placeholder="搜索客户" clearable size="small"
+      <el-input v-model="customerSearch" :placeholder="$t('invoiceBoard.searchCustomer')" clearable size="small"
         style="width: 180px; margin-left: 12px" @clear="loadCards" @keyup.enter.native="loadCards" />
     </div>
 
@@ -44,7 +44,7 @@
         <div class="inv-card-header">
           <span class="inv-no">{{ inv.invoiceNo || inv.sn || '—' }}</span>
           <span class="inv-status" :class="'status-' + (inv.status || 'pending')">
-            {{ statusMap[inv.status] || '待核销' }}
+            {{ statusMap[inv.status] || $t('invoiceBoard.statusPending') }}
           </span>
         </div>
         <div class="inv-card-body">
@@ -59,7 +59,7 @@
       </div>
       <div v-if="invoices.length === 0 && !loading" class="empty-state">
         <div class="empty-icon">📄</div>
-        <div class="empty-text">暂无发票数据</div>
+        <div class="empty-text">{{ $t('invoiceBoard.noInvoiceData') }}</div>
       </div>
     </div>
   </div>
@@ -79,8 +79,17 @@ export default {
       invoices: [],
       dateRange: [],
       statusFilter: '',
-      customerSearch: '',
-      statusMap: { verified: '已核销', partial: '部分核销', pending: '待核销', reversed: '红冲' }
+      customerSearch: ''
+    }
+  },
+  computed: {
+    statusMap() {
+      return {
+        verified: this.$t('invoiceBoard.statusVerified'),
+        partial: this.$t('invoiceBoard.statusPartial'),
+        pending: this.$t('invoiceBoard.statusPending'),
+        reversed: this.$t('invoiceBoard.statusReversed')
+      }
     }
   },
   created() { this.loadCards() },

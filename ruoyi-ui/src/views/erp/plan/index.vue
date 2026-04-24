@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="80px">
-      <el-form-item label="销售订单" prop="salesOrderId">
-        <el-select v-model="queryParams.salesOrderId" placeholder="请选择销售订单" clearable
+      <el-form-item :label="$t('plan.salesOrderId')" prop="salesOrderId">
+        <el-select v-model="queryParams.salesOrderId" :placeholder="$t('plan.selectSalesOrder')" clearable
           filterable clearable remote :remote-method="filterSalesOrder" loading="salesOrderLoading">
           <el-option
             v-for="item in salesOrderOptions"
@@ -12,8 +12,8 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="客户" prop="customerId">
-        <el-select v-model="queryParams.customerId" placeholder="请选择客户" clearable
+      <el-form-item :label="$t('plan.customerId')" prop="customerId">
+        <el-select v-model="queryParams.customerId" :placeholder="$t('plan.selectCustomer')" clearable
           filterable clearable remote :remote-method="filterCustomer" loading="customerLoading">
           <el-option
             v-for="item in customerOptions"
@@ -23,41 +23,41 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="大货款号" prop="bulkOrderNo">
+      <el-form-item :label="$t('plan.bulkOrderNo')" prop="bulkOrderNo">
         <el-input
           v-model="queryParams.bulkOrderNo"
-          placeholder="请输入大货款号"
+          :placeholder="$t('validation.enter', [$t('plan.bulkOrderNo')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="打样编号" prop="sampleStyleNo">
+      <el-form-item :label="$t('plan.sampleStyleNo')" prop="sampleStyleNo">
         <el-input
           v-model="queryParams.sampleStyleNo"
-          placeholder="请输入打样编号"
+          :placeholder="$t('validation.enter', [$t('plan.sampleStyleNo')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="款号" prop="styleCode">
+      <el-form-item :label="$t('plan.styleCode')" prop="styleCode">
         <el-input
           v-model="queryParams.styleCode"
-          placeholder="请输入款号"
+          :placeholder="$t('validation.enter', [$t('plan.styleCode')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="生产状态" prop="produceStatus">
+      <el-form-item :label="$t('plan.produceStatus')" prop="produceStatus">
         <el-input
           v-model="queryParams.produceStatus"
-          placeholder="请输入生产状态"
+          :placeholder="$t('validation.enter', [$t('plan.produceStatus')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('btn.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('btn.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -70,7 +70,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['erp:plan:add']"
-        >新增生产计划</el-button>
+        >{{ $t('plan.addTitle') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -81,7 +81,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['erp:plan:edit']"
-        >修改</el-button>
+        >{{ $t('btn.edit') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -92,7 +92,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['erp:plan:remove']"
-        >删除</el-button>
+        >{{ $t('btn.delete') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -102,7 +102,7 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['erp:plan:export']"
-        >导出</el-button>
+        >{{ $t('btn.export') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -111,59 +111,59 @@
           icon="el-icon-upload2"
           size="mini"
           @click="handleImport"
-        >生产进度</el-button>
+        >{{ $t('plan.importTitle') }}</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="planList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="生产状态" align="center" prop="produceStatus" width="100" />
-      <el-table-column label="类型" align="center" prop="type" width="80" />
-      <el-table-column label="生产计划编号" align="center" prop="planNo" width="160" show-overflow-tooltip />
-      <el-table-column label="大货款号" align="center" prop="bulkOrderNo" width="140" show-overflow-tooltip />
-      <el-table-column label="打样款号" align="center" prop="sampleStyleNo" width="120" show-overflow-tooltip />
-      <el-table-column label="款号" align="center" prop="styleCode" width="140" show-overflow-tooltip />
-      <el-table-column label="客户名称" align="center" prop="customerName" width="120" show-overflow-tooltip />
-      <el-table-column label="款式/品类" align="center" prop="styleCategory" width="100" show-overflow-tooltip />
-      <el-table-column label="业务员" align="center" prop="salesName" width="80" />
-      <el-table-column label="原料到货日期" align="center" prop="materialArrivalDate" width="120">
+      <el-table-column :label="$t('plan.produceStatus')" align="center" prop="produceStatus" width="100" />
+      <el-table-column :label="$t('plan.type')" align="center" prop="type" width="80" />
+      <el-table-column :label="$t('plan.planNo')" align="center" prop="planNo" width="160" show-overflow-tooltip />
+      <el-table-column :label="$t('plan.bulkOrderNo')" align="center" prop="bulkOrderNo" width="140" show-overflow-tooltip />
+      <el-table-column :label="$t('plan.sampleStyleNo')" align="center" prop="sampleStyleNo" width="120" show-overflow-tooltip />
+      <el-table-column :label="$t('plan.styleCode')" align="center" prop="styleCode" width="140" show-overflow-tooltip />
+      <el-table-column :label="$t('plan.customerName')" align="center" prop="customerName" width="120" show-overflow-tooltip />
+      <el-table-column :label="$t('plan.styleCategory')" align="center" prop="styleCategory" width="100" show-overflow-tooltip />
+      <el-table-column :label="$t('plan.salesName')" align="center" prop="salesName" width="80" />
+      <el-table-column :label="$t('plan.materialArrivalDate')" align="center" prop="materialArrivalDate" width="120">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.materialArrivalDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="前道日期" align="center" prop="preProcessDate" width="120">
+      <el-table-column :label="$t('plan.preProcessDate')" align="center" prop="preProcessDate" width="120">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.preProcessDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="送检日期" align="center" prop="inspectionDate" width="120">
+      <el-table-column :label="$t('plan.inspectionDate')" align="center" prop="inspectionDate" width="120">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.inspectionDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="进仓日期" align="center" prop="inBoundDate" width="120">
+      <el-table-column :label="$t('plan.inBoundDate')" align="center" prop="inBoundDate" width="120">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.inBoundDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="船期" align="center" prop="shippingDate" width="120">
+      <el-table-column :label="$t('plan.shippingDate')" align="center" prop="shippingDate" width="120">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.shippingDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="后道日期" align="center" prop="postProcessDate" width="120">
+      <el-table-column :label="$t('plan.postProcessDate')" align="center" prop="postProcessDate" width="120">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.postProcessDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="交期" align="center" prop="dueDate" width="120">
+      <el-table-column :label="$t('plan.dueDate')" align="center" prop="dueDate" width="120">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.dueDate, '{y}-{m}-{d}') }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="审批状态" align="center" prop="auditStatus" width="100" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="150">
+      <el-table-column :label="$t('plan.auditStatus')" align="center" prop="auditStatus" width="100" />
+      <el-table-column :label="$t('system.operation')" align="center" class-name="small-padding fixed-width" width="150">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -171,14 +171,14 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['erp:plan:edit']"
-          >修改</el-button>
+          >{{ $t('btn.edit') }}</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['erp:plan:remove']"
-          >删除</el-button>
+          >{{ $t('btn.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -196,8 +196,8 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
         <el-row>
           <el-col :span="12">
-            <el-form-item label="销售订单" prop="salesOrderId">
-              <el-select v-model="form.salesOrderId" placeholder="请选择销售订单" clearable
+            <el-form-item :label="$t('plan.salesOrderId')" prop="salesOrderId">
+              <el-select v-model="form.salesOrderId" :placeholder="$t('plan.selectSalesOrder')" clearable
                 filterable clearable remote :remote-method="filterSalesOrder" loading="salesOrderLoading">
                 <el-option
                   v-for="item in salesOrderOptions"
@@ -209,8 +209,8 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="客户" prop="customerId">
-              <el-select v-model="form.customerId" placeholder="请选择客户" clearable
+            <el-form-item :label="$t('plan.customerId')" prop="customerId">
+              <el-select v-model="form.customerId" :placeholder="$t('plan.selectCustomer')" clearable
                 filterable clearable remote :remote-method="filterCustomer" loading="customerLoading">
                 <el-option
                   v-for="item in customerOptions"
@@ -224,44 +224,44 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="生产计划编号" prop="planNo">
-              <el-input v-model="form.planNo" placeholder="保存时自动生成（PP-yyyyMMdd-序号）" disabled />
+            <el-form-item :label="$t('plan.planNo')" prop="planNo">
+              <el-input v-model="form.planNo" :placeholder="$t('plan.planNoAuto')" disabled />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="大货款号" prop="bulkOrderNo" required>
-              <el-input v-model="form.bulkOrderNo" placeholder="请输入大货款号" />
-            </el-form-item>
-          </el-col>
-        </el-row>
-        <el-row>
-          <el-col :span="12">
-            <el-form-item label="打样款号" prop="sampleStyleNo">
-              <el-input v-model="form.sampleStyleNo" placeholder="请输入打样款号" />
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
-            <el-form-item label="款号" prop="styleCode">
-              <el-input v-model="form.styleCode" placeholder="保存时自动继承销售单款号，可手动填写" />
+            <el-form-item :label="$t('plan.bulkOrderNo')" prop="bulkOrderNo" required>
+              <el-input v-model="form.bulkOrderNo" :placeholder="$t('validation.enter', [$t('plan.bulkOrderNo')])" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="客户名称" prop="customerName">
-              <el-input v-model="form.customerName" placeholder="请输入客户名称" />
+            <el-form-item :label="$t('plan.sampleStyleNo')" prop="sampleStyleNo">
+              <el-input v-model="form.sampleStyleNo" :placeholder="$t('validation.enter', [$t('plan.sampleStyleNo')])" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="款式/品类" prop="styleCategory">
-              <el-input v-model="form.styleCategory" placeholder="请输入款式/品类" />
+            <el-form-item :label="$t('plan.styleCode')" prop="styleCode">
+              <el-input v-model="form.styleCode" :placeholder="$t('plan.styleCodeAuto')" />
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="生产状态" prop="produceStatus">
-              <el-input v-model="form.produceStatus" placeholder="请输入生产状态" />
+            <el-form-item :label="$t('plan.customerName')" prop="customerName">
+              <el-input v-model="form.customerName" :placeholder="$t('validation.enter', [$t('plan.customerName')])" />
+            </el-form-item>
+          </el-col>
+          <el-col :span="12">
+            <el-form-item :label="$t('plan.styleCategory')" prop="styleCategory">
+              <el-input v-model="form.styleCategory" :placeholder="$t('validation.enter', [$t('plan.styleCategory')])" />
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
+            <el-form-item :label="$t('plan.produceStatus')" prop="produceStatus">
+              <el-input v-model="form.produceStatus" :placeholder="$t('validation.enter', [$t('plan.produceStatus')])" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
@@ -269,94 +269,94 @@
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="原料到货日期" prop="materialArrivalDate">
+            <el-form-item :label="$t('plan.materialArrivalDate')" prop="materialArrivalDate">
               <el-date-picker clearable
                 v-model="form.materialArrivalDate"
                 type="date"
                 value-format="yyyy-MM-dd"
-                placeholder="请选择原料到货日期">
+                :placeholder="$t('validation.select', [$t('plan.materialArrivalDate')])">
               </el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="前道日期" prop="preProcessDate">
+            <el-form-item :label="$t('plan.preProcessDate')" prop="preProcessDate">
               <el-date-picker clearable
                 v-model="form.preProcessDate"
                 type="date"
                 value-format="yyyy-MM-dd"
-                placeholder="请选择前道日期">
+                :placeholder="$t('validation.select', [$t('plan.preProcessDate')])">
               </el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="送检日期" prop="inspectionDate">
+            <el-form-item :label="$t('plan.inspectionDate')" prop="inspectionDate">
               <el-date-picker clearable
                 v-model="form.inspectionDate"
                 type="date"
                 value-format="yyyy-MM-dd"
-                placeholder="请选择送检日期">
+                :placeholder="$t('validation.select', [$t('plan.inspectionDate')])">
               </el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="进仓日期" prop="inBoundDate">
+            <el-form-item :label="$t('plan.inBoundDate')" prop="inBoundDate">
               <el-date-picker clearable
                 v-model="form.inBoundDate"
                 type="date"
                 value-format="yyyy-MM-dd"
-                placeholder="请选择进仓日期">
+                :placeholder="$t('validation.select', [$t('plan.inBoundDate')])">
               </el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="船期" prop="shippingDate">
+            <el-form-item :label="$t('plan.shippingDate')" prop="shippingDate">
               <el-date-picker clearable
                 v-model="form.shippingDate"
                 type="date"
                 value-format="yyyy-MM-dd"
-                placeholder="请选择船期">
+                :placeholder="$t('validation.select', [$t('plan.shippingDate')])">
               </el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="后道日期" prop="postProcessDate">
+            <el-form-item :label="$t('plan.postProcessDate')" prop="postProcessDate">
               <el-date-picker clearable
                 v-model="form.postProcessDate"
                 type="date"
                 value-format="yyyy-MM-dd"
-                placeholder="请选择后道日期">
+                :placeholder="$t('validation.select', [$t('plan.postProcessDate')])">
               </el-date-picker>
             </el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="12">
-            <el-form-item label="交期" prop="dueDate">
+            <el-form-item :label="$t('plan.dueDate')" prop="dueDate">
               <el-date-picker clearable
                 v-model="form.dueDate"
                 type="date"
                 value-format="yyyy-MM-dd"
-                placeholder="请选择交期">
+                :placeholder="$t('validation.select', [$t('plan.dueDate')])">
               </el-date-picker>
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="审批状态" prop="auditStatus">
-              <el-input v-model="form.auditStatus" placeholder="请输入审批状态" />
+            <el-form-item :label="$t('plan.auditStatus')" prop="auditStatus">
+              <el-input v-model="form.auditStatus" :placeholder="$t('validation.enter', [$t('plan.auditStatus')])" />
             </el-form-item>
           </el-col>
         </el-row>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+        <el-form-item :label="$t('system.remark')" prop="remark">
+          <el-input v-model="form.remark" type="textarea" :placeholder="$t('validation.enter', [$t('system.remark')])" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" :loading="submitLoading" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">{{ $t('btn.confirm') }}</el-button>
+        <el-button @click="cancel">{{ $t('btn.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -382,13 +382,10 @@ export default {
       title: "",
       open: false,
       submitLoading: false,
-      // 销售订单选项
       salesOrderOptions: [],
       salesOrderLoading: false,
-      // 客户选项
       customerOptions: [],
       customerLoading: false,
-      // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -401,20 +398,23 @@ export default {
         produceStatus: null,
         salesName: null
       },
-      form: {},
-      // 表单校验
-      rules: {
+      form: {}
+    }
+  },
+  computed: {
+    rules() {
+      return {
         planNo: [
-          { required: true, message: "生产计划编号不能为空", trigger: "blur" }
+          { required: true, message: () => this.$t('plan.planNo') + this.$t('validation.required'), trigger: "blur" }
         ],
         bulkOrderNo: [
-          { required: true, message: "大货款号不能为空", trigger: "blur" }
+          { required: true, message: () => this.$t('plan.bulkOrderNo') + this.$t('validation.required'), trigger: "blur" }
         ],
         customerName: [
-          { required: true, message: "客户名称不能为空", trigger: "blur" }
+          { required: true, message: () => this.$t('plan.customerName') + this.$t('validation.required'), trigger: "blur" }
         ],
         dueDate: [
-          { required: true, message: "交期不能为空", trigger: "change" }
+          { required: true, message: () => this.$t('plan.dueDate') + this.$t('validation.required'), trigger: "change" }
         ]
       }
     }
@@ -423,7 +423,6 @@ export default {
     this.getList()
   },
   methods: {
-    /** 过滤销售订单 */
     filterSalesOrder(query) {
       if (!query) {
         this.salesOrderOptions = []
@@ -440,7 +439,6 @@ export default {
         this.salesOrderLoading = false
       })
     },
-    /** 过滤客户 */
     filterCustomer(query) {
       if (!query) {
         this.customerOptions = []
@@ -509,7 +507,7 @@ export default {
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = "添加生产计划"
+      this.title = this.$t('plan.addTitle')
     },
     handleUpdate(row) {
       this.reset()
@@ -517,7 +515,7 @@ export default {
       getPlan(id).then(response => {
         this.form = response.data
         this.open = true
-        this.title = "修改生产计划"
+        this.title = this.$t('plan.editTitle')
       })
     },
     submitForm() {
@@ -526,13 +524,13 @@ export default {
           this.submitLoading = true
           if (this.form.id != null) {
             updatePlan(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功")
+              this.$modal.msgSuccess(this.$t('msg.editSuccess'))
               this.open = false
               this.getList()
             }).finally(() => { this.submitLoading = false })
           } else {
             addPlan(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功")
+              this.$modal.msgSuccess(this.$t('msg.addSuccess'))
               this.open = false
               this.getList()
             }).finally(() => { this.submitLoading = false })
@@ -542,11 +540,11 @@ export default {
     },
     handleDelete(row) {
       const ids = row.id || this.ids
-      this.$modal.confirm('是否确认删除生产计划编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm(this.$t('plan.destroyConfirm', [ids])).then(function() {
         return delPlan(ids)
       }).then(() => {
         this.getList()
-        this.$modal.msgSuccess("删除成功")
+        this.$modal.msgSuccess(this.$t('msg.deleteSuccess'))
       }).catch(() => {})
     },
     handleExport() {
@@ -555,7 +553,7 @@ export default {
       }, `plan_${new Date().getTime()}.xlsx`)
     },
     handleImport() {
-      this.$message.info("生产进度功能开发中...")
+      this.$message.info(this.$t('plan.importWip'))
     }
   }
 }

@@ -1,17 +1,17 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
-      <el-form-item label="库区名称" prop="name">
+      <el-form-item :label="$t('warehouse.name')" prop="name">
         <el-input
           v-model="queryParams.name"
-          placeholder="请输入库区名称"
+          :placeholder="$t('validation.enter', [$t('warehouse.name')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('btn.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('btn.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -24,7 +24,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['erp:warehouse:add']"
-        >新增</el-button>
+        >{{ $t('btn.add') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -35,7 +35,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['erp:warehouse:edit']"
-        >修改</el-button>
+        >{{ $t('btn.edit') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -46,7 +46,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['erp:warehouse:remove']"
-        >删除</el-button>
+        >{{ $t('btn.delete') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -56,7 +56,7 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['erp:warehouse:export']"
-        >导出</el-button>
+        >{{ $t('btn.export') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -66,7 +66,7 @@
           size="mini"
           @click="handleImport"
           v-hasPermi="['erp:warehouse:import']"
-        >导入</el-button>
+        >{{ $t('btn.import') }}</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
@@ -74,10 +74,10 @@
     <el-table v-loading="loading" :data="warehouseList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column label="客户id" align="center" prop="id" />
-      <el-table-column label="库区编码" align="center" prop="code" />
-      <el-table-column label="库区名称" align="center" prop="name" />
+      <el-table-column :label="$t('warehouse.code')" align="center" prop="code" />
+      <el-table-column :label="$t('warehouse.name')" align="center" prop="name" />
       <el-table-column label="所属仓库" align="center" prop="warehouseAreaId" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('system.operation')" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -85,14 +85,14 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['erp:warehouse:edit']"
-          >修改</el-button>
+          >{{ $t('btn.edit') }}</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['erp:warehouse:remove']"
-          >删除</el-button>
+          >{{ $t('btn.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -108,19 +108,19 @@
     <!-- 添加或修改库区管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="60%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="库区编码" prop="code">
-          <el-input v-model="form.code" placeholder="请输入库区编码" />
+        <el-form-item :label="$t('warehouse.code')" prop="code">
+          <el-input v-model="form.code" :placeholder="$t('validation.enter', [$t('warehouse.code')])" />
         </el-form-item>
-        <el-form-item label="库区名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入库区名称" />
+        <el-form-item :label="$t('warehouse.name')" prop="name">
+          <el-input v-model="form.name" :placeholder="$t('validation.enter', [$t('warehouse.name')])" />
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+        <el-form-item :label="$t('system.remark')" prop="remark">
+          <el-input v-model="form.remark" type="textarea" :placeholder="$t('validation.enter', [$t('system.remark')])" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" :loading="submitLoading" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">{{ $t('btn.confirm') }}</el-button>
+        <el-button @click="cancel">{{ $t('btn.cancel') }}</el-button>
       </div>
     </el-dialog>
 
@@ -140,8 +140,8 @@
         auto-upload
       >
         <i class="el-icon-upload"></i>
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        <div class="el-upload__tip" slot="tip">只能上传Excel文件，且不超过10MB</div>
+        <div class="el-upload__text">{{ $t('upload.dragText') }}</div>
+        <div class="el-upload__tip" slot="tip">{{ $t('upload.allowedExcelShort') }}</div>
       </el-upload>
     </el-dialog>
   </div>
@@ -183,19 +183,10 @@ export default {
       },
       // 表单参数
       form: {},
-      // 表单校验
-      rules: {
-        name: [
-          { required: true, message: "库区名称不能为空", trigger: "blur" }
-        ],
-        code: [
-          { required: true, message: "库区编码不能为空", trigger: "blur" }
-        ]
-      },
       // 上传参数
       upload: {
         open: false,
-        title: "导入库区管理数据",
+        title: "",
         url: process.env.VUE_APP_BASE_API + "/erp/warehouse/importData",
         headers: { Authorization: "Bearer " + getToken() },
         data: {
@@ -204,7 +195,20 @@ export default {
       }
     }
   },
+  computed: {
+    rules() {
+      return {
+        name: [
+          { required: true, message: this.$t('warehouse.name') + this.$t('validation.required'), trigger: "blur" }
+        ],
+        code: [
+          { required: true, message: this.$t('warehouse.code') + this.$t('validation.required'), trigger: "blur" }
+        ]
+      }
+    }
+  },
   created() {
+    this.upload.title = this.$t('warehouse.importTitle')
     this.getList()
   },
   methods: {
@@ -257,7 +261,7 @@ export default {
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = "添加库区管理"
+      this.title = this.$t('warehouse.addTitle')
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -266,7 +270,7 @@ export default {
       getWarehouse(id).then(response => {
         this.form = response.data
         this.open = true
-        this.title = "修改库区管理"
+        this.title = this.$t('warehouse.editTitle')
       })
     },
     /** 提交按钮 */
@@ -276,13 +280,13 @@ export default {
           this.submitLoading = true
           if (this.form.id != null) {
             updateWarehouse(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功")
+              this.$modal.msgSuccess(this.$t('msg.editSuccess'))
               this.open = false
               this.getList()
             }).finally(() => { this.submitLoading = false })
           } else {
             addWarehouse(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功")
+              this.$modal.msgSuccess(this.$t('msg.addSuccess'))
               this.open = false
               this.getList()
             }).finally(() => { this.submitLoading = false })
@@ -293,11 +297,11 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids
-      this.$modal.confirm('是否确认删除库区管理编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm(this.$t('msg.deleteConfirm', [ids])).then(function() {
         return delWarehouse(ids)
       }).then(() => {
         this.getList()
-        this.$modal.msgSuccess("删除成功")
+        this.$modal.msgSuccess(this.$t('msg.deleteSuccess'))
       }).catch(() => {})
     },
     /** 导出按钮操作 */
@@ -308,6 +312,7 @@ export default {
     },
     /** 导入按钮操作 */
     handleImport() {
+      this.upload.title = this.$t('warehouse.importTitle')
       this.upload.open = true
     },
     /** 上传成功回调 */
@@ -322,18 +327,18 @@ export default {
     },
     /** 上传失败回调 */
     onError(err, file, fileList) {
-      this.$modal.msgError("上传失败")
+      this.$modal.msgError(this.$t('upload.uploadFailed'))
     },
     /** 上传前校验 */
     beforeUpload(file) {
       const isExcel = /\.(xlsx|xls)$/i.test(file.name)
       if (!isExcel) {
-        this.$modal.msgError("只能上传Excel文件!")
+        this.$modal.msgError(this.$t('upload.onlyExcel'))
         return false
       }
       const isLt10M = file.size / 1024 / 1024 < 10
       if (!isLt10M) {
-        this.$modal.msgError("上传文件大小不能超过 10MB!")
+        this.$modal.msgError(this.$t('upload.sizeLimit'))
         return false
       }
       return true

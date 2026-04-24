@@ -2,37 +2,37 @@
   <div class="app-container">
     <!-- 工具栏 -->
     <el-form :inline="true" :model="queryParams" size="small" class="mb8">
-      <el-form-item label="开始日期">
-        <el-date-picker v-model="queryParams.startDate" type="date" value-format="yyyy-MM-dd" placeholder="开始日期" clearable />
+      <el-form-item :label="$t('gantt.startDate')">
+        <el-date-picker v-model="queryParams.startDate" type="date" value-format="yyyy-MM-dd" :placeholder="$t('gantt.startDate')" clearable />
       </el-form-item>
-      <el-form-item label="截止日期">
-        <el-date-picker v-model="queryParams.endDate" type="date" value-format="yyyy-MM-dd" placeholder="截止日期" clearable />
+      <el-form-item :label="$t('gantt.endDate')">
+        <el-date-picker v-model="queryParams.endDate" type="date" value-format="yyyy-MM-dd" :placeholder="$t('gantt.endDate')" clearable />
       </el-form-item>
-      <el-form-item label="工序">
-        <el-input v-model="queryParams.process" placeholder="工序名称" clearable @keyup.enter.native="loadData" />
+      <el-form-item :label="$t('gantt.process')">
+        <el-input v-model="queryParams.process" :placeholder="$t('gantt.processName')" clearable @keyup.enter.native="loadData" />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="loadData">查询</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
-        <el-button type="warning" icon="el-icon-warning" size="mini" v-hasPermi="['erp:producegantt:detect']" @click="detectConflicts">检测冲突</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="loadData">{{ $t('btn.query') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('btn.reset') }}</el-button>
+        <el-button type="warning" icon="el-icon-warning" size="mini" v-hasPermi="['erp:producegantt:detect']" @click="detectConflicts">{{ $t('gantt.detectConflict') }}</el-button>
       </el-form-item>
     </el-form>
 
     <!-- 图例 -->
     <div class="legend mb8">
-      <span class="legend-item"><span class="dot dot-normal"></span>正常</span>
-      <span class="legend-item"><span class="dot dot-conflict-cap"></span>产能冲突</span>
-      <span class="legend-item"><span class="dot dot-conflict-date"></span>日期冲突</span>
-      <span class="legend-item"><span class="dot dot-done"></span>已完成</span>
+      <span class="legend-item"><span class="dot dot-normal"></span>{{ $t('gantt.normal') }}</span>
+      <span class="legend-item"><span class="dot dot-conflict-cap"></span>{{ $t('gantt.capacityConflict') }}</span>
+      <span class="legend-item"><span class="dot dot-conflict-date"></span>{{ $t('gantt.dateConflict') }}</span>
+      <span class="legend-item"><span class="dot dot-done"></span>{{ $t('gantt.completed') }}</span>
     </div>
 
     <!-- 甘特图主体 -->
     <div v-loading="loading" class="gantt-wrap">
-      <div v-if="tasks.length === 0 && !loading" class="empty-tip">暂无排程数据</div>
+      <div v-if="tasks.length === 0 && !loading" class="empty-tip">{{ $t('gantt.noSchedule') }}</div>
       <div v-else class="gantt-scroll">
         <!-- 表头：日期轴 -->
         <div class="gantt-header">
-          <div class="gantt-label-col">工序 / 订单</div>
+          <div class="gantt-label-col">{{ $t('gantt.processOrder') }}</div>
           <div class="gantt-timeline">
             <div
               v-for="d in dateAxis"
@@ -80,21 +80,21 @@
     </div>
 
     <!-- 重新排期弹窗 -->
-    <el-dialog title="重新排期" :visible.sync="rescheduleVisible" width="400px">
+    <el-dialog :title="$t('gantt.reschedule')" :visible.sync="rescheduleVisible" width="400px">
       <el-form :model="rescheduleForm" label-width="80px" size="small">
-        <el-form-item label="工序">
+        <el-form-item :label="$t('gantt.process')">
           <span>{{ rescheduleForm.process }}</span>
         </el-form-item>
-        <el-form-item label="开始日期">
+        <el-form-item :label="$t('gantt.startDate')">
           <el-date-picker v-model="rescheduleForm.newStartDate" type="date" value-format="yyyy-MM-dd" style="width:100%" />
         </el-form-item>
-        <el-form-item label="截止日期">
+        <el-form-item :label="$t('gantt.endDate')">
           <el-date-picker v-model="rescheduleForm.newDueDate" type="date" value-format="yyyy-MM-dd" style="width:100%" />
         </el-form-item>
       </el-form>
       <div slot="footer">
-        <el-button size="small" @click="rescheduleVisible = false">取消</el-button>
-        <el-button type="primary" size="small" :loading="submitLoading" v-hasPermi="['erp:producegantt:edit']" @click="submitReschedule">确定</el-button>
+        <el-button size="small" @click="rescheduleVisible = false">{{ $t('btn.cancel') }}</el-button>
+        <el-button type="primary" size="small" :loading="submitLoading" v-hasPermi="['erp:producegantt:edit']" @click="submitReschedule">{{ $t('btn.confirm') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -176,7 +176,7 @@ export default {
       return "bar-normal";
     },
     barTitle(task) {
-      return `${task.process} | 负载:${task.load || 0}% | ${task.startDate}~${task.dueDate}`;
+      return `${task.process} | ${this.$t('gantt.load')}:${task.load || 0}% | ${task.startDate}~${task.dueDate}`;
     },
     priorityType(p) {
       if (p <= 2) return "danger";
@@ -189,12 +189,17 @@ export default {
       return map[s] || "info";
     },
     statusLabel(s) {
-      const map = { "0": "待排", "1": "已排", "2": "进行中", "3": "已完成" };
+      const map = {
+        "0": this.$t('gantt.pending'),
+        "1": this.$t('gantt.scheduled'),
+        "2": this.$t('gantt.inProgress'),
+        "3": this.$t('gantt.completed')
+      };
       return map[s] || s;
     },
     detectConflicts() {
       detectConflicts().then(res => {
-        this.$modal.msgSuccess(`检测完成，发现冲突 ${res.data} 条`);
+        this.$modal.msgSuccess(this.$t('gantt.detectComplete', [res.data]));
         this.loadData();
       });
     },
@@ -211,7 +216,7 @@ export default {
       const { id, newStartDate, newDueDate } = this.rescheduleForm;
       this.submitLoading = true;
       updatePlanDate(id, newStartDate, newDueDate).then(() => {
-        this.$modal.msgSuccess("排期已更新");
+        this.$modal.msgSuccess(this.$t('gantt.scheduleUpdated'));
         this.rescheduleVisible = false;
         this.loadData();
       }).finally(() => { this.submitLoading = false; });

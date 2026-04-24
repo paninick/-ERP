@@ -1,48 +1,48 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
-      <el-form-item label="生产计划ID" prop="producePlanId">
+      <el-form-item :label="$t('materialConsume.producePlanId')" prop="producePlanId">
         <el-input-number
           v-model="queryParams.producePlanId"
-          placeholder="生产计划ID"
+          :placeholder="$t('materialConsume.producePlanId')"
           :min="1"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="物料编码" prop="materialCode">
+      <el-form-item :label="$t('materialConsume.materialCode')" prop="materialCode">
         <el-input
           v-model="queryParams.materialCode"
-          placeholder="请输入物料编码"
+          :placeholder="$t('validation.enter', [$t('materialConsume.materialCode')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="物料名称" prop="materialName">
+      <el-form-item :label="$t('materialConsume.materialName')" prop="materialName">
         <el-input
           v-model="queryParams.materialName"
-          placeholder="请输入物料名称"
+          :placeholder="$t('validation.enter', [$t('materialConsume.materialName')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="是否超限额" prop="isOverLimit">
-        <el-select v-model="queryParams.isOverLimit" placeholder="请选择" clearable>
-          <el-option label="否" value="0" />
-          <el-option label="是" value="1" />
+      <el-form-item :label="$t('materialConsume.isOverLimit')" prop="isOverLimit">
+        <el-select v-model="queryParams.isOverLimit" :placeholder="$t('validation.select', [''])" clearable>
+          <el-option :label="$t('status.no')" value="0" />
+          <el-option :label="$t('status.yes')" value="1" />
         </el-select>
       </el-form-item>
-      <el-form-item label="审批状态" prop="approvalStatus">
-        <el-select v-model="queryParams.approvalStatus" placeholder="请选择" clearable>
-          <el-option label="无需审批" value="0" />
-          <el-option label="待审批" value="1" />
-          <el-option label="已批准" value="2" />
-          <el-option label="已拒绝" value="3" />
+      <el-form-item :label="$t('materialConsume.approvalStatus')" prop="approvalStatus">
+        <el-select v-model="queryParams.approvalStatus" :placeholder="$t('validation.select', [''])" clearable>
+          <el-option :label="$t('materialConsume.noApproval')" value="0" />
+          <el-option :label="$t('materialConsume.pendingApproval')" value="1" />
+          <el-option :label="$t('materialConsume.approved')" value="2" />
+          <el-option :label="$t('materialConsume.rejected')" value="3" />
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('btn.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('btn.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -55,7 +55,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['erp:materialconsume:add']"
-        >新增</el-button>
+        >{{ $t('btn.add') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -66,7 +66,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['erp:materialconsume:edit']"
-        >修改</el-button>
+        >{{ $t('btn.edit') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -77,7 +77,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['erp:materialconsume:remove']"
-        >删除</el-button>
+        >{{ $t('btn.delete') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -87,37 +87,37 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['erp:materialconsume:export']"
-        >导出</el-button>
+        >{{ $t('btn.export') }}</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="materialconsumeList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="生产计划ID" align="center" prop="producePlanId" width="100" />
-      <el-table-column label="工序名称" align="center" prop="processName" width="120" />
-      <el-table-column label="物料编码" align="center" prop="materialCode" width="120" />
-      <el-table-column label="物料名称" align="center" prop="materialName" width="140" />
-      <el-table-column label="BOM用量" align="center" prop="bomQty" width="100" />
-      <el-table-column label="实际领用" align="center" prop="actualQty" width="100" />
-      <el-table-column label="标准损耗率%" align="center" prop="standardLossRate" width="100" />
-      <el-table-column label="限额" align="center" prop="limitLossQty" width="80" />
-      <el-table-column label="实际损耗" align="center" prop="actualLossQty" width="80" />
-      <el-table-column label="超限额" align="center" prop="isOverLimit" width="80">
+      <el-table-column :label="$t('materialConsume.producePlanId')" align="center" prop="producePlanId" width="100" />
+      <el-table-column :label="$t('materialConsume.processName')" align="center" prop="processName" width="120" />
+      <el-table-column :label="$t('materialConsume.materialCode')" align="center" prop="materialCode" width="120" />
+      <el-table-column :label="$t('materialConsume.materialName')" align="center" prop="materialName" width="140" />
+      <el-table-column :label="$t('materialConsume.bomQty')" align="center" prop="bomQty" width="100" />
+      <el-table-column :label="$t('materialConsume.actualQty')" align="center" prop="actualQty" width="100" />
+      <el-table-column :label="$t('materialConsume.standardLossRate')" align="center" prop="standardLossRate" width="100" />
+      <el-table-column :label="$t('materialConsume.limitLossQty')" align="center" prop="limitLossQty" width="80" />
+      <el-table-column :label="$t('materialConsume.actualLossQty')" align="center" prop="actualLossQty" width="80" />
+      <el-table-column :label="$t('materialConsume.isOverLimit')" align="center" prop="isOverLimit" width="80">
         <template slot-scope="scope">
           <el-tag :type="scope.row.isOverLimit === '1' ? 'danger' : 'info'">
-            {{ scope.row.isOverLimit === '1' ? '是' : '否' }}
+            {{ scope.row.isOverLimit === '1' ? $t('status.yes') : $t('status.no') }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="审批状态" align="center" prop="approvalStatus">
+      <el-table-column :label="$t('materialConsume.approvalStatus')" align="center" prop="approvalStatus">
         <template slot-scope="scope">
           <el-tag :type="scope.row.approvalStatus === '2' ? 'success' : scope.row.approvalStatus === '1' ? 'warning' : scope.row.approvalStatus === '3' ? 'danger' : 'info'">
-            {{ scope.row.approvalStatus === '0' ? '无需' : scope.row.approvalStatus === '1' ? '待审' : scope.row.approvalStatus === '2' ? '批准' : '拒绝' }}
+            {{ scope.row.approvalStatus === '0' ? $t('materialConsume.noApprovalShort') : scope.row.approvalStatus === '1' ? $t('materialConsume.pendingApprovalShort') : scope.row.approvalStatus === '2' ? $t('materialConsume.approvedShort') : $t('materialConsume.rejectedShort') }}
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('system.operation')" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -125,14 +125,14 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['erp:materialconsume:edit']"
-          >修改</el-button>
+          >{{ $t('btn.edit') }}</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['erp:materialconsume:remove']"
-          >删除</el-button>
+          >{{ $t('btn.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -148,46 +148,46 @@
     <!-- 添加或修改物料消耗对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="70%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="生产计划ID" prop="producePlanId">
-          <el-input-number v-model="form.producePlanId" :min="1" placeholder="生产计划ID" />
+        <el-form-item :label="$t('materialConsume.producePlanId')" prop="producePlanId">
+          <el-input-number v-model="form.producePlanId" :min="1" :placeholder="$t('materialConsume.producePlanId')" />
         </el-form-item>
-        <el-form-item label="订单ID" prop="orderId">
-          <el-input-number v-model="form.orderId" :min="1" placeholder="订单ID" />
+        <el-form-item :label="$t('materialConsume.orderId')" prop="orderId">
+          <el-input-number v-model="form.orderId" :min="1" :placeholder="$t('materialConsume.orderId')" />
         </el-form-item>
-        <el-form-item label="工序ID" prop="processId">
-          <el-input-number v-model="form.processId" :min="1" placeholder="工序ID" />
+        <el-form-item :label="$t('materialConsume.processId')" prop="processId">
+          <el-input-number v-model="form.processId" :min="1" :placeholder="$t('materialConsume.processId')" />
         </el-form-item>
-        <el-form-item label="工序名称" prop="processName">
-          <el-input v-model="form.processName" placeholder="请输入工序名称" />
+        <el-form-item :label="$t('materialConsume.processName')" prop="processName">
+          <el-input v-model="form.processName" :placeholder="$t('validation.enter', [$t('materialConsume.processName')])" />
         </el-form-item>
-        <el-form-item label="物料ID" prop="materialId">
-          <el-input-number v-model="form.materialId" :min="1" placeholder="物料ID" />
+        <el-form-item :label="$t('materialConsume.materialId')" prop="materialId">
+          <el-input-number v-model="form.materialId" :min="1" :placeholder="$t('materialConsume.materialId')" />
         </el-form-item>
-        <el-form-item label="物料编码" prop="materialCode">
-          <el-input v-model="form.materialCode" placeholder="请输入物料编码" />
+        <el-form-item :label="$t('materialConsume.materialCode')" prop="materialCode">
+          <el-input v-model="form.materialCode" :placeholder="$t('validation.enter', [$t('materialConsume.materialCode')])" />
         </el-form-item>
-        <el-form-item label="物料名称" prop="materialName">
-          <el-input v-model="form.materialName" placeholder="请输入物料名称" />
+        <el-form-item :label="$t('materialConsume.materialName')" prop="materialName">
+          <el-input v-model="form.materialName" :placeholder="$t('validation.enter', [$t('materialConsume.materialName')])" />
         </el-form-item>
-        <el-form-item label="BOM理论用量" prop="bomQty">
-          <el-input-number v-model="form.bomQty" :precision="3" :min="0" placeholder="BOM理论用量" />
+        <el-form-item :label="$t('materialConsume.bomQtyTheory')" prop="bomQty">
+          <el-input-number v-model="form.bomQty" :precision="3" :min="0" :placeholder="$t('materialConsume.bomQtyTheory')" />
         </el-form-item>
-        <el-form-item label="实际领用数量" prop="actualQty">
-          <el-input-number v-model="form.actualQty" :precision="3" :min="0" placeholder="实际领用数量" />
+        <el-form-item :label="$t('materialConsume.actualQtyLabel')" prop="actualQty">
+          <el-input-number v-model="form.actualQty" :precision="3" :min="0" :placeholder="$t('materialConsume.actualQtyLabel')" />
         </el-form-item>
-        <el-form-item label="标准损耗率%" prop="standardLossRate">
-          <el-input-number v-model="form.standardLossRate" :precision="2" :min="0" max="100" placeholder="标准损耗率%" />
+        <el-form-item :label="$t('materialConsume.standardLossRate')" prop="standardLossRate">
+          <el-input-number v-model="form.standardLossRate" :precision="2" :min="0" max="100" :placeholder="$t('materialConsume.standardLossRate')" />
         </el-form-item>
-        <el-form-item label="超限额原因" v-if="form.isOverLimit === '1'" prop="overLimitReason">
-          <el-input v-model="form.overLimitReason" type="textarea" placeholder="请填写超限额原因" />
+        <el-form-item :label="$t('materialConsume.overLimitReason')" v-if="form.isOverLimit === '1'" prop="overLimitReason">
+          <el-input v-model="form.overLimitReason" type="textarea" :placeholder="$t('validation.enter', [$t('materialConsume.overLimitReason')])" />
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+        <el-form-item :label="$t('system.remark')" prop="remark">
+          <el-input v-model="form.remark" type="textarea" :placeholder="$t('validation.enter', [$t('system.remark')])" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" :loading="submitLoading" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">{{ $t('btn.confirm') }}</el-button>
+        <el-button @click="cancel">{{ $t('btn.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -200,26 +200,16 @@ export default {
   name: "ProduceMaterialConsume",
   data() {
     return {
-      // 遮罩层
       loading: true,
-      // 选中数组
       ids: [],
-      // 非单个禁用
       single: true,
-      // 非多个禁用
       multiple: true,
-      // 显示搜索条件
       showSearch: true,
-      // 总条数
       total: 0,
-      // 物料消耗表格数据
       materialconsumeList: [],
-      // 弹出层标题
       title: "",
-      // 是否显示弹出层
       open: false,
       submitLoading: false,
-      // 查询参数
       queryParams: {
         pageNum: 1,
         pageSize: 10,
@@ -229,24 +219,26 @@ export default {
         isOverLimit: null,
         approvalStatus: null
       },
-      // 表单参数
-      form: {},
-      // 表单校验
-      rules: {
+      form: {}
+    };
+  },
+  computed: {
+    rules() {
+      return {
         producePlanId: [
-          { required: true, message: "生产计划ID不能为空", trigger: "blur" }
+          { required: true, message: this.$t('validation.required'), trigger: "blur" }
         ],
         materialId: [
-          { required: true, message: "物料ID不能为空", trigger: "blur" }
+          { required: true, message: this.$t('validation.required'), trigger: "blur" }
         ],
         bomQty: [
-          { required: true, message: "BOM理论用量不能为空", trigger: "blur" }
+          { required: true, message: this.$t('validation.required'), trigger: "blur" }
         ],
         actualQty: [
-          { required: true, message: "实际领用数量不能为空", trigger: "blur" }
+          { required: true, message: this.$t('validation.required'), trigger: "blur" }
         ]
-      }
-    };
+      };
+    }
   },
   created() {
     this.getList();
@@ -309,7 +301,7 @@ export default {
     handleAdd() {
       this.reset();
       this.open = true;
-      this.title = "添加物料消耗记录";
+      this.title = this.$t('materialConsume.addTitle');
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -318,7 +310,7 @@ export default {
       getMaterialconsume(id).then(response => {
         this.form = response.data;
         this.open = true;
-        this.title = "修改物料消耗记录";
+        this.title = this.$t('materialConsume.editTitle');
       });
     },
     /** 提交按钮 */
@@ -328,13 +320,13 @@ export default {
           this.submitLoading = true;
           if (this.form.id != null) {
             updateMaterialconsume(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功");
+              this.$modal.msgSuccess(this.$t('msg.editSuccess'));
               this.open = false;
               this.getList();
             }).finally(() => { this.submitLoading = false });
           } else {
             addMaterialconsume(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功");
+              this.$modal.msgSuccess(this.$t('msg.addSuccess'));
               this.open = false;
               this.getList();
             }).finally(() => { this.submitLoading = false });
@@ -345,11 +337,11 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids;
-      this.$modal.confirm('是否确认删除选中的数据项？').then(function() {
+      this.$modal.confirm(this.$t('msg.deleteConfirm', [ids])).then(function() {
         return delMaterialconsume(ids);
       }).then(() => {
         this.getList();
-        this.$modal.msgSuccess("删除成功");
+        this.$modal.msgSuccess(this.$t('msg.deleteSuccess'));
       }).catch(() => {});
     },
     /** 导出按钮操作 */

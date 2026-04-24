@@ -1,17 +1,17 @@
 <template>
   <div class="app-container">
     <el-form :model="queryParams" ref="queryForm" size="small" :inline="true" v-show="showSearch" label-width="100px">
-      <el-form-item label="库位名称" prop="name">
+      <el-form-item :label="$t('warehouseLocation.name')" prop="name">
         <el-input
           v-model="queryParams.name"
-          placeholder="请输入库位名称"
+          :placeholder="$t('validation.enter', [$t('warehouseLocation.name')])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('btn.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('btn.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -24,7 +24,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['erp:warehouselocation:add']"
-        >新增</el-button>
+        >{{ $t('btn.add') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -35,7 +35,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['erp:warehouselocation:edit']"
-        >修改</el-button>
+        >{{ $t('btn.edit') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -46,7 +46,7 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['erp:warehouselocation:remove']"
-        >删除</el-button>
+        >{{ $t('btn.delete') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -56,20 +56,20 @@
           size="mini"
           @click="handleExport"
           v-hasPermi="['erp:warehouselocation:export']"
-        >导出</el-button>
+        >{{ $t('btn.export') }}</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="warehouselocationList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="客户id" align="center" prop="id" />
-      <el-table-column label="库位编码" align="center" prop="code" />
-      <el-table-column label="库位名称" align="center" prop="name" />
-      <el-table-column label="所属库区" align="center" prop="warehouseAreaName" />
-      <el-table-column label="所属仓库" align="center" prop="warehouseName" />
-      <el-table-column label="备注" align="center" prop="remark" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width">
+      <el-table-column :label="$t('warehouseLocation.id')" align="center" prop="id" />
+      <el-table-column :label="$t('warehouseLocation.code')" align="center" prop="code" />
+      <el-table-column :label="$t('warehouseLocation.name')" align="center" prop="name" />
+      <el-table-column :label="$t('warehouseLocation.warehouseAreaId')" align="center" prop="warehouseAreaName" />
+      <el-table-column :label="$t('warehouseLocation.warehouseId')" align="center" prop="warehouseName" />
+      <el-table-column :label="$t('system.remark')" align="center" prop="remark" />
+      <el-table-column :label="$t('system.operation')" align="center" class-name="small-padding fixed-width">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -77,14 +77,14 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['erp:warehouselocation:edit']"
-          >修改</el-button>
+          >{{ $t('btn.edit') }}</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['erp:warehouselocation:remove']"
-          >删除</el-button>
+          >{{ $t('btn.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -100,14 +100,14 @@
     <!-- 添加或修改仓位管理对话框 -->
     <el-dialog :title="title" :visible.sync="open" width="60%" append-to-body :close-on-click-modal="false" :close-on-press-escape="false">
       <el-form ref="form" :model="form" :rules="rules" label-width="120px">
-        <el-form-item label="库位编码" prop="code">
-          <el-input v-model="form.code" placeholder="请输入库位编码" />
+        <el-form-item :label="$t('warehouseLocation.code')" prop="code">
+          <el-input v-model="form.code" :placeholder="$t('validation.enter', [$t('warehouseLocation.code')])" />
         </el-form-item>
-        <el-form-item label="库位名称" prop="name">
-          <el-input v-model="form.name" placeholder="请输入库位名称" />
+        <el-form-item :label="$t('warehouseLocation.name')" prop="name">
+          <el-input v-model="form.name" :placeholder="$t('validation.enter', [$t('warehouseLocation.name')])" />
         </el-form-item>
-        <el-form-item label="所属库区" prop="warehouseAreaId">
-          <el-select v-model="form.warehouseAreaId" placeholder="请选择所属库区" clearable>
+        <el-form-item :label="$t('warehouseLocation.warehouseAreaId')" prop="warehouseAreaId">
+          <el-select v-model="form.warehouseAreaId" :placeholder="$t('validation.select', [$t('warehouseLocation.warehouseAreaId')])" clearable>
             <el-option
               v-for="item in warehouseAreaList"
               :key="item.id"
@@ -116,8 +116,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="所属仓库" prop="warehouseId">
-          <el-select v-model="form.warehouseId" placeholder="请选择所属仓库" clearable>
+        <el-form-item :label="$t('warehouseLocation.warehouseId')" prop="warehouseId">
+          <el-select v-model="form.warehouseId" :placeholder="$t('validation.select', [$t('warehouseLocation.warehouseId')])" clearable>
             <el-option
               v-for="item in warehouseList"
               :key="item.id"
@@ -126,13 +126,13 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="备注" prop="remark">
-          <el-input v-model="form.remark" type="textarea" placeholder="请输入内容" />
+        <el-form-item :label="$t('system.remark')" prop="remark">
+          <el-input v-model="form.remark" type="textarea" :placeholder="$t('validation.enter', [$t('system.remark')])" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" :loading="submitLoading" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">{{ $t('btn.confirm') }}</el-button>
+        <el-button @click="cancel">{{ $t('btn.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -252,7 +252,7 @@ export default {
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = "添加仓位管理"
+      this.title = this.$t('warehouseLocation.addTitle')
     },
     /** 修改按钮操作 */
     handleUpdate(row) {
@@ -261,7 +261,7 @@ export default {
       getWarehouselocation(id).then(response => {
         this.form = response.data
         this.open = true
-        this.title = "修改仓位管理"
+        this.title = this.$t('warehouseLocation.editTitle')
       })
     },
     /** 提交按钮 */
@@ -271,13 +271,13 @@ export default {
           this.submitLoading = true
           if (this.form.id != null) {
             updateWarehouselocation(this.form).then(response => {
-              this.$modal.msgSuccess("修改成功")
+              this.$modal.msgSuccess(this.$t('msg.editSuccess'))
               this.open = false
               this.getList()
             }).finally(() => { this.submitLoading = false })
           } else {
             addWarehouselocation(this.form).then(response => {
-              this.$modal.msgSuccess("新增成功")
+              this.$modal.msgSuccess(this.$t('msg.addSuccess'))
               this.open = false
               this.getList()
             }).finally(() => { this.submitLoading = false })
@@ -288,11 +288,11 @@ export default {
     /** 删除按钮操作 */
     handleDelete(row) {
       const ids = row.id || this.ids
-      this.$modal.confirm('是否确认删除仓位管理编号为"' + ids + '"的数据项？').then(function() {
+      this.$modal.confirm(this.$t('msg.deleteConfirm', [ids])).then(function() {
         return delWarehouselocation(ids)
       }).then(() => {
         this.getList()
-        this.$modal.msgSuccess("删除成功")
+        this.$modal.msgSuccess(this.$t('msg.deleteSuccess'))
       }).catch(() => {})
     },
     /** 导出按钮操作 */

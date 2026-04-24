@@ -8,18 +8,18 @@
       v-show="showSearch"
       label-width="90px"
     >
-      <el-form-item label="库存ID" prop="id">
+      <el-form-item :label="$t('inventory.title') + 'ID'" prop="id">
         <el-input
           v-model="queryParams.id"
-          placeholder="请输入库存ID"
+          :placeholder="$t('validation.enter', [$t('inventory.title') + 'ID'])"
           clearable
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
-      <el-form-item label="仓库" prop="warehouseId">
+      <el-form-item :label="$t('inventory.warehouse')" prop="warehouseId">
         <el-select
           v-model="queryParams.warehouseId"
-          placeholder="请选择仓库"
+          :placeholder="$t('validation.select', [$t('inventory.warehouse')])"
           filterable
           clearable
         >
@@ -31,10 +31,10 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="物料" prop="materialId">
+      <el-form-item :label="$t('inventory.material')" prop="materialId">
         <el-select
           v-model="queryParams.materialId"
-          placeholder="请选择物料"
+          :placeholder="$t('validation.select', [$t('inventory.material')])"
           filterable
           clearable
           @change="handleQueryMaterialChange"
@@ -47,10 +47,10 @@
           />
         </el-select>
       </el-form-item>
-      <el-form-item label="SKU" prop="skuId">
+      <el-form-item :label="$t('inventory.sku')" prop="skuId">
         <el-select
           v-model="queryParams.skuId"
-          placeholder="请先选择物料"
+          :placeholder="$t('validation.select', [$t('inventory.material')])"
           filterable
           clearable
           :loading="skuLoading"
@@ -65,8 +65,8 @@
         </el-select>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">搜索</el-button>
-        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">重置</el-button>
+        <el-button type="primary" icon="el-icon-search" size="mini" @click="handleQuery">{{ $t('btn.search') }}</el-button>
+        <el-button icon="el-icon-refresh" size="mini" @click="resetQuery">{{ $t('btn.reset') }}</el-button>
       </el-form-item>
     </el-form>
 
@@ -79,7 +79,7 @@
           size="mini"
           @click="handleAdd"
           v-hasPermi="['erp:inventory:add']"
-        >新增</el-button>
+        >{{ $t('btn.add') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -90,7 +90,7 @@
           :disabled="single"
           @click="handleUpdate"
           v-hasPermi="['erp:inventory:edit']"
-        >修改</el-button>
+        >{{ $t('btn.edit') }}</el-button>
       </el-col>
       <el-col :span="1.5">
         <el-button
@@ -101,44 +101,44 @@
           :disabled="multiple"
           @click="handleDelete"
           v-hasPermi="['erp:inventory:remove']"
-        >删除</el-button>
+        >{{ $t('btn.delete') }}</el-button>
       </el-col>
       <right-toolbar :showSearch.sync="showSearch" @queryTable="getList"></right-toolbar>
     </el-row>
 
     <el-table v-loading="loading" :data="inventoryList" @selection-change="handleSelectionChange">
       <el-table-column type="selection" width="55" align="center" />
-      <el-table-column label="库存ID" align="center" prop="id" width="90" />
-      <el-table-column label="仓库" align="center" min-width="160">
+      <el-table-column :label="$t('inventory.title') + 'ID'" align="center" prop="id" width="90" />
+      <el-table-column :label="$t('inventory.warehouse')" align="center" min-width="160">
         <template slot-scope="scope">
           <span>{{ getWarehouseLabel(scope.row.warehouseId) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="物料" align="center" min-width="220" :show-overflow-tooltip="true">
+      <el-table-column :label="$t('inventory.material')" align="center" min-width="220" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           <span>{{ getMaterialLabel(scope.row.materialId) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="SKU" align="center" min-width="220" :show-overflow-tooltip="true">
+      <el-table-column :label="$t('inventory.sku')" align="center" min-width="220" :show-overflow-tooltip="true">
         <template slot-scope="scope">
           <span>{{ getSkuLabel(scope.row.skuId) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="可用库存" align="center" prop="invQty" min-width="120" />
-      <el-table-column label="锁定库存" align="center" prop="lockQty" min-width="120" />
-      <el-table-column label="版本号" align="center" prop="version" width="90" />
-      <el-table-column label="创建时间" align="center" prop="createTime" width="180">
+      <el-table-column :label="$t('inventory.invQty')" align="center" prop="invQty" min-width="120" />
+      <el-table-column :label="$t('inventory.lockQty')" align="center" prop="lockQty" min-width="120" />
+      <el-table-column :label="$t('inventory.version')" align="center" prop="version" width="90" />
+      <el-table-column :label="$t('system.createTime')" align="center" prop="createTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.createTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="更新时间" align="center" prop="updateTime" width="180">
+      <el-table-column :label="$t('system.updateTime')" align="center" prop="updateTime" width="180">
         <template slot-scope="scope">
           <span>{{ parseTime(scope.row.updateTime) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="备注" align="center" prop="remark" min-width="180" :show-overflow-tooltip="true" />
-      <el-table-column label="操作" align="center" class-name="small-padding fixed-width" width="140">
+      <el-table-column :label="$t('system.remark')" align="center" prop="remark" min-width="180" :show-overflow-tooltip="true" />
+      <el-table-column :label="$t('system.operation')" align="center" class-name="small-padding fixed-width" width="140">
         <template slot-scope="scope">
           <el-button
             size="mini"
@@ -146,14 +146,14 @@
             icon="el-icon-edit"
             @click="handleUpdate(scope.row)"
             v-hasPermi="['erp:inventory:edit']"
-          >修改</el-button>
+          >{{ $t('btn.edit') }}</el-button>
           <el-button
             size="mini"
             type="text"
             icon="el-icon-delete"
             @click="handleDelete(scope.row)"
             v-hasPermi="['erp:inventory:remove']"
-          >删除</el-button>
+          >{{ $t('btn.delete') }}</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -170,8 +170,8 @@
       <el-form ref="form" :model="form" :rules="rules" label-width="110px">
         <el-row :gutter="20">
           <el-col :span="12">
-            <el-form-item label="仓库" prop="warehouseId">
-              <el-select v-model="form.warehouseId" placeholder="请选择仓库" filterable style="width: 100%">
+            <el-form-item :label="$t('inventory.warehouse')" prop="warehouseId">
+              <el-select v-model="form.warehouseId" :placeholder="$t('validation.select', [$t('inventory.warehouse')])" filterable style="width: 100%">
                 <el-option
                   v-for="item in warehouseOptions"
                   :key="item.id"
@@ -182,10 +182,10 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="物料" prop="materialId">
+            <el-form-item :label="$t('inventory.material')" prop="materialId">
               <el-select
                 v-model="form.materialId"
-                placeholder="请选择物料"
+                :placeholder="$t('validation.select', [$t('inventory.material')])"
                 filterable
                 style="width: 100%"
                 @change="handleFormMaterialChange"
@@ -200,10 +200,10 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="SKU" prop="skuId">
+            <el-form-item :label="$t('inventory.sku')" prop="skuId">
               <el-select
                 v-model="form.skuId"
-                placeholder="请先选择物料"
+                :placeholder="$t('validation.select', [$t('inventory.material')])"
                 filterable
                 clearable
                 style="width: 100%"
@@ -220,12 +220,12 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="版本号" prop="version">
+            <el-form-item :label="$t('inventory.version')" prop="version">
               <el-input-number v-model="form.version" :min="0" :precision="0" controls-position="right" />
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="可用库存" prop="invQty">
+            <el-form-item :label="$t('inventory.invQty')" prop="invQty">
               <el-input-number
                 v-model="form.invQty"
                 :min="0"
@@ -236,7 +236,7 @@
             </el-form-item>
           </el-col>
           <el-col :span="12">
-            <el-form-item label="锁定库存" prop="lockQty">
+            <el-form-item :label="$t('inventory.lockQty')" prop="lockQty">
               <el-input-number
                 v-model="form.lockQty"
                 :min="0"
@@ -247,15 +247,15 @@
             </el-form-item>
           </el-col>
           <el-col :span="24">
-            <el-form-item label="备注" prop="remark">
-              <el-input v-model="form.remark" type="textarea" :rows="3" placeholder="请输入备注" />
+            <el-form-item :label="$t('system.remark')" prop="remark">
+              <el-input v-model="form.remark" type="textarea" :rows="3" :placeholder="$t('validation.enter', [$t('system.remark')])" />
             </el-form-item>
           </el-col>
         </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
-        <el-button type="primary" :loading="submitLoading" @click="submitForm">确 定</el-button>
-        <el-button @click="cancel">取 消</el-button>
+        <el-button type="primary" :loading="submitLoading" @click="submitForm">{{ $t('btn.confirm') }}</el-button>
+        <el-button @click="cancel">{{ $t('btn.cancel') }}</el-button>
       </div>
     </el-dialog>
   </div>
@@ -296,14 +296,18 @@ export default {
         skuId: undefined,
         materialId: undefined
       },
-      form: {},
-      rules: {
-        warehouseId: [{ required: true, message: "请选择仓库", trigger: "change" }],
-        materialId: [{ required: true, message: "请选择物料", trigger: "change" }],
-        skuId: [{ required: true, message: "请选择SKU", trigger: "change" }],
-        invQty: [{ required: true, message: "可用库存不能为空", trigger: "change" }],
-        lockQty: [{ required: true, message: "锁定库存不能为空", trigger: "change" }],
-        version: [{ required: true, message: "版本号不能为空", trigger: "change" }]
+      form: {}
+    }
+  },
+  computed: {
+    rules() {
+      return {
+        warehouseId: [{ required: true, message: this.$t('validation.select', [this.$t('inventory.warehouse')]), trigger: "change" }],
+        materialId: [{ required: true, message: this.$t('validation.select', [this.$t('inventory.material')]), trigger: "change" }],
+        skuId: [{ required: true, message: this.$t('validation.select', [this.$t('inventory.sku')]), trigger: "change" }],
+        invQty: [{ required: true, message: this.$t('inventory.invQty') + this.$t('validation.required'), trigger: "change" }],
+        lockQty: [{ required: true, message: this.$t('inventory.lockQty') + this.$t('validation.required'), trigger: "change" }],
+        version: [{ required: true, message: this.$t('inventory.version') + this.$t('validation.required'), trigger: "change" }]
       }
     }
   },
@@ -478,7 +482,7 @@ export default {
     handleAdd() {
       this.reset()
       this.open = true
-      this.title = "新增库存盘点"
+      this.title = this.$t('inventory.addTitle')
     },
     handleUpdate(row) {
       this.reset()
@@ -491,7 +495,7 @@ export default {
         return this.syncSkuOptions(this.form.materialId, "form")
       }).then(() => {
         this.open = true
-        this.title = "修改库存盘点"
+        this.title = this.$t('inventory.editTitle')
       })
     },
     submitForm() {
@@ -508,7 +512,7 @@ export default {
         }
         const request = payload.id ? updateInventory(payload) : addInventory(payload)
         request.then(() => {
-          this.$modal.msgSuccess(payload.id ? "修改成功" : "新增成功")
+          this.$modal.msgSuccess(payload.id ? this.$t('msg.editSuccess') : this.$t('msg.addSuccess'))
           this.open = false
           this.getList()
         }).finally(() => { this.submitLoading = false })
@@ -516,11 +520,11 @@ export default {
     },
     handleDelete(row) {
       const ids = row.id ? [row.id] : this.ids
-      this.$modal.confirm('是否确认删除库存记录编号为"' + ids.join(",") + '"的数据项？').then(() => {
+      this.$modal.confirm(this.$t('msg.deleteConfirm', [ids.join(",")])).then(() => {
         return delInventory(ids)
       }).then(() => {
         this.getList()
-        this.$modal.msgSuccess("删除成功")
+        this.$modal.msgSuccess(this.$t('msg.deleteSuccess'))
       }).catch(() => {})
     }
   }
