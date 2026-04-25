@@ -59,10 +59,8 @@ public class ProduceMaterialConsumeController extends BaseController {
     @GetMapping("/calculateLimit")
     public AjaxResult calculateLimit(@RequestParam BigDecimal bomQty, @RequestParam BigDecimal standardLossRate) {
         BigDecimal limit = produceMaterialConsumeService.calculateLimitQty(bomQty, standardLossRate);
-        BigDecimal loss = produceMaterialConsumeService.calculateActualLoss(bomQty.add(new BigDecimal("10")), bomQty);
         AjaxResult result = AjaxResult.success();
         result.put("limitQty", limit);
-        result.put("sampleLoss", loss);
         return result;
     }
 

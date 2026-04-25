@@ -118,10 +118,11 @@ public class ProduceMaterialConsumeServiceImpl implements IProduceMaterialConsum
     private void fillDerivedFields(ProduceMaterialConsume consume) {
         BigDecimal limitQty = calculateLimitQty(consume.getBomQty(), consume.getStandardLossRate());
         BigDecimal actualLoss = calculateActualLoss(consume.getActualQty(), consume.getBomQty());
+        BigDecimal allowedLossQty = limitQty.subtract(defaultDecimal(consume.getBomQty())).setScale(4, RoundingMode.HALF_UP);
         consume.setLimitLossQty(limitQty);
         consume.setActualLossQty(actualLoss);
 
-        if (actualLoss.compareTo(limitQty) > 0) {
+        if (actualLoss.compareTo(allowedLossQty) > 0) {
             consume.setIsOverLimit("1");
             if (!"2".equals(consume.getApprovalStatus()) && !"3".equals(consume.getApprovalStatus())) {
                 consume.setApprovalStatus("1");

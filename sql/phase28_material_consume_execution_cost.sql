@@ -12,6 +12,44 @@ ALTER TABLE `t_erp_produce_material_consume`
     ADD COLUMN IF NOT EXISTS `actual_cost` decimal(14,4) DEFAULT NULL COMMENT 'actual cost' AFTER `theoretical_cost`,
     ADD COLUMN IF NOT EXISTS `cost_diff` decimal(14,4) DEFAULT NULL COMMENT 'cost difference' AFTER `actual_cost`;
 
-CREATE INDEX `idx_erp_pmc_job` ON `t_erp_produce_material_consume` (`job_id`);
-CREATE INDEX `idx_erp_pmc_job_process` ON `t_erp_produce_material_consume` (`job_process_id`);
-CREATE INDEX `idx_erp_pmc_report_log` ON `t_erp_produce_material_consume` (`report_log_id`);
+SET @idx_job_exists := (
+    SELECT COUNT(1)
+    FROM information_schema.statistics
+    WHERE table_schema = DATABASE()
+      AND table_name = 't_erp_produce_material_consume'
+      AND index_name = 'idx_erp_pmc_job'
+);
+SET @idx_job_sql := IF(@idx_job_exists = 0,
+    'CREATE INDEX `idx_erp_pmc_job` ON `t_erp_produce_material_consume` (`job_id`)',
+    'SELECT 1');
+PREPARE stmt FROM @idx_job_sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @idx_job_process_exists := (
+    SELECT COUNT(1)
+    FROM information_schema.statistics
+    WHERE table_schema = DATABASE()
+      AND table_name = 't_erp_produce_material_consume'
+      AND index_name = 'idx_erp_pmc_job_process'
+);
+SET @idx_job_process_sql := IF(@idx_job_process_exists = 0,
+    'CREATE INDEX `idx_erp_pmc_job_process` ON `t_erp_produce_material_consume` (`job_process_id`)',
+    'SELECT 1');
+PREPARE stmt FROM @idx_job_process_sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @idx_report_log_exists := (
+    SELECT COUNT(1)
+    FROM information_schema.statistics
+    WHERE table_schema = DATABASE()
+      AND table_name = 't_erp_produce_material_consume'
+      AND index_name = 'idx_erp_pmc_report_log'
+);
+SET @idx_report_log_sql := IF(@idx_report_log_exists = 0,
+    'CREATE INDEX `idx_erp_pmc_report_log` ON `t_erp_produce_material_consume` (`report_log_id`)',
+    'SELECT 1');
+PREPARE stmt FROM @idx_report_log_sql;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
