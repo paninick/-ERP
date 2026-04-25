@@ -73,4 +73,10 @@ public interface IProduceJobProcessService {
      * @return 当前工序
      */
     public ProduceJobProcess selectCurrentProcessByJobId(Long jobId);
+
+    public int insertCustomProcess(ProduceJobProcess produceJobProcess);
+
+    public int skipProcess(ProduceJobProcess produceJobProcess);
+
+    public int insertReworkProcess(ProduceJobProcess produceJobProcess);
 }

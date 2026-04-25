@@ -14,11 +14,20 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="allowForceStart"    column="allow_force_start"    />
         <result property="isOutsource"    column="is_outsource"    />
         <result property="standardCycleHours"    column="standard_cycle_hours"    />
+        <result property="requiredMode"    column="required_mode"    />
+        <result property="conditionCode"    column="condition_code"    />
+        <result property="qcRequired"    column="qc_required"    />
+        <result property="needleCheckRequired"    column="needle_check_required"    />
+        <result property="lossTracked"    column="loss_tracked"    />
+        <result property="pieceWageApplicable"    column="piece_wage_applicable"    />
         <result property="remark"    column="remark"    />
     </resultMap>
 
     <sql id="selectProcessRouteItemVo">
-        select a.id, a.route_id, a.process_id, a.sort_order, a.is_control_point, a.require_complete_ratio, a.allow_force_start, a.is_outsource, a.standard_cycle_hours, a.remark
+        select a.id, a.route_id, a.process_id, a.sort_order, a.is_control_point, a.require_complete_ratio,
+               a.allow_force_start, a.is_outsource, a.standard_cycle_hours,
+               a.required_mode, a.condition_code, a.qc_required, a.needle_check_required,
+               a.loss_tracked, a.piece_wage_applicable, a.remark
         from t_erp_process_route_item a
     </sql>
 
@@ -55,6 +64,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="allowForceStart != null">allow_force_start,</if>
             <if test="isOutsource != null">is_outsource,</if>
             <if test="standardCycleHours != null">standard_cycle_hours,</if>
+            <if test="requiredMode != null">required_mode,</if>
+            <if test="conditionCode != null">condition_code,</if>
+            <if test="qcRequired != null">qc_required,</if>
+            <if test="needleCheckRequired != null">needle_check_required,</if>
+            <if test="lossTracked != null">loss_tracked,</if>
+            <if test="pieceWageApplicable != null">piece_wage_applicable,</if>
             <if test="remark != null">remark,</if>
          </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
@@ -66,6 +81,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="allowForceStart != null">#{allowForceStart},</if>
             <if test="isOutsource != null">#{isOutsource},</if>
             <if test="standardCycleHours != null">#{standardCycleHours},</if>
+            <if test="requiredMode != null">#{requiredMode},</if>
+            <if test="conditionCode != null">#{conditionCode},</if>
+            <if test="qcRequired != null">#{qcRequired},</if>
+            <if test="needleCheckRequired != null">#{needleCheckRequired},</if>
+            <if test="lossTracked != null">#{lossTracked},</if>
+            <if test="pieceWageApplicable != null">#{pieceWageApplicable},</if>
             <if test="remark != null">#{remark},</if>
          </trim>
     </insert>
@@ -81,6 +102,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="allowForceStart != null">allow_force_start = #{allowForceStart},</if>
             <if test="isOutsource != null">is_outsource = #{isOutsource},</if>
             <if test="standardCycleHours != null">standard_cycle_hours = #{standardCycleHours},</if>
+            <if test="requiredMode != null">required_mode = #{requiredMode},</if>
+            <if test="conditionCode != null">condition_code = #{conditionCode},</if>
+            <if test="qcRequired != null">qc_required = #{qcRequired},</if>
+            <if test="needleCheckRequired != null">needle_check_required = #{needleCheckRequired},</if>
+            <if test="lossTracked != null">loss_tracked = #{lossTracked},</if>
+            <if test="pieceWageApplicable != null">piece_wage_applicable = #{pieceWageApplicable},</if>
             <if test="remark != null">remark = #{remark},</if>
         </trim>
         where id = #{id}

@@ -124,6 +124,18 @@ public class ProduceJobProcess extends BaseEntity {
     /** 工票号（查询时 JOIN 回填，非持久化列） */
     private String jobNo;
 
+    private Long sourceRouteItemId;
+    private String isInserted;
+    private String insertReason;
+    private String isSkipped;
+    private String skipReason;
+    private String isRework;
+    private Long reworkSourceProcessId;
+    private String qcRequired;
+    private String needleCheckRequired;
+    private String lossTracked;
+    private String pieceWageApplicable;
+
     public Long getId() {
         return id;
     }
@@ -255,6 +267,39 @@ public class ProduceJobProcess extends BaseEntity {
     public String getJobNo() { return jobNo; }
     public void setJobNo(String jobNo) { this.jobNo = jobNo; }
 
+    public Long getSourceRouteItemId() { return sourceRouteItemId; }
+    public void setSourceRouteItemId(Long sourceRouteItemId) { this.sourceRouteItemId = sourceRouteItemId; }
+
+    public String getIsInserted() { return isInserted; }
+    public void setIsInserted(String isInserted) { this.isInserted = isInserted; }
+
+    public String getInsertReason() { return insertReason; }
+    public void setInsertReason(String insertReason) { this.insertReason = insertReason; }
+
+    public String getIsSkipped() { return isSkipped; }
+    public void setIsSkipped(String isSkipped) { this.isSkipped = isSkipped; }
+
+    public String getSkipReason() { return skipReason; }
+    public void setSkipReason(String skipReason) { this.skipReason = skipReason; }
+
+    public String getIsRework() { return isRework; }
+    public void setIsRework(String isRework) { this.isRework = isRework; }
+
+    public Long getReworkSourceProcessId() { return reworkSourceProcessId; }
+    public void setReworkSourceProcessId(Long reworkSourceProcessId) { this.reworkSourceProcessId = reworkSourceProcessId; }
+
+    public String getQcRequired() { return qcRequired; }
+    public void setQcRequired(String qcRequired) { this.qcRequired = qcRequired; }
+
+    public String getNeedleCheckRequired() { return needleCheckRequired; }
+    public void setNeedleCheckRequired(String needleCheckRequired) { this.needleCheckRequired = needleCheckRequired; }
+
+    public String getLossTracked() { return lossTracked; }
+    public void setLossTracked(String lossTracked) { this.lossTracked = lossTracked; }
+
+    public String getPieceWageApplicable() { return pieceWageApplicable; }
+    public void setPieceWageApplicable(String pieceWageApplicable) { this.pieceWageApplicable = pieceWageApplicable; }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -274,6 +319,17 @@ public class ProduceJobProcess extends BaseEntity {
                 .append("rejectReason", getRejectReason())
                 .append("processName", getProcessName())
                 .append("jobNo", getJobNo())
+                .append("sourceRouteItemId", getSourceRouteItemId())
+                .append("isInserted", getIsInserted())
+                .append("insertReason", getInsertReason())
+                .append("isSkipped", getIsSkipped())
+                .append("skipReason", getSkipReason())
+                .append("isRework", getIsRework())
+                .append("reworkSourceProcessId", getReworkSourceProcessId())
+                .append("qcRequired", getQcRequired())
+                .append("needleCheckRequired", getNeedleCheckRequired())
+                .append("lossTracked", getLossTracked())
+                .append("pieceWageApplicable", getPieceWageApplicable())
                 .append("createBy", getCreateBy())
                 .append("createTime", getCreateTime())
                 .append("remark", getRemark())

@@ -90,6 +90,36 @@ public class ProduceJobProcessController extends BaseController {
     }
 
     /**
+     * 插入临时工序，例如印花、绣花、照灯/灯检、检品公司等。
+     */
+    @PreAuthorize("@ss.hasPermi('erp:produceJobProcess:add')")
+    @Log(title = "插入临时工序", businessType = BusinessType.INSERT)
+    @PostMapping("/insertCustom")
+    public AjaxResult insertCustom(@RequestBody ProduceJobProcess produceJobProcess) {
+        return toAjax(produceJobProcessService.insertCustomProcess(produceJobProcess));
+    }
+
+    /**
+     * 跳过当前工序，必须保留跳过原因。
+     */
+    @PreAuthorize("@ss.hasPermi('erp:produceJobProcess:edit')")
+    @Log(title = "跳过工序", businessType = BusinessType.UPDATE)
+    @PutMapping("/skip")
+    public AjaxResult skip(@RequestBody ProduceJobProcess produceJobProcess) {
+        return toAjax(produceJobProcessService.skipProcess(produceJobProcess));
+    }
+
+    /**
+     * 插入返修工序，关联来源不合格工序。
+     */
+    @PreAuthorize("@ss.hasPermi('erp:produceJobProcess:add')")
+    @Log(title = "插入返修工序", businessType = BusinessType.INSERT)
+    @PostMapping("/insertRework")
+    public AjaxResult insertRework(@RequestBody ProduceJobProcess produceJobProcess) {
+        return toAjax(produceJobProcessService.insertReworkProcess(produceJobProcess));
+    }
+
+    /**
      * 修改工序流转记录
      * 当状态变为 FAIL 时，将 rejectReason 追加写入 remark，便于后续审计查阅
      */

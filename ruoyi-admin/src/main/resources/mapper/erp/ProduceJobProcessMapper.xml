@@ -22,6 +22,17 @@
         <result property="failHandleType" column="fail_handle_type"/>
         <result property="lossQty" column="loss_qty"/>
         <result property="lossExceed" column="loss_exceed"/>
+        <result property="sourceRouteItemId" column="source_route_item_id"/>
+        <result property="isInserted" column="is_inserted"/>
+        <result property="insertReason" column="insert_reason"/>
+        <result property="isSkipped" column="is_skipped"/>
+        <result property="skipReason" column="skip_reason"/>
+        <result property="isRework" column="is_rework"/>
+        <result property="reworkSourceProcessId" column="rework_source_process_id"/>
+        <result property="qcRequired" column="qc_required"/>
+        <result property="needleCheckRequired" column="needle_check_required"/>
+        <result property="lossTracked" column="loss_tracked"/>
+        <result property="pieceWageApplicable" column="piece_wage_applicable"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
         <result property="remark" column="remark"/>
@@ -31,6 +42,8 @@
         id, job_id, process_id, process_seq, employee_id, employee_name, in_qty, out_qty, defect_qty,
         start_time, finish_time, is_outsource, outsource_id,
         process_status, release_by, release_time, fail_handle_type, loss_qty, loss_exceed,
+        source_route_item_id, is_inserted, insert_reason, is_skipped, skip_reason, is_rework,
+        rework_source_process_id, qc_required, needle_check_required, loss_tracked, piece_wage_applicable,
         create_by, create_time, remark
     </sql>
 
@@ -65,11 +78,15 @@
             job_id, process_id, process_seq, employee_id, employee_name, in_qty, out_qty, defect_qty,
             start_time, finish_time, is_outsource, outsource_id,
             process_status, release_by, release_time, fail_handle_type, loss_qty, loss_exceed,
+            source_route_item_id, is_inserted, insert_reason, is_skipped, skip_reason, is_rework,
+            rework_source_process_id, qc_required, needle_check_required, loss_tracked, piece_wage_applicable,
             create_by, create_time, remark
         ) VALUES (
             #{jobId}, #{processId}, #{processSeq}, #{employeeId}, #{employeeName}, #{inQty}, #{outQty}, #{defectQty},
             #{startTime}, #{finishTime}, #{isOutsource}, #{outsourceId},
             #{processStatus}, #{releaseBy}, #{releaseTime}, #{failHandleType}, #{lossQty}, #{lossExceed},
+            #{sourceRouteItemId}, #{isInserted}, #{insertReason}, #{isSkipped}, #{skipReason}, #{isRework},
+            #{reworkSourceProcessId}, #{qcRequired}, #{needleCheckRequired}, #{lossTracked}, #{pieceWageApplicable},
             #{createBy}, #{createTime}, #{remark}
         )
     </insert>
@@ -94,6 +111,17 @@
             <if test="failHandleType != null">fail_handle_type = #{failHandleType},</if>
             <if test="lossQty != null">loss_qty = #{lossQty},</if>
             <if test="lossExceed != null">loss_exceed = #{lossExceed},</if>
+            <if test="sourceRouteItemId != null">source_route_item_id = #{sourceRouteItemId},</if>
+            <if test="isInserted != null">is_inserted = #{isInserted},</if>
+            <if test="insertReason != null">insert_reason = #{insertReason},</if>
+            <if test="isSkipped != null">is_skipped = #{isSkipped},</if>
+            <if test="skipReason != null">skip_reason = #{skipReason},</if>
+            <if test="isRework != null">is_rework = #{isRework},</if>
+            <if test="reworkSourceProcessId != null">rework_source_process_id = #{reworkSourceProcessId},</if>
+            <if test="qcRequired != null">qc_required = #{qcRequired},</if>
+            <if test="needleCheckRequired != null">needle_check_required = #{needleCheckRequired},</if>
+            <if test="lossTracked != null">loss_tracked = #{lossTracked},</if>
+            <if test="pieceWageApplicable != null">piece_wage_applicable = #{pieceWageApplicable},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="remark != null">remark = #{remark},</if>
@@ -119,6 +147,33 @@
 
     <select id="selectCurrentProcessByJobId" parameterType="Long" resultMap="BaseResultMap">
         SELECT <include refid="Base_Column_List"/> FROM t_erp_produce_job_process WHERE job_id = #{jobId}
-        AND finish_time IS NULL ORDER BY process_seq ASC LIMIT 1
+        AND (
+            process_status IS NULL
+            OR process_status IN ('PENDING', 'RUNNING', 'WAIT_CHECK', 'OUTSOURCE', 'FAIL')
+        )
+        ORDER BY
+            CASE process_status
+                WHEN 'RUNNING' THEN 1
+                WHEN 'WAIT_CHECK' THEN 2
+                WHEN 'FAIL' THEN 3
+                WHEN 'OUTSOURCE' THEN 4
+                WHEN 'PENDING' THEN 5
+                ELSE 6
+            END,
+            process_seq ASC
+        LIMIT 1
     </select>
+
+    <select id="selectMaxProcessSeqByJobId" parameterType="Long" resultType="Integer">
+        SELECT COALESCE(MAX(process_seq), 0)
+        FROM t_erp_produce_job_process
+        WHERE job_id = #{jobId}
+    </select>
+
+    <update id="shiftProcessSeqAfter" parameterType="ProduceJobProcess">
+        UPDATE t_erp_produce_job_process
+        SET process_seq = process_seq + 10
+        WHERE job_id = #{jobId}
+          AND process_seq >= #{processSeq}
+    </update>
 </mapper>

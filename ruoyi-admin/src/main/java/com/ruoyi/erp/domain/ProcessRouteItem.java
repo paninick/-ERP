@@ -49,6 +49,24 @@ public class ProcessRouteItem extends BaseEntity {
     @Excel(name = "标准工时（小时）")
     private Double standardCycleHours;
 
+    /** REQUIRED / OPTIONAL / CONDITIONAL */
+    private String requiredMode;
+
+    /** HAS_PRINT / HAS_EMBROIDERY / JAPAN_ORDER / NEED_LIGHT_INSPECTION / THIRD_PARTY_INSPECTION */
+    private String conditionCode;
+
+    /** 是否需要质检 */
+    private Integer qcRequired;
+
+    /** 是否需要检针 */
+    private Integer needleCheckRequired;
+
+    /** 是否记录损耗 */
+    private Integer lossTracked;
+
+    /** 是否适用计件 */
+    private Integer pieceWageApplicable;
+
     /** 备注 */
     private String remark;
 
@@ -132,6 +150,24 @@ public class ProcessRouteItem extends BaseEntity {
         return remark;
     }
 
+    public String getRequiredMode() { return requiredMode; }
+    public void setRequiredMode(String requiredMode) { this.requiredMode = requiredMode; }
+
+    public String getConditionCode() { return conditionCode; }
+    public void setConditionCode(String conditionCode) { this.conditionCode = conditionCode; }
+
+    public Integer getQcRequired() { return qcRequired; }
+    public void setQcRequired(Integer qcRequired) { this.qcRequired = qcRequired; }
+
+    public Integer getNeedleCheckRequired() { return needleCheckRequired; }
+    public void setNeedleCheckRequired(Integer needleCheckRequired) { this.needleCheckRequired = needleCheckRequired; }
+
+    public Integer getLossTracked() { return lossTracked; }
+    public void setLossTracked(Integer lossTracked) { this.lossTracked = lossTracked; }
+
+    public Integer getPieceWageApplicable() { return pieceWageApplicable; }
+    public void setPieceWageApplicable(Integer pieceWageApplicable) { this.pieceWageApplicable = pieceWageApplicable; }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -144,6 +180,12 @@ public class ProcessRouteItem extends BaseEntity {
             .append("allowForceStart", getAllowForceStart())
             .append("isOutsource", getIsOutsource())
             .append("standardCycleHours", getStandardCycleHours())
+            .append("requiredMode", getRequiredMode())
+            .append("conditionCode", getConditionCode())
+            .append("qcRequired", getQcRequired())
+            .append("needleCheckRequired", getNeedleCheckRequired())
+            .append("lossTracked", getLossTracked())
+            .append("pieceWageApplicable", getPieceWageApplicable())
             .append("remark", getRemark())
             .toString();
     }

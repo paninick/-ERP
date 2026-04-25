@@ -75,4 +75,8 @@ public interface ProduceJobProcessMapper {
      * @return 当前工序
      */
     public ProduceJobProcess selectCurrentProcessByJobId(Long jobId);
+
+    public Integer selectMaxProcessSeqByJobId(Long jobId);
+
+    public int shiftProcessSeqAfter(ProduceJobProcess produceJobProcess);
 }
