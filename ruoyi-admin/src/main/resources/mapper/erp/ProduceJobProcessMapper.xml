@@ -164,6 +164,14 @@
         LIMIT 1
     </select>
 
+    <select id="selectProduceJobProcessByJobIdAndProcessSeq" parameterType="ProduceJobProcess" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_erp_produce_job_process
+        WHERE job_id = #{jobId}
+          AND process_seq = #{processSeq}
+        LIMIT 1
+    </select>
+
     <select id="selectMaxProcessSeqByJobId" parameterType="Long" resultType="Integer">
         SELECT COALESCE(MAX(process_seq), 0)
         FROM t_erp_produce_job_process

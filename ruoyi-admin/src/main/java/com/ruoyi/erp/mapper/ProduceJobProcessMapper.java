@@ -76,6 +76,8 @@ public interface ProduceJobProcessMapper {
      */
     public ProduceJobProcess selectCurrentProcessByJobId(Long jobId);
 
+    public ProduceJobProcess selectProduceJobProcessByJobIdAndProcessSeq(ProduceJobProcess produceJobProcess);
+
     public Integer selectMaxProcessSeqByJobId(Long jobId);
 
     public int shiftProcessSeqAfter(ProduceJobProcess produceJobProcess);

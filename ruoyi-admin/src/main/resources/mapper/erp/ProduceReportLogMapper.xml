@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.ProduceReportLogMapper">
+
+    <resultMap id="BaseResultMap" type="com.ruoyi.erp.domain.ProduceReportLog">
+        <id property="id" column="id"/>
+        <result property="jobId" column="job_id"/>
+        <result property="jobProcessId" column="job_process_id"/>
+        <result property="processId" column="process_id"/>
+        <result property="processSeq" column="process_seq"/>
+        <result property="employeeId" column="employee_id"/>
+        <result property="employeeName" column="employee_name"/>
+        <result property="operatorName" column="operator_name"/>
+        <result property="teamName" column="team_name"/>
+        <result property="machineNo" column="machine_no"/>
+        <result property="reportQty" column="report_qty"/>
+        <result property="completedQty" column="completed_qty"/>
+        <result property="defectQty" column="defect_qty"/>
+        <result property="lossQty" column="loss_qty"/>
+        <result property="reportType" column="report_type"/>
+        <result property="reportSource" column="report_source"/>
+        <result property="batchNo" column="batch_no"/>
+        <result property="scanToken" column="scan_token"/>
+        <result property="billingGroupId" column="billing_group_id"/>
+        <result property="isOutsourced" column="is_outsourced"/>
+        <result property="vendorId" column="vendor_id"/>
+        <result property="validationStatus" column="validation_status"/>
+        <result property="validationMessage" column="validation_message"/>
+        <result property="eventTime" column="event_time"/>
+        <result property="delFlag" column="del_flag"/>
+        <result property="createBy" column="create_by"/>
+        <result property="createTime" column="create_time"/>
+        <result property="updateBy" column="update_by"/>
+        <result property="updateTime" column="update_time"/>
+        <result property="remark" column="remark"/>
+        <result property="processName" column="process_name"/>
+        <result property="jobNo" column="job_no"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, job_id, job_process_id, process_id, process_seq, employee_id, employee_name,
+        operator_name, team_name, machine_no, report_qty, completed_qty, defect_qty, loss_qty,
+        report_type, report_source, batch_no, scan_token, billing_group_id, is_outsourced,
+        vendor_id, validation_status, validation_message, event_time, del_flag,
+        create_by, create_time, update_by, update_time, remark
+    </sql>
+
+    <select id="selectProduceReportLogById" parameterType="Long" resultMap="BaseResultMap">
+        SELECT l.*, p.process_name, j.job_no
+        FROM t_erp_produce_report_log l
+        LEFT JOIN t_erp_process_def p ON l.process_id = p.id
+        LEFT JOIN t_erp_produce_job j ON l.job_id = j.id
+        WHERE l.id = #{id} AND l.del_flag = '0'
+    </select>
+
+    <select id="selectProduceReportLogList" parameterType="com.ruoyi.erp.domain.ProduceReportLog" resultMap="BaseResultMap">
+        SELECT l.*, p.process_name, j.job_no
+        FROM t_erp_produce_report_log l
+        LEFT JOIN t_erp_process_def p ON l.process_id = p.id
+        LEFT JOIN t_erp_produce_job j ON l.job_id = j.id
+        <where>
+            l.del_flag = '0'
+            <if test="jobId != null">AND l.job_id = #{jobId}</if>
+            <if test="jobProcessId != null">AND l.job_process_id = #{jobProcessId}</if>
+            <if test="processId != null">AND l.process_id = #{processId}</if>
+            <if test="employeeId != null">AND l.employee_id = #{employeeId}</if>
+            <if test="reportType != null and reportType != ''">AND l.report_type = #{reportType}</if>
+            <if test="reportSource != null and reportSource != ''">AND l.report_source = #{reportSource}</if>
+            <if test="batchNo != null and batchNo != ''">AND l.batch_no = #{batchNo}</if>
+            <if test="isOutsourced != null and isOutsourced != ''">AND l.is_outsourced = #{isOutsourced}</if>
+            <if test="vendorId != null">AND l.vendor_id = #{vendorId}</if>
+            <if test="validationStatus != null and validationStatus != ''">AND l.validation_status = #{validationStatus}</if>
+        </where>
+        ORDER BY l.event_time DESC, l.id DESC
+    </select>
+
+    <insert id="insertProduceReportLog" parameterType="com.ruoyi.erp.domain.ProduceReportLog" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO t_erp_produce_report_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="jobId != null">job_id,</if>
+            <if test="jobProcessId != null">job_process_id,</if>
+            <if test="processId != null">process_id,</if>
+            <if test="processSeq != null">process_seq,</if>
+            <if test="employeeId != null">employee_id,</if>
+            <if test="employeeName != null">employee_name,</if>
+            <if test="operatorName != null">operator_name,</if>
+            <if test="teamName != null">team_name,</if>
+            <if test="machineNo != null">machine_no,</if>
+            <if test="reportQty != null">report_qty,</if>
+            <if test="completedQty != null">completed_qty,</if>
+            <if test="defectQty != null">defect_qty,</if>
+            <if test="lossQty != null">loss_qty,</if>
+            <if test="reportType != null">report_type,</if>
+            <if test="reportSource != null">report_source,</if>
+            <if test="batchNo != null">batch_no,</if>
+            <if test="scanToken != null">scan_token,</if>
+            <if test="billingGroupId != null">billing_group_id,</if>
+            <if test="isOutsourced != null">is_outsourced,</if>
+            <if test="vendorId != null">vendor_id,</if>
+            <if test="validationStatus != null">validation_status,</if>
+            <if test="validationMessage != null">validation_message,</if>
+            <if test="eventTime != null">event_time,</if>
+            <if test="delFlag != null">del_flag,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="jobId != null">#{jobId},</if>
+            <if test="jobProcessId != null">#{jobProcessId},</if>
+            <if test="processId != null">#{processId},</if>
+            <if test="processSeq != null">#{processSeq},</if>
+            <if test="employeeId != null">#{employeeId},</if>
+            <if test="employeeName != null">#{employeeName},</if>
+            <if test="operatorName != null">#{operatorName},</if>
+            <if test="teamName != null">#{teamName},</if>
+            <if test="machineNo != null">#{machineNo},</if>
+            <if test="reportQty != null">#{reportQty},</if>
+            <if test="completedQty != null">#{completedQty},</if>
+            <if test="defectQty != null">#{defectQty},</if>
+            <if test="lossQty != null">#{lossQty},</if>
+            <if test="reportType != null">#{reportType},</if>
+            <if test="reportSource != null">#{reportSource},</if>
+            <if test="batchNo != null">#{batchNo},</if>
+            <if test="scanToken != null">#{scanToken},</if>
+            <if test="billingGroupId != null">#{billingGroupId},</if>
+            <if test="isOutsourced != null">#{isOutsourced},</if>
+            <if test="vendorId != null">#{vendorId},</if>
+            <if test="validationStatus != null">#{validationStatus},</if>
+            <if test="validationMessage != null">#{validationMessage},</if>
+            <if test="eventTime != null">#{eventTime},</if>
+            <if test="delFlag != null">#{delFlag},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="updateProduceReportLog" parameterType="com.ruoyi.erp.domain.ProduceReportLog">
+        UPDATE t_erp_produce_report_log
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="operatorName != null">operator_name = #{operatorName},</if>
+            <if test="teamName != null">team_name = #{teamName},</if>
+            <if test="machineNo != null">machine_no = #{machineNo},</if>
+            <if test="reportQty != null">report_qty = #{reportQty},</if>
+            <if test="completedQty != null">completed_qty = #{completedQty},</if>
+            <if test="defectQty != null">defect_qty = #{defectQty},</if>
+            <if test="lossQty != null">loss_qty = #{lossQty},</if>
+            <if test="validationStatus != null">validation_status = #{validationStatus},</if>
+            <if test="validationMessage != null">validation_message = #{validationMessage},</if>
+            <if test="delFlag != null">del_flag = #{delFlag},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+            <if test="remark != null">remark = #{remark},</if>
+        </trim>
+        WHERE id = #{id}
+    </update>
+
+    <delete id="deleteProduceReportLogById" parameterType="Long">
+        UPDATE t_erp_produce_report_log SET del_flag = '2' WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteProduceReportLogByIds">
+        UPDATE t_erp_produce_report_log SET del_flag = '2' WHERE id IN
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <select id="sumReportQtyByJobProcessId" parameterType="Long" resultType="java.lang.Integer">
+        SELECT COALESCE(SUM(report_qty), 0)
+        FROM t_erp_produce_report_log
+        WHERE job_process_id = #{jobProcessId}
+          AND del_flag = '0'
+          AND validation_status = 'PASS'
+    </select>
+</mapper>
