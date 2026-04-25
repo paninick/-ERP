@@ -26,6 +26,20 @@
           @keyup.enter.native="handleQuery"
         />
       </el-form-item>
+      <el-form-item :label="$t('materialConsume.batchNo')" prop="batchNo">
+        <el-input
+          v-model="queryParams.batchNo"
+          :placeholder="$t('validation.enter', [$t('materialConsume.batchNo')])"
+          clearable
+          @keyup.enter.native="handleQuery"
+        />
+      </el-form-item>
+      <el-form-item :label="$t('materialConsume.materialType')" prop="materialType">
+        <el-select v-model="queryParams.materialType" :placeholder="$t('validation.select', [$t('materialConsume.materialType')])" clearable>
+          <el-option :label="$t('materialConsume.rawMaterial')" value="1" />
+          <el-option :label="$t('materialConsume.auxiliary')" value="2" />
+        </el-select>
+      </el-form-item>
       <el-form-item :label="$t('materialConsume.isOverLimit')" prop="isOverLimit">
         <el-select v-model="queryParams.isOverLimit" :placeholder="$t('validation.select', [''])" clearable>
           <el-option :label="$t('status.no')" value="0" />
@@ -96,13 +110,42 @@
       <el-table-column type="selection" width="55" align="center" />
       <el-table-column :label="$t('materialConsume.producePlanId')" align="center" prop="producePlanId" width="100" />
       <el-table-column :label="$t('materialConsume.processName')" align="center" prop="processName" width="120" />
+      <el-table-column :label="$t('materialConsume.batchNo')" align="center" prop="batchNo" width="140" show-overflow-tooltip />
       <el-table-column :label="$t('materialConsume.materialCode')" align="center" prop="materialCode" width="120" />
-      <el-table-column :label="$t('materialConsume.materialName')" align="center" prop="materialName" width="140" />
+      <el-table-column :label="$t('materialConsume.materialName')" align="center" prop="materialName" width="140" show-overflow-tooltip />
+      <el-table-column :label="$t('materialConsume.materialType')" align="center" prop="materialType" width="110">
+        <template slot-scope="scope">
+          {{ formatMaterialType(scope.row.materialType) }}
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('materialConsume.unit')" align="center" prop="unit" width="90" />
       <el-table-column :label="$t('materialConsume.bomQty')" align="center" prop="bomQty" width="100" />
       <el-table-column :label="$t('materialConsume.actualQty')" align="center" prop="actualQty" width="100" />
       <el-table-column :label="$t('materialConsume.standardLossRate')" align="center" prop="standardLossRate" width="100" />
       <el-table-column :label="$t('materialConsume.limitLossQty')" align="center" prop="limitLossQty" width="80" />
       <el-table-column :label="$t('materialConsume.actualLossQty')" align="center" prop="actualLossQty" width="80" />
+      <el-table-column :label="$t('materialConsume.unitPrice')" align="center" prop="unitPrice" width="110">
+        <template slot-scope="scope">
+          {{ formatDecimal(scope.row.unitPrice) }}
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('materialConsume.theoreticalCost')" align="center" prop="theoreticalCost" width="130">
+        <template slot-scope="scope">
+          {{ formatDecimal(scope.row.theoreticalCost) }}
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('materialConsume.actualCost')" align="center" prop="actualCost" width="130">
+        <template slot-scope="scope">
+          {{ formatDecimal(scope.row.actualCost) }}
+        </template>
+      </el-table-column>
+      <el-table-column :label="$t('materialConsume.costDiff')" align="center" prop="costDiff" width="130">
+        <template slot-scope="scope">
+          <span :style="{ color: toNumber(scope.row.costDiff) > 0 ? '#F56C6C' : toNumber(scope.row.costDiff) < 0 ? '#67C23A' : '' }">
+            {{ formatDecimal(scope.row.costDiff) }}
+          </span>
+        </template>
+      </el-table-column>
       <el-table-column :label="$t('materialConsume.isOverLimit')" align="center" prop="isOverLimit" width="80">
         <template slot-scope="scope">
           <el-tag :type="scope.row.isOverLimit === '1' ? 'danger' : 'info'">
@@ -160,6 +203,9 @@
         <el-form-item :label="$t('materialConsume.processName')" prop="processName">
           <el-input v-model="form.processName" :placeholder="$t('validation.enter', [$t('materialConsume.processName')])" />
         </el-form-item>
+        <el-form-item :label="$t('materialConsume.batchNo')" prop="batchNo">
+          <el-input v-model="form.batchNo" :placeholder="$t('validation.enter', [$t('materialConsume.batchNo')])" />
+        </el-form-item>
         <el-form-item :label="$t('materialConsume.materialId')" prop="materialId">
           <el-input-number v-model="form.materialId" :min="1" :placeholder="$t('materialConsume.materialId')" />
         </el-form-item>
@@ -169,6 +215,15 @@
         <el-form-item :label="$t('materialConsume.materialName')" prop="materialName">
           <el-input v-model="form.materialName" :placeholder="$t('validation.enter', [$t('materialConsume.materialName')])" />
         </el-form-item>
+        <el-form-item :label="$t('materialConsume.materialType')" prop="materialType">
+          <el-select v-model="form.materialType" :placeholder="$t('validation.select', [$t('materialConsume.materialType')])" clearable>
+            <el-option :label="$t('materialConsume.rawMaterial')" value="1" />
+            <el-option :label="$t('materialConsume.auxiliary')" value="2" />
+          </el-select>
+        </el-form-item>
+        <el-form-item :label="$t('materialConsume.unit')" prop="unit">
+          <el-input v-model="form.unit" :placeholder="$t('validation.enter', [$t('materialConsume.unit')])" />
+        </el-form-item>
         <el-form-item :label="$t('materialConsume.bomQtyTheory')" prop="bomQty">
           <el-input-number v-model="form.bomQty" :precision="3" :min="0" :placeholder="$t('materialConsume.bomQtyTheory')" />
         </el-form-item>
@@ -177,6 +232,18 @@
         </el-form-item>
         <el-form-item :label="$t('materialConsume.standardLossRate')" prop="standardLossRate">
           <el-input-number v-model="form.standardLossRate" :precision="2" :min="0" max="100" :placeholder="$t('materialConsume.standardLossRate')" />
+        </el-form-item>
+        <el-form-item :label="$t('materialConsume.unitPrice')" prop="unitPrice">
+          <el-input-number v-model="form.unitPrice" :precision="4" :min="0" :placeholder="$t('materialConsume.unitPrice')" />
+        </el-form-item>
+        <el-form-item :label="$t('materialConsume.theoreticalCost')">
+          <el-input :value="formatDecimal(getTheoreticalCost(form))" disabled />
+        </el-form-item>
+        <el-form-item :label="$t('materialConsume.actualCost')">
+          <el-input :value="formatDecimal(getActualCost(form))" disabled />
+        </el-form-item>
+        <el-form-item :label="$t('materialConsume.costDiff')">
+          <el-input :value="formatDecimal(getCostDiff(form))" disabled />
         </el-form-item>
         <el-form-item :label="$t('materialConsume.overLimitReason')" v-if="form.isOverLimit === '1'" prop="overLimitReason">
           <el-input v-model="form.overLimitReason" type="textarea" :placeholder="$t('validation.enter', [$t('materialConsume.overLimitReason')])" />
@@ -216,6 +283,8 @@ export default {
         producePlanId: null,
         materialCode: null,
         materialName: null,
+        batchNo: null,
+        materialType: null,
         isOverLimit: null,
         approvalStatus: null
       },
@@ -266,14 +335,21 @@ export default {
         orderId: null,
         processId: null,
         processName: null,
+        batchNo: null,
         materialId: null,
         materialCode: null,
         materialName: null,
+        materialType: null,
+        unit: null,
         bomQty: null,
         actualQty: null,
         standardLossRate: null,
         limitLossQty: null,
         actualLossQty: null,
+        unitPrice: null,
+        theoreticalCost: null,
+        actualCost: null,
+        costDiff: null,
         isOverLimit: "0",
         overLimitReason: null,
         approvalStatus: null,
@@ -349,6 +425,30 @@ export default {
       this.download('erp/materialconsume/export', {
         ...this.queryParams
       }, `materialconsume_${new Date().getTime()}.xlsx`);
+    },
+    formatMaterialType(value) {
+      const typeMap = {
+        "1": this.$t('materialConsume.rawMaterial'),
+        "2": this.$t('materialConsume.auxiliary')
+      };
+      return typeMap[value] || value || "-";
+    },
+    formatDecimal(value, scale = 4) {
+      const num = Number(value);
+      return Number.isFinite(num) ? num.toFixed(scale) : "-";
+    },
+    toNumber(value) {
+      const num = Number(value);
+      return Number.isFinite(num) ? num : 0;
+    },
+    getTheoreticalCost(row) {
+      return this.toNumber(row && row.bomQty) * this.toNumber(row && row.unitPrice);
+    },
+    getActualCost(row) {
+      return this.toNumber(row && row.actualQty) * this.toNumber(row && row.unitPrice);
+    },
+    getCostDiff(row) {
+      return this.getActualCost(row) - this.getTheoreticalCost(row);
     }
   }
 };
