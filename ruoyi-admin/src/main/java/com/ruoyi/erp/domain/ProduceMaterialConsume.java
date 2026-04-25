@@ -6,96 +6,97 @@ import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 
 import java.math.BigDecimal;
+import java.util.Date;
 
 /**
- * 生产物料消耗记录对象 t_erp_produce_material_consume
- *
- * @author zhangmingjian
- * @date 2026-04-15
+ * Production material consume record.
  */
 public class ProduceMaterialConsume extends BaseEntity {
     private static final long serialVersionUID = 1L;
 
-    /** 消耗记录ID */
     private Long id;
 
-    /** 生产计划ID */
-    @Excel(name = "生产计划ID")
+    @Excel(name = "producePlanId")
     private Long producePlanId;
 
-    /** 订单ID */
-    @Excel(name = "订单ID")
+    @Excel(name = "jobId")
+    private Long jobId;
+
+    @Excel(name = "jobProcessId")
+    private Long jobProcessId;
+
+    @Excel(name = "reportLogId")
+    private Long reportLogId;
+
+    @Excel(name = "batchNo")
+    private String batchNo;
+
+    @Excel(name = "orderId")
     private Long orderId;
 
-    /** 工序ID */
-    @Excel(name = "工序ID")
+    @Excel(name = "processId")
     private Long processId;
 
-    /** 工序名称 */
-    @Excel(name = "工序名称")
+    @Excel(name = "processName")
     private String processName;
 
-    /** 物料ID */
-    @Excel(name = "物料ID")
+    @Excel(name = "materialId")
     private Long materialId;
 
-    /** 物料编码 */
-    @Excel(name = "物料编码")
+    @Excel(name = "materialCode")
     private String materialCode;
 
-    /** 物料名称 */
-    @Excel(name = "物料名称")
+    @Excel(name = "materialName")
     private String materialName;
 
-    /** BOM理论用量 */
-    @Excel(name = "BOM理论用量")
+    @Excel(name = "materialType")
+    private String materialType;
+
+    @Excel(name = "bomQty")
     private BigDecimal bomQty;
 
-    /** 实际领用数量 */
-    @Excel(name = "实际领用数量")
+    @Excel(name = "actualQty")
     private BigDecimal actualQty;
 
-    /** 标准损耗率(%) */
-    @Excel(name = "标准损耗率")
+    @Excel(name = "standardLossRate")
     private BigDecimal standardLossRate;
 
-    /** 理论损耗限额 */
-    @Excel(name = "理论损耗限额")
+    @Excel(name = "limitLossQty")
     private BigDecimal limitLossQty;
 
-    /** 实际损耗数量 */
-    @Excel(name = "实际损耗数量")
+    @Excel(name = "actualLossQty")
     private BigDecimal actualLossQty;
 
-    /** 是否超限额 */
-    @Excel(name = "是否超限额", readConverterExp = "0=否,1=是")
+    @Excel(name = "isOverLimit")
     private String isOverLimit;
 
-    /** 超限额原因 */
-    @Excel(name = "超限额原因")
+    @Excel(name = "overLimitReason")
     private String overLimitReason;
 
-    /** 是否审批状态 0无需审批 1待审批 2已批准 2已拒绝 */
-    @Excel(name = "审批状态", readConverterExp = "0=无需,1=待审,2=批准,3=拒绝")
+    @Excel(name = "approvalStatus")
     private String approvalStatus;
 
-    /** 审批人ID */
     private Long approvalById;
 
-    /** 审批人姓名 */
     private String approvalByName;
 
-    /** 审批时间 */
-    private java.util.Date approvalTime;
+    private Date approvalTime;
 
-    /** 审批备注 */
     private String approvalRemark;
 
-    /** 物料单位 */
     private String unit;
 
-    /** 备注 */
-    private String remark;
+    @Excel(name = "unitPrice")
+    private BigDecimal unitPrice;
+
+    @Excel(name = "theoreticalCost")
+    private BigDecimal theoreticalCost;
+
+    @Excel(name = "actualCost")
+    private BigDecimal actualCost;
+
+    @Excel(name = "costDiff")
+    private BigDecimal costDiff;
 
     public Long getId() {
         return id;
@@ -111,6 +112,38 @@ public class ProduceMaterialConsume extends BaseEntity {
 
     public void setProducePlanId(Long producePlanId) {
         this.producePlanId = producePlanId;
+    }
+
+    public Long getJobId() {
+        return jobId;
+    }
+
+    public void setJobId(Long jobId) {
+        this.jobId = jobId;
+    }
+
+    public Long getJobProcessId() {
+        return jobProcessId;
+    }
+
+    public void setJobProcessId(Long jobProcessId) {
+        this.jobProcessId = jobProcessId;
+    }
+
+    public Long getReportLogId() {
+        return reportLogId;
+    }
+
+    public void setReportLogId(Long reportLogId) {
+        this.reportLogId = reportLogId;
+    }
+
+    public String getBatchNo() {
+        return batchNo;
+    }
+
+    public void setBatchNo(String batchNo) {
+        this.batchNo = batchNo;
     }
 
     public Long getOrderId() {
@@ -159,6 +192,14 @@ public class ProduceMaterialConsume extends BaseEntity {
 
     public void setMaterialName(String materialName) {
         this.materialName = materialName;
+    }
+
+    public String getMaterialType() {
+        return materialType;
+    }
+
+    public void setMaterialType(String materialType) {
+        this.materialType = materialType;
     }
 
     public BigDecimal getBomQty() {
@@ -241,11 +282,11 @@ public class ProduceMaterialConsume extends BaseEntity {
         this.approvalByName = approvalByName;
     }
 
-    public java.util.Date getApprovalTime() {
+    public Date getApprovalTime() {
         return approvalTime;
     }
 
-    public void setApprovalTime(java.util.Date approvalTime) {
+    public void setApprovalTime(Date approvalTime) {
         this.approvalTime = approvalTime;
     }
 
@@ -265,12 +306,36 @@ public class ProduceMaterialConsume extends BaseEntity {
         this.unit = unit;
     }
 
-    public String getRemark() {
-        return remark;
+    public BigDecimal getUnitPrice() {
+        return unitPrice;
     }
 
-    public void setRemark(String remark) {
-        this.remark = remark;
+    public void setUnitPrice(BigDecimal unitPrice) {
+        this.unitPrice = unitPrice;
+    }
+
+    public BigDecimal getTheoreticalCost() {
+        return theoreticalCost;
+    }
+
+    public void setTheoreticalCost(BigDecimal theoreticalCost) {
+        this.theoreticalCost = theoreticalCost;
+    }
+
+    public BigDecimal getActualCost() {
+        return actualCost;
+    }
+
+    public void setActualCost(BigDecimal actualCost) {
+        this.actualCost = actualCost;
+    }
+
+    public BigDecimal getCostDiff() {
+        return costDiff;
+    }
+
+    public void setCostDiff(BigDecimal costDiff) {
+        this.costDiff = costDiff;
     }
 
     @Override
@@ -278,12 +343,17 @@ public class ProduceMaterialConsume extends BaseEntity {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
             .append("id", getId())
             .append("producePlanId", getProducePlanId())
+            .append("jobId", getJobId())
+            .append("jobProcessId", getJobProcessId())
+            .append("reportLogId", getReportLogId())
+            .append("batchNo", getBatchNo())
             .append("orderId", getOrderId())
             .append("processId", getProcessId())
             .append("processName", getProcessName())
             .append("materialId", getMaterialId())
             .append("materialCode", getMaterialCode())
             .append("materialName", getMaterialName())
+            .append("materialType", getMaterialType())
             .append("bomQty", getBomQty())
             .append("actualQty", getActualQty())
             .append("standardLossRate", getStandardLossRate())
@@ -297,6 +367,10 @@ public class ProduceMaterialConsume extends BaseEntity {
             .append("approvalTime", getApprovalTime())
             .append("approvalRemark", getApprovalRemark())
             .append("unit", getUnit())
+            .append("unitPrice", getUnitPrice())
+            .append("theoreticalCost", getTheoreticalCost())
+            .append("actualCost", getActualCost())
+            .append("costDiff", getCostDiff())
             .append("remark", getRemark())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())

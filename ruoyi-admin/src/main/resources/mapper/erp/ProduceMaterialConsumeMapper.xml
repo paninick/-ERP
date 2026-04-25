@@ -5,12 +5,17 @@
     <resultMap id="BaseResultMap" type="com.ruoyi.erp.domain.ProduceMaterialConsume">
         <id column="id" property="id"/>
         <result column="produce_plan_id" property="producePlanId"/>
+        <result column="job_id" property="jobId"/>
+        <result column="job_process_id" property="jobProcessId"/>
+        <result column="report_log_id" property="reportLogId"/>
+        <result column="batch_no" property="batchNo"/>
         <result column="order_id" property="orderId"/>
         <result column="process_id" property="processId"/>
         <result column="process_name" property="processName"/>
         <result column="material_id" property="materialId"/>
         <result column="material_code" property="materialCode"/>
         <result column="material_name" property="materialName"/>
+        <result column="material_type" property="materialType"/>
         <result column="bom_qty" property="bomQty"/>
         <result column="actual_qty" property="actualQty"/>
         <result column="standard_loss_rate" property="standardLossRate"/>
@@ -24,6 +29,10 @@
         <result column="approval_time" property="approvalTime"/>
         <result column="approval_remark" property="approvalRemark"/>
         <result column="unit" property="unit"/>
+        <result column="unit_price" property="unitPrice"/>
+        <result column="theoretical_cost" property="theoreticalCost"/>
+        <result column="actual_cost" property="actualCost"/>
+        <result column="cost_diff" property="costDiff"/>
         <result column="remark" property="remark"/>
         <result column="create_by" property="createBy"/>
         <result column="create_time" property="createTime"/>
@@ -32,48 +41,51 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, produce_plan_id, order_id, process_id, process_name, material_id, material_code, material_name,
-        bom_qty, actual_qty, standard_loss_rate, limit_loss_qty, actual_loss_qty, is_over_limit, over_limit_reason,
-        approval_status, approval_by_id, approval_by_name, approval_time, approval_remark, unit, remark,
-        create_by, create_time, update_by, update_time
+        id, produce_plan_id, job_id, job_process_id, report_log_id, batch_no, order_id, process_id, process_name,
+        material_id, material_code, material_name, material_type, bom_qty, actual_qty, standard_loss_rate,
+        limit_loss_qty, actual_loss_qty, is_over_limit, over_limit_reason, approval_status, approval_by_id,
+        approval_by_name, approval_time, approval_remark, unit, unit_price, theoretical_cost, actual_cost,
+        cost_diff, remark, create_by, create_time, update_by, update_time
     </sql>
 
     <select id="selectProduceMaterialConsumeById" parameterType="Long" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List"/> FROM t_erp_produce_material_consume WHERE id = #{id}
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_erp_produce_material_consume
+        WHERE id = #{id}
     </select>
 
     <select id="selectProduceMaterialConsumeList" parameterType="ProduceMaterialConsume" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List"/> FROM t_erp_produce_material_consume
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_erp_produce_material_consume
         <where>
-            <if test="producePlanId != null">
-                AND produce_plan_id = #{producePlanId}
-            </if>
-            <if test="materialCode != null and materialCode != ''">
-                AND material_code like concat('%', #{materialCode}, '%')
-            </if>
-            <if test="materialName != null and materialName != ''">
-                AND material_name like concat('%', #{materialName}, '%')
-            </if>
-            <if test="isOverLimit != null and isOverLimit != ''">
-                AND is_over_limit = #{isOverLimit}
-            </if>
-            <if test="approvalStatus != null and approvalStatus != ''">
-                AND approval_status = #{approvalStatus}
-            </if>
+            <if test="producePlanId != null">AND produce_plan_id = #{producePlanId}</if>
+            <if test="jobId != null">AND job_id = #{jobId}</if>
+            <if test="jobProcessId != null">AND job_process_id = #{jobProcessId}</if>
+            <if test="reportLogId != null">AND report_log_id = #{reportLogId}</if>
+            <if test="batchNo != null and batchNo != ''">AND batch_no = #{batchNo}</if>
+            <if test="processId != null">AND process_id = #{processId}</if>
+            <if test="materialCode != null and materialCode != ''">AND material_code LIKE concat('%', #{materialCode}, '%')</if>
+            <if test="materialName != null and materialName != ''">AND material_name LIKE concat('%', #{materialName}, '%')</if>
+            <if test="materialType != null and materialType != ''">AND material_type = #{materialType}</if>
+            <if test="isOverLimit != null and isOverLimit != ''">AND is_over_limit = #{isOverLimit}</if>
+            <if test="approvalStatus != null and approvalStatus != ''">AND approval_status = #{approvalStatus}</if>
         </where>
+        ORDER BY id DESC
     </select>
 
     <insert id="insertProduceMaterialConsume" parameterType="ProduceMaterialConsume" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO t_erp_produce_material_consume (
-            produce_plan_id, order_id, process_id, process_name, material_id, material_code, material_name,
-            bom_qty, actual_qty, standard_loss_rate, limit_loss_qty, actual_loss_qty, is_over_limit, over_limit_reason,
-            approval_status, approval_by_id, approval_by_name, approval_time, approval_remark, unit, remark,
-            create_by, create_time, update_by, update_time
+            produce_plan_id, job_id, job_process_id, report_log_id, batch_no, order_id, process_id, process_name,
+            material_id, material_code, material_name, material_type, bom_qty, actual_qty, standard_loss_rate,
+            limit_loss_qty, actual_loss_qty, is_over_limit, over_limit_reason, approval_status, approval_by_id,
+            approval_by_name, approval_time, approval_remark, unit, unit_price, theoretical_cost, actual_cost,
+            cost_diff, remark, create_by, create_time, update_by, update_time
         ) VALUES (
-            #{producePlanId}, #{orderId}, #{processId}, #{processName}, #{materialId}, #{materialCode}, #{materialName},
-            #{bomQty}, #{actualQty}, #{standardLossRate}, #{limitLossQty}, #{actualLossQty}, #{isOverLimit}, #{overLimitReason},
-            #{approvalStatus}, #{approvalById}, #{approvalByName}, #{approvalTime}, #{approvalRemark}, #{unit}, #{remark},
-            #{createBy}, #{createTime}, #{updateBy}, #{updateTime}
+            #{producePlanId}, #{jobId}, #{jobProcessId}, #{reportLogId}, #{batchNo}, #{orderId}, #{processId}, #{processName},
+            #{materialId}, #{materialCode}, #{materialName}, #{materialType}, #{bomQty}, #{actualQty}, #{standardLossRate},
+            #{limitLossQty}, #{actualLossQty}, #{isOverLimit}, #{overLimitReason}, #{approvalStatus}, #{approvalById},
+            #{approvalByName}, #{approvalTime}, #{approvalRemark}, #{unit}, #{unitPrice}, #{theoreticalCost}, #{actualCost},
+            #{costDiff}, #{remark}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime}
         )
     </insert>
 
@@ -81,12 +93,17 @@
         UPDATE t_erp_produce_material_consume
         <set>
             <if test="producePlanId != null">produce_plan_id = #{producePlanId},</if>
+            <if test="jobId != null">job_id = #{jobId},</if>
+            <if test="jobProcessId != null">job_process_id = #{jobProcessId},</if>
+            <if test="reportLogId != null">report_log_id = #{reportLogId},</if>
+            <if test="batchNo != null">batch_no = #{batchNo},</if>
             <if test="orderId != null">order_id = #{orderId},</if>
             <if test="processId != null">process_id = #{processId},</if>
             <if test="processName != null">process_name = #{processName},</if>
             <if test="materialId != null">material_id = #{materialId},</if>
             <if test="materialCode != null">material_code = #{materialCode},</if>
             <if test="materialName != null">material_name = #{materialName},</if>
+            <if test="materialType != null">material_type = #{materialType},</if>
             <if test="bomQty != null">bom_qty = #{bomQty},</if>
             <if test="actualQty != null">actual_qty = #{actualQty},</if>
             <if test="standardLossRate != null">standard_loss_rate = #{standardLossRate},</if>
@@ -100,6 +117,10 @@
             <if test="approvalTime != null">approval_time = #{approvalTime},</if>
             <if test="approvalRemark != null">approval_remark = #{approvalRemark},</if>
             <if test="unit != null">unit = #{unit},</if>
+            <if test="unitPrice != null">unit_price = #{unitPrice},</if>
+            <if test="theoreticalCost != null">theoretical_cost = #{theoreticalCost},</if>
+            <if test="actualCost != null">actual_cost = #{actualCost},</if>
+            <if test="costDiff != null">cost_diff = #{costDiff},</if>
             <if test="remark != null">remark = #{remark},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
@@ -119,22 +140,27 @@
     </delete>
 
     <select id="sumActualLossByProducePlan" resultType="java.math.BigDecimal">
-        SELECT COALESCE(SUM(actual_loss_qty), 0) FROM t_erp_produce_material_consume WHERE produce_plan_id = #{producePlanId}
+        SELECT COALESCE(SUM(actual_loss_qty), 0)
+        FROM t_erp_produce_material_consume
+        WHERE produce_plan_id = #{producePlanId}
     </select>
 
     <select id="selectByProducePlanId" resultMap="BaseResultMap">
-        SELECT <include refid="Base_Column_List"/> FROM t_erp_produce_material_consume WHERE produce_plan_id = #{producePlanId}
+        SELECT <include refid="Base_Column_List"/>
+        FROM t_erp_produce_material_consume
+        WHERE produce_plan_id = #{producePlanId}
+        ORDER BY id DESC
     </select>
 
-    <!-- 统计待审批数量 -->
     <select id="countPendingApproval" resultType="int">
-        SELECT COUNT(*) FROM t_erp_produce_material_consume WHERE approval_status = '1'
+        SELECT COUNT(*)
+        FROM t_erp_produce_material_consume
+        WHERE approval_status = '1'
     </select>
 
-    <!-- 损耗统计汇总 -->
     <select id="selectLossStats" resultType="java.util.Map">
         SELECT
-            COUNT(*)                                        AS totalRecords,
+            COUNT(*) AS totalRecords,
             SUM(CASE WHEN is_over_limit = '1' THEN 1 ELSE 0 END) AS overLimitCount,
             SUM(CASE WHEN approval_status = '1' THEN 1 ELSE 0 END) AS pendingApprovalCount
         FROM t_erp_produce_material_consume
