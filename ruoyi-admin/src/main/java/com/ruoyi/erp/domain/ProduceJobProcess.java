@@ -115,6 +115,15 @@ public class ProduceJobProcess extends BaseEntity {
     @Excel(name = "损耗超标")
     private String lossExceed;
 
+    /** 不合格原因（FAIL 状态时填写） */
+    private String rejectReason;
+
+    /** 工序名称（查询时 JOIN 回填，非持久化列） */
+    private String processName;
+
+    /** 工票号（查询时 JOIN 回填，非持久化列） */
+    private String jobNo;
+
     public Long getId() {
         return id;
     }
@@ -237,6 +246,15 @@ public class ProduceJobProcess extends BaseEntity {
     public String getLossExceed() { return lossExceed; }
     public void setLossExceed(String lossExceed) { this.lossExceed = lossExceed; }
 
+    public String getRejectReason() { return rejectReason; }
+    public void setRejectReason(String rejectReason) { this.rejectReason = rejectReason; }
+
+    public String getProcessName() { return processName; }
+    public void setProcessName(String processName) { this.processName = processName; }
+
+    public String getJobNo() { return jobNo; }
+    public void setJobNo(String jobNo) { this.jobNo = jobNo; }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -253,6 +271,9 @@ public class ProduceJobProcess extends BaseEntity {
                 .append("finishTime", getFinishTime())
                 .append("isOutsource", getIsOutsource())
                 .append("outsourceId", getOutsourceId())
+                .append("rejectReason", getRejectReason())
+                .append("processName", getProcessName())
+                .append("jobNo", getJobNo())
                 .append("createBy", getCreateBy())
                 .append("createTime", getCreateTime())
                 .append("remark", getRemark())

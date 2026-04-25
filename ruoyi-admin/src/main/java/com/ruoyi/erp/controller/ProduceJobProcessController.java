@@ -91,11 +91,17 @@ public class ProduceJobProcessController extends BaseController {
 
     /**
      * 修改工序流转记录
+     * 当状态变为 FAIL 时，将 rejectReason 追加写入 remark，便于后续审计查阅
      */
     @PreAuthorize("@ss.hasPermi('erp:produceJobProcess:edit')")
     @Log(title = "工序流转记录", businessType = BusinessType.UPDATE)
     @PutMapping
     public AjaxResult edit(@RequestBody ProduceJobProcess produceJobProcess) {
+        if ("FAIL".equals(produceJobProcess.getProcessStatus()) && produceJobProcess.getRejectReason() != null) {
+            String remark = produceJobProcess.getRemark();
+            String suffix = "REJECT_REASON: " + produceJobProcess.getRejectReason();
+            produceJobProcess.setRemark(remark == null || remark.isEmpty() ? suffix : remark + "\n" + suffix);
+        }
         return toAjax(produceJobProcessService.updateProduceJobProcess(produceJobProcess));
     }
 
