@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -71,7 +72,7 @@ public class PurchaseController extends BaseController {
     @PreAuthorize("@ss.hasPermi('erp:purchase:add')")
     @Log(title = "采购单", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody Purchase purchase) {
+    public AjaxResult add(@Validated @RequestBody Purchase purchase) {
         return toAjax(purchaseService.insertPurchase(purchase));
     }
 
@@ -81,7 +82,7 @@ public class PurchaseController extends BaseController {
     @PreAuthorize("@ss.hasPermi('erp:purchase:edit')")
     @Log(title = "采购单", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody Purchase purchase) {
+    public AjaxResult edit(@Validated @RequestBody Purchase purchase) {
         return toAjax(purchaseService.updatePurchase(purchase));
     }
 

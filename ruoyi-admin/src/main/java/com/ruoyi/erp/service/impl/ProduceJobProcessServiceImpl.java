@@ -2,6 +2,7 @@ package com.ruoyi.erp.service.impl;
 
 import com.ruoyi.erp.domain.ProduceJobProcess;
 import com.ruoyi.erp.mapper.ProduceJobProcessMapper;
+import com.ruoyi.erp.service.ErpRealtimePushService;
 import com.ruoyi.erp.service.IProduceJobProcessService;
 import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.common.utils.DateUtils;
@@ -22,6 +23,9 @@ public class ProduceJobProcessServiceImpl implements IProduceJobProcessService {
 
     @Autowired
     private ProduceJobProcessMapper produceJobProcessMapper;
+
+    @Autowired
+    private ErpRealtimePushService erpRealtimePushService;
 
     /**
      * 查询工序流转记录
@@ -66,7 +70,11 @@ public class ProduceJobProcessServiceImpl implements IProduceJobProcessService {
      */
     @Override
     public int updateProduceJobProcess(ProduceJobProcess produceJobProcess) {
-        return produceJobProcessMapper.updateProduceJobProcess(produceJobProcess);
+        int rows = produceJobProcessMapper.updateProduceJobProcess(produceJobProcess);
+        if (rows > 0) {
+            erpRealtimePushService.pushProduceBoardRefresh();
+        }
+        return rows;
     }
 
     /**
@@ -142,7 +150,11 @@ public class ProduceJobProcessServiceImpl implements IProduceJobProcessService {
         }
         produceJobProcess.setIsSkipped("1");
         produceJobProcess.setProcessStatus("PASS");
-        return produceJobProcessMapper.updateProduceJobProcess(produceJobProcess);
+        int rows = produceJobProcessMapper.updateProduceJobProcess(produceJobProcess);
+        if (rows > 0) {
+            erpRealtimePushService.pushProduceBoardRefresh();
+        }
+        return rows;
     }
 
     @Override

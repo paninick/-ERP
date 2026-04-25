@@ -3,6 +3,7 @@ package com.ruoyi.erp.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,11 +17,13 @@ import com.ruoyi.common.core.page.TableDataInfo;
 @RequestMapping("/erp/report")
 public class ReportController extends BaseController {
 
+    @PreAuthorize("@ss.hasPermi('erp:report:list')")
     @GetMapping("/overview")
     public TableDataInfo overview() {
         return list();
     }
 
+    @PreAuthorize("@ss.hasPermi('erp:report:list')")
     @GetMapping("/list")
     public TableDataInfo list() {
         List<Map<String, String>> cards = new ArrayList<>();

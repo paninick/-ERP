@@ -35,11 +35,11 @@ public class UnitConversion extends BaseEntity {
 
     /** 采购转库存换算率 */
     @Excel(name = "采购转库存换算率")
-    private Double purchaseToStock;
+    private java.math.BigDecimal purchaseToStock;
 
     /** 库存转生产换算率 */
     @Excel(name = "库存转生产换算率")
-    private Double stockToProduce;
+    private java.math.BigDecimal stockToProduce;
 
     /** 备注 */
     private String remark;
@@ -84,19 +84,19 @@ public class UnitConversion extends BaseEntity {
         return produceUnit;
     }
 
-    public void setPurchaseToStock(Double purchaseToStock) {
+    public void setPurchaseToStock(java.math.BigDecimal purchaseToStock) {
         this.purchaseToStock = purchaseToStock;
     }
 
-    public Double getPurchaseToStock() {
+    public java.math.BigDecimal getPurchaseToStock() {
         return purchaseToStock;
     }
 
-    public void setStockToProduce(Double stockToProduce) {
+    public void setStockToProduce(java.math.BigDecimal stockToProduce) {
         this.stockToProduce = stockToProduce;
     }
 
-    public Double getStockToProduce() {
+    public java.math.BigDecimal getStockToProduce() {
         return stockToProduce;
     }
 

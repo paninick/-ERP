@@ -31,11 +31,11 @@ public class ProcessLossMatrix extends BaseEntity {
 
     /** 标准损耗率（%） */
     @Excel(name = "标准损耗率（%）")
-    private Double standardLossRate;
+    private java.math.BigDecimal standardLossRate;
 
     /** 历史实际平均损耗 */
     @Excel(name = "历史实际平均损耗")
-    private Double actualAvgLoss;
+    private java.math.BigDecimal actualAvgLoss;
 
     /** 备注 */
     private String remark;
@@ -72,19 +72,19 @@ public class ProcessLossMatrix extends BaseEntity {
         return processCode;
     }
 
-    public void setStandardLossRate(Double standardLossRate) {
+    public void setStandardLossRate(java.math.BigDecimal standardLossRate) {
         this.standardLossRate = standardLossRate;
     }
 
-    public Double getStandardLossRate() {
+    public java.math.BigDecimal getStandardLossRate() {
         return standardLossRate;
     }
 
-    public void setActualAvgLoss(Double actualAvgLoss) {
+    public void setActualAvgLoss(java.math.BigDecimal actualAvgLoss) {
         this.actualAvgLoss = actualAvgLoss;
     }
 
-    public Double getActualAvgLoss() {
+    public java.math.BigDecimal getActualAvgLoss() {
         return actualAvgLoss;
     }
 

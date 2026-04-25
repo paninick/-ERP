@@ -31,7 +31,7 @@ public class StandardColor extends BaseEntity {
 
     /** 默认色差允差值ΔE */
     @Excel(name = "默认色差允差值ΔE")
-    private Double defaultDeltaE;
+    private java.math.BigDecimal defaultDeltaE;
 
     /** 色卡图片路径 */
     private String colorImage;
@@ -71,11 +71,11 @@ public class StandardColor extends BaseEntity {
         return colorLab;
     }
 
-    public void setDefaultDeltaE(Double defaultDeltaE) {
+    public void setDefaultDeltaE(java.math.BigDecimal defaultDeltaE) {
         this.defaultDeltaE = defaultDeltaE;
     }
 
-    public Double getDefaultDeltaE() {
+    public java.math.BigDecimal getDefaultDeltaE() {
         return defaultDeltaE;
     }
 

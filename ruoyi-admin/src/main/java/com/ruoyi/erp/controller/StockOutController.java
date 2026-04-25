@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -71,7 +72,7 @@ public class StockOutController extends BaseController {
     @PreAuthorize("@ss.hasPermi('erp:stockout:add')")
     @Log(title = "出库单", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody StockOut stockOut) {
+    public AjaxResult add(@Validated @RequestBody StockOut stockOut) {
         return toAjax(stockOutService.insertStockOut(stockOut));
     }
 
@@ -81,7 +82,7 @@ public class StockOutController extends BaseController {
     @PreAuthorize("@ss.hasPermi('erp:stockout:edit')")
     @Log(title = "出库单", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody StockOut stockOut) {
+    public AjaxResult edit(@Validated @RequestBody StockOut stockOut) {
         return toAjax(stockOutService.updateStockOut(stockOut));
     }
 

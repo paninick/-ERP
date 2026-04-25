@@ -123,4 +123,16 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         where a.sales_order_id = #{salesOrderId}
     </select>
 
+    <update id="incrementExecuteQty">
+        UPDATE t_erp_sales_order_item
+        SET execute_qty = COALESCE(execute_qty, 0) + #{delta}
+        WHERE id = #{id}
+    </update>
+
+    <update id="decrementExecuteQty">
+        UPDATE t_erp_sales_order_item
+        SET execute_qty = GREATEST(COALESCE(execute_qty, 0) - #{delta}, 0)
+        WHERE id = #{id}
+    </update>
+
 </mapper>

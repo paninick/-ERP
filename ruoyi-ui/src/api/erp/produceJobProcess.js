@@ -67,3 +67,30 @@ export function exportProduceJobProcess(query) {
     params: query
   })
 }
+
+// 插入临时工序（印花/绣花/灯检等）
+export function insertCustomProcess(data) {
+  return request({
+    url: '/erp/produceJobProcess/insertCustom',
+    method: 'post',
+    data: data
+  })
+}
+
+// 跳过工序
+export function skipProcess(data) {
+  return request({
+    url: '/erp/produceJobProcess/skip',
+    method: 'put',
+    data: data
+  })
+}
+
+// 插入返修工序
+export function insertReworkProcess(data) {
+  return request({
+    url: '/erp/produceJobProcess/insertRework',
+    method: 'post',
+    data: data
+  })
+}

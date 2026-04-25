@@ -4,7 +4,8 @@ import com.ruoyi.common.annotation.Excel;
 import com.ruoyi.common.core.domain.BaseEntity;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
-
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -23,12 +24,14 @@ public class ProduceJob extends BaseEntity {
     /**
      * 工票编号
      */
+    @NotBlank(message = "工票编号不能为空")
     @Excel(name = "工票编号")
     private String jobNo;
 
     /**
      * 生产计划ID
      */
+    @NotNull(message = "生产计划ID不能为空")
     @Excel(name = "生产计划ID")
     private Long producePlanId;
 
@@ -41,6 +44,7 @@ public class ProduceJob extends BaseEntity {
     /**
      * 工艺路线ID（创建工单时按此路线自动初始化 ProduceJobProcess 工序队列）
      */
+    @NotNull(message = "工艺路线ID不能为空")
     @Excel(name = "工艺路线ID")
     private Long processRouteId;
 
@@ -59,6 +63,7 @@ public class ProduceJob extends BaseEntity {
     /**
      * 计划数量
      */
+    @NotNull(message = "计划数量不能为空")
     @Excel(name = "计划数量")
     private Integer planQty;
 

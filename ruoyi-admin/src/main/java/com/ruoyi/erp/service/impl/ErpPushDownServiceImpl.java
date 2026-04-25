@@ -1,8 +1,11 @@
 package com.ruoyi.erp.service.impl;
 
 import com.ruoyi.erp.domain.*;
+import com.ruoyi.erp.mapper.ProducePlanMapper;
 import com.ruoyi.erp.mapper.PurchaseItemMapper;
 import com.ruoyi.erp.mapper.SalesOrderItemMapper;
+import com.ruoyi.erp.mapper.StockInItemMapper;
+import com.ruoyi.erp.mapper.StockOutItemMapper;
 import com.ruoyi.erp.service.IErpPushDownService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,9 +16,8 @@ import java.util.List;
 
 /**
  * 单据下推服务实现
- *
- * @author zhangmingjian
- * @date 2026-04-20
+ * 入库确认 → 采购明细 execute_qty 累加
+ * 出库确认 → 销售订单明细 execute_qty 累加
  */
 @Service
 public class ErpPushDownServiceImpl implements IErpPushDownService {
@@ -26,24 +28,39 @@ public class ErpPushDownServiceImpl implements IErpPushDownService {
     @Autowired
     private SalesOrderItemMapper salesOrderItemMapper;
 
+    @Autowired
+    private StockInItemMapper stockInItemMapper;
+
+    @Autowired
+    private StockOutItemMapper stockOutItemMapper;
+
+    @Autowired
+    private ProducePlanMapper producePlanMapper;
+
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean updatePurchaseExecuteQty(StockIn stockIn) {
-        // 如果入库单没有关联采购单，不需要更新
-        if (stockIn.getPurchaseId() == null) {
+        if (stockIn.getPurchaseId() == null || stockIn.getId() == null) {
             return true;
         }
-
-        // 获取采购单明细，根据采购单ID查询
-        List<PurchaseItem> items = purchaseItemMapper.selectPurchaseItemByPurchaseId(stockIn.getPurchaseId());
-        // 这里需要根据入库明细对应的采购明细更新已执行数量
-        // 简化处理：累计所有入库数量到采购明细
-        // 实际业务中，入库单明细会对应采购明细，这里假设每个采购明细按比例增加已执行数量
-        // 具体对应关系由前端传入，这里框架预留，后续具体业务逻辑细化
-        for (PurchaseItem item : items) {
-            // 这里应由入库明细对应到采购明细，更新executeQty
-            // 当前实现：框架占位，具体业务逻辑在整合时完成
-            // 保证接口设计正确
+        List<StockInItem> inItems = stockInItemMapper.selectStockInItemByInId(stockIn.getId());
+        if (inItems == null || inItems.isEmpty()) {
+            return true;
+        }
+        List<PurchaseItem> purchaseItems = purchaseItemMapper.selectPurchaseItemByPurchaseId(stockIn.getPurchaseId());
+        if (purchaseItems == null || purchaseItems.isEmpty()) {
+            return true;
+        }
+        for (StockInItem inItem : inItems) {
+            if (inItem.getMaterialId() == null || inItem.getCount() == null) {
+                continue;
+            }
+            // 按 materialId + materialType 匹配采购明细，取第一条
+            purchaseItems.stream()
+                .filter(p -> inItem.getMaterialId().equals(p.getMaterialId())
+                    && matchType(inItem.getMaterialType(), p.getMaterialType()))
+                .findFirst()
+                .ifPresent(p -> purchaseItemMapper.incrementExecuteQty(p.getId(), inItem.getCount()));
         }
         return true;
     }
@@ -51,35 +68,125 @@ public class ErpPushDownServiceImpl implements IErpPushDownService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean updateSalesOrderExecuteQty(StockOut stockOut) {
-        // 如果出库单没有关联计划，不需要更新
-        if (stockOut.getPlanId() == null) {
+        if (stockOut.getPlanId() == null || stockOut.getId() == null) {
             return true;
         }
-
-        // 获取销售订单明细，根据计划ID找到销售订单，再更新明细已执行数量
-        // 框架占位，具体业务逻辑在整合时完成
+        ProducePlan plan = producePlanMapper.selectProducePlanById(stockOut.getPlanId());
+        if (plan == null || plan.getSalesOrderId() == null) {
+            return true;
+        }
+        List<StockOutItem> outItems = stockOutItemMapper.selectStockOutItemByOutId(stockOut.getId());
+        if (outItems == null || outItems.isEmpty()) {
+            return true;
+        }
+        List<SalesOrderItem> salesItems = salesOrderItemMapper.selectSalesOrderItemBySalesOrderId(plan.getSalesOrderId());
+        if (salesItems == null || salesItems.isEmpty()) {
+            return true;
+        }
+        // 出库明细无 color/size，按总数量均摊到销售明细（按 planQuantity 比例）
+        BigDecimal totalOut = outItems.stream()
+            .map(o -> o.getCount() == null ? BigDecimal.ZERO : o.getCount())
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+        if (totalOut.compareTo(BigDecimal.ZERO) == 0) {
+            return true;
+        }
+        BigDecimal totalPlan = salesItems.stream()
+            .map(s -> s.getPlanQuantity() == null ? BigDecimal.ZERO : s.getPlanQuantity())
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+        if (totalPlan.compareTo(BigDecimal.ZERO) == 0) {
+            // 无计划数量时平均分配
+            BigDecimal avg = totalOut.divide(BigDecimal.valueOf(salesItems.size()), 0, java.math.RoundingMode.DOWN);
+            for (SalesOrderItem item : salesItems) {
+                salesOrderItemMapper.incrementExecuteQty(item.getId(), avg);
+            }
+        } else {
+            for (SalesOrderItem item : salesItems) {
+                BigDecimal planQty = item.getPlanQuantity() == null ? BigDecimal.ZERO : item.getPlanQuantity();
+                BigDecimal delta = totalOut.multiply(planQty)
+                    .divide(totalPlan, 0, java.math.RoundingMode.DOWN);
+                if (delta.compareTo(BigDecimal.ZERO) > 0) {
+                    salesOrderItemMapper.incrementExecuteQty(item.getId(), delta);
+                }
+            }
+        }
         return true;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean rollbackPurchaseExecuteQty(StockIn stockIn) {
-        // 反向回滚已执行数量
-        if (stockIn.getPurchaseId() == null) {
+        if (stockIn.getPurchaseId() == null || stockIn.getId() == null) {
             return true;
         }
-        // 框架占位，具体业务逻辑在整合时完成
+        List<StockInItem> inItems = stockInItemMapper.selectStockInItemByInId(stockIn.getId());
+        if (inItems == null || inItems.isEmpty()) {
+            return true;
+        }
+        List<PurchaseItem> purchaseItems = purchaseItemMapper.selectPurchaseItemByPurchaseId(stockIn.getPurchaseId());
+        if (purchaseItems == null || purchaseItems.isEmpty()) {
+            return true;
+        }
+        for (StockInItem inItem : inItems) {
+            if (inItem.getMaterialId() == null || inItem.getCount() == null) {
+                continue;
+            }
+            purchaseItems.stream()
+                .filter(p -> inItem.getMaterialId().equals(p.getMaterialId())
+                    && matchType(inItem.getMaterialType(), p.getMaterialType()))
+                .findFirst()
+                .ifPresent(p -> purchaseItemMapper.decrementExecuteQty(p.getId(), inItem.getCount()));
+        }
         return true;
     }
 
     @Override
     @Transactional(rollbackFor = Exception.class)
     public boolean rollbackSalesOrderExecuteQty(StockOut stockOut) {
-        // 反向回滚已执行数量
-        if (stockOut.getPlanId() == null) {
+        if (stockOut.getPlanId() == null || stockOut.getId() == null) {
             return true;
         }
-        // 框架占位，具体业务逻辑在整合时完成
+        ProducePlan plan = producePlanMapper.selectProducePlanById(stockOut.getPlanId());
+        if (plan == null || plan.getSalesOrderId() == null) {
+            return true;
+        }
+        List<StockOutItem> outItems = stockOutItemMapper.selectStockOutItemByOutId(stockOut.getId());
+        if (outItems == null || outItems.isEmpty()) {
+            return true;
+        }
+        List<SalesOrderItem> salesItems = salesOrderItemMapper.selectSalesOrderItemBySalesOrderId(plan.getSalesOrderId());
+        if (salesItems == null || salesItems.isEmpty()) {
+            return true;
+        }
+        BigDecimal totalOut = outItems.stream()
+            .map(o -> o.getCount() == null ? BigDecimal.ZERO : o.getCount())
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+        if (totalOut.compareTo(BigDecimal.ZERO) == 0) {
+            return true;
+        }
+        BigDecimal totalPlan = salesItems.stream()
+            .map(s -> s.getPlanQuantity() == null ? BigDecimal.ZERO : s.getPlanQuantity())
+            .reduce(BigDecimal.ZERO, BigDecimal::add);
+        if (totalPlan.compareTo(BigDecimal.ZERO) == 0) {
+            BigDecimal avg = totalOut.divide(BigDecimal.valueOf(salesItems.size()), 0, java.math.RoundingMode.DOWN);
+            for (SalesOrderItem item : salesItems) {
+                salesOrderItemMapper.decrementExecuteQty(item.getId(), avg);
+            }
+        } else {
+            for (SalesOrderItem item : salesItems) {
+                BigDecimal planQty = item.getPlanQuantity() == null ? BigDecimal.ZERO : item.getPlanQuantity();
+                BigDecimal delta = totalOut.multiply(planQty)
+                    .divide(totalPlan, 0, java.math.RoundingMode.DOWN);
+                if (delta.compareTo(BigDecimal.ZERO) > 0) {
+                    salesOrderItemMapper.decrementExecuteQty(item.getId(), delta);
+                }
+            }
+        }
         return true;
+    }
+
+    private boolean matchType(String inType, String purchaseType) {
+        if (inType == null && purchaseType == null) return true;
+        if (inType == null || purchaseType == null) return false;
+        return inType.equals(purchaseType);
     }
 }

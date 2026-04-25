@@ -2,6 +2,8 @@ package com.ruoyi.erp.domain;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -24,10 +26,12 @@ public class SalesOrder extends ErpBaseBillEntity {
     private String salesType;
 
     /** 客户名称 */
+    @NotBlank(message = "客户名称不能为空")
     @Excel(name = "客户名称")
     private String customerName;
 
     /** 大货款号 */
+    @NotBlank(message = "大货款号不能为空")
     @Excel(name = "大货款号")
     private String bulkOrderNo;
 

@@ -10,6 +10,7 @@ import com.ruoyi.common.enums.BusinessType;
 import com.ruoyi.common.utils.poi.ExcelUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import jakarta.servlet.http.HttpServletResponse;
@@ -89,7 +90,7 @@ public class ProduceJobController extends BaseController {
     @PreAuthorize("@ss.hasPermi('erp:produceJob:add')")
     @Log(title = "生产工票", businessType = BusinessType.INSERT)
     @PostMapping
-    public AjaxResult add(@RequestBody ProduceJob produceJob) {
+    public AjaxResult add(@Validated @RequestBody ProduceJob produceJob) {
         return toAjax(produceJobService.insertProduceJob(produceJob));
     }
 
@@ -109,7 +110,7 @@ public class ProduceJobController extends BaseController {
     @PreAuthorize("@ss.hasPermi('erp:produceJob:edit')")
     @Log(title = "生产工票", businessType = BusinessType.UPDATE)
     @PutMapping
-    public AjaxResult edit(@RequestBody ProduceJob produceJob) {
+    public AjaxResult edit(@Validated @RequestBody ProduceJob produceJob) {
         return toAjax(produceJobService.updateProduceJob(produceJob));
     }
 

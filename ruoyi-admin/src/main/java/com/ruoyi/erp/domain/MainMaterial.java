@@ -67,7 +67,7 @@ public class MainMaterial extends BaseEntity {
 
     /** 单价 - 跳过 */
     @Excel(name = "单价")
-    private Double price;
+    private java.math.BigDecimal price;
 
     /** 最低库存预警 */
     @Excel(name = "最低库存预警")
@@ -199,11 +199,11 @@ public class MainMaterial extends BaseEntity {
         return pictrueUrl;
     }
 
-    public Double getPrice() {
+    public java.math.BigDecimal getPrice() {
         return price;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(java.math.BigDecimal price) {
         this.price = price;
     }
 

@@ -35,7 +35,7 @@ public class ProcessDef extends BaseEntity {
 
     /** 默认工价 */
     @Excel(name = "默认工价")
-    private Double defaultPrice;
+    private java.math.BigDecimal defaultPrice;
 
     /** 是否支持外协 */
     @Excel(name = "是否支持外协", readConverterExp = "0=否,1=是")
@@ -120,11 +120,11 @@ public class ProcessDef extends BaseEntity {
         return department;
     }
 
-    public void setDefaultPrice(Double defaultPrice) {
+    public void setDefaultPrice(java.math.BigDecimal defaultPrice) {
         this.defaultPrice = defaultPrice;
     }
 
-    public Double getDefaultPrice() {
+    public java.math.BigDecimal getDefaultPrice() {
         return defaultPrice;
     }
 

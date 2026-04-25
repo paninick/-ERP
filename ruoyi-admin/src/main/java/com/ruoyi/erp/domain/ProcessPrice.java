@@ -28,7 +28,7 @@ public class ProcessPrice extends BaseEntity {
 
     /** 工价 */
     @Excel(name = "工价")
-    private Double price;
+    private java.math.BigDecimal price;
 
     /** 生效日期 */
     @Excel(name = "生效日期", width = 30, dateFormat = "yyyy-MM-dd")
@@ -69,11 +69,11 @@ public class ProcessPrice extends BaseEntity {
         return employeeId;
     }
 
-    public void setPrice(Double price) {
+    public void setPrice(java.math.BigDecimal price) {
         this.price = price;
     }
 
-    public Double getPrice() {
+    public java.math.BigDecimal getPrice() {
         return price;
     }
 

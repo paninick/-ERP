@@ -1,6 +1,7 @@
 package com.ruoyi.erp.mapper;
 
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 import com.ruoyi.erp.domain.PurchaseItem;
 
 /**
@@ -73,4 +74,8 @@ public interface PurchaseItemMapper {
      * @return 采购明细集合
      */
     List<PurchaseItem> selectPurchaseItemByPurchaseId(Long purchaseId);
+
+    int incrementExecuteQty(@Param("id") Long id, @Param("delta") java.math.BigDecimal delta);
+
+    int decrementExecuteQty(@Param("id") Long id, @Param("delta") java.math.BigDecimal delta);
 }

@@ -65,4 +65,6 @@ public interface StockInItemMapper {
      * @return 结果
      */
     int insertStockInItemBatch(List<StockInItem> list);
+
+    List<StockInItem> selectStockInItemByInId(Long inId);
 }

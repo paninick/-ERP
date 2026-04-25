@@ -6,6 +6,53 @@
 
 SET NAMES utf8mb4;
 
+-- Dictionaries for route customization. INSERT IGNORE keeps reruns safe.
+INSERT IGNORE INTO sys_dict_type (dict_name, dict_type, status, create_by, create_time, remark)
+VALUES
+  ('工艺路线工序模式', 'erp_route_item_required_mode', '0', 'admin', NOW(), '路线明细是否必选、可选或按条件启用'),
+  ('工艺路线条件编码', 'erp_route_condition_code', '0', 'admin', NOW(), '路线明细条件工序触发条件'),
+  ('ERP产品类型', 'erp_product_family', '0', 'admin', NOW(), '毛衫、拼接款、普通针织衫等产品类型'),
+  ('ERP工序类型', 'erp_process_type', '0', 'admin', NOW(), '本厂、外协、质检、后整质检等工序类型');
+
+INSERT IGNORE INTO sys_dict_data
+  (dict_sort, dict_label, dict_value, dict_type, css_class, list_class, is_default, status, create_by, create_time, remark)
+VALUES
+  (1, '必选', 'REQUIRED', 'erp_route_item_required_mode', '', 'primary', 'Y', '0', 'admin', NOW(), '标准必经工序'),
+  (2, '可选', 'OPTIONAL', 'erp_route_item_required_mode', '', 'info', 'N', '0', 'admin', NOW(), '路线模板可选工序'),
+  (3, '条件', 'CONDITIONAL', 'erp_route_item_required_mode', '', 'warning', 'N', '0', 'admin', NOW(), '满足条件时启用的工序'),
+  (1, '有印花', 'HAS_PRINT', 'erp_route_condition_code', '', 'info', 'N', '0', 'admin', NOW(), '款式包含印花工艺'),
+  (2, '有绣花', 'HAS_EMBROIDERY', 'erp_route_condition_code', '', 'info', 'N', '0', 'admin', NOW(), '款式包含绣花工艺'),
+  (3, '日单', 'JAPAN_ORDER', 'erp_route_condition_code', '', 'warning', 'N', '0', 'admin', NOW(), '日本客户订单'),
+  (4, '需照灯/灯检', 'NEED_LIGHT_INSPECTION', 'erp_route_condition_code', '', 'warning', 'N', '0', 'admin', NOW(), '需加入照灯或灯检节点'),
+  (5, '检品公司', 'THIRD_PARTY_INSPECTION', 'erp_route_condition_code', '', 'danger', 'N', '0', 'admin', NOW(), '需第三方检品公司检验'),
+  (1, '毛衫', 'SWEATER', 'erp_product_family', '', 'primary', 'Y', '0', 'admin', NOW(), '毛衫/针织毛衫'),
+  (2, '拼接款', 'SPLICE', 'erp_product_family', '', 'warning', 'N', '0', 'admin', NOW(), '针织拼接或异材质拼接款'),
+  (3, '普通针织衫', 'KNIT_TOP', 'erp_product_family', '', 'info', 'N', '0', 'admin', NOW(), '普通针织上衣'),
+  (4, '其他', 'OTHER', 'erp_product_family', '', 'default', 'N', '0', 'admin', NOW(), '其他产品类型'),
+  (1, '本厂工序', '0', 'erp_process_type', '', 'primary', 'Y', '0', 'admin', NOW(), '本厂内部生产工序'),
+  (2, '外协工序', '1', 'erp_process_type', '', 'warning', 'N', '0', 'admin', NOW(), '外发协作工序');
+
+-- Current production schema keeps process_type as char(1): 0=internal, 1=outsource.
+-- Quality responsibility is represented by need_quality_check, not a third process_type value.
+DELETE FROM sys_dict_data
+WHERE dict_type = 'erp_process_type'
+  AND dict_value IN ('QUALITY', 'FINISHING_QC');
+
+-- sys_dict_data has no unique key on dict_type + dict_value in the current RuoYi schema.
+-- Repeated hotfix runs must therefore remove duplicates explicitly.
+DELETE d
+FROM sys_dict_data d
+JOIN sys_dict_data keep
+  ON keep.dict_type = d.dict_type
+ AND keep.dict_value = d.dict_value
+ AND keep.dict_code < d.dict_code
+WHERE d.dict_type IN (
+  'erp_route_item_required_mode',
+  'erp_route_condition_code',
+  'erp_product_family',
+  'erp_process_type'
+);
+
 DROP PROCEDURE IF EXISTS sp_erp_add_column;
 DELIMITER $$
 CREATE PROCEDURE sp_erp_add_column(
@@ -79,7 +126,7 @@ INSERT INTO t_erp_process_def
 SELECT
   'LIGHT_INSPECTION',
   '照灯/灯检',
-  'QUALITY',
+  '0',
   0.3000,
   150,
   '0',

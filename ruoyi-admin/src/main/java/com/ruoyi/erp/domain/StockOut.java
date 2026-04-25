@@ -1,6 +1,8 @@
 package com.ruoyi.erp.domain;
 
 import java.util.Date;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
@@ -19,10 +21,12 @@ public class StockOut extends ErpBaseBillEntity {
     private Long id;
 
     /** 出库单号 */
+    @NotBlank(message = "出库单号不能为空")
     @Excel(name = "出库单号")
     private String sn;
 
     /** 出库日期 */
+    @NotNull(message = "出库日期不能为空")
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Excel(name = "出库日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date outDate;

@@ -149,4 +149,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </insert>
 
+    <select id="selectStockOutItemByOutId" parameterType="Long" resultMap="StockOutItemResult">
+        <include refid="selectStockOutItemVo"/>
+        where a.out_id = #{outId}
+    </select>
+
 </mapper>

@@ -1,6 +1,7 @@
 package com.ruoyi.erp.mapper;
 
 import java.util.List;
+import org.apache.ibatis.annotations.Param;
 import com.ruoyi.erp.domain.SalesOrderItem;
 
 /**
@@ -73,4 +74,8 @@ public interface SalesOrderItemMapper {
      * @return 销售明细集合
      */
     List<SalesOrderItem> selectSalesOrderItemBySalesOrderId(Long salesOrderId);
+
+    int incrementExecuteQty(@Param("id") Long id, @Param("delta") java.math.BigDecimal delta);
+
+    int decrementExecuteQty(@Param("id") Long id, @Param("delta") java.math.BigDecimal delta);
 }

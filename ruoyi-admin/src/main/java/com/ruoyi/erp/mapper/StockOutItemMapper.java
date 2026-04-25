@@ -65,4 +65,6 @@ public interface StockOutItemMapper {
      * @return 结果
      */
     int insertStockOutItemBatch(List<StockOutItem> list);
+
+    List<StockOutItem> selectStockOutItemByOutId(Long outId);
 }
