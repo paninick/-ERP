@@ -105,6 +105,10 @@ public class MainMaterial extends BaseEntity {
     @Excel(name = "批发价")
     private java.math.BigDecimal wholesalePrice;
 
+    /** 当前库存 */
+    @Excel(name = "当前库存")
+    private java.math.BigDecimal currentStockQty;
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -279,6 +283,9 @@ public class MainMaterial extends BaseEntity {
         this.wholesalePrice = wholesalePrice;
     }
 
+    public java.math.BigDecimal getCurrentStockQty() { return currentStockQty; }
+    public void setCurrentStockQty(java.math.BigDecimal v) { this.currentStockQty = v; }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -305,6 +312,7 @@ public class MainMaterial extends BaseEntity {
             .append("standardCost", getStandardCost())
             .append("retailPrice", getRetailPrice())
             .append("wholesalePrice", getWholesalePrice())
+            .append("currentStockQty", getCurrentStockQty())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())
             .append("updateBy", getUpdateBy())
