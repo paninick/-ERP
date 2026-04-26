@@ -75,6 +75,7 @@ public class DataScopeAspect
             {
                 String permission = StringUtils.defaultIfEmpty(controllerDataScope.permission(), PermissionContextHolder.getContext());
                 dataScopeFilter(joinPoint, currentUser, controllerDataScope.deptAlias(), controllerDataScope.userAlias(), permission);
+                factoryScopeFilter(joinPoint, currentUser, controllerDataScope.factoryAlias());
             }
         }
     }
@@ -166,6 +167,28 @@ public class DataScopeAspect
                 BaseEntity baseEntity = (BaseEntity) params;
                 baseEntity.getParams().put(DATA_SCOPE, " AND (" + sqlString.substring(4) + ")");
             }
+        }
+    }
+
+    /**
+     * 工厂级别数据过滤（ERP扩展）
+     * 非超管用户自动过滤 factory_id = 当前用户的 dept_id（dept 映射为工厂）
+     * 与 dataScopeFilter 独立，互不干扰
+     */
+    private void factoryScopeFilter(JoinPoint joinPoint, SysUser user, String factoryAlias)
+    {
+        if (StringUtils.isEmpty(factoryAlias) || user.isAdmin())
+        {
+            return;
+        }
+        Object params = joinPoint.getArgs()[0];
+        if (StringUtils.isNotNull(params) && params instanceof BaseEntity)
+        {
+            BaseEntity baseEntity = (BaseEntity) params;
+            String existing = baseEntity.getParams().get(DATA_SCOPE) != null
+                ? baseEntity.getParams().get(DATA_SCOPE).toString() : "";
+            String factoryClause = " AND " + factoryAlias + ".factory_id = " + user.getDeptId();
+            baseEntity.getParams().put(DATA_SCOPE, existing + factoryClause);
         }
     }
 

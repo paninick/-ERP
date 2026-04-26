@@ -27,6 +27,11 @@ public @interface DataScope
     public String userAlias() default "";
 
     /**
+     * 工厂表的别名（ERP扩展：多工厂数据隔离）
+     */
+    public String factoryAlias() default "";
+
+    /**
      * 权限字符（用于多个角色匹配符合要求的权限）默认根据权限注解@ss获取，多个权限用逗号分隔开来
      */
     public String permission() default "";
