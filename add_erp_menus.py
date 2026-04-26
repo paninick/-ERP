@@ -63,14 +63,20 @@ A(M(906,"后道生产1",8,55,"post","erp/post/index", mtype="C", icon="tool"))
 A(M(907,"采购订单",8,60,"purchase","erp/purchase/index", mtype="C", icon="shopping"))
 BTN(907,4240,[("采购单查询","erp.purchase:query"),("采购单新增","erp.purchase:add"),("采购单修改","erp.purchase:edit"),("采购单删除","erp.purchase:remove"),("采购单导出","erp.purchase:export")])
 A(M(908,"打样总览",8,70,"overview","erp/overview/index", mtype="C", icon="eye"))
+A(M(909,"入库管理",8,80,"stockin","erp/stockin/index", mtype="C", icon="download"))
+BTN(909,4250,[("入库查询","erp.stockin:query"),("入库新增","erp.stockin:add"),("入库修改","erp.stockin:edit"),("入库删除","erp.stockin:remove"),("入库导出","erp.stockin:export")])
+A(M(910,"出库管理",8,90,"stockout","erp/stockout/index", mtype="C", icon="upload"))
+BTN(910,4260,[("出库查询","erp.stockout:query"),("出库新增","erp.stockout:add"),("出库修改","erp.stockout:edit"),("出库删除","erp.stockout:remove"),("出库导出","erp.stockout:export")])
+A(M(911,"库存查询",8,100,"stock","erp/stock/index", mtype="C", icon="list"))
+BTN(911,4270,[("库存查询","erp.inventory:query")])
 
 all_ids=[6,700,701,702,
          7,800,801,802,803,804,805,806,807,
-         8,900,901,902,903,904,905,906,907,908,
+         8,900,901,902,903,904,905,906,907,908,909,910,911,
          4000,4001,4002,
         ]+list(range(4100,4105))+list(range(4110,4115))+list(range(4120,4125))+list(range(4130,4135))+list(range(4140,4145)) \
         +list(range(4150,4155))+list(range(4200,4205))+list(range(4210,4216))+list(range(4220,4225)) \
-        +list(range(4230,4235))+list(range(4240,4245))
+        +list(range(4230,4235))+list(range(4240,4245))+list(range(4250,4255))+list(range(4260,4265))+list(range(4270,4274))
 A("\nDELETE FROM sys_role_menu WHERE role_id=1 AND menu_id IN (%s);" % ",".join(map(str,all_ids)))
 for mid in all_ids:
     A("INSERT IGNORE INTO sys_role_menu(role_id,menu_id) VALUES(1,%d);" % mid)
