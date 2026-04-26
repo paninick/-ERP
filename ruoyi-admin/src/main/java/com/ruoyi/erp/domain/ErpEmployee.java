@@ -1,6 +1,5 @@
 package com.ruoyi.erp.domain;
 
-import jakarta.validation.constraints.NotBlank;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -20,12 +19,10 @@ public class ErpEmployee extends BaseEntity {
     private Long id;
 
     /** 员工编号 */
-    @NotBlank(message = "员工编号不能为空")
     @Excel(name = "员工编号")
     private String employeeCode;
 
     /** 员工姓名 */
-    @NotBlank(message = "员工姓名不能为空")
     @Excel(name = "员工姓名")
     private String employeeName;
 
