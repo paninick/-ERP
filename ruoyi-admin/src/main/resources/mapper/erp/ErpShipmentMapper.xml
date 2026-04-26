@@ -49,6 +49,7 @@
             <if test="customerName != null and customerName != ''"> and a.customer_name like concat('%', #{customerName}, '%')</if>
             <if test="status != null and status != ''"> and a.status = #{status}</if>
             <if test="releaseStatus != null and releaseStatus != ''"> and a.release_status = #{releaseStatus}</if>
+            ${params.dataScope}
         </where>
         order by a.id desc
     </select>
