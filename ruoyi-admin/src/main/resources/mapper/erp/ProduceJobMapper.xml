@@ -6,7 +6,9 @@
         <id property="id" column="id"/>
         <result property="jobNo" column="job_no"/>
         <result property="producePlanId" column="produce_plan_id"/>
+        <result property="styleCode" column="style_code"/>
         <result property="orderId" column="order_id"/>
+        <result property="createdFrom" column="created_from"/>
         <result property="processRouteId" column="process_route_id"/>
         <result property="colorCode" column="color_code"/>
         <result property="sizeCode" column="size_code"/>
@@ -31,7 +33,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, job_no, produce_plan_id, order_id, process_route_id, color_code, size_code, plan_qty, actual_qty, defect_qty,
+        id, job_no, produce_plan_id, style_code, order_id, created_from, process_route_id, color_code, size_code, plan_qty, actual_qty, defect_qty,
         current_process_id, current_process_status, start_time, finish_time, outsource_batch_barcode,
         outbound_time, receive_time, confirm_qty, outsource_id, status, create_by, create_time,
         update_by, update_time, remark

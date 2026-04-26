@@ -35,11 +35,16 @@ public class ProduceJob extends BaseEntity {
     @Excel(name = "生产计划ID")
     private Long producePlanId;
 
+    @Excel(name = "款号")
+    private String styleCode;
+
     /**
-     * 销售订单ID
+     * 销售订单ID（冗余，加速追溯）
      */
     @Excel(name = "销售订单ID")
     private Long orderId;
+
+    private String createdFrom;
 
     /**
      * 工艺路线ID（创建工单时按此路线自动初始化 ProduceJobProcess 工序队列）
@@ -162,6 +167,12 @@ public class ProduceJob extends BaseEntity {
     public void setProducePlanId(Long producePlanId) {
         this.producePlanId = producePlanId;
     }
+
+    public String getStyleCode() { return styleCode; }
+    public void setStyleCode(String v) { this.styleCode = v; }
+
+    public String getCreatedFrom() { return createdFrom; }
+    public void setCreatedFrom(String v) { this.createdFrom = v; }
 
     public Long getOrderId() {
         return orderId;
