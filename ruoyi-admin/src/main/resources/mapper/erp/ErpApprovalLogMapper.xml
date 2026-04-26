@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.approval.mapper.ErpApprovalLogMapper">
+
+    <resultMap type="ErpApprovalLog" id="ApprovalLogResult">
+        <result property="id"           column="id"            />
+        <result property="businessType" column="business_type" />
+        <result property="businessId"   column="business_id"   />
+        <result property="businessNo"   column="business_no"   />
+        <result property="nodeCode"     column="node_code"     />
+        <result property="actionType"   column="action_type"   />
+        <result property="fromStatus"   column="from_status"   />
+        <result property="toStatus"     column="to_status"     />
+        <result property="actionBy"     column="action_by"     />
+        <result property="actionTime"   column="action_time"   />
+        <result property="actionRemark" column="action_remark" />
+        <result property="factoryId"    column="factory_id"    />
+        <result property="createTime"   column="create_time"   />
+    </resultMap>
+
+    <sql id="selectApprovalLogVo">
+        select id, business_type, business_id, business_no, node_code, action_type,
+               from_status, to_status, action_by, action_time, action_remark, factory_id, create_time
+        from t_erp_approval_log a
+    </sql>
+
+    <select id="selectByBusiness" resultMap="ApprovalLogResult">
+        <include refid="selectApprovalLogVo"/>
+        where a.business_type = #{businessType} and a.business_id = #{businessId}
+        order by a.action_time desc
+    </select>
+
+    <select id="selectApprovalLogList" parameterType="ErpApprovalLog" resultMap="ApprovalLogResult">
+        <include refid="selectApprovalLogVo"/>
+        <where>
+            <if test="businessType != null and businessType != ''"> and a.business_type = #{businessType}</if>
+            <if test="businessId != null"> and a.business_id = #{businessId}</if>
+            <if test="businessNo != null and businessNo != ''"> and a.business_no like concat('%', #{businessNo}, '%')</if>
+            <if test="actionType != null and actionType != ''"> and a.action_type = #{actionType}</if>
+            <if test="actionBy != null and actionBy != ''"> and a.action_by = #{actionBy}</if>
+            <if test="factoryId != null"> and a.factory_id = #{factoryId}</if>
+        </where>
+        order by a.action_time desc
+    </select>
+
+    <insert id="insertApprovalLog" parameterType="ErpApprovalLog" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_approval_log
+        (business_type, business_id, business_no, node_code, action_type,
+         from_status, to_status, action_by, action_time, action_remark, factory_id, create_time)
+        values
+        (#{businessType}, #{businessId}, #{businessNo}, #{nodeCode}, #{actionType},
+         #{fromStatus}, #{toStatus}, #{actionBy},
+         #{actionTime, jdbcType=TIMESTAMP}, #{actionRemark}, #{factoryId}, NOW())
+    </insert>
+
+</mapper>

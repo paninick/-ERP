@@ -17,6 +17,7 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.erp.approval.service.IErpApprovalLogService;
 import com.ruoyi.erp.domain.Purchase;
 import com.ruoyi.erp.service.IPurchaseService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
@@ -33,6 +34,9 @@ import com.ruoyi.common.core.page.TableDataInfo;
 public class PurchaseController extends BaseController {
     @Autowired
     private IPurchaseService purchaseService;
+
+    @Autowired
+    private IErpApprovalLogService approvalLogService;
 
     /**
      * 查询采购单列表
@@ -94,5 +98,49 @@ public class PurchaseController extends BaseController {
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {
         return toAjax(purchaseService.deletePurchaseByIds(ids));
+    }
+
+    @PreAuthorize("@ss.hasPermi('erp:purchase:edit')")
+    @Log(title = "采购审批", businessType = BusinessType.UPDATE)
+    @PutMapping("/submit/{id}")
+    public AjaxResult submit(@PathVariable Long id) {
+        Purchase p = purchaseService.selectPurchaseById(id);
+        if (p == null) return error("采购单不存在");
+        String from = p.getStatus();
+        p.setStatus("SUBMITTED");
+        purchaseService.updatePurchase(p);
+        approvalLogService.writeLog("PURCHASE", id, p.getBulkOrderNo(), "PURCHASE_APPROVE",
+            "SUBMIT", from, "SUBMITTED", getUsername(), null, null);
+        return success();
+    }
+
+    @PreAuthorize("@ss.hasPermi('erp:purchase:edit')")
+    @Log(title = "采购审批", businessType = BusinessType.UPDATE)
+    @PutMapping("/approve/{id}")
+    public AjaxResult approve(@PathVariable Long id,
+                              @RequestBody(required = false) java.util.Map<String, String> body) {
+        Purchase p = purchaseService.selectPurchaseById(id);
+        if (p == null) return error("采购单不存在");
+        String from = p.getStatus();
+        p.setStatus("APPROVED");
+        purchaseService.updatePurchase(p);
+        approvalLogService.writeLog("PURCHASE", id, p.getBulkOrderNo(), "PURCHASE_APPROVE",
+            "APPROVE", from, "APPROVED", getUsername(), body != null ? body.get("remark") : null, null);
+        return success();
+    }
+
+    @PreAuthorize("@ss.hasPermi('erp:purchase:edit')")
+    @Log(title = "采购审批", businessType = BusinessType.UPDATE)
+    @PutMapping("/reject/{id}")
+    public AjaxResult reject(@PathVariable Long id,
+                             @RequestBody java.util.Map<String, String> body) {
+        Purchase p = purchaseService.selectPurchaseById(id);
+        if (p == null) return error("采购单不存在");
+        String from = p.getStatus();
+        p.setStatus("REJECTED");
+        purchaseService.updatePurchase(p);
+        approvalLogService.writeLog("PURCHASE", id, p.getBulkOrderNo(), "PURCHASE_APPROVE",
+            "REJECT", from, "REJECTED", getUsername(), body.get("remark"), null);
+        return success();
     }
 }

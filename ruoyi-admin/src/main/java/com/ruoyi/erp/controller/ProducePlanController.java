@@ -16,6 +16,7 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.erp.approval.service.IErpApprovalLogService;
 import com.ruoyi.erp.domain.ProducePlan;
 import com.ruoyi.erp.service.IProducePlanService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
@@ -32,6 +33,9 @@ import com.ruoyi.common.core.page.TableDataInfo;
 public class ProducePlanController extends BaseController {
     @Autowired
     private IProducePlanService producePlanService;
+
+    @Autowired
+    private IErpApprovalLogService approvalLogService;
 
     /**
      * 查询生产计划列表
@@ -93,5 +97,49 @@ public class ProducePlanController extends BaseController {
 	@DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {
         return toAjax(producePlanService.deleteProducePlanByIds(ids));
+    }
+
+    @PreAuthorize("@ss.hasPermi('erp:plan:edit')")
+    @Log(title = "生产计划审批", businessType = BusinessType.UPDATE)
+    @PutMapping("/submit/{id}")
+    public AjaxResult submit(@PathVariable Long id) {
+        ProducePlan plan = producePlanService.selectProducePlanById(id);
+        if (plan == null) return error("生产计划不存在");
+        String from = plan.getAuditStatus();
+        plan.setAuditStatus("SUBMITTED");
+        producePlanService.updateProducePlan(plan);
+        approvalLogService.writeLog("PLAN", id, plan.getPlanNo(), "PLAN_APPROVE", "SUBMIT",
+            from, "SUBMITTED", getUsername(), null, null);
+        return success();
+    }
+
+    @PreAuthorize("@ss.hasPermi('erp:plan:edit')")
+    @Log(title = "生产计划审批", businessType = BusinessType.UPDATE)
+    @PutMapping("/approve/{id}")
+    public AjaxResult approve(@PathVariable Long id,
+                              @RequestBody(required = false) java.util.Map<String, String> body) {
+        ProducePlan plan = producePlanService.selectProducePlanById(id);
+        if (plan == null) return error("生产计划不存在");
+        String from = plan.getAuditStatus();
+        plan.setAuditStatus("APPROVED");
+        producePlanService.updateProducePlan(plan);
+        approvalLogService.writeLog("PLAN", id, plan.getPlanNo(), "PLAN_APPROVE", "APPROVE",
+            from, "APPROVED", getUsername(), body != null ? body.get("remark") : null, null);
+        return success();
+    }
+
+    @PreAuthorize("@ss.hasPermi('erp:plan:edit')")
+    @Log(title = "生产计划审批", businessType = BusinessType.UPDATE)
+    @PutMapping("/reject/{id}")
+    public AjaxResult reject(@PathVariable Long id,
+                             @RequestBody java.util.Map<String, String> body) {
+        ProducePlan plan = producePlanService.selectProducePlanById(id);
+        if (plan == null) return error("生产计划不存在");
+        String from = plan.getAuditStatus();
+        plan.setAuditStatus("REJECTED");
+        producePlanService.updateProducePlan(plan);
+        approvalLogService.writeLog("PLAN", id, plan.getPlanNo(), "PLAN_APPROVE", "REJECT",
+            from, "REJECTED", getUsername(), body.get("remark"), null);
+        return success();
     }
 }

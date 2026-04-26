@@ -18,6 +18,7 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.erp.approval.service.IErpApprovalLogService;
 import com.ruoyi.erp.domain.SalesOrder;
 import com.ruoyi.erp.service.ISalesOrderService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
@@ -34,6 +35,9 @@ import com.ruoyi.common.core.page.TableDataInfo;
 public class SalesOrderController extends BaseController {
     @Autowired
     private ISalesOrderService salesOrderService;
+
+    @Autowired
+    private IErpApprovalLogService approvalLogService;
 
     /**
      * 查询销售订单列表
@@ -147,5 +151,54 @@ public class SalesOrderController extends BaseController {
     {
         ExcelUtil<SalesOrder> util = new ExcelUtil<SalesOrder>(SalesOrder.class);
         util.importTemplateExcel(response, "销售订单数据");
+    }
+
+    /** 提交审批 */
+    @PreAuthorize("@ss.hasPermi('erp:sales:edit')")
+    @Log(title = "销售订单审批", businessType = BusinessType.UPDATE)
+    @PutMapping("/submit/{id}")
+    public AjaxResult submit(@PathVariable Long id) {
+        SalesOrder order = salesOrderService.selectSalesOrderById(id);
+        if (order == null) return error("订单不存在");
+        String from = order.getAuditStatus();
+        order.setAuditStatus("待审批");
+        salesOrderService.updateSalesOrder(order);
+        approvalLogService.writeLog("SALES_ORDER", id, order.getSalesNo(),
+            "SALES_APPROVE", "SUBMIT", from, "待审批", getUsername(), null, null);
+        return success();
+    }
+
+    /** 审核通过 */
+    @PreAuthorize("@ss.hasPermi('erp:sales:edit')")
+    @Log(title = "销售订单审批", businessType = BusinessType.UPDATE)
+    @PutMapping("/approve/{id}")
+    public AjaxResult approve(@PathVariable Long id,
+                              @RequestBody(required = false) java.util.Map<String, String> body) {
+        SalesOrder order = salesOrderService.selectSalesOrderById(id);
+        if (order == null) return error("订单不存在");
+        String from = order.getAuditStatus();
+        String remark = body != null ? body.get("remark") : null;
+        order.setAuditStatus("审批通过");
+        salesOrderService.updateSalesOrder(order);
+        approvalLogService.writeLog("SALES_ORDER", id, order.getSalesNo(),
+            "SALES_APPROVE", "APPROVE", from, "审批通过", getUsername(), remark, null);
+        return success();
+    }
+
+    /** 驳回 */
+    @PreAuthorize("@ss.hasPermi('erp:sales:edit')")
+    @Log(title = "销售订单审批", businessType = BusinessType.UPDATE)
+    @PutMapping("/reject/{id}")
+    public AjaxResult reject(@PathVariable Long id,
+                             @RequestBody java.util.Map<String, String> body) {
+        SalesOrder order = salesOrderService.selectSalesOrderById(id);
+        if (order == null) return error("订单不存在");
+        String from = order.getAuditStatus();
+        String remark = body.get("remark");
+        order.setAuditStatus("已驳回");
+        salesOrderService.updateSalesOrder(order);
+        approvalLogService.writeLog("SALES_ORDER", id, order.getSalesNo(),
+            "SALES_APPROVE", "REJECT", from, "已驳回", getUsername(), remark, null);
+        return success();
     }
 }

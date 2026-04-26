@@ -16,6 +16,7 @@ import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.erp.approval.service.IErpApprovalLogService;
 import com.ruoyi.erp.domain.Bom;
 import com.ruoyi.erp.service.IBomService;
 import com.ruoyi.common.utils.poi.ExcelUtil;
@@ -27,6 +28,9 @@ import org.springframework.web.multipart.MultipartFile;
 public class BomController extends BaseController {
     @Autowired
     private IBomService bomService;
+
+    @Autowired
+    private IErpApprovalLogService approvalLogService;
 
     @PreAuthorize("@ss.hasPermi('erp:bom:list')")
     @GetMapping("/list")
@@ -96,5 +100,49 @@ public class BomController extends BaseController {
     public void importTemplate(HttpServletResponse response) {
         ExcelUtil<Bom> util = new ExcelUtil<>(Bom.class);
         util.importTemplateExcel(response, "样衣BOM数据");
+    }
+
+    @PreAuthorize("@ss.hasPermi('erp:bom:edit')")
+    @Log(title = "BOM审批", businessType = BusinessType.UPDATE)
+    @PutMapping("/submit/{id}")
+    public AjaxResult submit(@PathVariable Long id) {
+        Bom bom = bomService.selectBomById(id);
+        if (bom == null) return error("BOM不存在");
+        String from = bom.getAuditStatus();
+        bom.setAuditStatus("SUBMITTED");
+        bomService.updateBom(bom);
+        approvalLogService.writeLog("BOM", id, null, "TECH_APPROVE", "SUBMIT",
+            from, "SUBMITTED", getUsername(), null, null);
+        return success();
+    }
+
+    @PreAuthorize("@ss.hasPermi('erp:bom:edit')")
+    @Log(title = "BOM审批", businessType = BusinessType.UPDATE)
+    @PutMapping("/approve/{id}")
+    public AjaxResult approve(@PathVariable Long id,
+                              @RequestBody(required = false) java.util.Map<String, String> body) {
+        Bom bom = bomService.selectBomById(id);
+        if (bom == null) return error("BOM不存在");
+        String from = bom.getAuditStatus();
+        bom.setAuditStatus("APPROVED");
+        bomService.updateBom(bom);
+        approvalLogService.writeLog("BOM", id, null, "TECH_APPROVE", "APPROVE",
+            from, "APPROVED", getUsername(), body != null ? body.get("remark") : null, null);
+        return success();
+    }
+
+    @PreAuthorize("@ss.hasPermi('erp:bom:edit')")
+    @Log(title = "BOM审批", businessType = BusinessType.UPDATE)
+    @PutMapping("/reject/{id}")
+    public AjaxResult reject(@PathVariable Long id,
+                             @RequestBody java.util.Map<String, String> body) {
+        Bom bom = bomService.selectBomById(id);
+        if (bom == null) return error("BOM不存在");
+        String from = bom.getAuditStatus();
+        bom.setAuditStatus("REJECTED");
+        bomService.updateBom(bom);
+        approvalLogService.writeLog("BOM", id, null, "TECH_APPROVE", "REJECT",
+            from, "REJECTED", getUsername(), body.get("remark"), null);
+        return success();
     }
 }
