@@ -9,6 +9,7 @@ import com.ruoyi.erp.domain.FinReconciliation;
 import com.ruoyi.erp.mapper.FinInvoiceMapper;
 import com.ruoyi.erp.mapper.FinReconciliationMapper;
 import com.ruoyi.erp.service.ErpRealtimePushService;
+import com.ruoyi.erp.service.IFinInvoiceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
-public class FinInvoiceServiceImpl {
+public class FinInvoiceServiceImpl implements IFinInvoiceService {
 
     private static final Logger log = LoggerFactory.getLogger(FinInvoiceServiceImpl.class);
 
@@ -27,14 +28,17 @@ public class FinInvoiceServiceImpl {
     @Autowired
     private ErpRealtimePushService pushService;
 
+    @Override
     public List<FinInvoice> selectList(FinInvoice query) {
         return invoiceMapper.selectList(query);
     }
 
+    @Override
     public FinInvoice selectById(Long id) {
         return invoiceMapper.selectById(id);
     }
 
+    @Override
     public int insert(FinInvoice invoice) {
         invoice.setCreateBy(SecurityUtils.getUsername());
         invoice.setCreateTime(DateUtils.getNowDate());
@@ -43,12 +47,14 @@ public class FinInvoiceServiceImpl {
         return invoiceMapper.insert(invoice);
     }
 
+    @Override
     public int update(FinInvoice invoice) {
         invoice.setUpdateBy(SecurityUtils.getUsername());
         invoice.setUpdateTime(DateUtils.getNowDate());
         return invoiceMapper.update(invoice);
     }
 
+    @Override
     public int deleteById(Long id) {
         return invoiceMapper.deleteById(id);
     }
