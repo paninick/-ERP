@@ -143,4 +143,27 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         </foreach>
     </delete>
 
+    <select id="sumMaterialCostByPlan" resultType="java.math.BigDecimal">
+        SELECT COALESCE(SUM(cost_amount), 0) FROM t_erp_produce_material_consume WHERE produce_plan_id = #{planId}
+    </select>
+
+    <select id="sumWageCostByPlan" resultType="java.math.BigDecimal">
+        SELECT COALESCE(SUM(cost_amount), 0) FROM t_erp_piece_wage WHERE report_log_id IN
+        (SELECT id FROM t_erp_produce_report_log WHERE job_id IN
+         (SELECT id FROM t_erp_produce_job WHERE produce_plan_id = #{planId}))
+    </select>
+
+    <select id="sumOutsourceCostByPlan" resultType="java.math.BigDecimal">
+        SELECT COALESCE(SUM(COALESCE(cost_amount, 0) + COALESCE(freight, 0)), 0)
+        FROM t_erp_outsource_order WHERE src_bill_id IN
+        (SELECT id FROM t_erp_produce_plan WHERE id = #{planId})
+    </select>
+
+    <select id="sumFinishQtyByPlan" resultType="java.math.BigDecimal">
+        SELECT COALESCE(SUM(finish_qty), 0) FROM t_erp_stock_in WHERE produce_plan_id = #{planId}
+    </select>
+
+    <delete id="deleteByPlanId">
+        DELETE FROM t_erp_cost_summary WHERE produce_plan_id = #{planId}
+    </delete>
 </mapper>

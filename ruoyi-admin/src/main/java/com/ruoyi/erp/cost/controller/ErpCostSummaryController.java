@@ -60,4 +60,12 @@ public class ErpCostSummaryController extends BaseController {
     public AjaxResult remove(@PathVariable Long[] ids) {
         return toAjax(costSummaryService.deleteByIds(ids));
     }
+
+    @PreAuthorize("@ss.hasPermi('erp:cost:add')")
+    @Log(title = "成本汇总", businessType = BusinessType.INSERT)
+    @PostMapping("/calculate/{planId}")
+    public AjaxResult calculate(@PathVariable Long planId) {
+        int rows = costSummaryService.calculateByPlanId(planId);
+        return success("成本汇总完成，写入 " + rows + " 条记录");
+    }
 }

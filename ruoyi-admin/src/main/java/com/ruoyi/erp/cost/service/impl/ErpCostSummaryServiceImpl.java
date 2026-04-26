@@ -1,5 +1,8 @@
 package com.ruoyi.erp.cost.service.impl;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.util.Date;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,16 +18,33 @@ public class ErpCostSummaryServiceImpl implements IErpCostSummaryService {
     @Autowired
     private ErpCostSummaryMapper costSummaryMapper;
 
-    /**
-     * TODO: W5 — 实现成本自动汇总引擎
-     * 从 t_erp_produce_material_consume / t_erp_piece_wage /
-     * t_erp_outsource_order / t_erp_stock_in 四表按 producePlanId
-     * 聚合 materialCost + wageCost + outsourceCost + freightCost，
-     * 计算 totalCost = SUM(above) + qualityLoss + otherCost，
-     * 写入 t_erp_cost_summary。当前为手动 CRUD 模式。
-     */
+    @Override
     public int calculateByPlanId(Long producePlanId) {
-        throw new UnsupportedOperationException("成本自动汇总引擎尚未实现，请通过 POST/PUT 手动录入");
+        costSummaryMapper.deleteByPlanId(producePlanId);
+
+        BigDecimal material = costSummaryMapper.sumMaterialCostByPlan(producePlanId);
+        BigDecimal wage = costSummaryMapper.sumWageCostByPlan(producePlanId);
+        BigDecimal outsource = costSummaryMapper.sumOutsourceCostByPlan(producePlanId);
+        BigDecimal finishQty = costSummaryMapper.sumFinishQtyByPlan(producePlanId);
+
+        BigDecimal total = material.add(wage).add(outsource);
+        BigDecimal unitCost = finishQty.compareTo(BigDecimal.ZERO) > 0
+            ? total.divide(finishQty, 6, RoundingMode.HALF_UP) : BigDecimal.ZERO;
+
+        ErpCostSummary cs = new ErpCostSummary();
+        cs.setProducePlanId(producePlanId);
+        cs.setMaterialCost(material);
+        cs.setWageCost(wage);
+        cs.setOutsourceCost(outsource);
+        cs.setFreightCost(BigDecimal.ZERO);
+        cs.setQualityLoss(BigDecimal.ZERO);
+        cs.setOtherCost(BigDecimal.ZERO);
+        cs.setTotalCost(total);
+        cs.setFinishQty(finishQty);
+        cs.setUnitCost(unitCost);
+        cs.setCalcTime(new Date());
+
+        return costSummaryMapper.insert(cs);
     }
 
     @Override

@@ -10,4 +10,5 @@ public interface IErpCostSummaryService {
     int update(ErpCostSummary summary);
     int deleteById(Long id);
     int deleteByIds(Long[] ids);
+    int calculateByPlanId(Long producePlanId);
 }
