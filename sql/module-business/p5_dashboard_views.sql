@@ -48,15 +48,15 @@ SELECT
     pd.id AS process_id,
     pd.process_name,
     COUNT(DISTINCT jp.job_id) AS active_jobs,
-    COALESCE(SUM(jp.plan_qty), 0) AS total_plan_qty,
-    COALESCE(SUM(jp.confirm_qty), 0) AS total_confirm_qty,
+    COALESCE(SUM(jp.in_qty), 0) AS total_in_qty,
+    COALESCE(SUM(jp.out_qty), 0) AS total_out_qty,
     COUNT(DISTINCT jp.employee_id) AS active_workers,
-    CASE WHEN COALESCE(SUM(jp.plan_qty), 0) > 0
-         THEN ROUND(COALESCE(SUM(jp.confirm_qty), 0) / SUM(jp.plan_qty) * 100, 1)
+    CASE WHEN COALESCE(SUM(jp.in_qty), 0) > 0
+         THEN ROUND(COALESCE(SUM(jp.out_qty), 0) / SUM(jp.in_qty) * 100, 1)
          ELSE 0 END AS completion_rate
 FROM t_erp_produce_job_process jp
 LEFT JOIN t_erp_process_def pd ON pd.id = jp.process_id
-WHERE jp.status NOT IN ('COMPLETED', 'CANCELLED')
+WHERE jp.process_status NOT IN ('COMPLETED', 'CANCELLED')
 GROUP BY pd.id, pd.process_name;
 
 -- P5-4: 异常闭环
