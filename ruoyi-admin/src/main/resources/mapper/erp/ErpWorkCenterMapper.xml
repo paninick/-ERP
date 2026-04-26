@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.workcenter.mapper.ErpWorkCenterMapper">
+
+    <resultMap type="ErpWorkCenter" id="ErpWorkCenterResult">
+        <result property="id"           column="id"            />
+        <result property="centerCode"   column="center_code"   />
+        <result property="centerName"   column="center_name"   />
+        <result property="centerType"   column="center_type"   />
+        <result property="workshopId"   column="workshop_id"   />
+        <result property="capacity"     column="capacity"      />
+        <result property="capacityUnit" column="capacity_unit" />
+        <result property="manager"      column="manager"       />
+        <result property="status"       column="status"        />
+        <result property="remark"       column="remark"        />
+        <result property="createBy"     column="create_by"     />
+        <result property="createTime"   column="create_time"   />
+        <result property="updateBy"     column="update_by"     />
+        <result property="updateTime"   column="update_time"   />
+    </resultMap>
+
+    <sql id="selectErpWorkCenterVo">
+        select id, center_code, center_name, center_type, workshop_id, capacity, capacity_unit,
+               manager, status, remark, create_by, create_time, update_by, update_time
+        from t_erp_work_center a
+    </sql>
+
+    <select id="selectErpWorkCenterList" parameterType="ErpWorkCenter" resultMap="ErpWorkCenterResult">
+        <include refid="selectErpWorkCenterVo"/>
+        <where>
+            <if test="centerCode != null and centerCode != ''"> and a.center_code like concat('%', #{centerCode}, '%')</if>
+            <if test="centerName != null and centerName != ''"> and a.center_name like concat('%', #{centerName}, '%')</if>
+            <if test="centerType != null and centerType != ''"> and a.center_type = #{centerType}</if>
+            <if test="workshopId != null"> and a.workshop_id = #{workshopId}</if>
+            <if test="status != null and status != ''"> and a.status = #{status}</if>
+        </where>
+        order by a.center_code
+    </select>
+
+    <select id="selectErpWorkCenterById" parameterType="Long" resultMap="ErpWorkCenterResult">
+        <include refid="selectErpWorkCenterVo"/>
+        where a.id = #{id}
+    </select>
+
+    <insert id="insertErpWorkCenter" parameterType="ErpWorkCenter" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_work_center
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="centerCode != null">center_code,</if>
+            <if test="centerName != null">center_name,</if>
+            <if test="centerType != null">center_type,</if>
+            <if test="workshopId != null">workshop_id,</if>
+            <if test="capacity != null">capacity,</if>
+            <if test="capacityUnit != null">capacity_unit,</if>
+            <if test="manager != null">manager,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="centerCode != null">#{centerCode},</if>
+            <if test="centerName != null">#{centerName},</if>
+            <if test="centerType != null">#{centerType},</if>
+            <if test="workshopId != null">#{workshopId},</if>
+            <if test="capacity != null">#{capacity},</if>
+            <if test="capacityUnit != null">#{capacityUnit},</if>
+            <if test="manager != null">#{manager},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateErpWorkCenter" parameterType="ErpWorkCenter">
+        update t_erp_work_center
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="centerCode != null">center_code = #{centerCode},</if>
+            <if test="centerName != null">center_name = #{centerName},</if>
+            <if test="centerType != null">center_type = #{centerType},</if>
+            <if test="workshopId != null">workshop_id = #{workshopId},</if>
+            <if test="capacity != null">capacity = #{capacity},</if>
+            <if test="capacityUnit != null">capacity_unit = #{capacityUnit},</if>
+            <if test="manager != null">manager = #{manager},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteErpWorkCenterById" parameterType="Long">
+        delete from t_erp_work_center where id = #{id}
+    </delete>
+
+    <delete id="deleteErpWorkCenterByIds" parameterType="Long">
+        delete from t_erp_work_center where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

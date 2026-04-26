@@ -77,6 +77,26 @@ public class ProcessDef extends BaseEntity {
     @Excel(name = "面料兼容性")
     private String fabricCompatibility;
 
+    /** 产品族 */
+    @Excel(name = "产品族")
+    private String productFamily;
+
+    /** 适用车间类型 */
+    @Excel(name = "适用车间类型")
+    private String workshopType;
+
+    /** 是否需要质检 */
+    @Excel(name = "是否需要质检", readConverterExp = "0=否,1=是")
+    private Integer qcRequired;
+
+    /** 是否追踪损耗 */
+    @Excel(name = "是否追踪损耗", readConverterExp = "0=否,1=是")
+    private Integer lossTracked;
+
+    /** 是否计件 */
+    @Excel(name = "是否计件", readConverterExp = "0=否,1=是")
+    private Integer pieceWageApplicable;
+
     /** 备注 */
     private String remark;
 
@@ -186,6 +206,21 @@ public class ProcessDef extends BaseEntity {
     public String getFabricCompatibility() { return fabricCompatibility; }
     public void setFabricCompatibility(String fabricCompatibility) { this.fabricCompatibility = fabricCompatibility; }
 
+    public String getProductFamily() { return productFamily; }
+    public void setProductFamily(String productFamily) { this.productFamily = productFamily; }
+
+    public String getWorkshopType() { return workshopType; }
+    public void setWorkshopType(String workshopType) { this.workshopType = workshopType; }
+
+    public Integer getQcRequired() { return qcRequired; }
+    public void setQcRequired(Integer qcRequired) { this.qcRequired = qcRequired; }
+
+    public Integer getLossTracked() { return lossTracked; }
+    public void setLossTracked(Integer lossTracked) { this.lossTracked = lossTracked; }
+
+    public Integer getPieceWageApplicable() { return pieceWageApplicable; }
+    public void setPieceWageApplicable(Integer pieceWageApplicable) { this.pieceWageApplicable = pieceWageApplicable; }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -205,6 +240,11 @@ public class ProcessDef extends BaseEntity {
             .append("seamWidth", getSeamWidth())
             .append("spliceDirection", getSpliceDirection())
             .append("fabricCompatibility", getFabricCompatibility())
+            .append("productFamily", getProductFamily())
+            .append("workshopType", getWorkshopType())
+            .append("qcRequired", getQcRequired())
+            .append("lossTracked", getLossTracked())
+            .append("pieceWageApplicable", getPieceWageApplicable())
             .append("remark", getRemark())
             .append("createBy", getCreateBy())
             .append("createTime", getCreateTime())

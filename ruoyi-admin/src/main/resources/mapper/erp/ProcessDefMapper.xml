@@ -18,6 +18,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="seamWidth"              column="seam_width"              />
         <result property="spliceDirection"        column="splice_direction"        />
         <result property="fabricCompatibility"    column="fabric_compatibility"    />
+        <result property="productFamily"          column="product_family"          />
+        <result property="workshopType"           column="workshop_type"           />
+        <result property="qcRequired"             column="qc_required"             />
+        <result property="lossTracked"            column="loss_tracked"            />
+        <result property="pieceWageApplicable"    column="piece_wage_applicable"   />
         <result property="remark"    column="remark"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
@@ -28,6 +33,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectProcessDefVo">
         select a.id, a.process_no, a.process_name, a.process_type, a.unit_price, a.sort_order, a.status,
                a.is_splice_process, a.shrinkage_baseline, a.elasticity_compensation, a.seam_width, a.splice_direction, a.fabric_compatibility,
+               a.product_family, a.workshop_type, a.qc_required, a.loss_tracked, a.piece_wage_applicable,
                a.remark, a.create_by, a.create_time, a.update_by, a.update_time
         from t_erp_process_def a
     </sql>
@@ -68,6 +74,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="seamWidth != null">seam_width,</if>
             <if test="spliceDirection != null">splice_direction,</if>
             <if test="fabricCompatibility != null">fabric_compatibility,</if>
+            <if test="productFamily != null">product_family,</if>
+            <if test="workshopType != null">workshop_type,</if>
+            <if test="qcRequired != null">qc_required,</if>
+            <if test="lossTracked != null">loss_tracked,</if>
+            <if test="pieceWageApplicable != null">piece_wage_applicable,</if>
             <if test="remark != null">remark,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
@@ -87,6 +98,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="seamWidth != null">#{seamWidth},</if>
             <if test="spliceDirection != null">#{spliceDirection},</if>
             <if test="fabricCompatibility != null">#{fabricCompatibility},</if>
+            <if test="productFamily != null">#{productFamily},</if>
+            <if test="workshopType != null">#{workshopType},</if>
+            <if test="qcRequired != null">#{qcRequired},</if>
+            <if test="lossTracked != null">#{lossTracked},</if>
+            <if test="pieceWageApplicable != null">#{pieceWageApplicable},</if>
             <if test="remark != null">#{remark},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
@@ -110,6 +126,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="seamWidth != null">seam_width = #{seamWidth},</if>
             <if test="spliceDirection != null">splice_direction = #{spliceDirection},</if>
             <if test="fabricCompatibility != null">fabric_compatibility = #{fabricCompatibility},</if>
+            <if test="productFamily != null">product_family = #{productFamily},</if>
+            <if test="workshopType != null">workshop_type = #{workshopType},</if>
+            <if test="qcRequired != null">qc_required = #{qcRequired},</if>
+            <if test="lossTracked != null">loss_tracked = #{lossTracked},</if>
+            <if test="pieceWageApplicable != null">piece_wage_applicable = #{pieceWageApplicable},</if>
             <if test="remark != null">remark = #{remark},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
