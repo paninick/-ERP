@@ -101,4 +101,13 @@ SELECT 2,'已确认','CONFIRMED','erp_wage_settle_status','0','admin',NOW() WHER
 INSERT INTO sys_dict_data (dict_sort, dict_label, dict_value, dict_type, status, create_by, create_time)
 SELECT 3,'已发放','PAID','erp_wage_settle_status','0','admin',NOW() WHERE NOT EXISTS (SELECT 1 FROM sys_dict_data WHERE dict_type='erp_wage_settle_status' AND dict_value='PAID');
 
+-- 新外键列索引（幂等，PREPARE STATEMENT 模式）
+SET @s = IF((SELECT COUNT(*) FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='t_erp_stock_in' AND INDEX_NAME='idx_stock_in_job')=0, 'CREATE INDEX idx_stock_in_job ON t_erp_stock_in (produce_job_id)', 'SELECT 1'); PREPARE p FROM @s; EXECUTE p; DEALLOCATE PREPARE p;
+SET @s = IF((SELECT COUNT(*) FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='t_erp_stock_in' AND INDEX_NAME='idx_stock_in_plan')=0, 'CREATE INDEX idx_stock_in_plan ON t_erp_stock_in (produce_plan_id)', 'SELECT 1'); PREPARE p FROM @s; EXECUTE p; DEALLOCATE PREPARE p;
+SET @s = IF((SELECT COUNT(*) FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='t_erp_produce_material_consume' AND INDEX_NAME='idx_mat_consume_report')=0, 'CREATE INDEX idx_mat_consume_report ON t_erp_produce_material_consume (report_log_id)', 'SELECT 1'); PREPARE p FROM @s; EXECUTE p; DEALLOCATE PREPARE p;
+SET @s = IF((SELECT COUNT(*) FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='t_erp_produce_material_consume' AND INDEX_NAME='idx_mat_consume_stockout')=0, 'CREATE INDEX idx_mat_consume_stockout ON t_erp_produce_material_consume (stock_out_id)', 'SELECT 1'); PREPARE p FROM @s; EXECUTE p; DEALLOCATE PREPARE p;
+SET @s = IF((SELECT COUNT(*) FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='t_erp_outsource_order' AND INDEX_NAME='idx_outsource_settle')=0, 'CREATE INDEX idx_outsource_settle ON t_erp_outsource_order (settle_status)', 'SELECT 1'); PREPARE p FROM @s; EXECUTE p; DEALLOCATE PREPARE p;
+SET @s = IF((SELECT COUNT(*) FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='t_erp_piece_wage' AND INDEX_NAME='idx_piece_wage_settle')=0, 'CREATE INDEX idx_piece_wage_settle ON t_erp_piece_wage (settle_status)', 'SELECT 1'); PREPARE p FROM @s; EXECUTE p; DEALLOCATE PREPARE p;
+SET @s = IF((SELECT COUNT(*) FROM information_schema.STATISTICS WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME='t_erp_piece_wage' AND INDEX_NAME='idx_piece_wage_report')=0, 'CREATE INDEX idx_piece_wage_report ON t_erp_piece_wage (report_log_id)', 'SELECT 1'); PREPARE p FROM @s; EXECUTE p; DEALLOCATE PREPARE p;
+
 SELECT 'cost_closure_extend.sql 执行完成' AS result;
