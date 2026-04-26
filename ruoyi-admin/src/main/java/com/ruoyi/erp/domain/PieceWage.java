@@ -77,6 +77,33 @@ public class PieceWage extends BaseEntity {
     /** 备注 */
     private String remark;
 
+    /** 结算状态 DRAFT/CONFIRMED/PAID */
+    private String settleStatus;
+
+    /** 关联报工事件ID */
+    private Long reportLogId;
+
+    /** 工资成本金额 */
+    @Excel(name = "工资成本")
+    private BigDecimal costAmount;
+
+    /** 确认人 */
+    private String confirmBy;
+
+    /** 确认时间 */
+    private Date confirmTime;
+
+    public String getSettleStatus() { return settleStatus; }
+    public void setSettleStatus(String settleStatus) { this.settleStatus = settleStatus; }
+    public Long getReportLogId() { return reportLogId; }
+    public void setReportLogId(Long reportLogId) { this.reportLogId = reportLogId; }
+    public BigDecimal getCostAmount() { return costAmount; }
+    public void setCostAmount(BigDecimal costAmount) { this.costAmount = costAmount; }
+    public String getConfirmBy() { return confirmBy; }
+    public void setConfirmBy(String confirmBy) { this.confirmBy = confirmBy; }
+    public Date getConfirmTime() { return confirmTime; }
+    public void setConfirmTime(Date confirmTime) { this.confirmTime = confirmTime; }
+
     public Long getId() {
         return id;
     }

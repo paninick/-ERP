@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.cost.mapper.ErpCostSummaryMapper">
+
+    <resultMap type="com.ruoyi.erp.cost.domain.ErpCostSummary" id="ErpCostSummaryResult">
+        <result property="id"            column="id"              />
+        <result property="produceJobId"  column="produce_job_id"  />
+        <result property="producePlanId" column="produce_plan_id" />
+        <result property="styleCode"     column="style_code"      />
+        <result property="salesNo"       column="sales_no"        />
+        <result property="period"        column="period"          />
+        <result property="materialCost"  column="material_cost"   />
+        <result property="wageCost"      column="wage_cost"       />
+        <result property="outsourceCost" column="outsource_cost"  />
+        <result property="freightCost"   column="freight_cost"    />
+        <result property="qualityLoss"   column="quality_loss"    />
+        <result property="otherCost"     column="other_cost"      />
+        <result property="totalCost"     column="total_cost"      />
+        <result property="finishQty"     column="finish_qty"      />
+        <result property="unitCost"      column="unit_cost"       />
+        <result property="calcTime"      column="calc_time"       />
+        <result property="factoryId"     column="factory_id"      />
+        <result property="remark"        column="remark"          />
+        <result property="createBy"      column="create_by"       />
+        <result property="createTime"    column="create_time"     />
+        <result property="updateBy"      column="update_by"       />
+        <result property="updateTime"    column="update_time"     />
+    </resultMap>
+
+    <sql id="selectErpCostSummaryVo">
+        select a.id, a.produce_job_id, a.produce_plan_id, a.style_code, a.sales_no,
+               a.period, a.material_cost, a.wage_cost, a.outsource_cost, a.freight_cost,
+               a.quality_loss, a.other_cost, a.total_cost, a.finish_qty, a.unit_cost,
+               a.calc_time, a.factory_id, a.remark,
+               a.create_by, a.create_time, a.update_by, a.update_time
+        from t_erp_cost_summary a
+    </sql>
+
+    <select id="selectById" parameterType="Long" resultMap="ErpCostSummaryResult">
+        <include refid="selectErpCostSummaryVo"/>
+        where a.id = #{id}
+    </select>
+
+    <select id="selectList" parameterType="com.ruoyi.erp.cost.domain.ErpCostSummary" resultMap="ErpCostSummaryResult">
+        <include refid="selectErpCostSummaryVo"/>
+        <where>
+            <if test="produceJobId != null"> and a.produce_job_id = #{produceJobId}</if>
+            <if test="producePlanId != null"> and a.produce_plan_id = #{producePlanId}</if>
+            <if test="styleCode != null and styleCode != ''"> and a.style_code = #{styleCode}</if>
+            <if test="salesNo != null and salesNo != ''"> and a.sales_no = #{salesNo}</if>
+            <if test="period != null and period != ''"> and a.period = #{period}</if>
+            <if test="factoryId != null"> and a.factory_id = #{factoryId}</if>
+        </where>
+        order by a.id desc
+    </select>
+
+    <insert id="insert" parameterType="com.ruoyi.erp.cost.domain.ErpCostSummary" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_cost_summary
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="produceJobId != null">produce_job_id,</if>
+            <if test="producePlanId != null">produce_plan_id,</if>
+            <if test="styleCode != null">style_code,</if>
+            <if test="salesNo != null">sales_no,</if>
+            <if test="period != null">period,</if>
+            <if test="materialCost != null">material_cost,</if>
+            <if test="wageCost != null">wage_cost,</if>
+            <if test="outsourceCost != null">outsource_cost,</if>
+            <if test="freightCost != null">freight_cost,</if>
+            <if test="qualityLoss != null">quality_loss,</if>
+            <if test="otherCost != null">other_cost,</if>
+            <if test="totalCost != null">total_cost,</if>
+            <if test="finishQty != null">finish_qty,</if>
+            <if test="unitCost != null">unit_cost,</if>
+            <if test="calcTime != null">calc_time,</if>
+            <if test="factoryId != null">factory_id,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="produceJobId != null">#{produceJobId},</if>
+            <if test="producePlanId != null">#{producePlanId},</if>
+            <if test="styleCode != null">#{styleCode},</if>
+            <if test="salesNo != null">#{salesNo},</if>
+            <if test="period != null">#{period},</if>
+            <if test="materialCost != null">#{materialCost},</if>
+            <if test="wageCost != null">#{wageCost},</if>
+            <if test="outsourceCost != null">#{outsourceCost},</if>
+            <if test="freightCost != null">#{freightCost},</if>
+            <if test="qualityLoss != null">#{qualityLoss},</if>
+            <if test="otherCost != null">#{otherCost},</if>
+            <if test="totalCost != null">#{totalCost},</if>
+            <if test="finishQty != null">#{finishQty},</if>
+            <if test="unitCost != null">#{unitCost},</if>
+            <if test="calcTime != null">#{calcTime},</if>
+            <if test="factoryId != null">#{factoryId},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.ruoyi.erp.cost.domain.ErpCostSummary">
+        update t_erp_cost_summary
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="produceJobId != null">produce_job_id = #{produceJobId},</if>
+            <if test="producePlanId != null">produce_plan_id = #{producePlanId},</if>
+            <if test="styleCode != null">style_code = #{styleCode},</if>
+            <if test="salesNo != null">sales_no = #{salesNo},</if>
+            <if test="period != null">period = #{period},</if>
+            <if test="materialCost != null">material_cost = #{materialCost},</if>
+            <if test="wageCost != null">wage_cost = #{wageCost},</if>
+            <if test="outsourceCost != null">outsource_cost = #{outsourceCost},</if>
+            <if test="freightCost != null">freight_cost = #{freightCost},</if>
+            <if test="qualityLoss != null">quality_loss = #{qualityLoss},</if>
+            <if test="otherCost != null">other_cost = #{otherCost},</if>
+            <if test="totalCost != null">total_cost = #{totalCost},</if>
+            <if test="finishQty != null">finish_qty = #{finishQty},</if>
+            <if test="unitCost != null">unit_cost = #{unitCost},</if>
+            <if test="calcTime != null">calc_time = #{calcTime},</if>
+            <if test="factoryId != null">factory_id = #{factoryId},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="Long">
+        delete from t_erp_cost_summary where id = #{id}
+    </delete>
+
+    <delete id="deleteByIds">
+        delete from t_erp_cost_summary where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>

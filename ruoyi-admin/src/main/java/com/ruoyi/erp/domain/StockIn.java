@@ -71,6 +71,29 @@ public class StockIn extends ErpBaseBillEntity {
     @Excel(name = "确认时间", width = 30, dateFormat = "yyyy-MM-dd")
     private java.util.Date confirmTime;
 
+    /** 关联生产单ID */
+    private Long produceJobId;
+
+    /** 关联生产计划ID */
+    private Long producePlanId;
+
+    /** 完工数量 */
+    @Excel(name = "完工数量")
+    private java.math.BigDecimal finishQty;
+
+    /** 入库成本金额 */
+    @Excel(name = "入库成本")
+    private java.math.BigDecimal costAmount;
+
+    public Long getProduceJobId() { return produceJobId; }
+    public void setProduceJobId(Long produceJobId) { this.produceJobId = produceJobId; }
+    public Long getProducePlanId() { return producePlanId; }
+    public void setProducePlanId(Long producePlanId) { this.producePlanId = producePlanId; }
+    public java.math.BigDecimal getFinishQty() { return finishQty; }
+    public void setFinishQty(java.math.BigDecimal finishQty) { this.finishQty = finishQty; }
+    public java.math.BigDecimal getCostAmount() { return costAmount; }
+    public void setCostAmount(java.math.BigDecimal costAmount) { this.costAmount = costAmount; }
+
     public void setId(Long id) {
         this.id = id;
     }

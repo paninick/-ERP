@@ -99,6 +99,29 @@ public class OutsourceOrder extends ErpBaseBillEntity {
     /** 备注 */
     private String remark;
 
+    /** 结算状态 UNSETTLED/PARTIAL/SETTLED */
+    private String settleStatus;
+
+    /** 已结算金额 */
+    @Excel(name = "已结算金额")
+    private BigDecimal settleAmount;
+
+    /** 结算时间 */
+    private Date settleTime;
+
+    /** 外协成本金额（含运费） */
+    @Excel(name = "外协成本")
+    private BigDecimal costAmount;
+
+    public String getSettleStatus() { return settleStatus; }
+    public void setSettleStatus(String settleStatus) { this.settleStatus = settleStatus; }
+    public BigDecimal getSettleAmount() { return settleAmount; }
+    public void setSettleAmount(BigDecimal settleAmount) { this.settleAmount = settleAmount; }
+    public Date getSettleTime() { return settleTime; }
+    public void setSettleTime(Date settleTime) { this.settleTime = settleTime; }
+    public BigDecimal getCostAmount() { return costAmount; }
+    public void setCostAmount(BigDecimal costAmount) { this.costAmount = costAmount; }
+
     public Long getId() {
         return id;
     }

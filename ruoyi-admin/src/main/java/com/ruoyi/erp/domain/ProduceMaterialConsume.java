@@ -28,6 +28,12 @@ public class ProduceMaterialConsume extends BaseEntity {
     @Excel(name = "reportLogId")
     private Long reportLogId;
 
+    @Excel(name = "stockOutId")
+    private Long stockOutId;
+
+    @Excel(name = "stockOutItemId")
+    private Long stockOutItemId;
+
     @Excel(name = "batchNo")
     private String batchNo;
 
@@ -77,13 +83,9 @@ public class ProduceMaterialConsume extends BaseEntity {
     private String approvalStatus;
 
     private Long approvalById;
-
     private String approvalByName;
-
     private Date approvalTime;
-
     private String approvalRemark;
-
     private String unit;
 
     @Excel(name = "unitPrice")
@@ -97,6 +99,24 @@ public class ProduceMaterialConsume extends BaseEntity {
 
     @Excel(name = "costDiff")
     private BigDecimal costDiff;
+
+    /** 单位成本 */
+    @Excel(name = "单位成本")
+    private BigDecimal unitCost;
+
+    /** 消耗成本金额 */
+    @Excel(name = "消耗成本")
+    private BigDecimal costAmount;
+
+    /** 来源 MANUAL/REPORT_LOG/STOCK_OUT */
+    private String eventSource;
+
+    public BigDecimal getUnitCost() { return unitCost; }
+    public void setUnitCost(BigDecimal unitCost) { this.unitCost = unitCost; }
+    public BigDecimal getCostAmount() { return costAmount; }
+    public void setCostAmount(BigDecimal costAmount) { this.costAmount = costAmount; }
+    public String getEventSource() { return eventSource; }
+    public void setEventSource(String eventSource) { this.eventSource = eventSource; }
 
     public Long getId() {
         return id;
@@ -136,6 +156,22 @@ public class ProduceMaterialConsume extends BaseEntity {
 
     public void setReportLogId(Long reportLogId) {
         this.reportLogId = reportLogId;
+    }
+
+    public Long getStockOutId() {
+        return stockOutId;
+    }
+
+    public void setStockOutId(Long stockOutId) {
+        this.stockOutId = stockOutId;
+    }
+
+    public Long getStockOutItemId() {
+        return stockOutItemId;
+    }
+
+    public void setStockOutItemId(Long stockOutItemId) {
+        this.stockOutItemId = stockOutItemId;
     }
 
     public String getBatchNo() {
@@ -346,6 +382,8 @@ public class ProduceMaterialConsume extends BaseEntity {
             .append("jobId", getJobId())
             .append("jobProcessId", getJobProcessId())
             .append("reportLogId", getReportLogId())
+            .append("stockOutId", getStockOutId())
+            .append("stockOutItemId", getStockOutItemId())
             .append("batchNo", getBatchNo())
             .append("orderId", getOrderId())
             .append("processId", getProcessId())
