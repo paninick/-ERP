@@ -1,6 +1,8 @@
 package com.ruoyi.erp.domain;
 
 import java.math.BigDecimal;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -19,30 +21,37 @@ public class StockOutItem extends BaseEntity {
     private Long id;
 
     /** 出库编号 */
+    @NotNull(message = "出库编号不能为空")
     @Excel(name = "出库编号")
     private Long outId;
 
     /** 出库单号 */
+    @NotBlank(message = "出库单号不能为空")
     @Excel(name = "出库单号")
     private String sn;
 
     /** 产品id，材料出库时 */
+    @NotNull(message = "产品id不能为空")
     @Excel(name = "产品id，材料出库时")
     private Long materialId;
 
     /** 1 主料， 2辅料 */
+    @NotBlank(message = "材料类型不能为空")
     @Excel(name = "1 主料， 2辅料")
     private String materialType;
 
     /** 编号（材料就是材料编号，成品就是打样通知时的款号） */
+    @NotBlank(message = "材料编号不能为空")
     @Excel(name = "编号", readConverterExp = "材=料就是材料编号，成品就是打样通知时的款号")
     private String materialNo;
 
     /** 材料名称（材料就是材料名称，成品就是品类） */
+    @NotBlank(message = "材料名称不能为空")
     @Excel(name = "材料名称", readConverterExp = "材=料就是材料名称，成品就是品类")
     private String name;
 
     /** 出库数量 */
+    @NotNull(message = "出库数量不能为空")
     @Excel(name = "出库数量")
     private BigDecimal count;
 
@@ -67,6 +76,7 @@ public class StockOutItem extends BaseEntity {
     private String size;
 
     /** 仓库 */
+    @NotNull(message = "仓库不能为空")
     @Excel(name = "仓库")
     private Long warehouseId;
 

@@ -21,6 +21,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="auditTime" column="audit_time" />
         <result property="payTime" column="pay_time" />
         <result property="remark" column="remark" />
+        <result property="settleStatus"  column="settle_status"  />
+        <result property="reportLogId"   column="report_log_id"  />
+        <result property="costAmount"    column="cost_amount"    />
+        <result property="confirmBy"     column="confirm_by"     />
+        <result property="confirmTime"   column="confirm_time"   />
         <result property="createBy" column="create_by" />
         <result property="createTime" column="create_time" />
         <result property="updateBy" column="update_by" />
@@ -30,8 +35,9 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     <sql id="selectPieceWageVo">
         select id, employee_id, employee_name, wage_month, total_process_count, total_ok_qty,
                total_defect_qty, should_wage, deduct_wage, actual_wage, status,
-               audit_by_id, audit_by_name, audit_time, pay_time, remark,
-               create_by, create_time, update_by, update_time
+               audit_by_id, audit_by_name, audit_time, pay_time,
+               settle_status, report_log_id, cost_amount, confirm_by, confirm_time,
+               remark, create_by, create_time, update_by, update_time
         from t_erp_piece_wage
     </sql>
 
@@ -57,13 +63,15 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         insert into t_erp_piece_wage (
             employee_id, employee_name, wage_month, total_process_count, total_ok_qty,
             total_defect_qty, should_wage, deduct_wage, actual_wage, status,
-            audit_by_id, audit_by_name, audit_time, pay_time, remark,
-            create_by, create_time, update_by, update_time
+            audit_by_id, audit_by_name, audit_time, pay_time,
+            settle_status, report_log_id, cost_amount, confirm_by, confirm_time,
+            remark, create_by, create_time, update_by, update_time
         ) values (
             #{employeeId}, #{employeeName}, #{wageMonth}, #{totalProcessCount}, #{totalOkQty},
             #{totalDefectQty}, #{shouldWage}, #{deductWage}, #{actualWage}, #{status},
-            #{auditById}, #{auditByName}, #{auditTime}, #{payTime}, #{remark},
-            #{createBy}, #{createTime}, #{updateBy}, #{updateTime}
+            #{auditById}, #{auditByName}, #{auditTime}, #{payTime},
+            #{settleStatus}, #{reportLogId}, #{costAmount}, #{confirmBy}, #{confirmTime},
+            #{remark}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime}
         )
     </insert>
 
@@ -84,6 +92,11 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="auditByName != null">audit_by_name = #{auditByName},</if>
             <if test="auditTime != null">audit_time = #{auditTime},</if>
             <if test="payTime != null">pay_time = #{payTime},</if>
+            <if test="settleStatus != null">settle_status = #{settleStatus},</if>
+            <if test="reportLogId != null">report_log_id = #{reportLogId},</if>
+            <if test="costAmount != null">cost_amount = #{costAmount},</if>
+            <if test="confirmBy != null">confirm_by = #{confirmBy},</if>
+            <if test="confirmTime != null">confirm_time = #{confirmTime},</if>
             <if test="remark != null">remark = #{remark},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
@@ -107,5 +120,30 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         from t_erp_piece_wage
         where employee_id = #{employeeId}
           and wage_month = #{wageMonth}
+    </select>
+
+    <select id="selectEventSummaryByMonth" resultType="java.util.Map">
+        SELECT
+            l.employee_id AS employee_id,
+            l.employee_name AS employee_name,
+            l.process_id AS process_id,
+            p.process_name AS process_name,
+            l.job_id AS job_id,
+            SUM(COALESCE(l.completed_qty, 0)) AS total_ok_qty,
+            SUM(COALESCE(l.defect_qty, 0)) AS total_defect_qty,
+            COALESCE(MAX(CASE WHEN l.completed_qty > 0 THEN jp.unit_price END), 0) AS unit_price,
+            SUM(COALESCE(l.completed_qty, 0) * COALESCE(jp.unit_price, 0)) AS should_wage
+        FROM t_erp_produce_report_log l
+        LEFT JOIN t_erp_process_def p ON l.process_id = p.id
+        LEFT JOIN t_erp_produce_job_process jps ON l.job_process_id = jps.id
+        LEFT JOIN t_erp_process_def jp ON jp.id = l.process_id
+        WHERE l.del_flag = '0'
+          AND l.validation_status = 'PASS'
+          AND l.employee_id IS NOT NULL
+          AND DATE_FORMAT(l.event_time, '%Y-%m') = #{wageMonth}
+          AND (jps.piece_wage_applicable IS NULL OR jps.piece_wage_applicable != '0')
+        GROUP BY l.employee_id, l.employee_name, l.process_id, p.process_name, l.job_id
+        HAVING SUM(COALESCE(l.completed_qty, 0)) > 0
+        ORDER BY l.employee_id, l.process_id, l.job_id
     </select>
 </mapper>

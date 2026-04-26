@@ -1,31 +1,29 @@
 package com.ruoyi.erp.controller;
 
-import java.util.List;
-import jakarta.servlet.http.HttpServletResponse;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
+import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.common.utils.poi.ExcelUtil;
 import com.ruoyi.erp.domain.StockOutItem;
 import com.ruoyi.erp.service.IStockOutItemService;
-import com.ruoyi.common.utils.poi.ExcelUtil;
-import com.ruoyi.common.core.page.TableDataInfo;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
- * 出库明细Controller
- *
- * @author zhangmingjian
- * @date 2026-04-07
+ * Stock-out item controller.
  */
 @RestController
 @RequestMapping("/erp/stockOut/item")
@@ -33,9 +31,6 @@ public class StockOutItemController extends BaseController {
     @Autowired
     private IStockOutItemService stockOutItemService;
 
-    /**
-     * 查询出库明细列表
-     */
     @PreAuthorize("@ss.hasPermi('erp:stock:list')")
     @GetMapping("/list")
     public TableDataInfo list(StockOutItem stockOutItem) {
@@ -44,30 +39,27 @@ public class StockOutItemController extends BaseController {
         return getDataTable(list);
     }
 
-    /**
-     * 导出出库明细列表
-     */
     @PreAuthorize("@ss.hasPermi('erp:stock:export')")
     @Log(title = "出库明细", businessType = BusinessType.EXPORT)
     @PostMapping("/export")
     public void export(HttpServletResponse response, StockOutItem stockOutItem) {
         List<StockOutItem> list = stockOutItemService.selectStockOutItemList(stockOutItem);
-        ExcelUtil<StockOutItem> util = new ExcelUtil<StockOutItem>(StockOutItem.class);
-        util.exportExcel(response, list, "出库明细数据");
+        ExcelUtil<StockOutItem> util = new ExcelUtil<>(StockOutItem.class);
+        util.exportExcel(response, list, "stock_out_item");
     }
 
-    /**
-     * 获取出库明细详细信息
-     */
     @PreAuthorize("@ss.hasPermi('erp:stock:query')")
-    @GetMapping(value = "/{id}")
+    @GetMapping("/{id}")
     public AjaxResult getInfo(@PathVariable("id") Long id) {
         return success(stockOutItemService.selectStockOutItemById(id));
     }
 
-    /**
-     * 新增出库明细
-     */
+    @PreAuthorize("@ss.hasPermi('erp:stock:query')")
+    @GetMapping("/listByOut/{outId}")
+    public AjaxResult listByOut(@PathVariable("outId") Long outId) {
+        return success(stockOutItemService.selectStockOutItemByOutId(outId));
+    }
+
     @PreAuthorize("@ss.hasPermi('erp:stock:add')")
     @Log(title = "出库明细", businessType = BusinessType.INSERT)
     @PostMapping
@@ -75,9 +67,6 @@ public class StockOutItemController extends BaseController {
         return toAjax(stockOutItemService.insertStockOutItem(stockOutItem));
     }
 
-    /**
-     * 修改出库明细
-     */
     @PreAuthorize("@ss.hasPermi('erp:stock:edit')")
     @Log(title = "出库明细", businessType = BusinessType.UPDATE)
     @PutMapping
@@ -85,12 +74,9 @@ public class StockOutItemController extends BaseController {
         return toAjax(stockOutItemService.updateStockOutItem(stockOutItem));
     }
 
-    /**
-     * 删除出库明细
-     */
     @PreAuthorize("@ss.hasPermi('erp:stock:remove')")
     @Log(title = "出库明细", businessType = BusinessType.DELETE)
-	@DeleteMapping("/{ids}")
+    @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {
         return toAjax(stockOutItemService.deleteStockOutItemByIds(ids));
     }

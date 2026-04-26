@@ -3,6 +3,8 @@ package com.ruoyi.erp.domain;
 import java.math.BigDecimal;
 import java.util.Date;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotBlank;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -21,17 +23,21 @@ public class StockInItem extends BaseEntity {
     private Long id;
 
     /** 入库编号 */
+    @NotNull(message = "入库编号不能为空")
     private Long inId;
 
     /** 入库单号 */
+    @NotBlank(message = "入库单号不能为空")
     @Excel(name = "入库单号")
     private String sn;
 
     /** 产品id */
+    @NotNull(message = "产品id不能为空")
     @Excel(name = "产品id")
     private Long materialId;
 
     /** 1 主料， 2辅料 */
+    @NotBlank(message = "材料类型不能为空")
     @Excel(name = "1 主料， 2辅料")
     private String materialType;
 
@@ -42,12 +48,14 @@ public class StockInItem extends BaseEntity {
     private BigDecimal price;
 
     /** 数量 */
+    @NotNull(message = "数量不能为空")
     private BigDecimal count;
 
     /** 生产日期 */
     private Date birthingTime;
 
     /** 仓库 */
+    @NotNull(message = "仓库不能为空")
     @Excel(name = "仓库")
     private Long warehouseId;
 
