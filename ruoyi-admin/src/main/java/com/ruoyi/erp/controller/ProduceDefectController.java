@@ -1,5 +1,6 @@
 package com.ruoyi.erp.controller;
 
+import com.ruoyi.erp.approval.service.IErpApprovalLogService;
 import com.ruoyi.erp.domain.ProduceDefect;
 import com.ruoyi.erp.service.IProduceDefectService;
 import com.ruoyi.common.annotation.Log;
@@ -26,6 +27,9 @@ public class ProduceDefectController extends BaseController {
 
     @Autowired
     private IProduceDefectService produceDefectService;
+
+    @Autowired
+    private IErpApprovalLogService approvalLogService;
 
     /**
      * 查询次品记录列表
@@ -87,5 +91,42 @@ public class ProduceDefectController extends BaseController {
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {
         return toAjax(produceDefectService.deleteProduceDefectByIds(ids));
+    }
+
+    @PreAuthorize("@ss.hasPermi('erp:defect:approve')")
+    @Log(title = "次品审批", businessType = BusinessType.UPDATE)
+    @PutMapping("/submit/{id}")
+    public AjaxResult submit(@PathVariable Long id) {
+        ProduceDefect defect = produceDefectService.selectProduceDefectById(id);
+        String from = defect.getAuditStatus() != null ? defect.getAuditStatus() : "DRAFT";
+        defect.setAuditStatus("SUBMITTED");
+        produceDefectService.updateProduceDefect(defect);
+        approvalLogService.writeLog("PRODUCE_DEFECT", id, null, "DEFECT_APPROVE", "SUBMIT",
+            from, "SUBMITTED", getUsername(), null, null);
+        return success();
+    }
+
+    @PreAuthorize("@ss.hasPermi('erp:defect:approve')")
+    @Log(title = "次品审批", businessType = BusinessType.UPDATE)
+    @PutMapping("/approve/{id}")
+    public AjaxResult approve(@PathVariable Long id) {
+        ProduceDefect defect = produceDefectService.selectProduceDefectById(id);
+        defect.setAuditStatus("APPROVED");
+        produceDefectService.updateProduceDefect(defect);
+        approvalLogService.writeLog("PRODUCE_DEFECT", id, null, "DEFECT_APPROVE", "APPROVE",
+            "SUBMITTED", "APPROVED", getUsername(), null, null);
+        return success();
+    }
+
+    @PreAuthorize("@ss.hasPermi('erp:defect:approve')")
+    @Log(title = "次品审批", businessType = BusinessType.UPDATE)
+    @PutMapping("/reject/{id}")
+    public AjaxResult reject(@PathVariable Long id) {
+        ProduceDefect defect = produceDefectService.selectProduceDefectById(id);
+        defect.setAuditStatus("REJECTED");
+        produceDefectService.updateProduceDefect(defect);
+        approvalLogService.writeLog("PRODUCE_DEFECT", id, null, "DEFECT_APPROVE", "REJECT",
+            "SUBMITTED", "REJECTED", getUsername(), null, null);
+        return success();
     }
 }

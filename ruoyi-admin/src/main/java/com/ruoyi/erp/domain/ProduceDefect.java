@@ -86,6 +86,9 @@ public class ProduceDefect extends BaseEntity {
     @Excel(name = "处理结果")
     private String handleResult;
 
+    /** 审批状态 DRAFT/SUBMITTED/APPROVED/REJECTED */
+    private String auditStatus;
+
     /** 责任归属：SELF=本厂 OUTSOURCE=外协 MATERIAL=原料 */
     @Excel(name = "责任归属")
     private String responsibility;
@@ -225,6 +228,9 @@ public class ProduceDefect extends BaseEntity {
     public String getHandleResult() { return handleResult; }
     public void setHandleResult(String handleResult) { this.handleResult = handleResult; }
 
+    public String getAuditStatus() { return auditStatus; }
+    public void setAuditStatus(String auditStatus) { this.auditStatus = auditStatus; }
+
     public String getResponsibility() { return responsibility; }
     public void setResponsibility(String responsibility) { this.responsibility = responsibility; }
 
@@ -258,6 +264,7 @@ public class ProduceDefect extends BaseEntity {
             .append("defectLevel", getDefectLevel())
             .append("handleType", getHandleType())
             .append("handleResult", getHandleResult())
+            .append("auditStatus", getAuditStatus())
             .append("responsibility", getResponsibility())
             .append("isBrokenNeedle", getIsBrokenNeedle())
             .append("needleConfirmBy", getNeedleConfirmBy())

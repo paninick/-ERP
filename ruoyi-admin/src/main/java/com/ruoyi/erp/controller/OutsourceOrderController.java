@@ -1,5 +1,6 @@
 package com.ruoyi.erp.controller;
 
+import com.ruoyi.erp.approval.service.IErpApprovalLogService;
 import com.ruoyi.erp.domain.OutsourceOrder;
 import com.ruoyi.erp.service.IOutsourceOrderService;
 import com.ruoyi.common.annotation.Log;
@@ -26,6 +27,9 @@ public class OutsourceOrderController extends BaseController {
 
     @Autowired
     private IOutsourceOrderService outsourceOrderService;
+
+    @Autowired
+    private IErpApprovalLogService approvalLogService;
 
     /**
      * 查询外协加工单列表
@@ -87,5 +91,42 @@ public class OutsourceOrderController extends BaseController {
     @DeleteMapping("/{ids}")
     public AjaxResult remove(@PathVariable Long[] ids) {
         return toAjax(outsourceOrderService.deleteOutsourceOrderByIds(ids));
+    }
+
+    @PreAuthorize("@ss.hasPermi('erp:outsource:approve')")
+    @Log(title = "外协审批", businessType = BusinessType.UPDATE)
+    @PutMapping("/submit/{id}")
+    public AjaxResult submit(@PathVariable Long id) {
+        OutsourceOrder order = outsourceOrderService.selectOutsourceOrderById(id);
+        String from = order.getAuditStatus() != null ? order.getAuditStatus() : "DRAFT";
+        order.setAuditStatus("SUBMITTED");
+        outsourceOrderService.updateOutsourceOrder(order);
+        approvalLogService.writeLog("OUTSOURCE_ORDER", id, null, "OUTSOURCE_APPROVE", "SUBMIT",
+            from, "SUBMITTED", getUsername(), null, null);
+        return success();
+    }
+
+    @PreAuthorize("@ss.hasPermi('erp:outsource:approve')")
+    @Log(title = "外协审批", businessType = BusinessType.UPDATE)
+    @PutMapping("/approve/{id}")
+    public AjaxResult approve(@PathVariable Long id) {
+        OutsourceOrder order = outsourceOrderService.selectOutsourceOrderById(id);
+        order.setAuditStatus("APPROVED");
+        outsourceOrderService.updateOutsourceOrder(order);
+        approvalLogService.writeLog("OUTSOURCE_ORDER", id, null, "OUTSOURCE_APPROVE", "APPROVE",
+            "SUBMITTED", "APPROVED", getUsername(), null, null);
+        return success();
+    }
+
+    @PreAuthorize("@ss.hasPermi('erp:outsource:approve')")
+    @Log(title = "外协审批", businessType = BusinessType.UPDATE)
+    @PutMapping("/reject/{id}")
+    public AjaxResult reject(@PathVariable Long id) {
+        OutsourceOrder order = outsourceOrderService.selectOutsourceOrderById(id);
+        order.setAuditStatus("REJECTED");
+        outsourceOrderService.updateOutsourceOrder(order);
+        approvalLogService.writeLog("OUTSOURCE_ORDER", id, null, "OUTSOURCE_APPROVE", "REJECT",
+            "SUBMITTED", "REJECTED", getUsername(), null, null);
+        return success();
     }
 }

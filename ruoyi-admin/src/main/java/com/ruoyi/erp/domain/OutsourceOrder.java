@@ -76,6 +76,9 @@ public class OutsourceOrder extends ErpBaseBillEntity {
     @Excel(name = "状态", readConverterExp = "0=待发出,1=已发出,2=部分收回,3=全部收回")
     private String status;
 
+    /** 审批状态 DRAFT/SUBMITTED/APPROVED/REJECTED */
+    private String auditStatus;
+
     /** 发出时间 */
     @Excel(name = "发出时间", dateFormat = "yyyy-MM-dd HH:mm:ss")
     private Date outboundTime;
@@ -115,6 +118,9 @@ public class OutsourceOrder extends ErpBaseBillEntity {
 
     public String getSettleStatus() { return settleStatus; }
     public void setSettleStatus(String settleStatus) { this.settleStatus = settleStatus; }
+
+    public String getAuditStatus() { return auditStatus; }
+    public void setAuditStatus(String auditStatus) { this.auditStatus = auditStatus; }
     public BigDecimal getSettleAmount() { return settleAmount; }
     public void setSettleAmount(BigDecimal settleAmount) { this.settleAmount = settleAmount; }
     public Date getSettleTime() { return settleTime; }
@@ -317,6 +323,7 @@ public class OutsourceOrder extends ErpBaseBillEntity {
             .append("confirmQty", getConfirmQty())
             .append("defectQty", getDefectQty())
             .append("status", getStatus())
+            .append("auditStatus", getAuditStatus())
             .append("outboundTime", getOutboundTime())
             .append("receiveTime", getReceiveTime())
             .append("unitPrice", getUnitPrice())

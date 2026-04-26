@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.QcDefectRecordMapper">
+
+    <resultMap type="com.ruoyi.erp.domain.QcDefectRecord" id="QcDefectRecordResult">
+        <result property="id"            column="id"            />
+        <result property="inspectionId"  column="inspection_id" />
+        <result property="defectType"    column="defect_type"   />
+        <result property="defectLevel"   column="defect_level"  />
+        <result property="qty"           column="qty"           />
+        <result property="createTime"    column="create_time"   />
+    </resultMap>
+
+    <sql id="selectQcDefectRecordVo">
+        select id, inspection_id, defect_type, defect_level, qty, create_time
+        from t_erp_qc_defect_record
+    </sql>
+
+    <select id="selectList" parameterType="com.ruoyi.erp.domain.QcDefectRecord" resultMap="QcDefectRecordResult">
+        <include refid="selectQcDefectRecordVo"/>
+        <where>
+            <if test="inspectionId != null"> and inspection_id = #{inspectionId}</if>
+            <if test="defectType != null and defectType != ''"> and defect_type = #{defectType}</if>
+            <if test="defectLevel != null and defectLevel != ''"> and defect_level = #{defectLevel}</if>
+        </where>
+        order by id desc
+    </select>
+
+    <select id="selectById" parameterType="Long" resultMap="QcDefectRecordResult">
+        <include refid="selectQcDefectRecordVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.ruoyi.erp.domain.QcDefectRecord" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_qc_defect_record
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="inspectionId != null">inspection_id,</if>
+            <if test="defectType != null">defect_type,</if>
+            <if test="defectLevel != null">defect_level,</if>
+            <if test="qty != null">qty,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="inspectionId != null">#{inspectionId},</if>
+            <if test="defectType != null">#{defectType},</if>
+            <if test="defectLevel != null">#{defectLevel},</if>
+            <if test="qty != null">#{qty},</if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.ruoyi.erp.domain.QcDefectRecord">
+        update t_erp_qc_defect_record
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="defectType != null">defect_type = #{defectType},</if>
+            <if test="defectLevel != null">defect_level = #{defectLevel},</if>
+            <if test="qty != null">qty = #{qty},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="Long">
+        delete from t_erp_qc_defect_record where id = #{id}
+    </delete>
+
+    <delete id="deleteByIds">
+        delete from t_erp_qc_defect_record where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+</mapper>
