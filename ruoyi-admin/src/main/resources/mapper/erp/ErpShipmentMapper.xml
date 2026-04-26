@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.mapper.ErpShipmentMapper">
+
+    <resultMap type="com.ruoyi.erp.domain.ErpShipment" id="ErpShipmentResult">
+        <result property="id"            column="id"            />
+        <result property="shipmentNo"    column="shipment_no"   />
+        <result property="salesOrderId"  column="sales_order_id"/>
+        <result property="salesNo"       column="sales_no"      />
+        <result property="styleCode"     column="style_code"    />
+        <result property="customerId"    column="customer_id"   />
+        <result property="customerName"  column="customer_name" />
+        <result property="shipmentDate"  column="shipment_date" />
+        <result property="totalQty"      column="total_qty"     />
+        <result property="totalCarton"   column="total_carton"  />
+        <result property="totalWeight"   column="total_weight"  />
+        <result property="totalVolume"   column="total_volume"  />
+        <result property="vesselName"    column="vessel_name"   />
+        <result property="containerNo"   column="container_no"  />
+        <result property="blNo"          column="bl_no"         />
+        <result property="invoiceNo"     column="invoice_no"    />
+        <result property="releaseStatus" column="release_status"/>
+        <result property="releaseBy"     column="release_by"    />
+        <result property="releaseTime"   column="release_time"  />
+        <result property="status"        column="status"        />
+        <result property="factoryId"     column="factory_id"    />
+        <result property="createBy"      column="create_by"     />
+        <result property="createTime"    column="create_time"   />
+        <result property="updateBy"      column="update_by"     />
+        <result property="updateTime"    column="update_time"   />
+        <result property="remark"        column="remark"        />
+    </resultMap>
+
+    <sql id="selectVo">
+        select a.id, a.shipment_no, a.sales_order_id, a.sales_no, a.style_code,
+               a.customer_id, a.customer_name, a.shipment_date, a.total_qty, a.total_carton,
+               a.total_weight, a.total_volume, a.vessel_name, a.container_no, a.bl_no,
+               a.invoice_no, a.release_status, a.release_by, a.release_time, a.status,
+               a.factory_id, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
+        from t_erp_shipment a
+    </sql>
+
+    <select id="selectList" parameterType="com.ruoyi.erp.domain.ErpShipment" resultMap="ErpShipmentResult">
+        <include refid="selectVo"/>
+        <where>
+            <if test="shipmentNo != null and shipmentNo != ''"> and a.shipment_no = #{shipmentNo}</if>
+            <if test="salesNo != null and salesNo != ''"> and a.sales_no = #{salesNo}</if>
+            <if test="styleCode != null and styleCode != ''"> and a.style_code = #{styleCode}</if>
+            <if test="customerName != null and customerName != ''"> and a.customer_name like concat('%', #{customerName}, '%')</if>
+            <if test="status != null and status != ''"> and a.status = #{status}</if>
+            <if test="releaseStatus != null and releaseStatus != ''"> and a.release_status = #{releaseStatus}</if>
+        </where>
+        order by a.id desc
+    </select>
+
+    <select id="selectById" parameterType="Long" resultMap="ErpShipmentResult">
+        <include refid="selectVo"/> where a.id = #{id}
+    </select>
+
+    <insert id="insert" parameterType="com.ruoyi.erp.domain.ErpShipment" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_shipment
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="shipmentNo != null">shipment_no,</if>
+            <if test="salesOrderId != null">sales_order_id,</if>
+            <if test="salesNo != null">sales_no,</if>
+            <if test="styleCode != null">style_code,</if>
+            <if test="customerId != null">customer_id,</if>
+            <if test="customerName != null">customer_name,</if>
+            <if test="shipmentDate != null">shipment_date,</if>
+            <if test="totalQty != null">total_qty,</if>
+            <if test="totalCarton != null">total_carton,</if>
+            <if test="totalWeight != null">total_weight,</if>
+            <if test="totalVolume != null">total_volume,</if>
+            <if test="vesselName != null">vessel_name,</if>
+            <if test="containerNo != null">container_no,</if>
+            <if test="blNo != null">bl_no,</if>
+            <if test="invoiceNo != null">invoice_no,</if>
+            <if test="releaseStatus != null">release_status,</if>
+            <if test="status != null">status,</if>
+            <if test="factoryId != null">factory_id,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="shipmentNo != null">#{shipmentNo},</if>
+            <if test="salesOrderId != null">#{salesOrderId},</if>
+            <if test="salesNo != null">#{salesNo},</if>
+            <if test="styleCode != null">#{styleCode},</if>
+            <if test="customerId != null">#{customerId},</if>
+            <if test="customerName != null">#{customerName},</if>
+            <if test="shipmentDate != null">#{shipmentDate},</if>
+            <if test="totalQty != null">#{totalQty},</if>
+            <if test="totalCarton != null">#{totalCarton},</if>
+            <if test="totalWeight != null">#{totalWeight},</if>
+            <if test="totalVolume != null">#{totalVolume},</if>
+            <if test="vesselName != null">#{vesselName},</if>
+            <if test="containerNo != null">#{containerNo},</if>
+            <if test="blNo != null">#{blNo},</if>
+            <if test="invoiceNo != null">#{invoiceNo},</if>
+            <if test="releaseStatus != null">#{releaseStatus},</if>
+            <if test="status != null">#{status},</if>
+            <if test="factoryId != null">#{factoryId},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="remark != null">#{remark},</if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.ruoyi.erp.domain.ErpShipment">
+        update t_erp_shipment
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="shipmentNo != null">shipment_no = #{shipmentNo},</if>
+            <if test="salesOrderId != null">sales_order_id = #{salesOrderId},</if>
+            <if test="salesNo != null">sales_no = #{salesNo},</if>
+            <if test="styleCode != null">style_code = #{styleCode},</if>
+            <if test="customerName != null">customer_name = #{customerName},</if>
+            <if test="shipmentDate != null">shipment_date = #{shipmentDate},</if>
+            <if test="totalQty != null">total_qty = #{totalQty},</if>
+            <if test="totalCarton != null">total_carton = #{totalCarton},</if>
+            <if test="totalWeight != null">total_weight = #{totalWeight},</if>
+            <if test="totalVolume != null">total_volume = #{totalVolume},</if>
+            <if test="vesselName != null">vessel_name = #{vesselName},</if>
+            <if test="containerNo != null">container_no = #{containerNo},</if>
+            <if test="blNo != null">bl_no = #{blNo},</if>
+            <if test="invoiceNo != null">invoice_no = #{invoiceNo},</if>
+            <if test="releaseStatus != null">release_status = #{releaseStatus},</if>
+            <if test="releaseBy != null">release_by = #{releaseBy},</if>
+            <if test="releaseTime != null">release_time = #{releaseTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteById" parameterType="Long">
+        delete from t_erp_shipment where id = #{id}
+    </delete>
+
+    <delete id="deleteByIds">
+        delete from t_erp_shipment where id in
+        <foreach collection="array" item="id" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>
