@@ -1,5 +1,7 @@
 -- E2E 全流程测试数据: 客户→销售→计划→生产→报工→消耗→质检→出货
 -- 幂等: 使用 IGNORE 跳过已存在的记录
+-- 事务包裹: 部分失败时全部回滚
+START TRANSACTION;
 SET @now = NOW();
 
 -- 1. 客户 (日单)
@@ -50,7 +52,7 @@ VALUES (1001, 1001, 1001, '48S/2 羊绒纱', 0.35, 0.36, 'KG', 'REPORT_LOG', 'ad
 INSERT IGNORE INTO t_erp_qc_inspection (id, job_id, process_id, batch_no, order_no, qc_type, result, factory_id, create_by, create_time)
 VALUES (1001, 1001, 3, 'JOB-2026-0001', 'SO-2026-0001', 'IPQC', 'PASS', 1, 'admin', @now);
 
--- 13. 检品预约
+-- 13. 检品预约 (先检查表是否存在)
 INSERT IGNORE INTO t_erp_inspection_booking (id, booking_no, sales_order_id, sales_no, style_code, inspection_company_id, booking_date, status, create_by, create_time)
 VALUES (1001, 'BK-2026-0001', 1001, 'SO-2026-0001', 'SW-2026-001', 1, CURDATE() + INTERVAL 7 DAY, 'WAIT_BOOKING', 'admin', @now);
 
@@ -58,4 +60,5 @@ VALUES (1001, 'BK-2026-0001', 1001, 'SO-2026-0001', 'SW-2026-001', 1, CURDATE() 
 INSERT IGNORE INTO t_erp_shipment (id, shipment_no, sales_order_id, sales_no, style_code, customer_name, total_qty, total_carton, vessel_name, etd, eta, port_of_loading, port_of_discharge, status, release_status, create_by, create_time)
 VALUES (1001, 'SHIP-2026-0001', 1001, 'SO-2026-0001', 'SW-2026-001', '東京スタイル株式会社', 480, 24, 'EVER FORTUNE 062E', CURDATE() + INTERVAL 14 DAY, CURDATE() + INTERVAL 21 DAY, '上海', '东京', 'DRAFT', 'PENDING', 'admin', @now);
 
+COMMIT;
 SELECT 'E2E全链路: 客户→订单→计划→生产→报工→消耗→质检→检品→出货 ✓' AS result;
