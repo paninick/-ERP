@@ -43,6 +43,10 @@ public class ErpShipment extends BaseEntity {
     private BigDecimal totalVolume;
 
     private String vesselName;
+    private Date etd;
+    private Date eta;
+    private String portOfLoading;
+    private String portOfDischarge;
     private String containerNo;
     private String blNo;
     private String invoiceNo;
@@ -83,6 +87,14 @@ public class ErpShipment extends BaseEntity {
     public BigDecimal getTotalVolume() { return totalVolume; }
     public void setTotalVolume(BigDecimal v) { this.totalVolume = v; }
     public String getVesselName() { return vesselName; }
+    public Date getEtd() { return etd; }
+    public void setEtd(Date v) { this.etd = v; }
+    public Date getEta() { return eta; }
+    public void setEta(Date v) { this.eta = v; }
+    public String getPortOfLoading() { return portOfLoading; }
+    public void setPortOfLoading(String v) { this.portOfLoading = v; }
+    public String getPortOfDischarge() { return portOfDischarge; }
+    public void setPortOfDischarge(String v) { this.portOfDischarge = v; }
     public void setVesselName(String v) { this.vesselName = v; }
     public String getContainerNo() { return containerNo; }
     public void setContainerNo(String v) { this.containerNo = v; }

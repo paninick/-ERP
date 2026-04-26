@@ -21,6 +21,11 @@ public class SampleNotice extends ErpBaseBillEntity {
     /** 打样编号 */
     @Excel(name = "打样编号")
     private String sampleNo;
+    private Integer roundNumber;
+    private String customerApproved;
+    private String customerFeedback;
+    private String factoryConfirmed;
+    private Date factoryConfirmDate;
 
     /** 打样类型 */
     @Excel(name = "打样类型")
@@ -213,6 +218,17 @@ public class SampleNotice extends ErpBaseBillEntity {
     public void setSampleNo(String sampleNo) {
         this.sampleNo = sampleNo;
     }
+
+    public Integer getRoundNumber() { return roundNumber; }
+    public void setRoundNumber(Integer v) { this.roundNumber = v; }
+    public String getCustomerApproved() { return customerApproved; }
+    public void setCustomerApproved(String v) { this.customerApproved = v; }
+    public String getCustomerFeedback() { return customerFeedback; }
+    public void setCustomerFeedback(String v) { this.customerFeedback = v; }
+    public String getFactoryConfirmed() { return factoryConfirmed; }
+    public void setFactoryConfirmed(String v) { this.factoryConfirmed = v; }
+    public Date getFactoryConfirmDate() { return factoryConfirmDate; }
+    public void setFactoryConfirmDate(Date v) { this.factoryConfirmDate = v; }
 
     public String getStyleCategory() {
         return styleCategory;

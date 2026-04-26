@@ -154,6 +154,8 @@ public class ProducePlan extends ErpBaseBillEntity {
     /** 订单状态 1-新建 2-已安排生产计划 3-生产中 4-部分入库 5-已全部入库 6-部分出库 7-已完成出库 8-交付中 9-完成 10-取消 */
     @Excel(name = "订单状态 1-新建 2-已安排生产计划 3-生产中 4-部分入库 5-已全部入库 6-部分出库 7-已完成出库 8-交付中 9-完成 10-取消")
     private String planStatus;
+    private String priority;
+    private String insertReason;
 
     /** 审批状态 */
     @Excel(name = "审批状态")
@@ -434,6 +436,11 @@ public class ProducePlan extends ErpBaseBillEntity {
     public String getPlanStatus() {
         return planStatus;
     }
+
+    public String getPriority() { return priority; }
+    public void setPriority(String v) { this.priority = v; }
+    public String getInsertReason() { return insertReason; }
+    public void setInsertReason(String v) { this.insertReason = v; }
     public void setAuditStatus(String auditStatus) {
         this.auditStatus = auditStatus;
     }

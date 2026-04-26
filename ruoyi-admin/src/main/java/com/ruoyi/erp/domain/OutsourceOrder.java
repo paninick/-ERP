@@ -51,6 +51,9 @@ public class OutsourceOrder extends ErpBaseBillEntity {
 
     /** 工票ID列表，逗号分隔 */
     private String jobIds;
+    private String batchNo;
+    private Integer batchSeq;
+    private Integer batchTotal;
 
     /** 总件数 */
     @Excel(name = "总件数")
@@ -207,6 +210,13 @@ public class OutsourceOrder extends ErpBaseBillEntity {
     public void setJobIds(String jobIds) {
         this.jobIds = jobIds;
     }
+
+    public String getBatchNo() { return batchNo; }
+    public void setBatchNo(String v) { this.batchNo = v; }
+    public Integer getBatchSeq() { return batchSeq; }
+    public void setBatchSeq(Integer v) { this.batchSeq = v; }
+    public Integer getBatchTotal() { return batchTotal; }
+    public void setBatchTotal(Integer v) { this.batchTotal = v; }
 
     public Integer getTotalQty() {
         return totalQty;

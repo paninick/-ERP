@@ -25,6 +25,7 @@ public class SalesOrderMaterial extends BaseEntity {
     /** 材料类型 */
     @Excel(name = "材料类型")
     private String materialType;
+    private String supplyType;
 
     /** 主料id */
     @Excel(name = "主料id")
@@ -87,6 +88,9 @@ public class SalesOrderMaterial extends BaseEntity {
     public void setMaterialType(String materialType) {
         this.materialType = materialType;
     }
+
+    public String getSupplyType() { return supplyType; }
+    public void setSupplyType(String v) { this.supplyType = v; }
 
     public String getMaterialType() {
         return materialType;

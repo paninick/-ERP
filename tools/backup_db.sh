@@ -8,7 +8,7 @@ set -e
 DB_HOST="${DB_HOST:-localhost}"
 DB_PORT="${DB_PORT:-3306}"
 DB_USER="${DB_USER:-root}"
-DB_PASS="${DB_PASS:-erp_root_2026}"
+DB_PASS="${DB_PASS:?必须设置DB_PASS环境变量}"
 DB_NAME="${DB_NAME:-ry_vue}"
 BACKUP_DIR="${BACKUP_DIR:-./backups}"
 RETENTION_DAYS="${1:-30}"
