@@ -112,4 +112,9 @@ public class ErpShipment extends BaseEntity {
     public void setStatus(String v) { this.status = v; }
     public Long getFactoryId() { return factoryId; }
     public void setFactoryId(Long v) { this.factoryId = v; }
+
+    @Override
+    public String toString() {
+        return "ErpShipment{id=" + id + ", shipmentNo='" + shipmentNo + "', salesNo='" + salesNo + "', styleCode='" + styleCode + "', customerName='" + customerName + "', totalQty=" + totalQty + ", status='" + status + "', releaseStatus='" + releaseStatus + "'}";
+    }
 }
