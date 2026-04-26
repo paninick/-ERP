@@ -2,11 +2,14 @@ package com.ruoyi.erp.controller;
 
 import java.math.BigDecimal;
 import java.util.Map;
+import com.ruoyi.common.annotation.Log;
 import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
+import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.erp.approval.service.IErpApprovalLogService;
 import com.ruoyi.erp.domain.FinInvoice;
-import com.ruoyi.erp.service.impl.FinInvoiceServiceImpl;
+import com.ruoyi.erp.service.IFinInvoiceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -16,7 +19,10 @@ import org.springframework.web.bind.annotation.*;
 public class FinInvoiceController extends BaseController {
 
     @Autowired
-    private FinInvoiceServiceImpl invoiceService;
+    private IFinInvoiceService invoiceService;
+
+    @Autowired
+    private IErpApprovalLogService approvalLogService;
 
     @PreAuthorize("@ss.hasPermi('erp:finInvoice:list')")
     @GetMapping("/list")
@@ -77,5 +83,42 @@ public class FinInvoiceController extends BaseController {
     @GetMapping("/boardStats")
     public AjaxResult boardStats() {
         return AjaxResult.success(invoiceService.getBoardStats());
+    }
+
+    @PreAuthorize("@ss.hasPermi('erp:finInvoice:approve')")
+    @Log(title = "发票审批", businessType = BusinessType.UPDATE)
+    @PutMapping("/submit/{id}")
+    public AjaxResult submit(@PathVariable Long id) {
+        FinInvoice invoice = invoiceService.selectById(id);
+        String from = invoice.getAuditStatus() != null ? invoice.getAuditStatus() : "DRAFT";
+        invoice.setAuditStatus("SUBMITTED");
+        invoiceService.update(invoice);
+        approvalLogService.writeLog("INVOICE", id, null, "FINANCE_CONFIRM", "SUBMIT",
+            from, "SUBMITTED", getUsername(), null, null);
+        return success();
+    }
+
+    @PreAuthorize("@ss.hasPermi('erp:finInvoice:approve')")
+    @Log(title = "发票审批", businessType = BusinessType.UPDATE)
+    @PutMapping("/approve/{id}")
+    public AjaxResult approve(@PathVariable Long id) {
+        FinInvoice invoice = invoiceService.selectById(id);
+        invoice.setAuditStatus("APPROVED");
+        invoiceService.update(invoice);
+        approvalLogService.writeLog("INVOICE", id, null, "FINANCE_CONFIRM", "APPROVE",
+            "SUBMITTED", "APPROVED", getUsername(), null, null);
+        return success();
+    }
+
+    @PreAuthorize("@ss.hasPermi('erp:finInvoice:approve')")
+    @Log(title = "发票审批", businessType = BusinessType.UPDATE)
+    @PutMapping("/reject/{id}")
+    public AjaxResult reject(@PathVariable Long id) {
+        FinInvoice invoice = invoiceService.selectById(id);
+        invoice.setAuditStatus("REJECTED");
+        invoiceService.update(invoice);
+        approvalLogService.writeLog("INVOICE", id, null, "FINANCE_CONFIRM", "REJECT",
+            "SUBMITTED", "REJECTED", getUsername(), null, null);
+        return success();
     }
 }

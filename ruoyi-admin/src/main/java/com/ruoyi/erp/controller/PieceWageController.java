@@ -1,5 +1,6 @@
 package com.ruoyi.erp.controller;
 
+import com.ruoyi.erp.approval.service.IErpApprovalLogService;
 import com.ruoyi.erp.domain.PieceWage;
 import com.ruoyi.erp.service.IPieceWageService;
 import com.ruoyi.common.annotation.Log;
@@ -26,6 +27,9 @@ public class PieceWageController extends BaseController {
 
     @Autowired
     private IPieceWageService pieceWageService;
+
+    @Autowired
+    private IErpApprovalLogService approvalLogService;
 
     /**
      * 查询计件工资汇总列表
@@ -104,5 +108,31 @@ public class PieceWageController extends BaseController {
     public AjaxResult autoGenerate(@RequestParam String wageMonth) {
         int count = pieceWageService.autoGenerateWageByMonth(wageMonth);
         return success("本月共生成 " + count + " 名员工工资单（已存在的自动跳过）");
+    }
+
+    @PreAuthorize("@ss.hasPermi('erp:piecewage:approve')")
+    @Log(title = "工资确认", businessType = BusinessType.UPDATE)
+    @PutMapping("/confirm/{id}")
+    public AjaxResult confirm(@PathVariable Long id) {
+        PieceWage wage = pieceWageService.selectPieceWageById(id);
+        wage.setSettleStatus("CONFIRMED");
+        wage.setConfirmBy(getUsername());
+        wage.setConfirmTime(new java.util.Date());
+        pieceWageService.updatePieceWage(wage);
+        approvalLogService.writeLog("PIECE_WAGE", id, null, "WAGE_CONFIRM", "APPROVE",
+            "DRAFT", "CONFIRMED", getUsername(), null, null);
+        return success();
+    }
+
+    @PreAuthorize("@ss.hasPermi('erp:piecewage:approve')")
+    @Log(title = "工资发放", businessType = BusinessType.UPDATE)
+    @PutMapping("/pay/{id}")
+    public AjaxResult pay(@PathVariable Long id) {
+        PieceWage wage = pieceWageService.selectPieceWageById(id);
+        wage.setSettleStatus("PAID");
+        pieceWageService.updatePieceWage(wage);
+        approvalLogService.writeLog("PIECE_WAGE", id, null, "WAGE_CONFIRM", "RELEASE",
+            "CONFIRMED", "PAID", getUsername(), null, null);
+        return success();
     }
 }

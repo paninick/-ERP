@@ -14,6 +14,7 @@ public class FinInvoice extends BaseEntity {
     private BigDecimal settledAmount;
     private String taxNumber;
     private String status;
+    private String auditStatus;
     @JsonFormat(pattern = "yyyy-MM-dd")
     private Date invoiceDate;
     private Long factoryId;
@@ -34,6 +35,8 @@ public class FinInvoice extends BaseEntity {
     public void setTaxNumber(String taxNumber) { this.taxNumber = taxNumber; }
     public String getStatus() { return status; }
     public void setStatus(String status) { this.status = status; }
+    public String getAuditStatus() { return auditStatus; }
+    public void setAuditStatus(String auditStatus) { this.auditStatus = auditStatus; }
     public Date getInvoiceDate() { return invoiceDate; }
     public void setInvoiceDate(Date invoiceDate) { this.invoiceDate = invoiceDate; }
     public Long getFactoryId() { return factoryId; }
