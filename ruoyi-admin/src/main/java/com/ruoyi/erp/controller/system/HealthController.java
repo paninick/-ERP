@@ -14,7 +14,7 @@ public class HealthController {
     @Autowired(required = false)
     private DataSource dataSource;
 
-    @GetMapping("/erp/health")
+    @GetMapping({"/erp/health", "/profile/health"})
     public AjaxResult health() {
         Map<String, Object> status = new LinkedHashMap<>();
         status.put("status", "UP");
