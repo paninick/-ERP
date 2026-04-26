@@ -12,6 +12,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="nationality"    column="nationality"    />
         <result property="businessScope"    column="business_scope"    />
         <result property="salesId"    column="sales_id"    />
+        <result property="isJapanOrder"              column="is_japan_order"               />
+        <result property="requireInspection"         column="require_inspection"           />
+        <result property="aqlLevel"                  column="aql_level"                    />
+        <result property="needleDetectReq"           column="needle_detect_req"            />
+        <result property="blockShipmentWithoutRelease" column="block_shipment_without_release" />
+        <result property="inspectionLeadDays"        column="inspection_lead_days"         />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
@@ -20,7 +26,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectCustomerVo">
-        select a.id, a.customer_no, a.customer_name, a.customer_brief, a.nationality, a.business_scope, a.sales_id, a.create_by, a.create_time, a.update_by, a.update_time, a.remark
+        select a.id, a.customer_no, a.customer_name, a.customer_brief, a.nationality, a.business_scope, a.sales_id,
+               a.is_japan_order, a.require_inspection, a.aql_level, a.needle_detect_req,
+               a.block_shipment_without_release, a.inspection_lead_days,
+               a.create_by, a.create_time, a.update_by, a.update_time, a.remark
         from t_erp_customer a
     </sql>
 
@@ -57,6 +66,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="nationality != null">nationality,</if>
             <if test="businessScope != null">business_scope,</if>
             <if test="salesId != null">sales_id,</if>
+            <if test="isJapanOrder != null">is_japan_order,</if>
+            <if test="requireInspection != null">require_inspection,</if>
+            <if test="aqlLevel != null">aql_level,</if>
+            <if test="needleDetectReq != null">needle_detect_req,</if>
+            <if test="blockShipmentWithoutRelease != null">block_shipment_without_release,</if>
+            <if test="inspectionLeadDays != null">inspection_lead_days,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
@@ -70,6 +85,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="nationality != null">#{nationality},</if>
             <if test="businessScope != null">#{businessScope},</if>
             <if test="salesId != null">#{salesId},</if>
+            <if test="isJapanOrder != null">#{isJapanOrder},</if>
+            <if test="requireInspection != null">#{requireInspection},</if>
+            <if test="aqlLevel != null">#{aqlLevel},</if>
+            <if test="needleDetectReq != null">#{needleDetectReq},</if>
+            <if test="blockShipmentWithoutRelease != null">#{blockShipmentWithoutRelease},</if>
+            <if test="inspectionLeadDays != null">#{inspectionLeadDays},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
             <if test="updateBy != null">#{updateBy},</if>
@@ -87,6 +108,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="nationality != null">nationality = #{nationality},</if>
             <if test="businessScope != null">business_scope = #{businessScope},</if>
             <if test="salesId != null">sales_id = #{salesId},</if>
+            <if test="isJapanOrder != null">is_japan_order = #{isJapanOrder},</if>
+            <if test="requireInspection != null">require_inspection = #{requireInspection},</if>
+            <if test="aqlLevel != null">aql_level = #{aqlLevel},</if>
+            <if test="needleDetectReq != null">needle_detect_req = #{needleDetectReq},</if>
+            <if test="blockShipmentWithoutRelease != null">block_shipment_without_release = #{blockShipmentWithoutRelease},</if>
+            <if test="inspectionLeadDays != null">inspection_lead_days = #{inspectionLeadDays},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>

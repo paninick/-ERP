@@ -1,0 +1,14 @@
+package com.ruoyi.erp.style.mapper;
+
+import java.util.List;
+import com.ruoyi.erp.style.domain.ErpStyle;
+
+public interface ErpStyleMapper {
+    ErpStyle selectErpStyleById(Long id);
+    ErpStyle selectErpStyleByCode(String styleCode);
+    List<ErpStyle> selectErpStyleList(ErpStyle style);
+    int insertErpStyle(ErpStyle style);
+    int updateErpStyle(ErpStyle style);
+    int deleteErpStyleById(Long id);
+    int deleteErpStyleByIds(Long[] ids);
+}

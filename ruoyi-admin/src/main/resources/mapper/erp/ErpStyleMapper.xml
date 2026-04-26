@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.style.mapper.ErpStyleMapper">
+
+    <resultMap type="ErpStyle" id="ErpStyleResult">
+        <result property="id"                 column="id"                   />
+        <result property="styleCode"          column="style_code"           />
+        <result property="customerStyleCode"  column="customer_style_code"  />
+        <result property="styleName"          column="style_name"           />
+        <result property="productFamily"      column="product_family"       />
+        <result property="customerId"         column="customer_id"          />
+        <result property="season"             column="season"               />
+        <result property="yarnType"           column="yarn_type"            />
+        <result property="gauge"              column="gauge"                />
+        <result property="weight"             column="weight"               />
+        <result property="bomVersion"         column="bom_version"          />
+        <result property="routeVersion"       column="route_version"        />
+        <result property="status"             column="status"               />
+        <result property="factoryId"          column="factory_id"           />
+        <result property="remark"             column="remark"               />
+        <result property="createBy"           column="create_by"            />
+        <result property="createTime"         column="create_time"          />
+        <result property="updateBy"           column="update_by"            />
+        <result property="updateTime"         column="update_time"          />
+    </resultMap>
+
+    <sql id="selectErpStyleVo">
+        select id, style_code, customer_style_code, style_name, product_family, customer_id,
+               season, yarn_type, gauge, weight, bom_version, route_version, status, factory_id,
+               remark, create_by, create_time, update_by, update_time
+        from t_erp_style a
+    </sql>
+
+    <select id="selectErpStyleList" parameterType="ErpStyle" resultMap="ErpStyleResult">
+        <include refid="selectErpStyleVo"/>
+        <where>
+            <if test="styleCode != null and styleCode != ''"> and a.style_code like concat('%', #{styleCode}, '%')</if>
+            <if test="customerStyleCode != null and customerStyleCode != ''"> and a.customer_style_code like concat('%', #{customerStyleCode}, '%')</if>
+            <if test="styleName != null and styleName != ''"> and a.style_name like concat('%', #{styleName}, '%')</if>
+            <if test="productFamily != null and productFamily != ''"> and a.product_family = #{productFamily}</if>
+            <if test="customerId != null"> and a.customer_id = #{customerId}</if>
+            <if test="status != null and status != ''"> and a.status = #{status}</if>
+            <if test="factoryId != null"> and a.factory_id = #{factoryId}</if>
+        </where>
+        order by a.create_time desc
+    </select>
+
+    <select id="selectErpStyleById" parameterType="Long" resultMap="ErpStyleResult">
+        <include refid="selectErpStyleVo"/>
+        where a.id = #{id}
+    </select>
+
+    <select id="selectErpStyleByCode" parameterType="String" resultMap="ErpStyleResult">
+        <include refid="selectErpStyleVo"/>
+        where a.style_code = #{styleCode}
+    </select>
+
+    <insert id="insertErpStyle" parameterType="ErpStyle" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_style
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="styleCode != null">style_code,</if>
+            <if test="customerStyleCode != null">customer_style_code,</if>
+            <if test="styleName != null">style_name,</if>
+            <if test="productFamily != null">product_family,</if>
+            <if test="customerId != null">customer_id,</if>
+            <if test="season != null">season,</if>
+            <if test="yarnType != null">yarn_type,</if>
+            <if test="gauge != null">gauge,</if>
+            <if test="weight != null">weight,</if>
+            <if test="bomVersion != null">bom_version,</if>
+            <if test="routeVersion != null">route_version,</if>
+            <if test="status != null">status,</if>
+            <if test="factoryId != null">factory_id,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="styleCode != null">#{styleCode},</if>
+            <if test="customerStyleCode != null">#{customerStyleCode},</if>
+            <if test="styleName != null">#{styleName},</if>
+            <if test="productFamily != null">#{productFamily},</if>
+            <if test="customerId != null">#{customerId},</if>
+            <if test="season != null">#{season},</if>
+            <if test="yarnType != null">#{yarnType},</if>
+            <if test="gauge != null">#{gauge},</if>
+            <if test="weight != null">#{weight},</if>
+            <if test="bomVersion != null">#{bomVersion},</if>
+            <if test="routeVersion != null">#{routeVersion},</if>
+            <if test="status != null">#{status},</if>
+            <if test="factoryId != null">#{factoryId},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateBy != null">#{updateBy},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateErpStyle" parameterType="ErpStyle">
+        update t_erp_style
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="customerStyleCode != null">customer_style_code = #{customerStyleCode},</if>
+            <if test="styleName != null">style_name = #{styleName},</if>
+            <if test="productFamily != null">product_family = #{productFamily},</if>
+            <if test="customerId != null">customer_id = #{customerId},</if>
+            <if test="season != null">season = #{season},</if>
+            <if test="yarnType != null">yarn_type = #{yarnType},</if>
+            <if test="gauge != null">gauge = #{gauge},</if>
+            <if test="weight != null">weight = #{weight},</if>
+            <if test="bomVersion != null">bom_version = #{bomVersion},</if>
+            <if test="routeVersion != null">route_version = #{routeVersion},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="factoryId != null">factory_id = #{factoryId},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteErpStyleById" parameterType="Long">
+        delete from t_erp_style where id = #{id}
+    </delete>
+
+    <delete id="deleteErpStyleByIds" parameterType="Long">
+        delete from t_erp_style where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+
+</mapper>

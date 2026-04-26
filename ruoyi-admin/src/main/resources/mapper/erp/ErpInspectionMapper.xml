@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.erp.inspection.mapper.ErpInspectionMapper">
+
+    <resultMap type="ErpInspectionCompany" id="CompanyResult">
+        <result property="id"          column="id"           />
+        <result property="companyName" column="company_name" />
+        <result property="companyCode" column="company_code" />
+        <result property="contact"     column="contact"      />
+        <result property="phone"       column="phone"        />
+        <result property="email"       column="email"        />
+        <result property="address"     column="address"      />
+        <result property="aqlStandard" column="aql_standard" />
+        <result property="status"      column="status"       />
+        <result property="remark"      column="remark"       />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"  column="create_time"  />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"  column="update_time"  />
+    </resultMap>
+
+    <resultMap type="ErpInspectionBooking" id="BookingResult">
+        <result property="id"                   column="id"                     />
+        <result property="bookingNo"            column="booking_no"             />
+        <result property="salesOrderId"         column="sales_order_id"         />
+        <result property="salesNo"              column="sales_no"               />
+        <result property="styleCode"            column="style_code"             />
+        <result property="inspectionCompanyId"  column="inspection_company_id"  />
+        <result property="bookingDate"          column="booking_date"           />
+        <result property="inspectionDate"       column="inspection_date"        />
+        <result property="inspectionResult"     column="inspection_result"      />
+        <result property="reportNo"             column="report_no"              />
+        <result property="defectSummary"        column="defect_summary"         />
+        <result property="releaseBy"            column="release_by"             />
+        <result property="releaseTime"          column="release_time"           />
+        <result property="status"               column="status"                 />
+        <result property="factoryId"            column="factory_id"             />
+        <result property="remark"               column="remark"                 />
+        <result property="createBy"             column="create_by"              />
+        <result property="createTime"           column="create_time"            />
+        <result property="updateBy"             column="update_by"              />
+        <result property="updateTime"           column="update_time"            />
+    </resultMap>
+
+    <!-- Company -->
+    <sql id="selectCompanyVo">
+        select id, company_name, company_code, contact, phone, email, address, aql_standard,
+               status, remark, create_by, create_time, update_by, update_time
+        from t_erp_inspection_company a
+    </sql>
+
+    <select id="selectCompanyList" parameterType="ErpInspectionCompany" resultMap="CompanyResult">
+        <include refid="selectCompanyVo"/>
+        <where>
+            <if test="companyName != null and companyName != ''"> and a.company_name like concat('%', #{companyName}, '%')</if>
+            <if test="companyCode != null and companyCode != ''"> and a.company_code = #{companyCode}</if>
+            <if test="status != null and status != ''"> and a.status = #{status}</if>
+        </where>
+        order by a.company_code
+    </select>
+
+    <select id="selectCompanyById" parameterType="Long" resultMap="CompanyResult">
+        <include refid="selectCompanyVo"/> where a.id = #{id}
+    </select>
+
+    <insert id="insertCompany" parameterType="ErpInspectionCompany" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_inspection_company
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="companyName != null">company_name,</if>
+            <if test="companyCode != null">company_code,</if>
+            <if test="contact != null">contact,</if>
+            <if test="phone != null">phone,</if>
+            <if test="email != null">email,</if>
+            <if test="address != null">address,</if>
+            <if test="aqlStandard != null">aql_standard,</if>
+            <if test="status != null">status,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="companyName != null">#{companyName},</if>
+            <if test="companyCode != null">#{companyCode},</if>
+            <if test="contact != null">#{contact},</if>
+            <if test="phone != null">#{phone},</if>
+            <if test="email != null">#{email},</if>
+            <if test="address != null">#{address},</if>
+            <if test="aqlStandard != null">#{aqlStandard},</if>
+            <if test="status != null">#{status},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateCompany" parameterType="ErpInspectionCompany">
+        update t_erp_inspection_company
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="companyName != null">company_name = #{companyName},</if>
+            <if test="companyCode != null">company_code = #{companyCode},</if>
+            <if test="contact != null">contact = #{contact},</if>
+            <if test="phone != null">phone = #{phone},</if>
+            <if test="email != null">email = #{email},</if>
+            <if test="address != null">address = #{address},</if>
+            <if test="aqlStandard != null">aql_standard = #{aqlStandard},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteCompanyById" parameterType="Long">
+        delete from t_erp_inspection_company where id = #{id}
+    </delete>
+    <delete id="deleteCompanyByIds" parameterType="Long">
+        delete from t_erp_inspection_company where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+
+    <!-- Booking -->
+    <sql id="selectBookingVo">
+        select id, booking_no, sales_order_id, sales_no, style_code, inspection_company_id,
+               booking_date, inspection_date, inspection_result, report_no, defect_summary,
+               release_by, release_time, status, factory_id, remark, create_by, create_time, update_by, update_time
+        from t_erp_inspection_booking a
+    </sql>
+
+    <select id="selectBookingList" parameterType="ErpInspectionBooking" resultMap="BookingResult">
+        <include refid="selectBookingVo"/>
+        <where>
+            <if test="bookingNo != null and bookingNo != ''"> and a.booking_no like concat('%', #{bookingNo}, '%')</if>
+            <if test="styleCode != null and styleCode != ''"> and a.style_code = #{styleCode}</if>
+            <if test="inspectionCompanyId != null"> and a.inspection_company_id = #{inspectionCompanyId}</if>
+            <if test="status != null and status != ''"> and a.status = #{status}</if>
+            <if test="factoryId != null"> and a.factory_id = #{factoryId}</if>
+        </where>
+        order by a.create_time desc
+    </select>
+
+    <select id="selectBookingById" parameterType="Long" resultMap="BookingResult">
+        <include refid="selectBookingVo"/> where a.id = #{id}
+    </select>
+
+    <insert id="insertBooking" parameterType="ErpInspectionBooking" useGeneratedKeys="true" keyProperty="id">
+        insert into t_erp_inspection_booking
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="bookingNo != null">booking_no,</if>
+            <if test="salesOrderId != null">sales_order_id,</if>
+            <if test="salesNo != null">sales_no,</if>
+            <if test="styleCode != null">style_code,</if>
+            <if test="inspectionCompanyId != null">inspection_company_id,</if>
+            <if test="bookingDate != null">booking_date,</if>
+            <if test="inspectionDate != null">inspection_date,</if>
+            <if test="inspectionResult != null">inspection_result,</if>
+            <if test="reportNo != null">report_no,</if>
+            <if test="defectSummary != null">defect_summary,</if>
+            <if test="status != null">status,</if>
+            <if test="factoryId != null">factory_id,</if>
+            <if test="remark != null">remark,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="bookingNo != null">#{bookingNo},</if>
+            <if test="salesOrderId != null">#{salesOrderId},</if>
+            <if test="salesNo != null">#{salesNo},</if>
+            <if test="styleCode != null">#{styleCode},</if>
+            <if test="inspectionCompanyId != null">#{inspectionCompanyId},</if>
+            <if test="bookingDate != null">#{bookingDate},</if>
+            <if test="inspectionDate != null">#{inspectionDate},</if>
+            <if test="inspectionResult != null">#{inspectionResult},</if>
+            <if test="reportNo != null">#{reportNo},</if>
+            <if test="defectSummary != null">#{defectSummary},</if>
+            <if test="status != null">#{status},</if>
+            <if test="factoryId != null">#{factoryId},</if>
+            <if test="remark != null">#{remark},</if>
+            <if test="createBy != null">#{createBy},</if>
+            <if test="createTime != null">#{createTime},</if>
+        </trim>
+    </insert>
+
+    <update id="updateBooking" parameterType="ErpInspectionBooking">
+        update t_erp_inspection_booking
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="inspectionResult != null">inspection_result = #{inspectionResult},</if>
+            <if test="reportNo != null">report_no = #{reportNo},</if>
+            <if test="defectSummary != null">defect_summary = #{defectSummary},</if>
+            <if test="releaseBy != null">release_by = #{releaseBy},</if>
+            <if test="releaseTime != null">release_time = #{releaseTime},</if>
+            <if test="status != null">status = #{status},</if>
+            <if test="remark != null">remark = #{remark},</if>
+            <if test="updateBy != null">update_by = #{updateBy},</if>
+            <if test="updateTime != null">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteBookingById" parameterType="Long">
+        delete from t_erp_inspection_booking where id = #{id}
+    </delete>
+    <delete id="deleteBookingByIds" parameterType="Long">
+        delete from t_erp_inspection_booking where id in
+        <foreach item="id" collection="array" open="(" separator="," close=")">#{id}</foreach>
+    </delete>
+
+</mapper>

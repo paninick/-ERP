@@ -19,6 +19,11 @@ public class QcInspection extends BaseEntity {
     private Long factoryId;
     private String status;
     private String rejectReason;
+    private String qcType;
+    private String sizeMeasure;
+    private String needleDetect;
+    private Integer recheckCount;
+    private String defectSegment;
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
@@ -46,4 +51,14 @@ public class QcInspection extends BaseEntity {
     public void setStatus(String status) { this.status = status; }
     public String getRejectReason() { return rejectReason; }
     public void setRejectReason(String rejectReason) { this.rejectReason = rejectReason; }
+    public String getQcType() { return qcType; }
+    public void setQcType(String qcType) { this.qcType = qcType; }
+    public String getSizeMeasure() { return sizeMeasure; }
+    public void setSizeMeasure(String sizeMeasure) { this.sizeMeasure = sizeMeasure; }
+    public String getNeedleDetect() { return needleDetect; }
+    public void setNeedleDetect(String needleDetect) { this.needleDetect = needleDetect; }
+    public Integer getRecheckCount() { return recheckCount; }
+    public void setRecheckCount(Integer recheckCount) { this.recheckCount = recheckCount; }
+    public String getDefectSegment() { return defectSegment; }
+    public void setDefectSegment(String defectSegment) { this.defectSegment = defectSegment; }
 }

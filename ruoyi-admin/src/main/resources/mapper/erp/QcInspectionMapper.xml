@@ -16,6 +16,11 @@
         <result property="factoryId" column="factory_id"/>
         <result property="status" column="status"/>
         <result property="rejectReason" column="reject_reason"/>
+        <result property="qcType"       column="qc_type"/>
+        <result property="sizeMeasure"  column="size_measure"/>
+        <result property="needleDetect" column="needle_detect"/>
+        <result property="recheckCount" column="recheck_count"/>
+        <result property="defectSegment" column="defect_segment"/>
         <result property="remark" column="remark"/>
         <result property="createBy" column="create_by"/>
         <result property="createTime" column="create_time"/>
@@ -24,11 +29,21 @@
     </resultMap>
 
     <select id="selectById" resultMap="QcResult">
-        SELECT /*+ USE_INDEX(t_erp_qc_inspection PRIMARY) */ * FROM t_erp_qc_inspection WHERE id = #{id}
+        SELECT /*+ USE_INDEX(t_erp_qc_inspection PRIMARY) */
+               id, batch_no, style_code, order_no, result, pass_rate, sample_qty, defect_qty,
+               inspector_id, inspector_name, factory_id, status, reject_reason,
+               qc_type, size_measure, needle_detect, recheck_count, defect_segment,
+               remark, create_by, create_time, update_by, update_time
+        FROM t_erp_qc_inspection WHERE id = #{id}
     </select>
 
     <select id="selectList" parameterType="com.ruoyi.erp.domain.QcInspection" resultMap="QcResult">
-        SELECT /*+ USE_INDEX(t_erp_qc_inspection idx_factory_id, idx_batch_no) */ * FROM t_erp_qc_inspection
+        SELECT /*+ USE_INDEX(t_erp_qc_inspection idx_factory_id, idx_batch_no) */
+               id, batch_no, style_code, order_no, result, pass_rate, sample_qty, defect_qty,
+               inspector_id, inspector_name, factory_id, status, reject_reason,
+               qc_type, size_measure, needle_detect, recheck_count, defect_segment,
+               remark, create_by, create_time, update_by, update_time
+        FROM t_erp_qc_inspection
         <where>
             <if test="batchNo != null and batchNo != ''">AND batch_no LIKE CONCAT('%',#{batchNo},'%')</if>
             <if test="styleCode != null and styleCode != ''">AND style_code = #{styleCode}</if>
@@ -42,9 +57,15 @@
 
     <insert id="insert" parameterType="com.ruoyi.erp.domain.QcInspection" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO t_erp_qc_inspection
-        (batch_no, style_code, order_no, result, pass_rate, sample_qty, defect_qty, inspector_id, inspector_name, factory_id, status, remark, create_by, create_time)
+        (batch_no, style_code, order_no, result, pass_rate, sample_qty, defect_qty,
+         inspector_id, inspector_name, factory_id, status,
+         qc_type, size_measure, needle_detect, recheck_count, defect_segment,
+         remark, create_by, create_time)
         VALUES
-        (#{batchNo}, #{styleCode}, #{orderNo}, #{result}, #{passRate}, #{sampleQty}, #{defectQty}, #{inspectorId}, #{inspectorName}, #{factoryId}, #{status}, #{remark}, #{createBy}, #{createTime})
+        (#{batchNo}, #{styleCode}, #{orderNo}, #{result}, #{passRate}, #{sampleQty}, #{defectQty},
+         #{inspectorId}, #{inspectorName}, #{factoryId}, #{status},
+         #{qcType}, #{sizeMeasure}, #{needleDetect}, #{recheckCount}, #{defectSegment},
+         #{remark}, #{createBy}, #{createTime})
     </insert>
 
     <update id="update" parameterType="com.ruoyi.erp.domain.QcInspection">
@@ -55,6 +76,11 @@
             <if test="defectQty != null">defect_qty = #{defectQty},</if>
             <if test="status != null">status = #{status},</if>
             <if test="rejectReason != null">reject_reason = #{rejectReason},</if>
+            <if test="qcType != null">qc_type = #{qcType},</if>
+            <if test="sizeMeasure != null">size_measure = #{sizeMeasure},</if>
+            <if test="needleDetect != null">needle_detect = #{needleDetect},</if>
+            <if test="recheckCount != null">recheck_count = #{recheckCount},</if>
+            <if test="defectSegment != null">defect_segment = #{defectSegment},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = NOW(),</if>
         </set>

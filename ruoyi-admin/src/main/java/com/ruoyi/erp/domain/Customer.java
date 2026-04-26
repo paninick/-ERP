@@ -50,6 +50,24 @@ public class Customer extends BaseEntity {
     /** 业务员ID */
     private Long salesId;
 
+    /** 是否日单客户 */
+    private Integer isJapanOrder;
+
+    /** 是否必须第三方检品 */
+    private Integer requireInspection;
+
+    /** AQL等级 */
+    private String aqlLevel;
+
+    /** 检针要求 */
+    private String needleDetectReq;
+
+    /** 未放行禁止出运 */
+    private Integer blockShipmentWithoutRelease;
+
+    /** 检品提前期(天) */
+    private Integer inspectionLeadDays;
+
     public void setId(Long id) {
         this.id = id;
     }
@@ -129,6 +147,24 @@ public class Customer extends BaseEntity {
     public Long getSalesId() {
         return salesId;
     }
+
+    public Integer getIsJapanOrder() { return isJapanOrder; }
+    public void setIsJapanOrder(Integer isJapanOrder) { this.isJapanOrder = isJapanOrder; }
+
+    public Integer getRequireInspection() { return requireInspection; }
+    public void setRequireInspection(Integer requireInspection) { this.requireInspection = requireInspection; }
+
+    public String getAqlLevel() { return aqlLevel; }
+    public void setAqlLevel(String aqlLevel) { this.aqlLevel = aqlLevel; }
+
+    public String getNeedleDetectReq() { return needleDetectReq; }
+    public void setNeedleDetectReq(String needleDetectReq) { this.needleDetectReq = needleDetectReq; }
+
+    public Integer getBlockShipmentWithoutRelease() { return blockShipmentWithoutRelease; }
+    public void setBlockShipmentWithoutRelease(Integer blockShipmentWithoutRelease) { this.blockShipmentWithoutRelease = blockShipmentWithoutRelease; }
+
+    public Integer getInspectionLeadDays() { return inspectionLeadDays; }
+    public void setInspectionLeadDays(Integer inspectionLeadDays) { this.inspectionLeadDays = inspectionLeadDays; }
 
     @Override
     public String toString() {
