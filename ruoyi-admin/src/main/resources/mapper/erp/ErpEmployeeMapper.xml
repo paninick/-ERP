@@ -12,6 +12,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="idCard"    column="id_card"    />
         <result property="department"    column="department"    />
         <result property="station"    column="station"    />
+        <result property="orgUnitId"    column="org_unit_id"    />
+        <result property="workshopId"    column="workshop_id"    />
+        <result property="teamId"    column="team_id"    />
+        <result property="stationId"    column="station_id"    />
+        <result property="skillLevel"    column="skill_level"    />
+        <result property="pieceCategory"    column="piece_category"    />
+        <result property="crossWorkshop"    column="cross_workshop"    />
+        <result property="qualification"    column="qualification"    />
         <result property="entryDate"    column="entry_date"    />
         <result property="leaveDate"    column="leave_date"    />
         <result property="status"    column="status"    />
@@ -23,7 +31,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectErpEmployeeVo">
-        select a.id, a.employee_code, a.employee_name, a.phone, a.id_card, a.department, a.station, a.entry_date, a.leave_date, a.status, a.remark, a.create_by, a.create_time, a.update_by, a.update_time
+        select a.id, a.employee_code, a.employee_name, a.phone, a.id_card, a.department, a.station, a.org_unit_id, a.workshop_id, a.team_id, a.station_id, a.skill_level, a.piece_category, a.cross_workshop, a.qualification, a.entry_date, a.leave_date, a.status, a.remark, a.create_by, a.create_time, a.update_by, a.update_time
         from t_erp_employee a
     </sql>
 
@@ -34,6 +42,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="employeeName != null  and employeeName != ''"> and a.employee_name like concat('%', #{employeeName}, '%')</if>
             <if test="department != null  and department != ''"> and a.department = #{department}</if>
             <if test="station != null  and station != ''"> and a.station = #{station}</if>
+            <if test="orgUnitId != null"> and a.org_unit_id = #{orgUnitId}</if>
+            <if test="workshopId != null"> and a.workshop_id = #{workshopId}</if>
+            <if test="teamId != null"> and a.team_id = #{teamId}</if>
+            <if test="skillLevel != null  and skillLevel != ''"> and a.skill_level = #{skillLevel}</if>
+            <if test="pieceCategory != null  and pieceCategory != ''"> and a.piece_category = #{pieceCategory}</if>
+            <if test="stationId != null"> and a.station_id = #{stationId}</if>
+            <if test="crossWorkshop != null"> and a.cross_workshop = #{crossWorkshop}</if>
             <if test="status != null  and status != ''"> and a.status = #{status}</if>
         </where>
         order by a.id desc
@@ -58,6 +73,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="idCard != null">id_card,</if>
             <if test="department != null">department,</if>
             <if test="station != null">station,</if>
+            <if test="orgUnitId != null">org_unit_id,</if>
+            <if test="workshopId != null">workshop_id,</if>
+            <if test="teamId != null">team_id,</if>
+            <if test="stationId != null">station_id,</if>
+            <if test="skillLevel != null and skillLevel != ''">skill_level,</if>
+            <if test="pieceCategory != null and pieceCategory != ''">piece_category,</if>
+            <if test="crossWorkshop != null">cross_workshop,</if>
+            <if test="qualification != null and qualification != ''">qualification,</if>
             <if test="entryDate != null">entry_date,</if>
             <if test="leaveDate != null">leave_date,</if>
             <if test="status != null">status,</if>
@@ -74,6 +97,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="idCard != null">#{idCard},</if>
             <if test="department != null">#{department},</if>
             <if test="station != null">#{station},</if>
+            <if test="orgUnitId != null">#{orgUnitId},</if>
+            <if test="workshopId != null">#{workshopId},</if>
+            <if test="teamId != null">#{teamId},</if>
+            <if test="stationId != null">#{stationId},</if>
+            <if test="skillLevel != null and skillLevel != ''">#{skillLevel},</if>
+            <if test="pieceCategory != null and pieceCategory != ''">#{pieceCategory},</if>
+            <if test="crossWorkshop != null">#{crossWorkshop},</if>
+            <if test="qualification != null and qualification != ''">#{qualification},</if>
             <if test="entryDate != null">#{entryDate},</if>
             <if test="leaveDate != null">#{leaveDate},</if>
             <if test="status != null">#{status},</if>
@@ -94,6 +125,14 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="idCard != null">id_card = #{idCard},</if>
             <if test="department != null">department = #{department},</if>
             <if test="station != null">station = #{station},</if>
+            <if test="orgUnitId != null">org_unit_id = #{orgUnitId},</if>
+            <if test="workshopId != null">workshop_id = #{workshopId},</if>
+            <if test="teamId != null">team_id = #{teamId},</if>
+            <if test="stationId != null">station_id = #{stationId},</if>
+            <if test="skillLevel != null and skillLevel != ''">skill_level = #{skillLevel},</if>
+            <if test="pieceCategory != null and pieceCategory != ''">piece_category = #{pieceCategory},</if>
+            <if test="crossWorkshop != null">cross_workshop = #{crossWorkshop},</if>
+            <if test="qualification != null and qualification != ''">qualification = #{qualification},</if>
             <if test="entryDate != null">entry_date = #{entryDate},</if>
             <if test="leaveDate != null">leave_date = #{leaveDate},</if>
             <if test="status != null">status = #{status},</if>

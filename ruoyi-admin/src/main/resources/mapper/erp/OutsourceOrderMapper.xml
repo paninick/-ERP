@@ -30,6 +30,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         <result property="totalPrice"    column="total_price"    />
         <result property="freight"    column="freight"    />
         <result property="remark"    column="remark"    />
+        <result property="settleStatus"  column="settle_status"  />
+        <result property="settleAmount"  column="settle_amount"  />
+        <result property="settleTime"    column="settle_time"    />
+        <result property="costAmount"    column="cost_amount"    />
         <result property="createBy"    column="create_by"    />
         <result property="createTime"    column="create_time"    />
         <result property="updateBy"    column="update_by"    />
@@ -37,7 +41,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
     </resultMap>
 
     <sql id="selectOutsourceOrderVo">
-        select a.id, a.src_bill_type, a.src_bill_id, a.src_bill_no, a.outsource_no, a.process_id, a.process_name, a.supplier_id, a.supplier_name, a.is_transfer, a.transfer_from, a.transfer_to, a.job_ids, a.total_qty, a.theory_weight, a.actual_weight, a.confirm_qty, a.defect_qty, a.status, a.outbound_time, a.receive_time, a.unit_price, a.total_price, a.freight, a.remark, a.create_by, a.create_time, a.update_by, a.update_time
+        select a.id, a.src_bill_type, a.src_bill_id, a.src_bill_no, a.outsource_no, a.process_id, a.process_name, a.supplier_id, a.supplier_name, a.is_transfer, a.transfer_from, a.transfer_to, a.job_ids, a.total_qty, a.theory_weight, a.actual_weight, a.confirm_qty, a.defect_qty, a.status, a.outbound_time, a.receive_time, a.unit_price, a.total_price, a.freight, a.settle_status, a.settle_amount, a.settle_time, a.cost_amount, a.remark, a.create_by, a.create_time, a.update_by, a.update_time
         from t_erp_outsource_order a
     </sql>
 
@@ -82,6 +86,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="unitPrice != null">unit_price,</if>
             <if test="totalPrice != null">total_price,</if>
             <if test="freight != null">freight,</if>
+            <if test="settleStatus != null">settle_status,</if>
+            <if test="settleAmount != null">settle_amount,</if>
+            <if test="settleTime != null">settle_time,</if>
+            <if test="costAmount != null">cost_amount,</if>
             <if test="remark != null">remark,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
@@ -112,6 +120,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="unitPrice != null">#{unitPrice},</if>
             <if test="totalPrice != null">#{totalPrice},</if>
             <if test="freight != null">#{freight},</if>
+            <if test="settleStatus != null">#{settleStatus},</if>
+            <if test="settleAmount != null">#{settleAmount},</if>
+            <if test="settleTime != null">#{settleTime},</if>
+            <if test="costAmount != null">#{costAmount},</if>
             <if test="remark != null">#{remark},</if>
             <if test="createBy != null">#{createBy},</if>
             <if test="createTime != null">#{createTime},</if>
@@ -146,6 +158,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
             <if test="unitPrice != null">unit_price = #{unitPrice},</if>
             <if test="totalPrice != null">total_price = #{totalPrice},</if>
             <if test="freight != null">freight = #{freight},</if>
+            <if test="settleStatus != null">settle_status = #{settleStatus},</if>
+            <if test="settleAmount != null">settle_amount = #{settleAmount},</if>
+            <if test="settleTime != null">settle_time = #{settleTime},</if>
+            <if test="costAmount != null">cost_amount = #{costAmount},</if>
             <if test="remark != null">remark = #{remark},</if>
             <if test="createBy != null">create_by = #{createBy},</if>
             <if test="createTime != null">create_time = #{createTime},</if>

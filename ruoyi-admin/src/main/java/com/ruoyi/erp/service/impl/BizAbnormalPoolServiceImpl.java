@@ -118,4 +118,17 @@ public class BizAbnormalPoolServiceImpl implements IBizAbnormalPoolService {
         int count = bizAbnormalPoolMapper.countUnhandledByBiz(bizType, bizId);
         return count > 0;
     }
+
+    @Override
+    public boolean hasLockedUnhandledAbnormal(String bizType, Long bizId) {
+        BizAbnormalPool query = new BizAbnormalPool();
+        query.setBizType(bizType);
+        query.setBizId(bizId);
+        query.setLockBiz("1");
+        List<BizAbnormalPool> list = bizAbnormalPoolMapper.selectBizAbnormalPoolList(query);
+        if (list == null || list.isEmpty()) {
+            return false;
+        }
+        return list.stream().anyMatch(item -> "0".equals(item.getStatus()) || "1".equals(item.getStatus()));
+    }
 }

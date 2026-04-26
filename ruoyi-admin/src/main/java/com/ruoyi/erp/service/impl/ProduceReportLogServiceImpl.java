@@ -10,6 +10,7 @@ import com.ruoyi.erp.mapper.ProduceJobMapper;
 import com.ruoyi.erp.mapper.ProduceJobProcessMapper;
 import com.ruoyi.erp.mapper.ProduceReportLogMapper;
 import com.ruoyi.erp.service.ErpRealtimePushService;
+import com.ruoyi.erp.service.IBizAbnormalPoolService;
 import com.ruoyi.erp.service.IProduceReportLogService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,9 @@ public class ProduceReportLogServiceImpl implements IProduceReportLogService {
     @Autowired
     private ErpRealtimePushService erpRealtimePushService;
 
+    @Autowired
+    private IBizAbnormalPoolService bizAbnormalPoolService;
+
     @Override
     public ProduceReportLog selectProduceReportLogById(Long id) {
         return produceReportLogMapper.selectProduceReportLogById(id);
@@ -54,6 +58,9 @@ public class ProduceReportLogServiceImpl implements IProduceReportLogService {
         ProduceJobProcess current = produceJobProcessMapper.selectProduceJobProcessById(produceReportLog.getJobProcessId());
         if (current == null) {
             throw new ServiceException("生产工序不存在");
+        }
+        if (bizAbnormalPoolService.hasLockedUnhandledAbnormal("PRODUCE_JOB_PROCESS", current.getId())) {
+            throw new ServiceException("当前工序存在锁定中的异常，禁止继续报工，请先处理异常池记录");
         }
         if (current.getJobId() == null || current.getProcessId() == null || current.getProcessSeq() == null) {
             throw new ServiceException("生产工序快照数据不完整");

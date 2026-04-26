@@ -109,7 +109,7 @@ public class PieceWageServiceImpl implements IPieceWageService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public int autoGenerateWageByMonth(String wageMonth) {
-        List<Map<String, Object>> summaryRows = pieceWageMapper.selectSummaryByMonth(wageMonth);
+        List<Map<String, Object>> summaryRows = pieceWageMapper.selectEventSummaryByMonth(wageMonth);
         if (summaryRows == null || summaryRows.isEmpty()) {
             return 0;
         }
@@ -140,9 +140,13 @@ public class PieceWageServiceImpl implements IPieceWageService {
             wage.setWageMonth(wageMonth);
             wage.setTotalOkQty(totalOkQty);
             wage.setTotalProcessCount(details.size());
+            wage.setTotalDefectQty(details.stream()
+                .mapToInt(r -> r.get("total_defect_qty") == null ? 0 : ((Number) r.get("total_defect_qty")).intValue())
+                .sum());
             wage.setShouldWage(totalShould);
             wage.setActualWage(totalShould);
             wage.setStatus("0");
+            wage.setRemark("AUTO_GENERATED_FROM_PRODUCE_REPORT_LOG");
             wage.setCreateBy("system");
             wage.setCreateTime(DateUtils.getNowDate());
             pieceWageMapper.insertPieceWage(wage);
@@ -154,14 +158,18 @@ public class PieceWageServiceImpl implements IPieceWageService {
                 detail.setEmployeeId(employeeId);
                 detail.setProcessId(((Number) row.get("process_id")).longValue());
                 detail.setProcessName((String) row.get("process_name"));
+                detail.setJobId(row.get("job_id") == null ? null : ((Number) row.get("job_id")).longValue());
                 detail.setOkQty(row.get("total_ok_qty") == null ? 0
                                 : ((Number) row.get("total_ok_qty")).intValue());
+                detail.setDefectQty(row.get("total_defect_qty") == null ? 0
+                                    : ((Number) row.get("total_defect_qty")).intValue());
                 detail.setProcessPrice(row.get("unit_price") == null ? BigDecimal.ZERO
                                        : new BigDecimal(row.get("unit_price").toString()));
                 BigDecimal sw = row.get("should_wage") == null ? BigDecimal.ZERO
                                : new BigDecimal(row.get("should_wage").toString());
                 detail.setShouldWage(sw);
                 detail.setActualWage(sw);
+                detail.setRemark("AUTO_GENERATED_FROM_PRODUCE_REPORT_LOG");
                 detail.setCreateBy("system");
                 detail.setCreateTime(DateUtils.getNowDate());
                 pieceWageDetailMapper.insertPieceWageDetail(detail);

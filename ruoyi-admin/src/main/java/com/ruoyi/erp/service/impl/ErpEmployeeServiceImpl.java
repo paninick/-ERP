@@ -5,7 +5,10 @@ import com.ruoyi.common.utils.DateUtils;
 import com.ruoyi.common.utils.SecurityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.ruoyi.common.exception.ServiceException;
 import com.ruoyi.erp.mapper.ErpEmployeeMapper;
+import com.ruoyi.erp.orgunit.mapper.OrgUnitMapper;
+import com.ruoyi.erp.orgunit.domain.OrgUnit;
 import com.ruoyi.erp.domain.ErpEmployee;
 import com.ruoyi.erp.service.IErpEmployeeService;
 
@@ -20,70 +23,79 @@ public class ErpEmployeeServiceImpl implements IErpEmployeeService {
     @Autowired
     private ErpEmployeeMapper erpEmployeeMapper;
 
-    /**
-     * 查询员工
-     *
-     * @param id 员工主键
-     * @return 员工
-     */
+    @Autowired
+    private OrgUnitMapper orgUnitMapper;
+
     @Override
     public ErpEmployee selectErpEmployeeById(Long id) {
         return erpEmployeeMapper.selectErpEmployeeById(id);
     }
 
-    /**
-     * 查询员工列表
-     *
-     * @param erpEmployee 员工
-     * @return 员工
-     */
     @Override
     public List<ErpEmployee> selectErpEmployeeList(ErpEmployee erpEmployee) {
         return erpEmployeeMapper.selectErpEmployeeList(erpEmployee);
     }
 
-    /**
-     * 新增员工
-     *
-     * @param erpEmployee 员工
-     * @return 结果
-     */
+    private void validateOrgFields(ErpEmployee employee) {
+        Long orgUnitId = employee.getOrgUnitId();
+        if (orgUnitId != null) {
+            OrgUnit orgUnit = orgUnitMapper.selectOrgUnitById(orgUnitId);
+            if (orgUnit == null) {
+                throw new ServiceException("所属组织节点不存在");
+            }
+        }
+        Long workshopId = employee.getWorkshopId();
+        if (workshopId != null) {
+            OrgUnit orgUnit = orgUnitMapper.selectOrgUnitById(workshopId);
+            if (orgUnit == null) {
+                throw new ServiceException("所属车间不存在");
+            }
+            if (!"WORKSHOP".equals(orgUnit.getOrgType())) {
+                throw new ServiceException("所选车间组织类型不正确，当前类型：" + orgUnit.getOrgType());
+            }
+        }
+        Long teamId = employee.getTeamId();
+        if (teamId != null) {
+            OrgUnit orgUnit = orgUnitMapper.selectOrgUnitById(teamId);
+            if (orgUnit == null) {
+                throw new ServiceException("所属班组不存在");
+            }
+            if (!"TEAM".equals(orgUnit.getOrgType())) {
+                throw new ServiceException("所选班组组织类型不正确，当前类型：" + orgUnit.getOrgType());
+            }
+        }
+        Long stationId = employee.getStationId();
+        if (stationId != null) {
+            OrgUnit orgUnit = orgUnitMapper.selectOrgUnitById(stationId);
+            if (orgUnit == null) {
+                throw new ServiceException("所属工位不存在");
+            }
+            if (!"STATION".equals(orgUnit.getOrgType())) {
+                throw new ServiceException("所选工位组织类型不正确，当前类型：" + orgUnit.getOrgType());
+            }
+        }
+    }
+
     @Override
     public int insertErpEmployee(ErpEmployee erpEmployee) {
+        validateOrgFields(erpEmployee);
         erpEmployee.setCreateBy(SecurityUtils.getUserId().toString());
         erpEmployee.setCreateTime(DateUtils.getNowDate());
         return erpEmployeeMapper.insertErpEmployee(erpEmployee);
     }
 
-    /**
-     * 修改员工
-     *
-     * @param erpEmployee 员工
-     * @return 结果
-     */
     @Override
     public int updateErpEmployee(ErpEmployee erpEmployee) {
+        validateOrgFields(erpEmployee);
         erpEmployee.setUpdateTime(DateUtils.getNowDate());
         return erpEmployeeMapper.updateErpEmployee(erpEmployee);
     }
 
-    /**
-     * 批量删除员工
-     *
-     * @param ids 需要删除的员工主键
-     * @return 结果
-     */
     @Override
     public int deleteErpEmployeeByIds(Long[] ids) {
         return erpEmployeeMapper.deleteErpEmployeeByIds(ids);
     }
 
-    /**
-     * 删除员工信息
-     *
-     * @param id 员工主键
-     * @return 结果
-     */
     @Override
     public int deleteErpEmployeeById(Long id) {
         return erpEmployeeMapper.deleteErpEmployeeById(id);

@@ -1,5 +1,6 @@
 package com.ruoyi.erp.domain;
 
+import jakarta.validation.constraints.NotBlank;
 import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.apache.commons.lang3.builder.ToStringStyle;
 import com.ruoyi.common.annotation.Excel;
@@ -19,10 +20,12 @@ public class ErpEmployee extends BaseEntity {
     private Long id;
 
     /** 员工编号 */
+    @NotBlank(message = "员工编号不能为空")
     @Excel(name = "员工编号")
     private String employeeCode;
 
     /** 员工姓名 */
+    @NotBlank(message = "员工姓名不能为空")
     @Excel(name = "员工姓名")
     private String employeeName;
 
@@ -49,6 +52,38 @@ public class ErpEmployee extends BaseEntity {
     /** 离职日期 */
     @Excel(name = "离职日期", width = 30, dateFormat = "yyyy-MM-dd")
     private Date leaveDate;
+
+    /** 所属组织节点ID(t_erp_org_unit) */
+    @Excel(name = "组织节点ID")
+    private Long orgUnitId;
+
+    /** 所属车间ID(t_erp_org_unit) */
+    @Excel(name = "车间ID")
+    private Long workshopId;
+
+    /** 所属班组ID(t_erp_org_unit) */
+    @Excel(name = "班组ID")
+    private Long teamId;
+
+    /** 所属工位ID(t_erp_org_unit) */
+    @Excel(name = "工位ID")
+    private Long stationId;
+
+    /** 技能等级 */
+    @Excel(name = "技能等级", readConverterExp = "TRAINEE=学徒,JUNIOR=初级,INTERMEDIATE=中级,SENIOR=高级,MASTER=技师")
+    private String skillLevel;
+
+    /** 计件工种 */
+    @Excel(name = "计件工种", readConverterExp = "SEWING=缝纫,LINKING=套口,IRONING=整烫,INSPECTION=检验,PACKING=包装,OUTSOURCE_SUPPORT=外协跟单,KNITTING=横机,WASHING=水洗")
+    private String pieceCategory;
+
+    /** 是否可跨车间作业 */
+    @Excel(name = "可跨车间", readConverterExp = "0=否,1=是")
+    private Boolean crossWorkshop;
+
+    /** 上岗资格 */
+    @Excel(name = "上岗资格")
+    private String qualification;
 
     /** 状态 */
     @Excel(name = "状态", readConverterExp = "0=在职,1=离职")
@@ -145,6 +180,30 @@ public class ErpEmployee extends BaseEntity {
         return remark;
     }
 
+    public Long getOrgUnitId() { return orgUnitId; }
+    public void setOrgUnitId(Long orgUnitId) { this.orgUnitId = orgUnitId; }
+
+    public Long getWorkshopId() { return workshopId; }
+    public void setWorkshopId(Long workshopId) { this.workshopId = workshopId; }
+
+    public Long getTeamId() { return teamId; }
+    public void setTeamId(Long teamId) { this.teamId = teamId; }
+
+    public Long getStationId() { return stationId; }
+    public void setStationId(Long stationId) { this.stationId = stationId; }
+
+    public String getSkillLevel() { return skillLevel; }
+    public void setSkillLevel(String skillLevel) { this.skillLevel = skillLevel; }
+
+    public String getPieceCategory() { return pieceCategory; }
+    public void setPieceCategory(String pieceCategory) { this.pieceCategory = pieceCategory; }
+
+    public Boolean getCrossWorkshop() { return crossWorkshop; }
+    public void setCrossWorkshop(Boolean crossWorkshop) { this.crossWorkshop = crossWorkshop; }
+
+    public String getQualification() { return qualification; }
+    public void setQualification(String qualification) { this.qualification = qualification; }
+
     @Override
     public String toString() {
         return new ToStringBuilder(this, ToStringStyle.MULTI_LINE_STYLE)
@@ -155,6 +214,14 @@ public class ErpEmployee extends BaseEntity {
             .append("idCard", getIdCard())
             .append("department", getDepartment())
             .append("station", getStation())
+            .append("orgUnitId", getOrgUnitId())
+            .append("workshopId", getWorkshopId())
+            .append("teamId", getTeamId())
+            .append("stationId", getStationId())
+            .append("skillLevel", getSkillLevel())
+            .append("pieceCategory", getPieceCategory())
+            .append("crossWorkshop", getCrossWorkshop())
+            .append("qualification", getQualification())
             .append("entryDate", getEntryDate())
             .append("leaveDate", getLeaveDate())
             .append("status", getStatus())

@@ -135,4 +135,26 @@ public class ProduceMaterialConsumeController extends BaseController {
                               @RequestParam(required = false, defaultValue = "") String remark) {
         return toAjax(produceMaterialConsumeService.approveLoss(id, approved, remark));
     }
+
+    /**
+     * 按出库单同步生成生产用料基线
+     */
+    @PreAuthorize("@ss.hasPermi('erp:materialconsume:edit')")
+    @Log(title = "物料消耗记录", businessType = BusinessType.UPDATE)
+    @PostMapping("/syncByStockOut/{stockOutId}")
+    public AjaxResult syncByStockOut(@PathVariable Long stockOutId) {
+        return AjaxResult.success(produceMaterialConsumeService.syncByStockOut(stockOutId));
+    }
+
+    /**
+     * 绑定用料记录到工序/报工事件
+     */
+    @PreAuthorize("@ss.hasPermi('erp:materialconsume:edit')")
+    @Log(title = "物料消耗记录", businessType = BusinessType.UPDATE)
+    @PutMapping("/bind/{consumeId}")
+    public AjaxResult bindToJobProcess(@PathVariable Long consumeId,
+                                       @RequestParam Long jobProcessId,
+                                       @RequestParam(required = false) Long reportLogId) {
+        return AjaxResult.success(produceMaterialConsumeService.bindToJobProcess(consumeId, jobProcessId, reportLogId));
+    }
 }

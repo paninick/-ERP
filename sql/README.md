@@ -27,6 +27,8 @@
 | 21 | `sys_automation.sql` | 系统自动化配置 |
 | 22 | `init_inventory_data.sql` | 初始库存数据（可选） |
 | 23 | `ops_panel_init.sql` | 运维面板（可选） |
+| 24 | `phase30_p0_roles_menu_permission.sql` | P0：补齐 11 个核心角色 + 按矩阵配置菜单权限 |
+| 25 | `phase31_p1_org_unit.sql` | P1-1：组织层级表（分厂/车间/班组/工位）+ 字典数据 |
 
 ## 其他脚本
 

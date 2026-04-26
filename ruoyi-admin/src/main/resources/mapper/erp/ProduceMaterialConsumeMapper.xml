@@ -8,6 +8,8 @@
         <result column="job_id" property="jobId"/>
         <result column="job_process_id" property="jobProcessId"/>
         <result column="report_log_id" property="reportLogId"/>
+        <result column="stock_out_id" property="stockOutId"/>
+        <result column="stock_out_item_id" property="stockOutItemId"/>
         <result column="batch_no" property="batchNo"/>
         <result column="order_id" property="orderId"/>
         <result column="process_id" property="processId"/>
@@ -33,6 +35,9 @@
         <result column="theoretical_cost" property="theoreticalCost"/>
         <result column="actual_cost" property="actualCost"/>
         <result column="cost_diff" property="costDiff"/>
+        <result column="unit_cost" property="unitCost"/>
+        <result column="cost_amount" property="costAmount"/>
+        <result column="event_source" property="eventSource"/>
         <result column="remark" property="remark"/>
         <result column="create_by" property="createBy"/>
         <result column="create_time" property="createTime"/>
@@ -41,11 +46,11 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id, produce_plan_id, job_id, job_process_id, report_log_id, batch_no, order_id, process_id, process_name,
+        id, produce_plan_id, job_id, job_process_id, report_log_id, stock_out_id, stock_out_item_id, batch_no, order_id, process_id, process_name,
         material_id, material_code, material_name, material_type, bom_qty, actual_qty, standard_loss_rate,
         limit_loss_qty, actual_loss_qty, is_over_limit, over_limit_reason, approval_status, approval_by_id,
         approval_by_name, approval_time, approval_remark, unit, unit_price, theoretical_cost, actual_cost,
-        cost_diff, remark, create_by, create_time, update_by, update_time
+        cost_diff, unit_cost, cost_amount, event_source, remark, create_by, create_time, update_by, update_time
     </sql>
 
     <select id="selectProduceMaterialConsumeById" parameterType="Long" resultMap="BaseResultMap">
@@ -62,6 +67,8 @@
             <if test="jobId != null">AND job_id = #{jobId}</if>
             <if test="jobProcessId != null">AND job_process_id = #{jobProcessId}</if>
             <if test="reportLogId != null">AND report_log_id = #{reportLogId}</if>
+            <if test="stockOutId != null">AND stock_out_id = #{stockOutId}</if>
+            <if test="stockOutItemId != null">AND stock_out_item_id = #{stockOutItemId}</if>
             <if test="batchNo != null and batchNo != ''">AND batch_no = #{batchNo}</if>
             <if test="processId != null">AND process_id = #{processId}</if>
             <if test="materialCode != null and materialCode != ''">AND material_code LIKE concat('%', #{materialCode}, '%')</if>
@@ -75,17 +82,17 @@
 
     <insert id="insertProduceMaterialConsume" parameterType="ProduceMaterialConsume" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO t_erp_produce_material_consume (
-            produce_plan_id, job_id, job_process_id, report_log_id, batch_no, order_id, process_id, process_name,
+            produce_plan_id, job_id, job_process_id, report_log_id, stock_out_id, stock_out_item_id, batch_no, order_id, process_id, process_name,
             material_id, material_code, material_name, material_type, bom_qty, actual_qty, standard_loss_rate,
             limit_loss_qty, actual_loss_qty, is_over_limit, over_limit_reason, approval_status, approval_by_id,
             approval_by_name, approval_time, approval_remark, unit, unit_price, theoretical_cost, actual_cost,
-            cost_diff, remark, create_by, create_time, update_by, update_time
+            cost_diff, unit_cost, cost_amount, event_source, remark, create_by, create_time, update_by, update_time
         ) VALUES (
-            #{producePlanId}, #{jobId}, #{jobProcessId}, #{reportLogId}, #{batchNo}, #{orderId}, #{processId}, #{processName},
+            #{producePlanId}, #{jobId}, #{jobProcessId}, #{reportLogId}, #{stockOutId}, #{stockOutItemId}, #{batchNo}, #{orderId}, #{processId}, #{processName},
             #{materialId}, #{materialCode}, #{materialName}, #{materialType}, #{bomQty}, #{actualQty}, #{standardLossRate},
             #{limitLossQty}, #{actualLossQty}, #{isOverLimit}, #{overLimitReason}, #{approvalStatus}, #{approvalById},
             #{approvalByName}, #{approvalTime}, #{approvalRemark}, #{unit}, #{unitPrice}, #{theoreticalCost}, #{actualCost},
-            #{costDiff}, #{remark}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime}
+            #{costDiff}, #{unitCost}, #{costAmount}, #{eventSource}, #{remark}, #{createBy}, #{createTime}, #{updateBy}, #{updateTime}
         )
     </insert>
 
@@ -96,6 +103,8 @@
             <if test="jobId != null">job_id = #{jobId},</if>
             <if test="jobProcessId != null">job_process_id = #{jobProcessId},</if>
             <if test="reportLogId != null">report_log_id = #{reportLogId},</if>
+            <if test="stockOutId != null">stock_out_id = #{stockOutId},</if>
+            <if test="stockOutItemId != null">stock_out_item_id = #{stockOutItemId},</if>
             <if test="batchNo != null">batch_no = #{batchNo},</if>
             <if test="orderId != null">order_id = #{orderId},</if>
             <if test="processId != null">process_id = #{processId},</if>
@@ -121,6 +130,9 @@
             <if test="theoreticalCost != null">theoretical_cost = #{theoreticalCost},</if>
             <if test="actualCost != null">actual_cost = #{actualCost},</if>
             <if test="costDiff != null">cost_diff = #{costDiff},</if>
+            <if test="unitCost != null">unit_cost = #{unitCost},</if>
+            <if test="costAmount != null">cost_amount = #{costAmount},</if>
+            <if test="eventSource != null">event_source = #{eventSource},</if>
             <if test="remark != null">remark = #{remark},</if>
             <if test="updateBy != null">update_by = #{updateBy},</if>
             <if test="updateTime != null">update_time = #{updateTime},</if>
