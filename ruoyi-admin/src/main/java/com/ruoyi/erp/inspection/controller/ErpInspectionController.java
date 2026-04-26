@@ -5,6 +5,7 @@ import com.ruoyi.common.core.controller.BaseController;
 import com.ruoyi.common.core.domain.AjaxResult;
 import com.ruoyi.common.core.page.TableDataInfo;
 import com.ruoyi.common.enums.BusinessType;
+import com.ruoyi.erp.approval.service.IErpApprovalLogService;
 import com.ruoyi.erp.inspection.domain.ErpInspectionBooking;
 import com.ruoyi.erp.inspection.domain.ErpInspectionCompany;
 import com.ruoyi.erp.inspection.service.IErpInspectionService;
@@ -19,6 +20,9 @@ public class ErpInspectionController extends BaseController {
 
     @Autowired
     private IErpInspectionService inspectionService;
+
+    @Autowired
+    private IErpApprovalLogService approvalLogService;
 
     // ---- 检品公司 ----
 
@@ -95,12 +99,37 @@ public class ErpInspectionController extends BaseController {
     @PreAuthorize("@ss.hasPermi('erp:inspectionBooking:edit')")
     @Log(title = "检品放行", businessType = BusinessType.UPDATE)
     @PutMapping("/booking/release/{id}")
-    public AjaxResult release(@PathVariable Long id) {
-        ErpInspectionBooking booking = new ErpInspectionBooking();
-        booking.setId(id);
+    public AjaxResult release(@PathVariable Long id,
+                              @RequestBody(required = false) java.util.Map<String, String> body) {
+        ErpInspectionBooking booking = inspectionService.selectBookingById(id);
+        if (booking == null) return error("检品预约单不存在");
+        String from = booking.getStatus();
         booking.setStatus("RELEASED");
         booking.setReleaseBy(getUsername());
         booking.setReleaseTime(new java.util.Date());
-        return toAjax(inspectionService.updateBooking(booking));
+        booking.setInspectionResult("PASS");
+        inspectionService.updateBooking(booking);
+        approvalLogService.writeLog("INSPECTION_BOOKING", id, booking.getBookingNo(),
+            "QUALITY_RELEASE", "RELEASE", from, "RELEASED",
+            getUsername(), body != null ? body.get("remark") : null, booking.getFactoryId());
+        return success();
+    }
+
+    @PreAuthorize("@ss.hasPermi('erp:inspectionBooking:edit')")
+    @Log(title = "检品驳回", businessType = BusinessType.UPDATE)
+    @PutMapping("/booking/reject/{id}")
+    public AjaxResult rejectBooking(@PathVariable Long id,
+                                    @RequestBody java.util.Map<String, String> body) {
+        ErpInspectionBooking booking = inspectionService.selectBookingById(id);
+        if (booking == null) return error("检品预约单不存在");
+        String from = booking.getStatus();
+        booking.setStatus("FAIL");
+        booking.setInspectionResult("FAIL");
+        booking.setDefectSummary(body.get("defectSummary"));
+        inspectionService.updateBooking(booking);
+        approvalLogService.writeLog("INSPECTION_BOOKING", id, booking.getBookingNo(),
+            "QUALITY_RELEASE", "REJECT", from, "FAIL",
+            getUsername(), body.get("remark"), booking.getFactoryId());
+        return success();
     }
 }
