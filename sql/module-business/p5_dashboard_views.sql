@@ -21,8 +21,8 @@ SELECT
          ELSE 'PENDING' END AS progress_status,
     so.create_time
 FROM t_erp_sales_order so
-LEFT JOIN t_erp_produce_plan pp ON pp.plan_no LIKE CONCAT('%', so.sales_no, '%')
-LEFT JOIN t_erp_produce_job pj ON pj.plan_id = pp.id
+LEFT JOIN t_erp_produce_plan pp ON pp.bulk_order_no = so.sales_no
+LEFT JOIN t_erp_produce_job pj ON pj.produce_plan_id = pp.id
 LEFT JOIN t_erp_shipment sp ON sp.sales_no = so.sales_no
 GROUP BY so.id, so.sales_no, so.style_code, so.customer_name, so.create_time;
 
@@ -38,7 +38,7 @@ SELECT
 FROM t_erp_style s
 LEFT JOIN t_erp_sales_order so ON so.style_code = s.style_code
 LEFT JOIN t_erp_produce_plan pp ON pp.bulk_order_no = so.sales_no
-LEFT JOIN t_erp_produce_job pj ON pj.plan_id = pp.id
+LEFT JOIN t_erp_produce_job pj ON pj.produce_plan_id = pp.id
 GROUP BY s.style_code, s.style_name;
 
 -- P5-3: 工厂产能看板
