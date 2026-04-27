@@ -61,6 +61,14 @@ export default {
     this.loadNoticeTop()
   },
   methods: {
+    // 防御深度 HTML 净化：移除 script 标签和内联事件处理器
+    sanitizeHtml(html) {
+      if (!html) return ''
+      return html
+        .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+        .replace(/\son\w+\s*=\s*"[^"]*"/gi, '')
+        .replace(/\son\w+\s*=\s*'[^']*'/gi, '')
+    },
     // 鼠标移入铃铛区域
     onNoticeEnter() {
       clearTimeout(this.noticeLeaveTimer)
@@ -102,7 +110,7 @@ export default {
       getNotice(item.noticeId).then(res => {
         const notice = res.data
         this.previewTitle = notice.noticeTitle
-        this.previewContent = notice.noticeContent
+        this.previewContent = this.sanitizeHtml(notice.noticeContent)
         this.previewNoticeType = notice.noticeType
         this.previewCreateBy = notice.createBy
         this.previewCreateTime = notice.createTime
